@@ -1,0 +1,11 @@
+
+.fix-dialog-footer {
+    bottom: 0px !important;
+    left: 0px !important;
+    right: 0px !important;
+    position: fixed !important;
+    background-color: white;
+    padding-bottom: 15px !important;
+    z-index: 100;
+    padding-left: 25px !important;
+}

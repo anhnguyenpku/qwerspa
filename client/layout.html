@@ -1,0 +1,1154 @@
+<head>
+    <title>H2E-WSBS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!--<link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/1.3.7/theme-default/fonts/element-icons.ttf">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/1.3.7/theme-default/fonts/element-icons.woff">
+    -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link href="https://fonts.googleapis.com/css?family=Kantumruy|Roboto|Roboto+Condensed" rel="stylesheet">
+    <meta name="theme-color" content="#ffffff">
+    <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+          integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+          crossorigin=""/>-->
+</head>
+
+<template name="MainLayout">
+    {{#AdminLTE skin="{{skin}}"}}
+        <div class="skin-{{skin}}">
+            <div class="wrapper" id="style-3">
+                {{#if currentUser}}
+                    {{#if notChoosenArea}}
+                    {{else}}
+                        <header class="main-header no-print">
+                            <!--style="margin-bottom: 50px !important;"-->
+                            <!-- Logo -->
+                            <a href="{{pathFor 'wb.home'}}" class="logo navbar-fixed-top cursor-pointer">
+                                <!-- mini logo for sidebar mini 50x50 pixels -->
+                                <span class="logo-mini"><b>WB</b></span>
+                                <!-- logo for regular state and mobile devices -->
+                                <!--<span class="logo-lg"><b>Water</b> Billing</span>   -->
+                                <span class="logo-lg">{{{showCompany}}}</span>
+                            </a>
+
+                            <!-- Header Navbar: style can be found in header.less -->
+                            <nav class="navbar navbar-static-top navbar-fixed-top navbar-default">
+                                <!-- Sidebar toggle button-->
+                                <!--<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">-->
+                                <!--<span class="sr-only">Toggle navigation</span>-->
+                                <!--</a>-->
+                                <ul class="nav navbar-nav">
+                                    <a href="#" class="sidebar-toggle media-small-none" data-toggle="push-menu"
+                                       role="button">
+                                        <span class="sr-only">Toggle navigation</span>
+                                    </a>
+                                </ul>
+                                <div class="newAffix no-print">
+                                    <ol class="breadcrumbs ">
+                                        {{#each Breadcrumb}}
+                                            <li class="{{cssClasses}}"><a href="{{url}}"
+                                                                          style="font-size: 16px; font-weight: 500">{{title}}</a>
+                                            </li>
+                                        {{/each}}
+                                    </ol>
+                                </div>
+                                <div class="pull-right">
+
+
+                                    {{#if wbLayout}}
+                                        <ul class="nav navbar-nav">
+                                            <li><a href="{{pathFor 'wb.requestUpdateJournalDetail'}}"><span
+                                                    class="badge" style="background: purple"><i
+                                                    class="fa fa-envelope-o"></i> {{countRequestJournalUpdate}}
+                                        </span></a></li>
+                                        </ul>
+                                        <ul class="nav navbar-nav">
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                <span class="badge" style="background: red"><i
+                                                        class="fa fa-cloud-download"></i> {{countMobileSynced}}
+                                                </span>
+                                                    <!--<img src="/images/no-user.png" class="user-image" alt="User Image">-->
+                                                    <!--<i class="fa fa-bell"></i>-->
+                                                    <!--<span class="badge" style="background: red;">{{countMobileSynced}}</span>-->
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu"
+                                                    style="font-family: 'Kh Battambang'">
+                                                    {{#each mobileSyncNotify}}
+                                                        <li>
+                                                            <a class="readBy {{#if
+                                                                    isRead}}isRead{{else}}isNotRead{{/if}}"
+                                                               href="/wb-data/meterWritingJournal/{{journalBookId}}?date={{journalDate}}"
+                                                            >
+                                                                <i class="fa fa-mobile"></i>ភ្ជាប់ដោយ
+                                                                <b>{{syncedBy.username}}({{journalBook.name}})</b>
+                                                                <br>
+                                                                <small style="color: #3A6BA3;font-size: 11px">&emsp;&emsp;&emsp;<i
+                                                                        class="fa fa-clock-o"></i>{{createdAt}}</small>
+                                                            </a>
+                                                        </li>
+                                                    {{/each}}
+                                                    <li class="divider"></li>
+                                                    <li>
+                                                        <a href="{{pathFor 'wb.mobileSyncedNotification'}}"
+                                                           align="center">បង្ហាញទាំងអស់</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    {{/if}}
+                                    {{#if posLayout}}
+                                        <ul class="nav navbar-nav">
+                                            <li>
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                                   aria-expanded="true">
+                                                    <i class="fa fa-bell-o"></i>
+                                                    <span class="label label-danger">{{invoiceExpire}}</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                                   aria-expanded="true">
+                                                    <i class="fa fa-bank"></i>
+                                                    <span class="label label-success">{{inventoryNonStock}}</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    {{/if}}
+
+
+
+                                    <a href="{{pathFor 'wb.area'}}" style="padding: 15px;float:left;"><i
+                                            class="fa fa-code-fork fa-1x"> </i> {{area}}</a>
+
+                                    <ul class="nav navbar-nav">
+                                        <li class="dropdown mega-dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+                                                    class="fa fa-th-large fa-1x" aria-hidden="true"></i>
+                                                <i class="padding-top-user">
+                                                    {{#if posLayout}}
+                                                        {{#if isShowReportRole}}
+                                                            Report
+                                                        {{/if}}
+                                                    {{else}}
+                                                        {{#if isShowSettingRole}}
+                                                            Setting
+                                                        {{/if}}
+                                                    {{/if}}</i>
+                                            </a>
+                                            <ul class="dropdown-menu mega-dropdown-menu row">
+                                                <!--style="width:inherit !important"-->
+                                                {{#if isAvailable}}
+                                                    {{#if wbLayout}}
+
+                                                        {{#if isShowSettingRole}}
+
+                                                            <li class="col-sm-3">
+                                                                <ul>
+                                                                    <li class="dropdown-header">Configurations</li>
+                                                                    <li><a href="{{pathFor 'wb.district'}}">District</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.quartier'}}">Quartier</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.block'}}">Block</a></li>
+                                                                    <li><a href="{{pathFor 'wb.agent'}}">Agent</a></li>
+                                                                    <li><a href="{{pathFor 'wb.meterReading'}}">Meter
+                                                                        Reading</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'wb.description'}}">Description</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="col-sm-3">
+                                                                <ul>
+                                                                    <li class="dropdown-header"><i
+                                                                            class="fa fa-cogs"></i>
+                                                                        Settings
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.activity'}}">Activity</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.category'}}">Category</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.class'}}">Class</a></li>
+                                                                    <!--<li><a href="{{pathFor
+                                                                            'wb.customerType'}}">Customer Type</a></li>-->
+                                                                    <li><a href="{{pathFor 'wb.meterType'}}">
+                                                                        Meter Type</a></li>
+                                                                    <li><a href="{{pathFor
+                                                                            'wb.reference'}}">Reference</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.referenceType'}}">Reference
+                                                                        Type</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.tariff'}}">Tariff</a>
+                                                                    </li>
+                                                                    <!--<li><a href="{{pathFor
+                                                                            'wb.operationCode'}}">Operation Code</a>-->
+                                                                    <!--</li>-->
+                                                                    <li><a href="{{pathFor 'wb.meterCode'}}">Meter
+                                                                        Code</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.waterBillingSetup'}}">Water
+                                                                        Billing
+                                                                        Setup</a></li>
+                                                                    <li class="divider"></li>
+                                                                    <!--<li class="dropdown-header">Newsletter</li>-->
+                                                                </ul>
+                                                            </li>
+                                                        {{/if}}
+                                                    {{/if}}
+                                                    {{#if accountLayout}}
+                                                        {{#if isShowSettingRole}}
+
+                                                            <li class="col-sm-3">
+                                                                <ul>
+                                                                    <li class="dropdown-header"><i
+                                                                            class="fa fa-cogs"></i>
+                                                                        Account
+                                                                        Settings
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'acc.closingEntry'}}">
+                                                                        Closing
+                                                                        Entry</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'acc.chartAccount'}}"> Chart
+                                                                        Account</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'acc.exchange'}}">
+                                                                        Exchange</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor 'wb.waterBillingSetup'}}">
+                                                                        Setup</a></li>
+
+                                                                </ul>
+                                                            </li>
+                                                        {{/if}}
+
+                                                    {{/if}}
+                                                    {{#if schLayout}}
+                                                        {{#if isShowSettingRole}}
+
+                                                        {{/if}}
+
+                                                    {{/if}}
+                                                    {{#if posLayout}}
+                                                        {{#if isShowReportRole}}
+
+                                                            <li class="col-sm-4">
+                                                                <ul>
+
+                                                                    <a href="#" class="title-head">
+                                                                        <i class="fa fa-file"></i> <span>{{_
+                                                                            "pos.sidebarMenu.customer"}}</span>
+                                                                    </a>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posSaleByCustomerSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.saleByCustomerSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posSaleByCustomerDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.saleByCustomerDetail"}}
+                                                                    </a>
+                                                                    </li>
+
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posSaleByProductSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.saleByProductSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posSaleByProductDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.saleByProductDetail"}}
+                                                                    </a>
+                                                                    </li>
+
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posReceivePaymentSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.receivePaymentSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posReceivePaymentDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.receivePaymentDetail"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posDebtSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.debtSummary"}}</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posDebtDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.debtDetail"}}</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posCollectionSheetSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.collectionSheetSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posCollectionSheetDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.collectionSheetDetail"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <hr>
+
+                                                                </ul>
+                                                            </li>
+                                                            <li class="col-sm-4">
+                                                                <ul>
+                                                                    <a href="#" class="title-head">
+                                                                        <i class="fa fa-file"></i> <span>{{_
+                                                                            "pos.sidebarMenu.vendor"}}</span>
+                                                                    </a>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posPurchaseByVendorSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.purchaseByVendorSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posPurchaseByVendorDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.purchaseByVendorDetail"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posPurchaseByProductSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.purchaseByProductSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posPurchaseByProductDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.purchaseByProductDetail"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posPayBillSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.payBillSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posPayBillDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.payBillDetail"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posUnPaidSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.unPaidSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posUnPaidDetailReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.unPaidDetail"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <hr>
+                                                                </ul>
+                                                            </li>
+
+                                                            <li class="col-sm-4">
+                                                                <ul>
+
+                                                                    <a href="#" class="title-head">
+                                                                        <i class="fa fa-file"></i> <span>{{_
+                                                                            "pos.sidebarMenu.general"}}</span>
+                                                                    </a>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posProdcutListReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.productList"}}</a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posInventoryEndingReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.inventoryEnding"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posInventoryTransactionReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.inventoryTransaction"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posTransferLocationReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.transferLocation"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posTransferLocationSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.transferLocationSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'pos.posPurchaseSaleByProductSummaryReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "pos.sidebarMenu.purchaseSaleByProductSummary"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <hr>
+                                                                </ul>
+                                                            </li>
+                                                        {{/if}}
+
+                                                    {{/if}}
+                                                {{/if}}
+
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+                                    <!-- Navbar Right Menu -->
+                                    <!--<ul class="nav navbar-nav">-->
+                                    <!--&lt;!&ndash; User Account: style can be found in dropdown.less &ndash;&gt;-->
+
+                                    <!--<li class="dropdown">-->
+                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+                                    <!--<i class="fa fa-user-circle"></i>-->
+                                    <!--&lt;!&ndash;<img src="/images/no-user.png" class="user-image" alt="User Image">&ndash;&gt;-->
+                                    <!--<span class="padding-top-user">{{currentUser.username}} <span-->
+                                    <!--class="caret"></span></span>-->
+                                    <!--</a>-->
+                                    <!--&lt;!&ndash;<ul class="dropdown-menu">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<li>&ndash;&gt;-->
+                                    {{#if currentUser}}
+                                        {{#if isAdminSettingAndSuper}}
+                                            <!--&lt;!&ndash;<a href="{{pathFor 'wb.userSetting'}}"&ndash;&gt;-->
+                                            <!--&lt;!&ndash;class="btn btn-default btn-flat">User List</a>&ndash;&gt;-->
+                                        {{else}}
+                                            <!--&lt;!&ndash;<a href="{{pathFor 'wb.changePassword'}}"&ndash;&gt;-->
+                                            <!--&lt;!&ndash;class="btn btn-primary">Edit Profile</a>&ndash;&gt;-->
+                                        {{/if}}
+
+                                    {{/if}}
+                                    <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<li>&ndash;&gt;-->
+                                    {{#if currentUser}}
+                                        <!--&lt;!&ndash;<a class="logout btn btn-default btn-flat">Sign out</a>&ndash;&gt;-->
+                                    {{/if}}
+
+                                    <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                                        <!--{{#if currentUser}}-->
+                                    <!--<ul class="dropdown-menu mega-dropdown-menu" role="menu">-->
+                                        <!--{{#if isAdminSettingAndSuper}}-->
+                                        <!--<li><a class="cursor-pointer" style="display: flex;"-->
+                                        <!--href="{{pathFor 'wb.userSetting'}}"><i-->
+                                        <!--class="fa fa-circle-o-notch" aria-hidden="true"></i>តារាងអ្នកប្រើប្រាស់</a>-->
+                                        <!--</li>-->
+                                            <!--{{/if}}-->
+                                    <!--<li><a class="cursor-pointer" style="display: flex;"-->
+                                    <!--href="{{pathFor 'wb.changePassword'}}"><i-->
+                                    <!--class="fa fa-unlock-alt"></i>&nbsp;ប្តូរពាក្យសម្ងាត់</a>-->
+                                    <!--</li>-->
+                                    <!--<li class="divider"></li>-->
+                                    <!--<li><a class="cursor-pointer" style="display: flex;"><i-->
+                                    <!--class="fa fa-sign-out"></i>&nbsp;ចាកចេញ</a>-->
+                                    <!--</li>-->
+                                    <!--</ul>-->
+                                        <!--{{/if}}-->
+                                    <!--</li>-->
+                                    <!--&lt;!&ndash; Control Sidebar Toggle Button &ndash;&gt;-->
+                                    <!--&lt;!&ndash;<li>-->
+                                    <!--<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>-->
+                                    <!--</li>&ndash;&gt;-->
+                                    <!--</ul>-->
+                                    <ul class="nav navbar-nav">
+                                        <a href="#" class="sidebar-toggle media-none-display" data-toggle="push-menu"
+                                           role="button">
+                                            <span class="sr-only">Toggle navigation</span>
+                                        </a>
+                                    </ul>
+                                </div>
+
+
+                            </nav>
+                        </header>
+                    {{/if}}
+                {{/if}}
+                {{#if currentUser}}
+                    {{#if currentUser.profile.approved}}
+                        {{#if notChoosenArea}}
+                            {{> wb_home}}
+                        {{else}}
+
+                            {{>sidebar}}
+                            <!-- <main class="content-wrapper"
+                                  style="background: none;;margin-bottom: 65px;">
+                            </main> -->
+                            <!--style="min-height: 768px;"-->
+
+                            <div class="content-wrapper" id="style-1">
+                                <div class="container main-yield">
+                                    <!--<div style="margin-top: 60px" class="no-print"></div>-->
+                                    {{> Template.dynamic template=content}}
+                                </div>
+                            </div>
+
+                            <footer class="main-footer no-print " style="background: #ECF0F5">
+                                <div class="pull-right">
+                                    <b>Version</b> 1.0
+                                </div>
+                                <strong>&nbsp;&nbsp; Copyright © 2017 <a href="https://h2e.asia">H2E
+                                    Tech</a></strong>
+                                <!--<ul class="nav navbar-nav">
+                                    <li>
+                                        {{>i18n_ui}}
+                                    </li>
+                                </ul>-->
+                                {{>i18n_ui}}
+
+                            </footer>
+
+                        {{/if}}
+                    {{else}}
+                        <div class="content-wrapper" style="min-height: 916px;" id="app">
+                            {{> wb_home}}
+                        </div>
+                    {{/if}}
+
+                {{else}}
+
+                    <body class="custom-login-background">
+                    <!--<div class="login-box">-->
+                    <!--<div style="padding: 50px; position: absolute">-->
+                    <div style="margin: 5%;margin-left: 15%;margin-right: 15%;  min-height: 0px;padding-right: 0px;padding-left: 0px;padding-bottom: 0px;padding-top:0px; background-color: rgba(251,251,255,0.5);box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14); border-radius: 3px ">
+                        <!--<div style="padding: 50px; position: absolute; top: 50px; bottom: 50px; right: 50px; left: 50px">-->
+                        <!--<div class="col-sm-6 col-md-6" style="padding-right: 0px">-->
+                        <!--<div class="jumbotron" style="padding: 10px; margin-bottom: 0px ; background-color: rgba(251,251,255,0.5); height: 650px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14)">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+
+                            <div style="height: auto; width: 100%;color: white;">
+                                <i style="margin: 2%">
+                                    <!--<div style="padding-top: 4%">-->
+                                    <img
+                                            style="display: block;margin: 0 auto;width: 180px;height: 180px;"
+                                            src="/mih.png"
+                                            alt="">
+                                    <!--</div>-->
+                                    <!--<div style="text-align: center; font-size: 18px"><br>-->
+                                    <!--<p>មន្ទីរឧស្សាហកម្មនិង សិប្បកម្មខេត្ត</p>-->
+                                    <!--<p>អង្គភាពរដ្ឋាករទឹកបាត់ដំបង</p>-->
+                                    <!--<p>Departerment of Industy and Handicraft of battambang</p>-->
+                                    <!--<p>Battambang Water Supply</p>-->
+                                    <!--</div>-->
+                                </i>
+                                <h5 style="text-align: center;font-family: 'Khmer OS Muol';font-size: 15px;">
+                                    <p>{{loginSetup.parentName}}</p>
+                                    <p>{{loginSetup.name}}</p>
+                                </h5>
+                                <div style="margin-top: -70px;margin-bottom: -70px">
+                                    {{>wb_login}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-6 col-md-6 col-lg-6">-->
+                        <!--<div style="background-color: rgba(0,0,0,0.2);box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .14); height: 550px">-->
+                        <!--<div class="col-md-12">-->
+                        <!--<div style="padding: 4%">-->
+                        <!--<img-->
+                        <!--style="display: block;margin: 0 auto;width: 250px;height: 250px;"-->
+                        <!--src="/mih.png"-->
+                        <!--alt="">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div style="text-align: center; font-size: 25px;margin-left: 20px;"><br>-->
+                        <!--<p>មន្ទីរឧស្សាហកម្មនិង សិប្បកម្មខេត្ត</p>-->
+                        <!--<p>អង្គភាពរដ្ឋាករទឹកបាត់ដំបង</p>-->
+                        <!--<p>Departerment of Industy and Handicraft of battambang</p>-->
+                        <!--<p>Battambang Water Supply</p>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                    </body>
+                {{/if}}
+                {{> meteorStatus position="bottom"}}
+                <!--</div>
+                </body>-->
+            </div>
+        </div>
+
+    {{/AdminLTE}}
+</template>
+
+<template name="navbar">
+</template>
+
+<template name="noHeaderNoSideBarLayout">
+    {{> Template.dynamic template=content}}
+</template>
+
+<template name="sidebar">
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar animated fadeIn" data-color="black" data-image style="height: auto;">
+
+            <!-- search form -->
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+
+            <body class="sidebar-background" id="style-3" style="background-image: url('/blur-bg.gif');">
+            <div class="user-panel simple-text"
+                 style="margin-bottom: 1px;text-align: center; border-bottom: 1px solid hsla(0,0%,100%,.2);margin-top:13px">
+                <a href="{{pathFor 'wb.home'}}" class="cursor-pointer" style="color: white">
+                    <span style="font-size:23px">{{{showCompany}}}</span>
+                </a>
+            </div>
+            <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
+                <div class="user-panel simple-text"
+                     style="margin-bottom: 1px;text-align: center; border-bottom: 1px solid hsla(0,0%,100%,.2);margin-top:13px">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <li class="fa fa-user-circle" style="font-size: 75px; color: white;"></li>
+                    <li style="font-size:23px; color: white;">{{currentUser.username}} <i class="fa fa-caret-down"></i>
+                    </li>
+                    </a>
+                        <!--{{#if currentUser}}-->
+                        <!--{{#if isAdminSettingAndSuper}}-->
+                        <!--<a href="{{pathFor 'wb.userSetting'}}"-->
+                        <!--class="btn btn-default btn-flat">User List</a>-->
+                            <!--{{else}}-->
+                        <!--<a href="{{pathFor 'wb.changePassword'}}"-->
+                        <!--class="btn btn-primary">Edit Profile</a>-->
+                            <!--{{/if}}-->
+
+                        <!--{{/if}}-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--{{#if currentUser}}-->
+                    <!--<a class="logout btn btn-default btn-flat">Sign out</a>-->
+                        <!--{{/if}}-->
+
+                    <!--</li>-->
+                    <!--</ul>-->
+                    {{#if currentUser}}
+                        <ul class="dropdown-menu" style="position: inherit !important;float: none !important;"
+                            role="menu">
+                            {{#if isAdminSettingAndSuper}}
+                                <li><a class="cursor-pointer" style="display: flex;"
+                                       href="{{pathFor 'wb.userSetting'}}"><i
+                                        class="fa fa-circle-o-notch" aria-hidden="true"></i>តារាងអ្នកប្រើប្រាស់</a>
+                                </li>
+                            {{/if}}
+                            {{#if isSuper}}
+                                <li><a class="cursor-pointer" style="display: flex;"
+                                       href="{{pathFor 'manage.module'}}"><i
+                                        class="fa fa-circle-o-notch" aria-hidden="true"></i>Manage Module</a>
+                                </li>
+                            {{/if}}
+
+
+                            <li><a class="cursor-pointer" style="display: flex;"
+                                   href="{{pathFor 'wb.changePassword'}}"><i
+                                    class="fa fa-unlock-alt"></i>&nbsp;ប្តូរពាក្យសម្ងាត់</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="cursor-pointer"></li>
+                            <li><a class="cursor-pointer logout" style="display: flex;"><i
+                                    class="fa fa-sign-out"></i>&nbsp;ចាកចេញ</a>
+                            </li>
+                        </ul>
+                    {{/if}}
+                    </li>
+                </div>
+            </ul>
+            {{#if wbLayout}}
+                <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
+
+                    {{#if isAdminAndSuper }}
+                        <li class="{{isActiveRoute 'wb.home'}}">
+                            <a href="{{pathFor 'wb.home'}}">
+                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="{{isActiveRoute 'wb.benchmark'}}">
+                            <a href="{{pathFor 'wb.benchmark'}}">
+                                <i class="fa fa-bar-chart"></i> <span>Benchmark</span>
+                            </a>
+                        </li>
+                        <li class="{{isActiveRoute 'wb.employee'}}">
+                            <a href="{{pathFor 'wb.employee'}}">
+                                <i class="fa fa-user" aria-hidden="true"></i> <span>Employee</span>
+                            </a>
+                        </li>
+                        <li class="{{isActiveRoute 'wb.meterChange'}}">
+                            <a href="{{pathFor 'wb.meterChange'}}">
+                                <i class="fa fa-user-circle"></i> <span>Customer</span>
+                            </a>
+                        </li>
+                        <!--<li>
+                    <a href="{{pathFor 'wb.meterChange'}}">
+                        <i class="fa fa-recycle"></i> <span>Meter Change</span>
+                    </a>
+                </li>-->
+                        <li class="{{isActiveRoute 'wb.meterReadingJournal'}}">
+                            <a href="{{pathFor 'wb.meterReadingJournal'}}">
+                                <i class="fa fa-tasks"></i> <span>Meter Reading Journal</span>
+                            </a>
+                        </li>
+
+
+                        <!--<li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-pie-chart"></i>
+                        <span>Data</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{pathFor 'wb.changeBlock'}}"><i class="fa fa-circle-o"></i> Change Block</a></li>
+                    </ul>
+                </li>-->
+                    {{/if}}
+
+                    {{#if isPaymentRole}}
+                        <li class="{{isActiveRoute 'wb.paymentAdd'}}">
+                            <a href="{{pathFor 'wb.paymentAdd'}}">
+                                <i class="fa fa-dollar"></i> <span>Receive Payment</span>
+                            </a>
+                        </li>
+                        <li class="{{isActiveRoute 'wb.payment'}}">
+                            <a href="{{pathFor 'wb.payment'}}">
+                                <i class="fa fa-list-alt"></i> <span>Receive Payment List</span>
+                            </a>
+                        </li>
+                    {{/if}}
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-line-chart"></i> <span>Benchmarking</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu animated-padding">
+                            {{#if isAdminAndSuper }}
+                                <li class="{{isActiveRoute 'wb.generalinformation'}}">
+                                    <a href="{{pathFor 'wb.generalinformation'}}">
+                                        <i class="fa fa-info"></i> General Information</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.benchmarking'}} ">
+                                    <a href="{{pathFor 'wb.benchmarking'}}">
+                                        <i class="fa fa-info"></i>Benchmarking</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.benchmarkSum'}} ">
+                                    <a href="{{pathFor 'wb.benchmarkSum'}}">
+                                        <i class="fa fa-info"></i>Benchmark Sum</a>
+                                </li>
+
+                            {{/if}}
+                        </ul>
+                    </li>
+                    <!--Report -->
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i> <span>Report</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu animated-padding">
+                            {{#if isAdminAndSuper }}
+
+                                <li class="{{isActiveRoute 'wb.saleReport'}}"><a
+                                        href="{{pathFor 'wb.saleReport'}}"
+                                        style="font-family: 'Kantumruy'"><i
+                                        class="fa fa-circle-o"></i> ដីការអមវិក័យបត្រទឹក</a></li>
+                                <li class="{{isActiveRoute 'wb.blockSummaryReport'}}"><a
+                                        href="{{pathFor 'wb.blockSummaryReport'}}"
+                                        style="font-family: 'Kantumruy'"><i class="fa fa-circle-o"></i>
+                                    ដីការអមសង្ខេបតាមប្លុក</a></li>
+
+                                <li class="{{isActiveRoute 'wb.totalAppellateReport'}}"><a
+                                        href="{{pathFor 'wb.totalAppellateReport'}}"
+                                        style="font-family: 'Kantumruy'"><i class="fa fa-circle-o"></i>
+                                    ដីការអមសង្ខេប</a></li>
+
+                                <li class="{{isActiveRoute 'wb.blockSummaryUnpaidExpireReport'}}"><a
+                                        href="{{pathFor 'wb.blockSummaryUnpaidExpireReport'}}"
+                                        style="font-family: 'Kantumruy'"><i class="fa fa-circle-o"></i>
+                                    សង្ខេបជំពាក់ហួសកំណត់តាមប្លុក</a></li>
+                                <li class="{{isActiveRoute 'wb.meterReadingJournalThreeMonthReport'}}"><a
+                                        href="{{pathFor 'wb.meterReadingJournalThreeMonthReport'}}"
+                                        style="font-family: 'Kantumruy'"><i class="fa fa-circle-o"></i>
+                                    Meter Reading Journal 3M</a></li>
+
+
+                                <li class="{{isActiveRoute 'wb.meterReadingJournalSixMonthReport'}}"><a
+                                        href="{{pathFor 'wb.meterReadingJournalSixMonthReport'}}"
+                                        style="font-family: 'Kantumruy'"><i class="fa fa-circle-o"></i>
+                                    Meter Reading Journal 6M</a></li>
+
+
+                                <li class="{{isActiveRoute 'wb.customerReport'}}"><a
+                                        href="{{pathFor 'wb.customerReport'}}"><i
+                                        class="fa fa-circle-o"></i>
+                                    QrCode Customer</a>
+                                </li>
+
+                                <li class="{{isActiveRoute 'wb.meterChangeReport'}}"><a
+                                        href="{{pathFor 'wb.meterChangeReport'}}"><i class="fa fa-circle-o"></i> Meter
+                                    Change</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.paymentReport'}}"><a
+                                        href="{{pathFor 'wb.paymentReport'}}"><i
+                                        class="fa fa-circle-o"></i> Teller
+                                    Payment</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.tellerPaymentSummary'}}"><a
+                                        href="{{pathFor 'wb.tellerPaymentSummary'}}"><i class="fa fa-circle-o"></i>
+                                    Teller
+                                    Payment Summery</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.postedPrintMeterReadingJournal'}}"><a
+                                        href="{{pathFor 'wb.postedPrintMeterReadingJournal'}}"><i
+                                        class="fa fa-circle-o"></i>
+                                    Posted Invoice</a></li>
+                            {{/if}}
+                            {{#if isAdminSuperAndPayment }}
+                                <li class="{{isActiveRoute 'wb.daikaomReport'}}"><a
+                                        href="{{pathFor 'wb.daikaomReport'}}"
+                                        style="font-family: 'Kantumruy'"><i class="fa fa-circle-o"></i>
+                                    ដីការអម</a></li>
+                                <li class="{{isActiveRoute 'wb.customUnpaidCustomerReport'}}"><a
+                                        href="{{pathFor 'wb.customUnpaidCustomerReport'}}"><i
+                                        class="fa fa-circle-o"></i>
+                                    Penalty Customer</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.unpaidCustomerReport'}}"><a
+                                        href="{{pathFor 'wb.unpaidCustomerReport'}}"><i class="fa fa-circle-o"></i>
+                                    Unpaid Customer</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.unpaidCustomerExpireReport'}}"><a
+                                        href="{{pathFor 'wb.unpaidCustomerExpireReport'}}"><i
+                                        class="fa fa-circle-o"></i>
+                                    Unpaid Customer Expire</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.unpaidCustomerBlockExpireReport'}}"><a
+                                        href="{{pathFor 'wb.unpaidCustomerBlockExpireReport'}}"><i
+                                        class="fa fa-circle-o"></i>
+                                    Unpaid Customer Block Expire</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.paymentSummary'}}"><a
+                                        href="{{pathFor 'wb.paymentSummary'}}"><i
+                                        class="fa fa-circle-o"></i>
+                                    Payment Summary
+                                </a></li>
+                                <li class="{{isActiveRoute 'wb.paymentDetail'}} "><a
+                                        href="{{pathFor 'wb.paymentDetail'}}"><i
+                                        class="fa fa-circle-o"></i>
+                                    Payment Detail
+                                </a></li>
+                                <li class="{{isActiveRoute 'wb.debtPaymentSummary'}}"><a
+                                        href="{{pathFor 'wb.debtPaymentSummary'}}"><i class="fa fa-circle-o"></i> Debt
+                                    Payment Summery</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.transferPaymentSummary'}}"><a
+                                        href="{{pathFor 'wb.transferPaymentSummary'}}"><i class="fa fa-circle-o"></i>
+                                    Transfer
+                                    Payment Summery</a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.invoiceTransfer'}}">
+                                    <a href="{{pathFor 'wb.invoiceTransfer'}}">
+                                        <i class="fa fa-dollar"></i> <span>Invoice Transfer</span>
+                                    </a>
+                                </li>
+                                <li class="{{isActiveRoute 'wb.geoVillage'}} ">
+                                    <a href="{{pathFor 'wb.geoVillage'}}">
+                                        <i class="fa fa-map-marker"></i> <span>Geo-village  Report</span>
+                                    </a>
+                                </li>
+                            {{/if}}
+                        </ul>
+                    </li>
+                    <!--End Report-->
+                    <li class="treeview">
+                        {{#if isSuper}}
+                            <a href="#">
+                                <i class="fa fa-folder"></i> <span>Seed Data</span>
+                                <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="{{isActiveRoute 'wb.importData'}} "><a
+                                        href="{{pathFor 'wb.importData'}}"><i
+                                        class="fa fa-circle-o"></i> Import Data</a>
+                                </li>
+                            </ul>
+                        {{/if}}
+                    </li>
+                    <li class="treeview">
+                        {{#if isAdminSuperAndPayment}}
+                            <a href="#">
+                                <i class="fa fa-folder"></i> <span>Export Data</span>
+                                <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="{{isActiveRoute 'wb.exportData'}} "><a
+                                        href="{{pathFor 'wb.exportData'}}"><i
+                                        class="fa fa-circle-o"></i> Export Data</a>
+                                </li>
+                            </ul>
+                        {{/if}}
+                    </li>
+                </ul>
+            {{/if}}
+            {{#if accountLayout}}
+                <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
+
+                    <li><a href="{{pathFor 'acc.journal'}}"><i class="fa fa-dollar"></i> Journal
+                        Entry</a></li>
+
+                    <!--Report -->
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-folder"></i> <span>Report</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu animated-padding">
+                            {{#if isAdminAndSuper }}
+                                <li><a href="{{pathFor 'acc.accountListReport'}}">
+                                    Account List
+                                    Report</a>
+                                </li>
+                                <li><a href="{{pathFor 'acc.journalReport'}}">
+                                    Journal​
+                                    Report</a>
+                                </li>
+                                <li><a href="{{pathFor
+                                        'acc.transactionDetailReport'}}">
+                                    Transaction Detail Report</a>
+                                </li>
+                                <li><a href="{{pathFor 'acc.ledgerReport'}}"> Ledger
+                                    Report</a>
+                                </li>
+                                <li><a href="{{pathFor 'acc.trialBalanceReport'}}">
+                                    Trial Balance
+                                    Report</a>
+                                </li>
+                                <li><a href="{{pathFor 'acc.profitLostReport'}}">
+                                    Profit Lost
+                                    Report</a>
+                                </li>
+                                <li><a href="{{pathFor 'acc.balanceSheetReport'}}">
+                                    Balance Sheet
+                                    Report</a>
+                                </li>
+                            {{/if}}
+
+                        </ul>
+                    </li>
+                    <!--End Report-->
+                    <li class="treeview">
+                        {{#if isSuper}}
+                            <a href="#">
+                                <i class="fa fa-folder"></i> <span>Seed Data</span>
+                                <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="{{isActiveRoute 'wb.importData'}} "><a
+                                        href="{{pathFor 'wb.importData'}}"><i
+                                        class="fa fa-circle-o"></i> Import Data</a>
+                                </li>
+                            </ul>
+                        {{/if}}
+                    </li>
+                </ul>
+            {{/if}}
+
+            {{#if posLayout}}
+                <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
+                    <a href="#" class="title-head">
+                        <i style="color: white !important;" class="fa fa-user"></i> <span style="color: white;">{{_
+                            "pos.sidebarMenu.vendor"}}</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+
+                    <li><a href="{{pathFor 'pos.vendor'}}" class="title-body"><i class="fa fa-user"
+                                                                                 aria-hidden="true"></i> {{_
+                            "pos.sidebarMenu.vendor"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'pos.bill'}}" class="title-body">
+                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.bill"}}</a>
+                    </li>
+
+                    <li><a href="{{pathFor 'pos.payBill'}}" class="title-body">
+                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.payBill"}}</a>
+                    </li>
+                    <a href="#" class="title-head">
+                        <i style="color: white !important;" class="fa fa-user"></i> <span style="color: white;">{{_
+                            "pos.sidebarMenu.customer"}}</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    <li><a href="{{pathFor 'pos.customer'}}" class="title-body">
+                        <i class="fa fa-user" aria-hidden="true"></i> {{_ "pos.sidebarMenu.customer"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'pos.invoice'}}" class="title-body">
+                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.invoice"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'pos.receivePayment'}}" class="title-body">
+                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.receivePayment"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'pos.saleOrder'}}" class="title-body">
+                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.saleOrder"}}</a>
+                    </li>
+                    <hr>
+
+                    <li><a href="{{pathFor 'pos.transferInventory'}}" class="title-body">
+                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.transferInventory"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'acc.exchange'}}" class="title-body">
+                        <i class="fa fa-exchange" aria-hidden="true"></i> {{_ "pos.sidebarMenu.exchange"}}</a>
+                    </li>
+                    <!--Report -->
+                    <!--<li class="treeview">
+
+                    </li>-->
+                    <!--Setting-->
+                    <li class="treeview">
+                        <a href="#" class="title-head">
+                            <i class="fa fa-cogs"></i> <span>{{_ "pos.sidebarMenu.setting"}}</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu animated-padding">
+                            {{#if isAdminAndSuper }}
+                                <li><a href="{{pathFor 'pos.term'}}" class="title-body"><i class="fa fa-terminal"
+                                                                                           aria-hidden="true"></i>
+                                    {{_ "pos.sidebarMenu.term"}}</a>
+                                </li>
+                                <li><a href="{{pathFor 'pos.unit'}}" class="title-body"><i class="fa fa-terminal"
+                                                                                           aria-hidden="true"></i>
+                                    {{_ "pos.sidebarMenu.unit"}}</a>
+                                </li>
+                                <li><a href="{{pathFor 'pos.location'}}" class="title-body">
+                                    <i class="fa fa-location-arrow" aria-hidden="true"></i>{{_
+                                        "pos.sidebarMenu.location"}}</a>
+                                </li>
+                                <li><a href="{{pathFor 'pos.category'}}" class="title-body">
+                                    <i class="fa fa-rebel" aria-hidden="true"></i>{{_ "pos.sidebarMenu.category"}}</a>
+                                </li>
+                                <li><a href="{{pathFor 'pos.product'}}" class="title-body"><i class="fa fa-product-hunt"
+                                                                                              aria-hidden="true"></i> {{_
+                                        "pos.sidebarMenu.product"}}</a>
+                                </li>
+                                <!--<li><a href="{{pathFor 'pos.agent'}}" class="title-body"><i class="fa fa-product-hunt"
+                                                                                            aria-hidden="true"></i> {{_
+                                        "pos.sidebarMenu.agent"}}</a>
+                                </li>-->
+                                <li><a href="{{pathFor 'wb.waterBillingSetup'}}" class="title-body">
+                                    <i class="fa fa-key" aria-hidden="true"></i>{{_ "pos.sidebarMenu.setup"}}</a></li>
+
+                            {{/if}}
+                        </ul>
+                    </li>
+                    <!--End Report-->
+                    <!--<li class="treeview">
+                        {{#if isSuper}}
+                            <a href="#">
+                                <i class="fa fa-folder"></i> <span>Seed Data</span>
+                                <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="{{isActiveRoute 'wb.importData'}} "><a
+                                        href="{{pathFor 'wb.importData'}}"><i
+                                        class="fa fa-circle-o"></i> Import Data</a>
+                                </li>
+                            </ul>
+                        {{/if}}
+                    </li>-->
+                </ul>
+            {{/if}}
+
+            {{#if schLayout}}
+                <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
+                    <a href="#" class="title-head">
+                        <i style="color: white !important;" class="fa fa-user"></i> <span style="color: white;">{{_
+                            "sch.sidebarMenu.student"}}</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+
+                    <li><a href="{{pathFor 'sch.student'}}" class="title-body"><i class="fa fa-user"
+                                                                                  aria-hidden="true"></i> {{_
+                            "sch.sidebarMenu.student"}}</a>
+                    </li>
+                    <hr>
+                    <a href="#" class="title-head">
+                        <i style="color: white !important;" class="fa fa-cogs"></i> <span style="color: white;">{{_
+                            "sch.sidebarMenu.setting"}}</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+
+                    <li><a href="{{pathFor 'sch.major'}}" class="title-body"><i class="el-icon-info"></i> {{_
+                            "sch.sidebarMenu.major"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'sch.subject'}}" class="title-body"><i class="el-icon-star-on"></i> {{_
+                            "sch.sidebarMenu.subject"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'sch.ciriculumn'}}" class="title-body"><i class="el-icon-time"></i> {{_
+                            "sch.sidebarMenu.ciriculumn"}}</a>
+                    </li>
+
+                </ul>
+            {{/if}}
+            </body>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+</template>

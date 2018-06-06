@@ -1,0 +1,25 @@
+<template name="wb_home">
+    {{#if currentUser.profile.approved}}
+        {{#if notChoosenArea}}
+            <div class="animated fadeIn">
+                {{> waterBilling_area}}
+            </div>
+        {{else}}
+            <br>
+            {{#if isWB}}
+                <div id="dashboard">
+
+                </div>
+            {{/if}}
+        {{/if}}
+    {{else}}
+        <div class="c">
+            <div class="card">
+                <div class="card-content">
+                    <h5>Welcome {{currentUser.username}}. Ask you admin to approved! <i class="material-icons">lock</i>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+</template>

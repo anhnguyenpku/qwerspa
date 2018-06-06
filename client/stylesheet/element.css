@@ -1,0 +1,21 @@
+.el-pager li.active {
+    border-color: #20a0ff;
+    background-color: #20a0ff !important;
+    color: #fff;
+    cursor: default;
+}
+
+.el-pager li:hover {
+    color: #20a0ff;
+}
+
+.el-pager li {
+    padding: 0 4px;
+    border-right: 0;
+    background: #fff;
+    font-size: 13px;
+    min-width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+}

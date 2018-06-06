@@ -1,0 +1,122 @@
+{
+  "wb": {
+    "sidebarMenu": {
+      "home": "home",
+      "customer": "Customer",
+      "customerType": "Customer Type",
+      "activity": "Activity"
+    },
+    "home": {
+      "title": "Home"
+    },
+    "customer": {
+      "title": "Customer",
+      "schema": {
+        "_id": {
+          "label": "ID"
+        },
+        "name": {
+          "label": "Name"
+        },
+        "gender": {
+          "label": "Gender"
+        },
+        "dob": {
+          "label": "Date of birth"
+        },
+        "address": {
+          "label": "Address"
+        },
+        "telephone": {
+          "label": "Telephone"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "rolesArea": {
+          "label": "Branch"
+        }
+      }
+    },
+    "customerType": {
+      "title": "Customer Type",
+      "info": "Welcome to POS!"
+    },
+    "meteor": {
+      "title": "Meter",
+      "info": "Meter"
+    }
+  },
+  "pos": {
+    "sidebarMenu": {
+      "home": "home",
+      "customer": "អតិថិជន",
+      "vendor": "អ្នកផ្គត់ផ្គង់",
+      "bill": "ទិញចូល",
+      "agent": "ភ្នាក់ងារ",
+      "invoice": "លក់ចេញ",
+      "receivePayment": "ទទួលប្រាក់",
+      "payBill": "បង់ប្រាក់",
+      "exchange": "អត្រាប្តូរប្រាក់",
+      "report": "របាយការណ៍",
+      "saleByCustomerDetail": "លក់ដោយអតិថិជនលម្អិត",
+      "saleByCustomerSummary": "លក់ដោយអតិថិជនសង្ខេប",
+      "saleByProductDetail": "លក់ដោយផលិតផលលម្អិត",
+      "saleByProductSummary": "លក់ដោយផលិតផលសង្ខេប",
+      "productList": "ឈ្មេាះទំនិញ",
+      "receivePaymentSummary": "ទទួលលុយសង្ខេប",
+      "receivePaymentDetail": "ទទួលលុយលម្អិត",
+      "debtSummary": "បំណុលសង្ខេប",
+      "debtDetail": "បំណុលលម្អិត",
+      "collectionSheetSummary": "ប្រមូលប្រាក់សង្ខេប",
+      "collectionSheetDetail": "ប្រមូលប្រាក់លម្អិត",
+      "transactionListByCustomer": "ប្រតិបត្តិការដោយអតិថិជន",
+      "setting": "ការកំណត់",
+      "term": "លក្ខខ័ណ្ឌ",
+      "location": "ទីតាំង",
+      "category": "ប្រភេទ",
+      "product": "ផលិតផល",
+      "setup": "ការរៀបចំ​",
+      "general": "ទូទៅ",
+      "purchaseByVendorSummary": "ទិញដោយអ្នកផ្គត់ផ្គង់សង្ខេប",
+      "purchaseByVendorDetail": "ទិញដោយអ្នកផ្គត់ផ្គង់លម្អិត",
+      "purchaseByProductSummary": "ទិញដោយអ្នកទំនិញសង្ខេប",
+      "purchaseByProductDetail": "ទិញដោយអ្នកទំនិញលម្អិត",
+      "payBillSummary": "បង់លុយសង្ខេប",
+      "payBillDetail": "បង់លុយលម្អិត",
+      "unPaidSummary": "បំណុលមិនទាន់បានបង់សង្ខេប",
+      "unPaidDetail": "បំណុលមិនទាន់បានបង់លម្អិត",
+      "purchaseSaleByProductSummary": "ទិញលក់ដោយផលិតផលសង្ខេប",
+      "inventoryEnding": "ស្តុកចុងគ្រា",
+      "inventoryTransaction": "ប្រតិបត្តការណ៍ស្តុក",
+      "transferInventory": "ផ្ទេស្តុក",
+      "transferLocation": "ផ្ទេទៅកាន់ទីតាំង",
+      "transferLocationSummary": "ផ្ទេទៅកាន់ទីតាំងសង្ខេប",
+      "unit": "ឯកតា",
+      "saleOrder": "កុម្មង់ទំនិញ"
+    },
+    "customer": {
+      "customerAdd": "បញ្ចូលពត័មានអតិថិជន",
+      "customerUpdate": "កែប្រែពត័មានអតិថិជន",
+      "customerTitle": "អតិថិជន",
+      "name": "ឈ្ម៾/ក្រុមហ៊ុន",
+      "khName": "ឈ្ម៾ខ្មែ/ក្រុមហ៊ុន",
+      "address": "អាស័យដ្ឋាន",
+      "email": "អ៊ីម៉ែល",
+      "phoneNumber": "លេខទូរស័ព្ទ",
+      "term": "លក្ខខ័ណ្ឌ",
+      "openingBalance": "សមតុល្យដើមគ្រា",
+      "note": "បរិយាយ"
+    }
+  },
+  "sch": {
+    "sidebarMenu": {
+      "home": "home",
+      "student": "សិស្ស",
+      "setting": "ការកំណត់",
+      "major": "ជំនាញ",
+      "subject": "មុខវិជ្ជា",
+      "ciriculumn": "កម្មវិធិសិក្សា"
+    }
+  }
+}

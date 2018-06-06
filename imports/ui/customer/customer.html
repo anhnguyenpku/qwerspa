@@ -1,0 +1,544 @@
+<template name="wb_customer">
+    <div class="c">
+        <div class="page-header" style="margin-top: 0px;">
+
+            <div class="card-action">
+                <ol class="breadcrumbs">
+                    <li><a href=""></a></li>
+                    <a class="btn btn-success add" style="float: right"><i class="fa fa-plus"></i> Add New</a>
+                </ol>
+
+
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <!--
+            <div class="animated fadeIn">
+                {{> tabular table=dataTable selector=selector class="cursor-pointer table table-striped"}}
+            </div>-->
+        </div>
+    </div>
+</template>
+<template name="wb_customerAdd">
+    <div class="container animated fadeIn">
+        {{#autoForm collection=collection id="wb_customerAdd" type="insert"}}
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">add</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title" style="font-family: 'Khmer OS Battambang'">បន្ថែមអតិជនថ្មី</h4>
+                    <div class="col-md-12" style="padding:20px;">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a>
+                                </li>
+                                <!--   <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Meter*</a></li>
+                                   <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Customer Location</a></li>-->
+                                <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Address(Map)</a>
+                                </li>
+                                <!--<li class="pull-right">
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <ol class="breadcrumbs">
+
+                                    <li><a href="/"><i class="fa fa-dashboard"></i> Home</a>
+                                    </li>
+                                    <li><a href="{{pathFor 'wb.meterChange'}}">{{_ "wb.customer.title"}}</a></li>
+                                    <li class="active">Add Customer</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </li>-->
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">General Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            {{> afQuickField name='khName'}}
+                                                            {{> afQuickField name='streetNo'}}
+                                                            {{> afQuickField name="contract.familyHeadCount"}}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            {{> afQuickField name='name'}}
+                                                            {{> afQuickField name='operationCode' label="Operation Code" options=operationCodeData}}
+                                                            {{> afQuickField name="contract.tableOrRoom"}}
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            {{> afQuickField name='phoneNumber'}}
+                                                            {{> afQuickField name='contact'}}
+                                                            {{> afQuickField name='sumId' label="SUMID"}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">Setting Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="">Category*</label>
+                                                            {{> afQuickField name='category' label=false}}
+                                                            <label for="">Group(optional)</label>
+                                                            {{> afQuickField name='group' label=false options=groupData}}
+
+                                                            <label for="">Activity*</label>
+                                                            {{> afQuickField name='activity' label=false options=activityData}}
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Tariff(optional)</label>
+                                                            {{> afQuickField name='tariff' label=false}}
+
+
+                                                            <label for="">Billing Cycle*</label>
+                                                            {{> afQuickField name='billingCycle' label=false }}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+
+                                                            <label for="">Class*</label>
+                                                            {{> afQuickField name='class' label=false options=classData}}
+
+                                                            <label for="">Position*</label>
+                                                            {{> afQuickField name='position' label=false}}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-success">
+                                                <div class="panel-heading">DPC Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <!--{{> afQuickField name='dpc'}}-->
+                                                            <label for="">District</label>
+                                                            {{> afQuickField name='district' label=false options=generalDistrictData }}
+                                                            <label for="">Folio*</label>
+                                                            {{> afQuickField name='folio' label=false options=folioData}}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Quartier*</label>
+                                                            {{> afQuickField name='quartier' label=false options=quartierData}}
+
+                                                            <label for="">Successor*</label>
+                                                            {{> afQuickField name='successor' label=false options=successorData}}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Block*</label>
+                                                            {{> afQuickField name='block' label=false options=blockData}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-warning">
+                                                <div class="panel-heading">Contract Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            {{> afQuickField name="contract.contractDate"}}
+                                                            {{> afQuickField name="contract.meterInstallDate"}}
+                                                            {{> afQuickField name="contract.meterCode"}}
+                                                            {{> afQuickField name="contract.meterSerialNo"}}
+                                                            <!--{{> afQuickField name="contract.meterDiameter"}}-->
+
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            {{> afQuickField name="contract.meterInstallData"}}
+                                                            {{> afQuickField name="contract.prevReadingDate"}}
+                                                            {{> afQuickField name="contract.prevReading"}}
+                                                            {{> afQuickField name="contract.meterTypeId"}}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    {{> afQuickField name="meterReference" label="Meteor Reference"}}
+                                </div>
+                                <!-- /.tab-pane -->
+                                <!--  <div class="tab-pane" id="tab_3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="">Province</label>
+                                            {{> afQuickField name="location.province" label=false options=province}}
+                                            <label for="">Commune</label>
+                                            {{> afQuickField name="location.commune" label=false options=commune}}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="">District</label>
+                                            {{> afQuickField name="location.district" label=false options=district}}
+                                            <label for="">Village</label>
+                                            {{> afQuickField name="location.village" label=false options=village}}
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="panel panel-primary">
+
+                                                <div class="panel-heading">Address Info</div>
+                                                <div class="panel-body">
+                                                    <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label for="">Province</label>
+                                                                        {{> afQuickField name="location.province" label=false options=province}}
+                                                                        <label for="">Commune</label>
+                                                                        {{> afQuickField name="location.commune" label=false options=commune}}
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label for="">District</label>
+                                                                        {{> afQuickField name="location.district" label=false options=district}}
+                                                                        <label for="">Village</label>
+                                                                        {{> afQuickField name="location.village" label=false options=village}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name='address'}}
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name='pipeId'}}
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name="location.x"}}
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name="location.y" }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                        <div class="row">
+                            <div class="col s11">
+                                {{> wb_preloader}}
+                                {{> wb_actionAdd}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {{/autoForm}}
+    </div>
+</template>
+<template name="wb_customerEdit">
+    <div class="container animated fadeIn">
+        {{#if subscriptionsReady}}
+        {{else}}
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="orange">
+                    <i class="material-icons">mode_edit</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title" style="font-family: 'Khmer OS Battambang'">កែប្រែអតិថិជន</h4>
+                    <div class="col-md-12" style="padding:20px;">
+                        <div class="row">
+                            <div id="loader">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="lading"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
+        {{#autoForm collection=collection doc=data id="wb_customerEdit" type="update"}}
+            <div class="card animated fadeIn">
+                <div class="card-header card-header-icon" data-background-color="orange">
+                    <i class="material-icons">mode_edit</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title" style="font-family: 'Khmer OS Battambang'">កែប្រែអតិថិជន</h4>
+                    <div class="col-md-12" style="padding:20px;">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">General</a>
+                                </li>
+                                <!--   <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Meter*</a></li>
+                                   <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Customer Location</a></li>-->
+                                <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Address(Map)</a>
+                                </li>
+                                <!--<li class="pull-right">
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <ol class="breadcrumbs">
+
+                                    <li><a href="/"><i class="fa fa-dashboard"></i> Home</a>
+                                    </li>
+                                    <li><a href="{{pathFor 'wb.meterChange'}}">{{_ "wb.customer.title"}}</a></li>
+                                    <li class="active">Add Customer</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </li>-->
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">General Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            {{> afQuickField name='khName'}}
+                                                            {{> afQuickField name='streetNo'}}
+                                                            {{> afQuickField name="contract.familyHeadCount"}}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            {{> afQuickField name='name'}}
+                                                            {{> afQuickField name='operationCode' label="Operation Code" options=operationCodeData}}
+                                                            {{> afQuickField name="contract.tableOrRoom"}}
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            {{> afQuickField name='phoneNumber'}}
+                                                            {{> afQuickField name='contact'}}
+                                                            {{> afQuickField name='sumId' label="SUMID"}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">Setting Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="">Category*</label>
+                                                            {{> afQuickField name='category' label=false}}
+                                                            <label for="">Group(optional)</label>
+                                                            {{> afQuickField name='group' label=false options=groupData}}
+
+                                                            <label for="">Activity*</label>
+                                                            {{> afQuickField name='activity' label=false options=activityData}}
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Tariff(optional)</label>
+                                                            {{> afQuickField name='tariff' label=false}}
+
+
+                                                            <label for="">Billing Cycle*</label>
+                                                            {{> afQuickField name='billingCycle' label=false }}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+
+                                                            <label for="">Class*</label>
+                                                            {{> afQuickField name='class' label=false options=classData}}
+
+                                                            <label for="">Position*</label>
+                                                            {{> afQuickField name='position' label=false}}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-success">
+                                                <div class="panel-heading">DPC Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <!--{{> afQuickField name='dpc'}}-->
+                                                            <label for="">District</label>
+                                                            {{> afQuickField name='district' label=false options=generalDistrictData }}
+                                                            <label for="">Folio*</label>
+                                                            {{> afQuickField name='folio' label=false options=folioData}}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Quartier*</label>
+                                                            {{> afQuickField name='quartier' label=false options=quartierData}}
+
+                                                            <label for="">Successor*</label>
+                                                            {{> afQuickField name='successor' label=false options=successorData}}
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Block*</label>
+                                                            {{> afQuickField name='block' label=false options=blockData}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-warning">
+                                                <div class="panel-heading">Contract Info</div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            {{> afQuickField name="contract.contractDate"}}
+                                                            {{> afQuickField name="contract.meterInstallDate"}}
+                                                            {{> afQuickField name="contract.meterCode"}}
+                                                            {{> afQuickField name="contract.meterSerialNo"}}
+                                                            <!--{{> afQuickField name="contract.meterDiameter"}}-->
+
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            {{> afQuickField name="contract.meterInstallData"}}
+                                                            {{> afQuickField name="contract.prevReadingDate"}}
+                                                            {{> afQuickField name="contract.prevReading"}}
+                                                            {{> afQuickField name="contract.meterTypeId"}}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    {{> afQuickField name="meterReference" label="Meteor Reference"}}
+                                </div>
+                                <!-- /.tab-pane -->
+                                <!--  <div class="tab-pane" id="tab_3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="">Province</label>
+                                            {{> afQuickField name="location.province" label=false options=province}}
+                                            <label for="">Commune</label>
+                                            {{> afQuickField name="location.commune" label=false options=commune}}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="">District</label>
+                                            {{> afQuickField name="location.district" label=false options=district}}
+                                            <label for="">Village</label>
+                                            {{> afQuickField name="location.village" label=false options=village}}
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="panel panel-primary">
+
+                                                <div class="panel-heading">Address Info</div>
+                                                <div class="panel-body">
+                                                    <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label for="">Province</label>
+                                                                        {{> afQuickField name="location.province" label=false options=province}}
+                                                                        <label for="">Commune</label>
+                                                                        {{> afQuickField name="location.commune" label=false options=commune}}
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label for="">District</label>
+                                                                        {{> afQuickField name="location.district" label=false options=district}}
+                                                                        <label for="">Village</label>
+                                                                        {{> afQuickField name="location.village" label=false options=village}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name='address'}}
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name='pipeId'}}
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name="location.x"}}
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                {{> afQuickField name="location.y" }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <div class="row">
+                            <div class="col s11">
+                                {{> wb_preloader}}
+                                {{> wb_actionAdd}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/autoForm}}
+
+    </div>
+</template>
+<template name="wb_customerDetail">
+    <div class="c">
+        <div class="col s12 m12 l12">
+            <div class="row">
+                <!--<ol class="breadcrumbs pull-right">
+                    <li><a href="/"><i class="fa fa-dashboard"></i> Home</a>
+                    </li>
+                    <li><a href="{{pathFor 'wb.meterChange'}}">{{_ "wb.customer.title"}}</a></li>
+                    <li class="active">Customer Detail</li>
+                </ol>-->
+            </div>
+        </div>
+        <customer-detail></customer-detail>
+    </div>
+</template>

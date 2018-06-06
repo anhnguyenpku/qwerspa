@@ -1,0 +1,155 @@
+<template name="wb_userSetting">
+    <div class="card">
+        <div class="card-header card-header-icon" data-background-color="purple">
+            <i class="material-icons">verified_user</i>
+        </div>
+        <div class="card-content">
+            <h4 class="card-title" style="cursor: pointer !important;font-family: 'Khmer OS Battambang'"><a
+                    href="{{pathFor 'wb.userAdd'}}"
+                    class="add"><i class="fa fa-plus"></i> New User </a></h4>
+            <div class="col-md-12" style="padding:20px;">
+                <div class="animated fadeIn">
+                    {{> tabular table=dataTable selector=selector class="cursor-pointer table table-striped"}}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<template name="wb_userSettingOptions">
+    <!-- Dropdown Structure -->
+    <a class="remove cursor-pointer"><i class="material-icons">delete</i></a>
+</template>
+<template name="wb_userAdd">
+    <div class="container animated fadeIn">
+        <div class="card">
+            <div class="card-header card-header-icon" data-background-color="purple">
+                <i class="material-icons">person_add</i>
+            </div>
+            <div class="card-content">
+                <h4 class="card-title">New User</h4>
+                <div class="row">
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        {{#autoForm schema=schema id="wb_userAdd" type="method" meteormethod="wb.insertUser"
+                                    singleMethodArgument=true}}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{> afQuickField name='username'}}
+                                    {{> afQuickField name='email'}}
+
+                                </div>
+                                <div class="col-md-6">
+                                    {{> afQuickField name='password' type="password"}}
+                                    {{> afQuickField name='confirmPassword' type="password"}}
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        {{> afQuickField name='roles' size=10}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{> afQuickField name='profile.status'}}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            {{> afQuickField name='rolesBranch' options=geoProvinces}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            {{> afQuickField name='rolesArea' options=geoArea}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            {{> afQuickField name='profile.modules' options=moduleOption}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{> afQuickField name='areaId' value=area type="hidden"}}
+                                            {{> afQuickField name='profile.approved'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {{>wb_preloader}}
+                                {{>wb_actionAdd}}
+                            </div>
+                        {{/autoForm}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<template name="wb_userSettingEdit">
+    {{#if subscriptionsReady}}
+        <div class="container animated fadeIn">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">mode_edit</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Edit User</h4>
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 10px;">
+                            {{#autoForm schema=schema id="wb_userEdit" doc=data type="method-update"
+                                        meteormethod="wb.updateUser" singleMethodArgument=true}}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{> afQuickField name='username'}}
+                                        {{> afQuickField name='email'}}
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{> afQuickField name='password' type="password"}}
+                                        {{> afQuickField name='confirmPassword' type="password"}}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            {{> afQuickField name='roles' size=10}}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{> afQuickField name='profile.status'}}
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                {{> afQuickField name='rolesBranch' class="checkbox" options=geoProvinces}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                {{> afQuickField name='rolesArea' class="checkbox" options=geoArea}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                {{> afQuickField name='profile.modules'  options=moduleOption}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{> afQuickField name='areaId' value=area type="hidden"}}
+                                                {{> afQuickField name='profile.approved'}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {{>wb_preloader}}
+                                    {{>wb_actionEdit}}
+                                </div>
+                            {{/autoForm}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{else}}
+        <div class="progress ">
+            <div class="indeterminate blue darken-1 "></div>
+        </div>
+    {{/if}}
+</template>

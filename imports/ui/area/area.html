@@ -1,0 +1,59 @@
+<template name="waterBilling_area">
+    <body class="custom-login-background animated fadeIn">
+        <div class="login-box-area-w500">
+            {{#autoForm schema=schema id="area"}}
+                {{#if showErr}}
+                    <div class="animated bounceInDown">
+                        <h3 class="err-no-select-area"><i class="fa fa-info-circle"> សូមជ្រើសរើសខេត្តក្រុង</i></h3>
+                    </div>
+                {{/if}}
+                <h4 style="color: white; font-family: 'Khmer OS Muol'" align="center"><i class="material-icons">location_on</i>
+                    ជ្រើសរើសខេត្ត</h4>
+                <div class="row" align="center">
+                    <ul class="roles-area">
+                        {{#each rolesBranchOptions}}
+                            <li class="select-province {{#if selectCurrentProvince}}active-area{{/if}}">{{label}}</li>
+                        {{/each}}
+                    </ul>
+                    <h4 style="color: white; font-family: 'Khmer OS Muol'"><i class="material-icons">location_on</i>
+                        ជ្រើសរើសក្រុង</h4>
+                    <ul class="roles-area">
+                        {{#if noArea}}
+                            <li>មិនទាន់បានជ្រើសរើស :(</li>
+                        {{else}}
+                            {{#each rolesAreaOptions}}
+                                <li class="select-district {{#if selectCurrentDistrict}}active-area{{/if}}">{{label}}</li>
+                            {{/each}}
+                        {{/if}}
+                    </ul>
+                        <!--{{#if fetchGeoDataReady}}-->
+                    <!--<div class="col-md-12">-->
+                    <!--{{>afQuickField  name="rolesBranch" label=false options=rolesBranchOptions}}-->
+                    <!--</div>-->
+
+                    <!--<div class="col-md-12">-->
+                    <!--{{>afQuickField name="rolesArea" label=false options=rolesAreaOptions}}-->
+                    <!--</div>-->
+                        <!--{{/if}}-->
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" align="center">
+                        <ul class="custom-module">
+                            {{#each moduleOptions}}
+                                <li class="select-module {{#if currentModule}}active-module{{/if}}">{{{label}}}</li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6" align="center">
+                        <button type="button" class="logout"><i class="fa fa-power-off"></i> ចាកចេញ</button>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <button type="submit" class="hidden submit-button">GO</button>
+            {{/autoForm}}
+        </div>
+    </body>
+</template>

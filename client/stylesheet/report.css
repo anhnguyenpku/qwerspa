@@ -1,0 +1,246 @@
+
+.body-border-outsite {
+    border: 1px solid;
+}
+
+/*.no-print {
+    display: block;
+}*/
+
+.heading-report {
+    text-align: center;
+    border: 1px solid;
+}
+
+.body-center-report {
+    text-align: center;
+    border: 1px solid;
+}
+
+.body-border-no-right {
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.body-border-no-left {
+    border-right: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.headin-no-border {
+    text-align: center;
+}
+
+.no-print {
+    font-size: 12px;
+}
+
+.report-title {
+    font-size: 18px !important;
+    font-family: "Khmer OS Muol" !important;
+}
+::-webkit-scrollbar {
+    display: auto;
+}
+@media print {
+    /*body {*/
+    /*overflow: hidden !important;*/
+    /*}*/
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    /*qrbox inside customer report*/
+    .qrbox{
+        display: inline-block;
+        height: 240px !important;
+        width: 150px !important;
+        border-top: 15px solid rgba(255, 255, 255, 0) !important;
+        padding: 15px !important;
+        margin-top: 5px !important;
+        margin-right:2px;
+        margin-left:2px;
+        background-color: rgba(255, 255, 255, 0) !important;
+        /*color: #fff !important;*/
+        -webkit-print-color-adjust: exact !important;
+    }
+    .jumbo-style {
+        padding: 0px;
+    }
+
+    .no-print {
+        display: none;
+    }
+
+    #page-number:before {
+        counter-increment: page;
+        counter-reset: page 1;
+        content: "Page " counter(page) " of " counter(pages);
+    }
+
+    #page-number-dont-have-total:after {
+        counter-increment: page;
+        /*counter-reset: page 1;*/
+        content: counter(page);
+    }
+
+    .heading-report {
+        border: 0px solid;
+    }
+
+    .body-center-report {
+        border: 0px solid;
+    }
+
+    .body-border-outsite {
+        border: 0px solid !important;
+    }
+
+    .body-border-no-right {
+        border-left: 0px solid;
+        border-top: 0px solid;
+        border-bottom: 0px solid;
+    }
+
+    .body-border-no-left {
+        border-right: 0px solid;
+        border-top: 0px solid;
+        border-bottom: 0px solid;
+    }
+}
+
+.table-report > thead > tr > th {
+    text-align: center !important;
+    font-size: 14px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.table-report > thead > tr > td {
+    border: none;
+}
+
+.table-report-block-summary > thead > tr > th {
+    text-align: center !important;
+    font-size: 14px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.table-report-block-summary > thead > tr > td {
+    border: none;
+}
+
+
+.table-report-block-summary > tbody > tr > td {
+    text-align: right !important;
+    font-family: "Khmer OS Battambang";
+}
+.table-report-block-summary > tbody > tr > th {
+    text-align: right !important;
+}
+
+.page-break{
+    page-break-after: always;
+}
+
+@media print {
+
+    /* #page-number-dont-have-total {
+         counter-increment: page-number-dont-have-total;
+         counter-reset: page-number-dont-have-total 1;
+         content: counter(page-number-dont-have-total);
+     }*/
+    /* #page-number-dont-have-total:after {
+         counter-increment: page;
+         content: counter(page);
+     }*/
+    /*#pageNumberAuto{
+        page-break-before:always;
+        counter-increment: page;
+    }
+*/
+    .pageNumberAuto:after  {
+        counter-increment: page;
+        content: counter(page);
+
+    }
+
+    .content{
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+
+    .table-report > thead > tr > th {
+        text-align: center !important;
+        font-size: 8px !important;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table-report > tbody > tr > td {
+        font-size: 10px !important;
+
+    }
+
+    .table-report > tbody > tr > th {
+        font-size: 10px !important;
+
+    }
+    .table-report-block-summary > thead > tr > th {
+        text-align: center !important;
+        font-size: 8px !important;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+
+    .table-report-block-summary > tbody > tr > td {
+        font-size: 9px !important;
+
+    }
+
+    .table-report-block-summary > tbody > tr > th {
+        font-size: 9px !important;
+
+    }
+
+}
+
+.sheet.padding-3mm {
+    padding: 3mm
+}
+
+.table-report-appellate > thead > tr > th {
+    text-align: center !important;
+    font-size: 14px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.reportAppellate{
+    text-align: center;
+
+}
+
+/*.table-bordered {
+    border: 0px solid !important;
+}*/
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {
+    border: 1px solid #9b9b9b !important;
+}
+
+.postInvoiceTh{
+    font-family: Khmer OS Battambang !important;
+    vertical-align: middle !important;
+    font-size: 11px;
+    padding-bottom: 22px;
+    padding-top: 8px;
+}
+.postInvoiceTh10{
+    font-family: Khmer OS Battambang !important;
+    vertical-align: middle !important;
+    font-size: 10px;
+    padding-bottom: 22px;
+    padding-top: 8px;
+}

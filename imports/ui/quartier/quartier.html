@@ -1,0 +1,44 @@
+<template name="wb_quartier">
+    <div class="c">
+        <div class="card">
+            <div class="card-header card-header-icon" data-background-color="purple">
+                <i class="material-icons">location_on</i>
+            </div>
+            <div class="card-content">
+                <h4 class="card-title" style="cursor: pointer !important;font-family: 'Khmer OS Battambang'"><a class="add"><i class="fa fa-plus"></i> Quartier </a></h4>
+                <div class="col-md-12" style="padding:20px;">
+                    <div class="animated fadeIn">
+                        {{> tabular table=dataTable selector=selector class="cursor-pointer table table-striped"}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<template name="wb_quartierAdd">
+    <div class="container animated fadeIn">
+        {{#autoForm collection=collection id="wb_quartierAdd" type="insert"}}
+            {{> afQuickField name='districtCodeId' options=fetchGeneralDistrict}}
+            {{> afQuickField name='code'}}
+            {{> afQuickField name='name'}}
+            {{> afQuickField name='description'}}
+            <div class="box-footer">
+                {{> wb_actionAdd}}
+            </div>
+        {{/autoForm}}
+    </div>
+</template>
+<template name="wb_quartierEdit">
+
+    <div class="container animated fadeIn">
+        {{#autoForm collection=collection id="wb_quartierEdit" doc=this type="update"}}
+            {{> afQuickField name='districtCodeId' options=fetchGeneralDistrict}}
+            {{> afQuickField name='code'}}
+            {{> afQuickField name='name'}}
+            {{> afQuickField name='description'}}
+            <div class="box-footer">
+                {{> wb_actionEdit}}
+            </div>
+        {{/autoForm}}
+    </div>
+</template>

@@ -1,0 +1,89 @@
+.sidebar-collapse {
+    position: initial !important;
+    left: -170px;
+    top: -45px;
+}
+
+.skin-blue-light .main-sidebar {
+    border-right: 1px solid #d2d6de;
+}
+
+.skin-blue-light .wrapper, .skin-blue-light .main-sidebar, .skin-blue-light .left-side {
+    background-color: #f9fafc;
+}
+
+.sidebar {
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.navbar-fixed-top {
+    /*background-color: teal;*/
+    background-color: white;
+    /*color: white;*/
+    color: black;
+}
+
+/*.main-header .sidebar-toggle {
+    color: white !important;
+}*/
+
+.main-header .logo {
+    /*text-transform: uppercase;*/
+    color: #337AB7;
+}
+
+.box-header {
+    /*padding: 0px !important;*/
+    padding-left: 8px !important;
+    padding-right: 10px !important;
+}
+
+.table {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.main-sidebar, .left-side {
+    position: fixed !important;
+    background-color: #ECF0F5;
+}
+
+
+
+.select2-container--default .select2-selection--single, .select2-selection .select2-selection--single {
+    /*border: 1px solid #d2d6de !important;*/
+    border: 1px solid #80cbc4 !important;
+    border-radius: 0 !important;
+    padding: 6px 12px !important;
+    width: 100% !important;
+    height: 36px !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid blue !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.form-control {
+    height: 36px !important;
+    border-color: #80cbc4 !important;
+}
+
+/*.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    !*position: relative !important;*!
+    min-height: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    padding-top:0px;
+}*/
+
+.main-sidebar, .left-side {
+    height: 100% !important;
+    /*overflow-y: scroll;*/
+}

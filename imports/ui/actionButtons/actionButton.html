@@ -1,0 +1,54 @@
+<template name="wb_actionAdd">
+    <span class="right" style="float: right">
+    <button type="reset" class="btn btn-default"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+
+    <button class="sumitForm btn btn-primary" type="submit"><i
+            class="glyphicon glyphicon-floppy-save"></i> Save</button>
+
+    </span>
+</template>
+<template name="wb_actionEdit">
+    <span class="right" style="float: right">
+    <button type="reset" class="btn btn-default">Reset</button>
+    <button type="submit" class="btn btn-success">Update</button>
+    </span>
+</template>
+
+<template name="wb_actionRemove">
+    <a class="remove cursor-pointer"><i class="material-icons red-text small">delete</i></a>
+</template>
+
+<template name="wb_action">
+    <div style="position: relative; height: 40px ">
+        <div class="fixed-action-btn horizontal cursor-pointer "
+             style="position: absolute; display: inline-block; right: 0px; bottom: 0">
+            <a class="btn-floating btn-small blue">
+                <i class="small material-icons">menu</i>
+            </a>
+            <ul style="margin-top:-15px">
+                <li><a class="btn-floating red remove"><i class="material-icons">remove</i></a></li>
+                <li><a class="btn-floating yellow darken-1 show"><i class="material-icons">visibility</i></a></li>
+                <li><a class="btn-floating green edit"><i class="material-icons">edit</i></a></li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<template name="wb_actionEditRemove">
+    <span>
+                <a class="edit cursor-pointer right"><i class="material-icons blue-text small">mode_edit</i></a>
+
+                <a class="remove cursor-pointer left"><i class="material-icons red-text small">delete</i></a>
+    </span>
+</template>
+<template name="wb_actionEditToggle">
+    <a class="editToggle cursor-pointer right"><i class="material-icons teal-text small">sync</i></a>
+</template>
+
+<template name="wb_actionFromSemantic">
+    <div class="ui buttons">
+        <button class="ui negative button remove"><i class="fa fa-remove"></i></button>
+        <div class="or"></div>
+        <button class="ui positive button edit"><i class="fa fa-pencil"></i></button>
+    </div>
+</template>

@@ -1,0 +1,314 @@
+{
+  "wb": {
+    "sidebarMenu": {
+      "home": "Home",
+      "customer": "Customer",
+      "customerType": "Customer Type",
+      "block": "Block",
+      "category": "Category",
+      "class": "Class",
+      "district": "District",
+      "operationCode": "Operation Code",
+      "position": "Position",
+      "quartier": "Quartier",
+      "attension": "Attension",
+      "referenceType": "Reference Type",
+      "reference": "Reference",
+      "tariff": "Tariff",
+      "activity": "Activity",
+      "meterReading": "Meter Reading",
+      "meterType": "Meter Type",
+      "setting-price": "Setting Price",
+      "meter": "Meter",
+      "changeBlock": "Change Block"
+    },
+    "home": {
+      "title": "Home"
+    },
+    "area": {
+      "title": "Choose Area"
+    },
+    "customerEdit": {
+      "title": "Edit Customer"
+    },
+    "customerAdd": {
+      "title": "Add Customer"
+    },
+    "customer": {
+      "title": "Customer",
+      "schema": {
+        "_id": {
+          "label": "ID"
+        },
+        "name": {
+          "label": "Name"
+        },
+        "gender": {
+          "label": "Gender"
+        },
+        "dob": {
+          "label": "Date of birth"
+        },
+        "address": {
+          "label": "Address"
+        },
+        "telephone": {
+          "label": "Telephone"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "rolesArea": {
+          "label": "Branch"
+        }
+      }
+    },
+    "customerType": {
+      "title": "Customer Type",
+      "info": ""
+    },
+    "customerTypeEdit": {
+      "title": "Edit Customer Type",
+      "info": ""
+    },
+    "block": {
+      "title": "Block",
+      "info": ""
+    },
+    "blockEdit": {
+      "title": "Edit Block",
+      "info": ""
+    },
+    "blockAdd": {
+      "title": "Add Block",
+      "info": ""
+    },
+    "category": {
+      "title": "Category",
+      "info": ""
+    },
+    "categoryEdit": {
+      "title": "Edit Category",
+      "info": ""
+    },
+    "class": {
+      "title": "Class",
+      "info": ""
+    },
+    "classEdit": {
+      "title": "Edit Class",
+      "info": ""
+    },
+    "district": {
+      "title": "District",
+      "info": ""
+    },
+    "districtEdit": {
+      "title": "Edit District",
+      "info": ""
+    },
+    "operationCode": {
+      "title": "Operation Code",
+      "info": ""
+    },
+    "operationCodeEdit": {
+      "title": "Edit Operation Code",
+      "info": ""
+    },
+    "position": {
+      "title": "Position",
+      "info": ""
+    },
+    "quartier": {
+      "title": "Quartier",
+      "info": ""
+    },
+    "quartierEdit": {
+      "title": "Edit Quartier",
+      "info": ""
+    },
+    "quartierAdd": {
+      "title": "Add Quartier",
+      "info": ""
+    },
+    "attension": {
+      "title": "Attension",
+      "info": ""
+    },
+    "referenceType": {
+      "title": "Reference Type",
+      "info": ""
+    },
+    "referenceTypeEdit": {
+      "title": "Edit Reference Type",
+      "info": ""
+    },
+    "reference": {
+      "title": "Reference",
+      "info": ""
+    },
+    "referenceAdd": {
+      "title": "Add Reference",
+      "info": ""
+    },
+    "referenceEdit": {
+      "title": "Edit Reference",
+      "info": ""
+    },
+    "tariff": {
+      "title": "Tariff",
+      "info": ""
+    },
+    "tariffAdd": {
+      "title": "Add Tariff",
+      "info": ""
+    },
+    "tariffEdit": {
+      "title": "Edit Tariff",
+      "info": ""
+    },
+    "meter": {
+      "title": "Meter",
+      "info": "Meter"
+    },
+    "meterChange": {
+      "title": "Meter Change",
+      "info": "Meter"
+    },
+    "meterReadingAdd": {
+      "title": "Add Meter Reading"
+    },
+    "meterReadingEdit": {
+      "title": "Edit Meter Reading"
+    },
+    "meterReading": {
+      "title": "Meter Reading",
+      "info": "Meter Reading"
+    },
+    "meterReadingJournal": {
+      "title": "Journal Books",
+      "info": ""
+    },
+    "meterReadingJournalNew": {
+      "title": "Meter Reading Journal Preview"
+    },
+    "meterWritingJournal": {
+      "title": "Writing Journal"
+    },
+    "setting-price": {
+      "title": "Setting Price"
+    },
+    "setting-price-new": {
+      "title": "Add Setting Price"
+    },
+    "setting-price-edit": {
+      "title": "Edit Setting Price"
+    },
+    "activity": {
+      "title": "Activity"
+    },
+    "activityEdit": {
+      "title": "Edit Activity"
+    },
+    "meterType": {
+      "title": "Meter Type"
+    },
+    "meterTypeEdit": {
+      "title": "Edit Meter Type"
+    },
+    "userSetting": {
+      "title": "User Setting"
+    },
+    "userAdd": {
+      "title": "Add User"
+    },
+    "userSettingEdit": {
+      "title": "Edit User"
+    },
+    "customerReport": {
+      "title": "Customer Report"
+    },
+    "changeBlock": {
+      "title": "Change Block"
+    },
+    "payment": {
+      "title": "Receive Payment"
+    }
+  },
+  "pos": {
+    "sidebarMenu": {
+      "home": "home",
+      "customer": "Customer",
+      "vendor": "Vendor",
+      "bill": "Bill",
+      "agent": "Agent",
+      "invoice": "Invoice",
+      "receivePayment": "Receive Payment",
+      "payBill": "Pay Bill",
+      "exchange": "Exchange",
+      "report": "Report",
+      "saleByCustomerDetail": "Sale By Customer Detail",
+      "saleByCustomerSummary": "Sale By Customer Summary",
+      "saleByProductDetail": "Sale By Product Detail",
+      "saleByProductSummary": "Sale By Product Summary",
+      "productList": "Product List",
+      "receivePaymentSummary": "Receive Payment Summary",
+      "receivePaymentDetail": "Receive Payment Detail",
+      "debtSummary": "Debt Summary",
+      "debtDetail": "Debt Detail",
+      "collectionSheetSummary": "Collection Sheet Summary",
+      "collectionSheetDetail": "Collection Sheet Detail",
+      "transactionListByCustomer": "Transaction List By Customer",
+      "setting": "Setting",
+      "term": "Term",
+      "location": "Location",
+      "category": "Category",
+      "product": "Product",
+      "setup": "Setup",
+      "general": "General",
+      "purchaseByVendorSummary": "Purchase By Vendor Summary",
+      "purchaseByVendorDetail": "Purchase By Vendor Detail",
+      "purchaseByProductSummary": "Purchase By Product Summary",
+      "purchaseByProductDetail": "Purchase By Product Detail",
+      "payBillSummary": "Pay Bill Summary",
+      "payBillDetail": "Pay Bill Detail",
+      "unPaidSummary": "UnPaid Summary",
+      "unPaidDetail": "UnPaid Detail",
+      "purchaseSaleByProductSummary": "Purchase and Sale By Product Summary",
+      "inventoryEnding": "Inventory Ending",
+      "inventoryTransaction": "Inventory Transaction",
+      "transferInventory": "Transfer Inventory",
+      "transferLocation": "Transfer Location",
+      "transferLocationSummary": "Transfer Location Summary",
+      "unit": "Unit",
+      "saleOrder": "Sale Order"
+    },
+    "customer": {
+      "customerAdd": "Add Customer",
+      "customerUpdate": "Update Customer",
+      "customerTitle": "Customer",
+      "name": "Name/Company",
+      "khName": "Khmer Name/Company",
+      "address": "Address",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "term": "Term",
+      "openingBalance": "Opening Balance",
+      "note": "Note"
+    }
+  },
+  "sch": {
+    "sidebarMenu": {
+      "home": "home",
+      "student": "Student",
+      "setting": "Setting",
+      "major": "Major",
+      "subject": "Subject",
+      "ciriculumn": "Ciriculumn"
+    }
+  },
+  "global": {
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}

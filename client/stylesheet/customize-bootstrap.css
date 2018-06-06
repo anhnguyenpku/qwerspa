@@ -1,0 +1,81 @@
+input[type="text"].form-control,
+input[type="number"].form-control,
+input[type="password"].form-control,
+select.form-control {
+    background: transparent;
+    /*border: none;*/
+    /*border-bottom: 1px solid #000000;*/
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 3px !important;
+}
+
+input[type="text"].form-control:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+label {
+    font-size: 12px !important;
+    /*text-transform: uppercase;*/
+    color: #777 !important;
+    font-weight: 500;
+}
+
+ul.animated-padding > li > a {
+    transition: .3s all ease-in-out;
+    -webkit-transition: .3s all ease-in-out;
+    -moz-transition: .3s all ease-in-out;
+    font-weight: normal;
+    color: white;
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    /*text-transform: uppercase;*/
+    /*border-left: 5px #ECF0F5 solid;*/
+}
+
+ul.animated-padding > li > a:hover {
+    text-decoration: none;
+    background: rgba(0, 59, 108, 0.8);
+    /*border-left: 5px #455A64 solid;*/
+    /*background: #1FC1D5 !important;
+    border-left: 5px #2CB8CB solid;*/
+    color: white !important;
+    font-weight: bold;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    box-shadow: 0px 0px 10px  rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0px 0px 10px  rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 10px  rgba(0,0,0,0.4);
+}
+ul.animated-padding > li.active {
+    background: rgba(0, 59, 108, 0.8);
+    font-weight: bold;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    box-shadow: 0px 0px 10px  rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0px 0px 10px  rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 10px  rgba(0,0,0,0.4);
+
+}
+
+ul.animated-padding > li.active > a {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+ul.animated-padding > li.treeview.active {
+    background: none !important;
+    box-shadow: none;
+    /*text-transform: capitalize;*/
+}
+
+ul.animated-padding > li.treeview.active > a {
+    /*color: black;*/
+    color: white;
+    /*text-transform: capitalize;*/
+}
+

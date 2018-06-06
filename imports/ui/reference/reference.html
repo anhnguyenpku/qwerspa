@@ -1,0 +1,46 @@
+<template name="wb_reference">
+
+    <div class="c">
+        <div class="card">
+            <div class="card-header card-header-icon" data-background-color="purple">
+                <i class="material-icons">chrome_reader_mode</i></div>
+            <div class="card-content">
+                <h4 class="card-title" style="cursor: pointer !important;font-family: 'Khmer OS Battambang'"><a
+                        class="add"><i class="fa fa-plus"></i> Reference </a></h4>
+                <div class="col-md-12" style="padding:20px;">
+                    <div class="animated fadeIn">
+                        {{> tabular table=dataTable selector=selector class="cursor-pointer table table-striped"}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="wb_referenceAdd">
+    <div class="container animated fadeIn">
+        {{#autoForm collection=collection id="wb_referenceAdd" type="insert"}}
+            {{> afQuickField name='code'}}
+            {{> afQuickField name='name'}}
+            {{> afQuickField name='referenceTypeId' options=referenceType}}
+            {{> afQuickField name='description'}}
+            <div class="box-footer">
+                {{> wb_actionAdd}}
+            </div>
+        {{/autoForm}}
+    </div>
+</template>
+
+<template name="wb_referenceEdit">
+    <div class="container animated fadeIn">
+        {{#autoForm collection=collection id="wb_referenceEdit" doc=this type="update"}}
+            {{> afQuickField name='code'}}
+            {{> afQuickField name='name'}}
+            {{> afQuickField name='referenceTypeId' options=referenceType}}
+            {{> afQuickField name='description'}}
+            <div class="box-footer">
+                {{> wb_actionEdit}}
+            </div>
+        {{/autoForm}}
+    </div>
+</template>

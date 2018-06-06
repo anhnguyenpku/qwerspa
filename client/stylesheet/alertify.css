@@ -1,0 +1,20 @@
+.alertify .ajs-dialog {
+    background-color: #eeeeee !important;
+}
+
+.alertify .ajs-body .ajs-content {
+    padding: 8px 0px 1px 0px !important;
+}
+
+.alertify .ajs-header {
+    color: white !important;
+    font-weight: bold;
+    background: #4db6ac !important;
+    border-bottom: #eee 1px solid;
+    border-radius: 2px 2px 0 0;
+}
+
+
+.select2-container {
+    z-index:2016;
+}

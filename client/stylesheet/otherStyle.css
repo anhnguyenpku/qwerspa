@@ -1,0 +1,28 @@
+.collapsible-header.active:after {
+    content: "" !important;
+}
+
+.collapsible-header:after {
+    content: "" !important;
+}
+
+.row {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px !important;
+}
+
+@media (max-width: 767px) {
+    .main-header .logo, .main-header .navbar {
+        width: 100% !important;
+        float: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-header .navbar {
+        margin: 0;
+    }
+}
+
+

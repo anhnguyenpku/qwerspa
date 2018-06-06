@@ -1,0 +1,10 @@
+ div.newAffix.no-print > ol > li {
+     color: #000000 !important;
+     font-size: 15px;
+     background: none;
+ }
+
+ div.newAffix.no-print > ol > li.active {
+     color: #4950A4 !important;
+     font-weight: 600 !important;
+ }

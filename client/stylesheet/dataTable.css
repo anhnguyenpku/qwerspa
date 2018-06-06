@@ -1,0 +1,13 @@
+
+table.dataTable-display {
+    width: 100% !important;
+    margin: 0 auto !important;
+    clear: both !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    padding: 5px;
+}
+
+table.dataTable-display > th,tr,td {
+    padding: 5px;
+}

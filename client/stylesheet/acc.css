@@ -1,0 +1,63 @@
+.el-dialog__title {
+    color: white !important;
+}
+
+.el-dialog__header {
+    padding: 20px 20px !important;
+    background: rgba(0, 59, 108, 0.8) !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+    color: white !important;
+}
+
+.el-dialog--full > .el-dialog__body {
+    height: calc(100vh - 140px) !important;
+    overflow-y: auto !important;
+}
+
+.responstable {
+    /*margin: 1em 0;*/
+    width: 100%;
+    overflow: hidden;
+    background: #FFF;
+    color: #024457;
+    /*border-radius: 10px;*/
+    border: 1px solid #167F92;
+}
+
+.journalForm > table {
+    display: table;
+    /* border-collapse: separate;
+     border-spacing: 2px;
+     border-color: grey;*/
+}
+
+.responstable th {
+    border: 1px solid #FFF;
+    /*background-color: #167F92;*/
+    background-color: white;
+    /*color: #FFF;*/
+    color: black;
+    margin: .5em 1em;
+}
+
+.responstable td {
+    border: 1px solid #D9E4E6;
+}
+
+.journalForm > .table-striped > tbody > tr:nth-child(2n+2) > td, .table-striped > tbody > tr:nth-child(2n+2) > th {
+    background-color: #EAF3F3;
+}
+
+.journalForm > .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: white;
+}
+
+.w3-code {
+    width: auto;
+    background-color: #fff;
+    padding: 8px 12px;
+    border-left: 4px solid #4CAF50;
+    word-wrap: break-word;
+}
