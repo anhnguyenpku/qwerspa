@@ -85,7 +85,8 @@
       "unit": "Unit",
       "receiveItem": "Receive Item",
       "qtyReceive": "Qty Receive",
-      "paidOnSaleOrder": "Paid On Order"
+      "paidOnSaleOrder": "Paid On Prepay",
+      "paidOnSaleOrderRaw": "Prepay"
     },
     "receivePayment": {
       "searchHere": "Search Here ...",
@@ -622,7 +623,8 @@
       "unit": "ឯកតា",
       "receiveItem": "ទទួលទំនិញ",
       "qtyReceive": "ចំនួនបានទទួល",
-      "paidOnSaleOrder": "បង់មុន"
+      "paidOnSaleOrder": "កាត់ពីប្រាក់កក់",
+      "paidOnSaleOrderRaw": "ប្រាក់កក់"
     },
     "receivePayment": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

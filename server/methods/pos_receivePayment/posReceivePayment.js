@@ -156,13 +156,13 @@ Meteor.methods({
                     _id: obj._id,
                     invoiceNo: obj.invoiceNo,
                     termId: obj.termId,
-                    amount: formatCurrency(obj.netTotal - obj.paid),
+                    amount: formatCurrency(obj.netTotal - obj.paid - (obj.balanceNotCut || 0)),
                     rawAmount: obj.total,
                     isApplyTerm: false,
                     discount: 0,
                     invoiceDate: obj.invoiceDate,
                     dueDate: obj.dueDate,
-                    netAmount: formatCurrency(obj.netTotal - obj.paid),
+                    netAmount: formatCurrency(obj.netTotal - obj.paid - (obj.balanceNotCut || 0)),
                     paid: 0,
                     isShow: true,
                     isPaid: false,
@@ -196,7 +196,7 @@ Meteor.methods({
         let invoiceDoc = Pos_Invoice.findOne({_id: data._id});
         let newStatus = invoiceDoc.status;
         let upd = {};
-        if (invoiceDoc.paid + numeral(data.paid).value() + numeral(data.discount).value() >= invoiceDoc.netTotal) {
+        if (invoiceDoc.paid + (invoiceDoc.balanceNotCut || 0) + numeral(data.paid).value() + numeral(data.discount).value() >= invoiceDoc.netTotal) {
             newStatus = "Complete";
             upd.closeDate = date;
         } else {

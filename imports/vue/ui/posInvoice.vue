@@ -973,10 +973,11 @@
                                 </th>
                                 <th colspan="2">
                                     <el-form-item label="">
-                                        <el-input :placeholder="langConfig['paidOnSaleOrder']"
-                                                  v-model.number="posInvoiceForm.balanceNotCut"
+
+                                        <el-input :placeholder="langConfig['paidOnSaleOrderRaw']"
+                                                  v-model.number="posInvoiceForm.balanceNotCutFull"
                                                   disabled>
-                                            <template slot="prepend">{{langConfig['paidOnSaleOrder']}} :</template>
+                                            <template slot="prepend">{{langConfig['paidOnSaleOrderRaw']}} :</template>
                                             <template slot="append">{{currencySymbol}}</template>
                                         </el-input>
                                     </el-form-item>
@@ -1012,6 +1013,21 @@
                                     <el-input placeholder="Amount" v-model.number=posInvoiceDoc.amount
                                               disabled>
                                         <!--<template slot="append">{{currencySymbol}}</template>-->
+
+                                    </el-input>
+                                </td>
+                                <td>
+                                    <el-input placeholder="Please input Qty"
+                                              v-model.number=posInvoiceDoc.rawQty type='number' disabled
+                                    >
+                                        <template slot="append">{{posInvoiceDoc.unitName || ""}}</template>
+                                    </el-input>
+                                </td>
+                                <td>
+                                    <el-input placeholder="Please input Qty"
+                                              v-model.number=posInvoiceDoc.qty type='number'
+                                              @keyup.native="updatePosInvoiceDetailReceiveItemQty(posInvoiceDoc, index)"
+                                              @change="updatePosInvoiceDetailReceiveItemQty(posInvoiceDoc, index)">
                                         <template slot="append">
                                             <el-dropdown trigger="click" :hide-on-click="false">
                                                     <span class="el-dropdown-link">
@@ -1033,20 +1049,6 @@
                                                 </el-dropdown-menu>
                                             </el-dropdown>
                                         </template>
-                                    </el-input>
-                                </td>
-                                <td>
-                                    <el-input placeholder="Please input Qty"
-                                              v-model.number=posInvoiceDoc.rawQty type='number' disabled
-                                    >
-                                    </el-input>
-                                </td>
-                                <td>
-                                    <el-input placeholder="Please input Qty"
-                                              v-model.number=posInvoiceDoc.qty type='number'
-                                              @keyup.native="updatePosInvoiceDetailReceiveItemQty(posInvoiceDoc, index)"
-                                              @change="updatePosInvoiceDetailReceiveItemQty(posInvoiceDoc, index)">
-                                        <template slot="append">{{posInvoiceDoc.unitName || ""}}</template>
                                     </el-input>
                                 </td>
                                 <td style="text-align: center;vertical-align: middle; width: auto">
@@ -1083,6 +1085,18 @@
                                 <th colspan="2">
                                     <el-input :placeholder="langConfig['netTotal']"
                                               v-model.number="posInvoiceForm.netTotal"
+                                              disabled>
+                                        <template slot="append">{{currencySymbol}}</template>
+                                    </el-input>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" style="text-align: right;vertical-align: middle">
+                                    {{langConfig['paidOnSaleOrder']}}:
+                                </th>
+                                <th colspan="2">
+                                    <el-input :placeholder="langConfig['paidOnSaleOrder']"
+                                              v-model.number="posInvoiceForm.balanceNotCut"
                                               disabled>
                                         <template slot="append">{{currencySymbol}}</template>
                                     </el-input>
@@ -1362,7 +1376,8 @@
                     locationId: "",
                     rawQty: 0,
                     isReceiveAll: false,
-                    balanceNotCut: 0
+                    balanceNotCut: 0,
+                    balanceNotCutFull: 0
 
                 },
                 rules: {
@@ -1791,8 +1806,78 @@
                 })
 
             },
-            savePosReceiveItem(id, isPrint) {
+            savePosReceiveItem(isCloseDialog, id, isPrint) {
+                event.preventDefault();
+                let vm = this;
+                this.$refs["posReceiveItem"].validate((valid) => {
+                    if (valid) {
+                        let posInvoiceDoc = {
+                            total: vm.$_numeral(vm.posInvoiceForm.total).value(),
+                            netTotal: vm.$_numeral(vm.posInvoiceForm.netTotal).value(),
+                            balanceUnpaid: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(),
+                            paid: vm.$_numeral(vm.posInvoiceForm.netTotal).value() - vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() - vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value(),
 
+                            paidUSD: vm.$_numeral(vm.posInvoiceForm.paidUSD).value(),
+                            paidKHR: vm.$_numeral(vm.posInvoiceForm.paidKHR).value(),
+                            paidTHB: vm.$_numeral(vm.posInvoiceForm.paidTHB).value(),
+
+                            remainUSD: vm.$_numeral(vm.posInvoiceForm.remainUSD).value(),
+                            remainKHR: vm.$_numeral(vm.posInvoiceForm.remainKHR).value(),
+                            remainTHB: vm.$_numeral(vm.posInvoiceForm.remainTHB).value(),
+
+                            invoiceDate: moment(vm.posInvoiceForm.invoiceDate).toDate(),
+                            invoiceDateName: moment(vm.posInvoiceForm.invoiceDate).format("DD/MM/YYYY"),
+                            dueDate: moment(vm.posInvoiceForm.dueDate).toDate(),
+                            invoiceNo: vm.posInvoiceForm.invoiceNo,
+
+                            note: vm.posInvoiceForm.note,
+
+                            discountType: vm.posInvoiceForm.discountType,
+
+
+                            discount: vm.$_numeral(vm.posInvoiceForm.discount).value(),
+                            discountValue: vm.$_numeral(vm.posInvoiceForm.discountValue).value(),
+                            termId: vm.posInvoiceForm.termId,
+                            address: vm.posInvoiceForm.address,
+                            balanceNotCut: vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value(),
+                            rolesArea: Session.get('area'),
+                            paymentNumber: 1,
+                            customerId: vm.posInvoiceForm.customerId,
+                            locationId: vm.posInvoiceForm.locationId,
+                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
+                        };
+                        let newPosInvoiceData = [];
+                        vm.posInvoiceData.map((obj) => {
+                            if (obj.isReceive == true) {
+                                newPosInvoiceData.push(obj);
+                            }
+                        })
+                        posInvoiceDoc.item = newPosInvoiceData;
+                        Meteor.call("insertPosInvoice", posInvoiceDoc, true, (err, result) => {
+                            if (!err) {
+                                if (isPrint) {
+                                    FlowRouter.go('/pos-data/posInvoice/print?inv=' + result);
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: this.langConfig['saveSuccess'],
+                                        type: 'success'
+                                    });
+                                }
+                                if (isCloseDialog) {
+                                    this.dialogAddPosReceiveItem = false;
+                                } else {
+                                    vm.getVoucherByRoleAndDate(moment().toDate());
+                                }
+
+                                Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
+
+                                vm.queryData();
+                                vm.resetForm();
+                            }
+                        })
+                    }
+                })
             },
             removePosInvoice(index, row, rows) {
                 let vm = this;
@@ -1873,7 +1958,7 @@
                 $(".el-dialog__title").text(this.langConfig['update']);
                 this.customerOpt();
                 this.termOpt();
-                if (row.status == "Active" || row.paymentNumber < 2) {
+                if ((row.status == "Active" || row.paymentNumber < 2) && row.transactionType != "Invoice Sale Order") {
                     vm.dialogUpdatePosInvoice = true;
                     vm.findPosInvoiceById(scope);
                 } else {
@@ -1891,6 +1976,7 @@
                 Meteor.call("queryPosInvoiceById", doc.row._id, (err, data) => {
                     vm.posInvoiceData = [];
                     if (data) {
+                        console.log(data.item);
                         vm.posInvoiceData = data.item;
                         vm.posInvoiceForm = {
                             total: formatCurrency(data.total, companyDoc.baseCurrency),
@@ -2108,14 +2194,20 @@
                 let total = 0;
                 vm.posInvoiceData.forEach(function (obj) {
                     total += parseFloat(vm.$_numeral(obj.amount).value());
+
                 });
+                if (total >= vm.$_numeral(vm.posInvoiceForm.balanceNotCutFull).value()) {
+                    vm.posInvoiceForm.balanceNotCut = vm.posInvoiceForm.balanceNotCutFull;
+                } else {
+                    vm.posInvoiceForm.balanceNotCut = formatCurrency(total);
+                }
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
                 this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
                 vm.posInvoiceForm.total = formatCurrency(total, companyDoc.baseCurrency);
 
                 if (vm.posInvoiceForm.discountType == "Amount") {
                     vm.posInvoiceForm.netTotal = formatCurrency(total - vm.posInvoiceForm.discount, companyDoc.baseCurrency);
-                    vm.posInvoiceForm.balanceUnpaid = formatCurrency(total - vm.posInvoiceForm.discount - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posInvoiceForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posInvoiceForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posInvoiceForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posInvoiceForm.balanceUnpaid = formatCurrency(total - vm.posInvoiceForm.discount - vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posInvoiceForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posInvoiceForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posInvoiceForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
                     vm.posInvoiceForm.remainUSD = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "USD");
                     vm.posInvoiceForm.remainKHR = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "KHR");
@@ -2164,7 +2256,7 @@
                         vm.posInvoiceForm.customerId = data.customerId;
                         vm.posInvoiceForm.locationId = data.locationId;
 
-                        vm.posInvoiceForm.balanceNotCut = data.balanceNotCut;
+                        vm.posInvoiceForm.balanceNotCutFull = data.balanceNotCut;
                         vm.getTotal();
                     }
                 })

@@ -104,8 +104,9 @@ Meteor.methods({
         })
         return data;
     },
-    insertPosInvoice(data) {
+    insertPosInvoice(data, isReceiveItem) {
         data.transactionType = (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt";
+        data.transactionType = isReceiveItem == true ? "Invoice Sale Order" : data.transactionType;
         data.invoiceNo = data.rolesArea + "-" + moment(data.invoiceDate).format("YYYY") + pad(data.invoiceNo, 6);
 
         data.item.forEach((obj) => {
@@ -140,7 +141,7 @@ Meteor.methods({
                 canRemove: false,
                 locationId: data.locationId,
                 closeDate: data.netTotal - data.paid == 0 ? moment(data.invoiceDate).toDate() : "",
-                transactionType: (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
+                transactionType: isReceiveItem == true ? "Invoice Sale Order" : (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
             };
 
             Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.invoiceDate, (err, result) => {
@@ -161,6 +162,35 @@ Meteor.methods({
             Meteor.call("addPosAverageInventory", data, (err, result) => {
                 if (err) {
                     console.log(err.message);
+                }
+            })
+        }
+
+        if (isReceiveItem == true) {
+            let balanceNotCut = data.balanceNotCut;
+            data.item.forEach((obj) => {
+                if (obj.isReceive == true) {
+                    Pos_SaleOrder.direct.update({
+                            _id: obj.saleOrderId,
+                            "item.itemId": obj.itemId
+                        }, {
+                            $set: {"item.$.isReceive": obj.qty >= obj.rawQty ? true : false},
+                            $inc: {
+                                "item.$.receive": obj.qty
+                            }
+                        }
+                    );
+
+                    Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$inc: {cutOnPaid: balanceNotCut >= obj.amount ? obj.amount : balanceNotCut}});
+                    balanceNotCut -= balanceNotCut >= obj.amount ? obj.amount : balanceNotCut;
+                    balanceNotCut = balanceNotCut >= 0 ? balanceNotCut : 0;
+                    let countNotReceive = Pos_SaleOrder.find({"item.isReceive": false, _id: obj.saleOrderId}).count();
+                    if (countNotReceive == 0) {
+                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Complete"}});
+                    } else {
+                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Partial"}});
+                    }
+
                 }
             })
         }
@@ -264,12 +294,48 @@ Meteor.methods({
         let isRemoved = Pos_Invoice.remove({_id: id});
 
         if (isRemoved) {
+
+            if (data.transactionType == "Invoice Sale Order") {
+                let balanceNotCut = data.balanceNotCut;
+                data.item.forEach((obj) => {
+                    if (obj.isReceive == true) {
+                        Pos_SaleOrder.direct.update({
+                            _id: obj.saleOrderId,
+                            "item.itemId": obj.itemId
+                        }, {
+                            $set: {
+                                "item.$.isReceive": false,
+
+                            },
+                            $inc: {
+                                "item.$.receive": -obj.qty
+                            }
+                        });
+
+                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$inc: {cutOnPaid: balanceNotCut >= obj.amount ? -obj.amount : -balanceNotCut}});
+                        balanceNotCut -= balanceNotCut >= obj.amount ? obj.amount : balanceNotCut;
+                        balanceNotCut = balanceNotCut >= 0 ? balanceNotCut : 0;
+                        let countNotReceive = Pos_SaleOrder.find({
+                            "item.isReceive": false,
+                            _id: obj.saleOrderId
+                        }).count();
+                        if (countNotReceive == 0) {
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Complete"}});
+                        } else {
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Partial"}});
+                        }
+
+                    }
+                })
+            }
+
             data.transactionType = "Remove Invoice";
             Meteor.call("reducePosAverageInventory", data, (err, reuslt) => {
                 if (err) {
                     console.log(err.message);
                 }
             })
+
         }
         return isRemoved;
     },

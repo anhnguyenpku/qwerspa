@@ -1280,7 +1280,7 @@
                             address: vm.posSaleOrderForm.address,
 
                             rolesArea: Session.get('area'),
-                            paymentNumber: 1,
+                            receiveNumber: 1,
                             customerId: vm.posSaleOrderForm.customerId,
                             locationId: vm.posSaleOrderForm.locationId,
                             status: vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() < vm.$_numeral(vm.posSaleOrderForm.netTotal).value() ? "Partial" : "Active"
@@ -1454,7 +1454,7 @@
                 $(".el-dialog__title").text(this.langConfig['update']);
                 this.customerOpt();
                 this.termOpt();
-                if (row.status == "Active" || row.paymentNumber < 2) {
+                if (row.status == "Active" || row.receiveNumber < 2) {
                     vm.dialogUpdatePosSaleOrder = true;
                     vm.findPosSaleOrderById(scope);
                 } else {

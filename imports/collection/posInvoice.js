@@ -85,6 +85,12 @@ Pos_Invoice.schema = new SimpleSchema({
         type: Number,
         decimal: true
     },
+    balanceNotCut: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        defaultValue: 0
+    },
     status: {
         type: String,
         defaultValue: "Active"
