@@ -1547,19 +1547,22 @@
                 }
             },
             "posInvoiceForm.isReceiveAll"(val) {
+
                 let vm = this;
-                let ind = 0;
-                if (val == false) {
-                    vm.posInvoiceForm.isReceiveAll = false;
-                }
-                vm.posInvoiceData.map((obj) => {
-                    obj.isReceive = val;
-                    if (obj.isReceive == false) {
-                        obj.isReceiveAll = false;
+                if (vm.refForm == "posReceiveItem") {
+                    let ind = 0;
+                    if (val == false) {
+                        vm.posInvoiceForm.isReceiveAll = false;
                     }
-                    vm.updatePosInvoiceDetailReceiveItem(obj, ind);
-                    ind++;
-                })
+                    vm.posInvoiceData.map((obj) => {
+                        obj.isReceive = val;
+                        if (obj.isReceive == false) {
+                            obj.isReceiveAll = false;
+                        }
+                        vm.updatePosInvoiceDetailReceiveItem(obj, ind);
+                        ind++;
+                    })
+                }
             },
         },
         methods: {
@@ -1976,7 +1979,6 @@
                 Meteor.call("queryPosInvoiceById", doc.row._id, (err, data) => {
                     vm.posInvoiceData = [];
                     if (data) {
-                        console.log(data.item);
                         vm.posInvoiceData = data.item;
                         vm.posInvoiceForm = {
                             total: formatCurrency(data.total, companyDoc.baseCurrency),
@@ -2032,41 +2034,52 @@
                     return false;
                 }
                 vm.posInvoiceForm.isRetail = true;
-                Meteor.call("queryPosProductById", val, (err, data) => {
-                    if (data) {
-                        vm.posInvoiceData.push({
-                            itemId: data._id,
-                            itemName: data.code + " : " + data.name,
-                            unit1: 1,
-                            unit2: 1,
-                            totalUnit: 1,
-                            unitId: data.unitId,
-                            unitName: data.unitName,
 
-                            price: vm.posInvoiceForm.isRetail == true ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
-                            qty: vm.$_numeral(1).value(),
-                            amount: vm.posInvoiceForm.isRetail == true ? formatCurrency(data.rePrice) : formatCurrency(data.whPrice),
-                            isRetail: true,
-                            desc: ""
+                Meteor.call("queryPosAverageCostById", val, Session.get("area"), vm.posInvoiceForm.locationId, (err, dataStock) => {
+                    if (dataStock) {
+
+                        Meteor.call("queryPosProductById", val, (err, data) => {
+                            if (data) {
+                                vm.posInvoiceData.push({
+                                    itemId: data._id,
+                                    itemName: data.code + " : " + data.name,
+                                    unit1: 1,
+                                    unit2: 1,
+                                    totalUnit: 1,
+                                    unitId: data.unitId,
+                                    unitName: data.unitName,
+
+                                    price: vm.posInvoiceForm.isRetail == true ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
+                                    qty: vm.$_numeral(1).value(),
+                                    amount: vm.posInvoiceForm.isRetail == true ? formatCurrency(data.rePrice) : formatCurrency(data.whPrice),
+                                    isRetail: true,
+                                    desc: "",
+                                    rawQty: vm.$_numeral(dataStock.qtyEnding).value()
+                                })
+                                vm.posInvoiceForm.itemId = "";
+                                vm.$message({
+                                    duration: 1000,
+                                    message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",
+                                    type: 'success'
+                                });
+
+                                this.getTotal();
+                            } else {
+                                vm.$message({
+                                    duration: 1000,
+                                    message: "មិនមានឈ្មេាះនេះឡើយ!!",
+                                    type: 'error'
+                                });
+                            }
                         })
-                        vm.posInvoiceForm.itemId = "";
-                        vm.$message({
-                            duration: 1000,
-                            message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",
-                            type: 'success'
-                        });
-
-                        this.getTotal();
                     } else {
                         vm.$message({
-                            duration: 1000,
-                            message: "មិនមានឈ្មេាះនេះឡើយ!!",
+                            duration: 3000,
+                            message: "ទំនិញនេះ អស់ពីស្តុកហើយ!!",
                             type: 'error'
                         });
                     }
                 })
-
-
             },
             removePosInvoiceDetailByIndex(index, row) {
                 this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
@@ -2088,20 +2101,28 @@
                         message: 'Delete canceled'
                     });
                 });
-            },
+            }
+            ,
             updatePosInvoiceDetail(row, index) {
+                console.log(row);
+                if (row.qty > row.rawQty) {
+                    this.$message({
+                        type: 'error',
+                        message: 'ស្តុកមានមិនគ្រប់គ្រាន់ ។ ស្តុកនៅសល់តែ ' + row.rawQty + ' ប៉ុន្នោះ !!'
+                    });
+                }
                 row.totalUnit = this.$_math.round(row.unit1 * row.unit2 * row.qty, 2);
                 row.amount = formatCurrency(row.price * row.totalUnit);
 
                 this.posInvoiceData[index] = row;
-                let newIndex = index + 1;
                 /*this.$message({
                     duration: 1000,
                     message: `Update Row Number ` + newIndex + " Successfully !",
                     type: 'success'
                 });*/
                 this.getTotal();
-            },
+            }
+            ,
             updatePosInvoiceDetailReceiveItem(row, index) {
 
                 if (row.isReceive == true) {
@@ -2114,9 +2135,9 @@
                 row.amount = formatCurrency(row.price * row.totalUnit);
 
                 this.posInvoiceData[index] = row;
-                let newIndex = index + 1;
                 this.getTotal();
-            },
+            }
+            ,
             updatePosInvoiceDetailReceiveItemQty(row, index) {
 
                 if (row.qty > 0) {
@@ -2129,9 +2150,9 @@
                 row.amount = formatCurrency(row.price * row.totalUnit);
 
                 this.posInvoiceData[index] = row;
-                let newIndex = index + 1;
                 this.getTotal();
-            },
+            }
+            ,
             updatePosInvoiceDetailByRetail(row, index) {
                 let vm = this;
                 Meteor.call("queryPosProductById", row.itemId, (err, data) => {
@@ -2154,19 +2175,22 @@
                         this.getTotal();
                     }
                 })
-            },
+            }
+            ,
             clearZero(event) {
                 /*debugger;
                 $(event.currentTarget).select();
                 console.log(event);*/
-            },
+            }
+            ,
             cancel() {
                 this.resetForm();
                 this.$message({
                     type: 'info',
                     message: this.langConfig['cancel']
                 });
-            },
+            }
+            ,
             resetForm() {
                 this.posInvoiceData = [];
                 this.posInvoiceForm.discountValue = 0;
@@ -2188,7 +2212,8 @@
                 }
                 this.getTotal();
 
-            },
+            }
+            ,
             getTotal() {
                 let vm = this;
                 let total = 0;
@@ -2228,7 +2253,8 @@
                     vm.posInvoiceForm.balanceUnpaid = vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() <= 0 ? 0 : vm.posInvoiceForm.balanceUnpaid;
                     this.typeDiscount = "%";
                 }
-            },
+            }
+            ,
             popupPosInvoiceShow(row) {
                 let vm = this;
                 this.dialogShowPosInvoice = true;
@@ -2241,10 +2267,10 @@
                         console.log(err.message);
                     }
                 })
-            },
+            }
+            ,
             findPosSaleOrderIdByCustomerId(customerId) {
                 let vm = this;
-                let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
                 Meteor.call("queryPosSaleOrderByCustomerId", customerId, (err, data) => {
                     vm.posInvoiceData = [];
                     if (data) {

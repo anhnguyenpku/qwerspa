@@ -1206,6 +1206,8 @@
 
                                 if (isCloseDialog) {
                                     this.dialogAddPosBill = false;
+                                } else {
+                                    this.getVoucherByRoleAndDate(moment().toDate());
                                 }
                                 vm.queryData();
                                 vm.resetForm();

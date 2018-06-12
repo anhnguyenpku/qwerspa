@@ -87,7 +87,6 @@ Meteor.methods({
             obj.amount = formatCurrency(obj.amount);
             return obj;
         })
-
         return data;
     },
     queryPosInvoiceByIdShow(id) {
