@@ -35,6 +35,21 @@ Meteor.methods({
                             $regex: reg,
                             $options: 'mi'
                         }
+                    }, {
+                        invoiceDateName: {
+                            $regex: reg,
+                            $options: 'mi'
+                        }
+                    }, {
+                        total: {
+                            $regex: reg,
+                            $options: 'mi'
+                        }
+                    }, {
+                        status: {
+                            $regex: reg,
+                            $options: 'mi'
+                        }
                     }, {"customerDoc.name": {$regex: reg, $options: 'mi'}}];
                 }
             }
