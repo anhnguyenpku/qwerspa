@@ -407,3 +407,14 @@ posReport.route('/posStockDebtReport', {
     }
 
 });
+import '../../imports/ui/report/posStockReceive/posStockReceive';
+
+posReport.route('/posStockReceiveReport', {
+    name: 'pos.posStockReceiveReport',
+    title: "Stock Receive",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_stockReceiveReport');
+    }
+
+});

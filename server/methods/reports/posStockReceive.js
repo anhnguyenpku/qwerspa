@@ -1,6 +1,6 @@
 import {Meteor} from 'meteor/meteor';
 import {WB_waterBillingSetup} from '../../../imports/collection/waterBillingSetup';
-import {Pos_SaleOrder} from '../../../imports/collection/posSaleOrder';
+import {Pos_Invoice} from '../../../imports/collection/posInvoice';
 import {Pos_ReceivePayment} from '../../../imports/collection/posReceivePayment';
 
 import {SpaceChar} from "../../../both/config.js/space"
@@ -12,7 +12,7 @@ import {roundCurrency} from "../../../imports/api/methods/roundCurrency"
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
 
 Meteor.methods({
-    posSaleOrderByCustomerDetailReport(params, translate) {
+    posStockReceiveReport(params, translate) {
         let parameter = {};
 
         if (params.area != "") {
@@ -27,26 +27,25 @@ Meteor.methods({
         let companyDoc = WB_waterBillingSetup.findOne({});
 
 
-        parameter.saleOrderDate = {
+        parameter.invoiceDate = {
             $lte: moment(params.date[1]).endOf("day").toDate(),
             $gte: moment(params.date[0]).startOf("day").toDate()
         };
+        parameter.transactionType = "Invoice Sale Order";
 
-
-        // parameter.status = {$ne: "Complete"};
-        let saleOrderList;
-        let saleOrderHTML = "";
+        let stockReceiveList;
+        let stockReceiveHTML = "";
 
         //Range Date
         if (params.groupBy == "Customer") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
                 {
@@ -85,9 +84,9 @@ Meteor.methods({
                     }
                 }
             ]);
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
-                    saleOrderHTML += `
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj.customerDoc.name}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -103,13 +102,13 @@ Meteor.methods({
                         ob.item.forEach((o) => {
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                                
@@ -120,17 +119,18 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                               
+                                <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            </tr>
                     `;
                             ind++;
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -138,14 +138,14 @@ Meteor.methods({
             }
         }
         else if (params.groupBy == "None") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
                 {
@@ -168,24 +168,24 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
+            if (stockReceiveList.length > 0) {
                 let bal = 0;
                 let ind = 1;
                 let balProfit = 0;
 
-                saleOrderList[0].data.forEach((obj) => {
+                stockReceiveList[0].data.forEach((obj) => {
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
 
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                         
@@ -196,7 +196,8 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td> 
-                              
+                                <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                            
                            </tr>
@@ -205,10 +206,10 @@ Meteor.methods({
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -217,14 +218,14 @@ Meteor.methods({
 
         }
         else if (params.groupBy == "Transaction Type") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
                 {
@@ -249,13 +250,13 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
                     let bal = 0;
                     let ind = 1;
                     let balProfit = 0;
 
-                    saleOrderHTML += `
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj._id.transactionType}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -268,13 +269,13 @@ Meteor.methods({
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
 
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                                 
@@ -285,7 +286,8 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                              
+                            <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                            </tr>
                     `;
@@ -293,10 +295,10 @@ Meteor.methods({
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -304,14 +306,14 @@ Meteor.methods({
             }
         }
         else if (params.groupBy == "Item") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
                 {
@@ -345,13 +347,13 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
                     let bal = 0;
                     let ind = 1;
                     let balProfit = 0;
 
-                    saleOrderHTML += `
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj._id.itemName}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -364,13 +366,13 @@ Meteor.methods({
                         bal += ob.item.amount;
                         balProfit += (ob.item.amount - ob.item.totalCost);
 
-                        saleOrderHTML += `
+                        stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${ob.item.itemName}</td>
                                 <td style="text-align: left !important;">${ob.item.desc || ""}</td>
                              
@@ -380,17 +382,18 @@ Meteor.methods({
                                 <td>${formatCurrency(ob.item.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(ob.item.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                            
+                                <td>${formatCurrency(ob.item.amount - ob.item.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                            </tr>
                     `;
                         ind++;
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -398,23 +401,23 @@ Meteor.methods({
             }
         }
         else if (params.groupBy == "Day") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
 
                 {
                     $group: {
                         _id: {
-                            day: {$dayOfMonth: "$saleOrderDate"},
-                            month: {$month: "$saleOrderDate"},
-                            year: {$year: "$saleOrderDate"}
+                            day: {$dayOfMonth: "$invoiceDate"},
+                            month: {$month: "$invoiceDate"},
+                            year: {$year: "$invoiceDate"}
                         },
                         data: {$push: "$$ROOT"},
                         total: {$sum: "$total"}
@@ -430,13 +433,13 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
                     let bal = 0;
                     let ind = 1;
                     let balProfit = 0;
 
-                    saleOrderHTML += `
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj._id.day}/${obj._id.month}/${obj._id.year}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -450,13 +453,13 @@ Meteor.methods({
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
 
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                            
@@ -466,7 +469,8 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                                
+                                <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                            </tr>
                             `;
@@ -474,10 +478,10 @@ Meteor.methods({
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -485,23 +489,23 @@ Meteor.methods({
             }
         }
         else if (params.groupBy == "Week") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
 
                 {
                     $group: {
                         _id: {
-                            week: {$week: "$saleOrderDate"},
-                            month: {$month: "$saleOrderDate"},
-                            year: {$year: "$saleOrderDate"}
+                            week: {$week: "$invoiceDate"},
+                            month: {$month: "$invoiceDate"},
+                            year: {$year: "$invoiceDate"}
                         },
                         data: {$push: "$$ROOT"},
                         total: {$sum: "$total"}
@@ -517,13 +521,13 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
                     let bal = 0;
                     let ind = 1;
                     let balProfit = 0;
 
-                    saleOrderHTML += `
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj._id.month}/${obj._id.year} -សប្តាហ៍ ${obj._id.week}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -537,13 +541,13 @@ Meteor.methods({
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
 
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                           
@@ -553,7 +557,8 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                            
+                           <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                           
                                 
@@ -563,10 +568,10 @@ Meteor.methods({
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -574,22 +579,22 @@ Meteor.methods({
             }
         }
         else if (params.groupBy == "Month") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
 
                 {
                     $group: {
                         _id: {
-                            month: {$month: "$saleOrderDate"},
-                            year: {$year: "$saleOrderDate"}
+                            month: {$month: "$invoiceDate"},
+                            year: {$year: "$invoiceDate"}
                         },
                         data: {$push: "$$ROOT"},
                         total: {$sum: "$total"}
@@ -605,13 +610,13 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
                     let bal = 0;
                     let ind = 1;
                     let balProfit = 0;
 
-                    saleOrderHTML += `
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj._id.month}/${obj._id.year}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -625,13 +630,13 @@ Meteor.methods({
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
 
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                             
@@ -641,7 +646,8 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                              
+                           <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                            </tr>
                             `;
@@ -649,10 +655,10 @@ Meteor.methods({
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -660,14 +666,14 @@ Meteor.methods({
             }
         }
         else if (params.groupBy == "Quarter") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
 
@@ -675,19 +681,19 @@ Meteor.methods({
                     $group: {
                         _id: {
                             quarter: {
-                                $cond: [{$lte: [{$month: "$saleOrderDate"}, 3]},
+                                $cond: [{$lte: [{$month: "$invoiceDate"}, 3]},
                                     1,
                                     {
-                                        $cond: [{$lte: [{$month: "$saleOrderDate"}, 6]},
+                                        $cond: [{$lte: [{$month: "$invoiceDate"}, 6]},
                                             2,
                                             {
-                                                $cond: [{$lte: [{$month: "$saleOrderDate"}, 9]},
+                                                $cond: [{$lte: [{$month: "$invoiceDate"}, 9]},
                                                     3,
                                                     4]
                                             }]
                                     }]
                             },
-                            year: {$year: "$saleOrderDate"}
+                            year: {$year: "$invoiceDate"}
                         },
                         data: {$push: "$$ROOT"},
                         total: {$sum: "$total"}
@@ -703,13 +709,13 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
                     let bal = 0;
                     let ind = 1;
                     let balProfit = 0;
 
-                    saleOrderHTML += `
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj._id.year}- ត្រីមាស ${obj._id.quarter}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -723,13 +729,13 @@ Meteor.methods({
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
 
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                              
@@ -739,7 +745,8 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                      
+                           <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                            </tr>
                             `;
@@ -747,10 +754,10 @@ Meteor.methods({
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -758,21 +765,21 @@ Meteor.methods({
             }
         }
         else if (params.groupBy == "Year") {
-            saleOrderList = Pos_SaleOrder.aggregate([
+            stockReceiveList = Pos_Invoice.aggregate([
 
                 {
                     $match: parameter
                 },
                 {
                     $sort: {
-                        saleOrderDate: 1
+                        invoiceDate: 1
                     }
                 },
 
                 {
                     $group: {
                         _id: {
-                            year: {$year: "$saleOrderDate"}
+                            year: {$year: "$invoiceDate"}
                         },
                         data: {$push: "$$ROOT"},
                         total: {$sum: "$total"}
@@ -788,13 +795,13 @@ Meteor.methods({
                 }
             ])
 
-            if (saleOrderList.length > 0) {
-                saleOrderList[0].data.forEach((obj) => {
+            if (stockReceiveList.length > 0) {
+                stockReceiveList[0].data.forEach((obj) => {
                     let bal = 0;
                     let ind = 1;
                     let balProfit = 0;
 
-                    saleOrderHTML += `
+                    stockReceiveHTML += `
                     <tr>
                             <th style="text-align: left !important;" colspan="9">${obj._id.year}</th>
                             <th>${formatCurrency(obj.total, companyDoc.baseCurrency)}</th>
@@ -807,13 +814,13 @@ Meteor.methods({
                         ob.item.forEach((o) => {
                             bal += o.amount;
                             balProfit += (o.amount - o.totalCost);
-                            saleOrderHTML += `
+                            stockReceiveHTML += `
                            <tr>
                                                        <td style="text-align: center !important;">${ind}</td>
 
-                                <td>${moment(ob.saleOrderDate).format("DD/MM/YYYY")}</td>
+                                <td>${moment(ob.invoiceDate).format("DD/MM/YYYY")}</td>
                                 <td>${ob.transactionType || ""}</td>
-                                <td>${getVoucherSubString(ob.saleOrderNo)}</td>
+                                <td>${getVoucherSubString(ob.invoiceNo)}</td>
                                 <td style="text-align: left !important;">${o.itemName}</td>
                                 <td style="text-align: left !important;">${o.desc || ""}</td>
                          
@@ -823,7 +830,8 @@ Meteor.methods({
                                 <td>${formatCurrency(o.price, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(o.amount, companyDoc.baseCurrency)}</td>
                                 <td>${formatCurrency(bal, companyDoc.baseCurrency)}</td>
-                        
+                           <td>${formatCurrency(o.amount - o.totalCost, companyDoc.baseCurrency)}</td>
+                                <td>${formatCurrency(balProfit, companyDoc.baseCurrency)}</td>        
                            
                            </tr>
                             `;
@@ -831,10 +839,10 @@ Meteor.methods({
                         })
                     })
                 })
-                saleOrderHTML += `
+                stockReceiveHTML += `
             <tr>
                 <th colspan="9">${translate['grandTotal']}</th>
-                 <th>${formatCurrency(saleOrderList[0].total, companyDoc.baseCurrency)}</th>
+                 <th>${formatCurrency(stockReceiveList[0].total, companyDoc.baseCurrency)}</th>
                  <td colspan="3"></td>
             </tr>
 `
@@ -845,16 +853,16 @@ Meteor.methods({
         data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");
         data.currencyHeader = companyDoc.baseCurrency;
 
-        data.saleOrderHTML = saleOrderHTML;
+        data.stockReceiveHTML = stockReceiveHTML;
         return data;
     }
 })
 ;
 
 
-function getVoucherSubString(saleOrderNo) {
-    let newSaleOrder = saleOrderNo.length > 9 ? parseInt((saleOrderNo || "0000000000000").substr(9, 13)) : parseInt(saleOrderNo || "0");
-    return pad(newSaleOrder, 6);
+function getVoucherSubString(invoiceNo) {
+    let newInvoice = invoiceNo.length > 9 ? parseInt((invoiceNo || "0000000000000").substr(9, 13)) : parseInt(invoiceNo || "0");
+    return pad(newInvoice, 6);
 }
 
 function pad(number, length) {

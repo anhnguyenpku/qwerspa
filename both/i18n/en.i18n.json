@@ -283,7 +283,8 @@
       "unit": "Unit",
       "saleOrder": "Sale Order",
       "saleOrderByCustomerDetail": "Sale Order By Customer Detail",
-      "stockDebt": "Stock Debt"
+      "stockDebt": "Stock Debt",
+      "stockReceive": "Stock Receive"
     },
     "customer": {
       "customerAdd": "Add Customer",

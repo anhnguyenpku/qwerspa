@@ -95,7 +95,8 @@
       "unit": "ឯកតា",
       "saleOrder": "កុម្មង់ទំនិញ",
       "saleOrderByCustomerDetail": "កុម្មង់ទំនិញដោយអតិថិជនលម្អិត",
-      "stockDebt": "ជំពាក់ស្តុក"
+      "stockDebt": "ជំពាក់ស្តុក",
+      "stockReceive": "ទទួលស្តុក"
     },
     "customer": {
       "customerAdd": "បញ្ចូលពត័មានអតិថិជន",
