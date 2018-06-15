@@ -382,3 +382,28 @@ posReport.route('/posTransferLocationSummaryReport', {
     }
 
 });
+
+
+import '../../imports/ui/report/posSaleOrderByCustomerDetail/posSaleOrderByCustomerDetail';
+
+posReport.route('/posSaleOrderByCustomerDetailReport', {
+    name: 'pos.posSaleOrderByCustomerDetailReport',
+    title: "Sale Order By Customer Detail",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_saleOrderByCustomerDetailReport');
+    }
+
+});
+
+import '../../imports/ui/report/posStockDebt/posStockDebt';
+
+posReport.route('/posStockDebtReport', {
+    name: 'pos.posStockDebtReport',
+    title: "Stock Debt",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_stockDebtReport');
+    }
+
+});

@@ -93,7 +93,9 @@
       "transferLocation": "ផ្ទេទៅកាន់ទីតាំង",
       "transferLocationSummary": "ផ្ទេទៅកាន់ទីតាំងសង្ខេប",
       "unit": "ឯកតា",
-      "saleOrder": "កុម្មង់ទំនិញ"
+      "saleOrder": "កុម្មង់ទំនិញ",
+      "saleOrderByCustomerDetail": "កុម្មង់ទំនិញដោយអតិថិជនលម្អិត",
+      "stockDebt": "ជំពាក់ស្តុក"
     },
     "customer": {
       "customerAdd": "បញ្ចូលពត័មានអតិថិជន",

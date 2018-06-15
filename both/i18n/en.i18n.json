@@ -281,7 +281,9 @@
       "transferLocation": "Transfer Location",
       "transferLocationSummary": "Transfer Location Summary",
       "unit": "Unit",
-      "saleOrder": "Sale Order"
+      "saleOrder": "Sale Order",
+      "saleOrderByCustomerDetail": "Sale Order By Customer Detail",
+      "stockDebt": "Stock Debt"
     },
     "customer": {
       "customerAdd": "Add Customer",

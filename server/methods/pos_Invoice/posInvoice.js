@@ -195,7 +195,12 @@ Meteor.methods({
                         }
                     );
 
-                    Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$inc: {cutOnPaid: balanceNotCut >= obj.amount ? obj.amount : balanceNotCut}});
+                    Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {
+                        $inc: {
+                            cutOnPaid: balanceNotCut >= obj.amount ? obj.amount : balanceNotCut,
+                            receiveNumber: 1
+                        }
+                    });
                     balanceNotCut -= balanceNotCut >= obj.amount ? obj.amount : balanceNotCut;
                     balanceNotCut = balanceNotCut >= 0 ? balanceNotCut : 0;
                     let countNotReceive = Pos_SaleOrder.find({"item.isReceive": false, _id: obj.saleOrderId}).count();
@@ -326,7 +331,12 @@ Meteor.methods({
                             }
                         });
 
-                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$inc: {cutOnPaid: balanceNotCut >= obj.amount ? -obj.amount : -balanceNotCut}});
+                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {
+                            $inc: {
+                                cutOnPaid: balanceNotCut >= obj.amount ? -obj.amount : -balanceNotCut,
+                                receiveNumber: -1
+                            }
+                        });
                         balanceNotCut -= balanceNotCut >= obj.amount ? obj.amount : balanceNotCut;
                         balanceNotCut = balanceNotCut >= 0 ? balanceNotCut : 0;
                         let countNotReceive = Pos_SaleOrder.find({
