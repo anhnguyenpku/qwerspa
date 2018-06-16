@@ -69,7 +69,10 @@
       "subject": "Subject",
       "credit": "Credit",
       "score": "Score",
-      "grades": "Grade"
+      "grades": "Grade",
+      "curiculumn": "Curiculumn",
+      "inputTranscript": "Input Transcript",
+      "finalGrade": "Grade"
     },
     "major": {
       "searchHere": "Search Here ...",
@@ -212,7 +215,10 @@
       "subject": "មុខវិជ្ជា",
       "credit": "Credit",
       "score": "ពិន្ទុ",
-      "grades": "និទ្ទេស"
+      "grades": "និទ្ទេស",
+      "curiculumn": "កម្មវិធីសិក្សា",
+      "inputTranscript": "បញ្ចូលព្រឹត្តបត្រពិន្ទុ",
+      "finalGrade": "និទ្ទេស"
     },
     "major": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

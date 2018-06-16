@@ -1077,13 +1077,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item :label="langConfig['major']" prop="majorId">
+                        <el-form-item :label="langConfig['curiculumn']" prop="curiculumnId">
                             <el-select style="display: block !important;"
                                        filterable
-                                       v-model="inputTranscriptForm.majorId"
+                                       v-model="inputTranscriptForm.curiculumnId"
                                        :placeholder="langConfig['chooseItem']">
                                 <el-option
-                                        v-for="item in majorList"
+                                        v-for="item in curiculumnList"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
@@ -1093,6 +1093,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+
                 <el-row>
                     <el-col :span="11">
                         <span><b>ឆមាស ១(Semester 1)</b></span>
@@ -1163,7 +1164,7 @@
                                     :label="langConfig['grades']">
                                 <template slot-scope="scope">
                                     <el-input size="small" v-model="scope.row.grade"
-                                              :placeholder="langConfig['grade']"
+                                              :placeholder="langConfig['grades']"
                                               @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
                                               @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
                                 </template>
@@ -1285,12 +1286,97 @@
                     </el-col>
                 </el-row>
                 <hr style="margin-top: 0px !important;">
-                <el-row class="pull-right">
-                    <el-button @click="dialoginputTranscript = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveTranscript">{{langConfig['save']}}</el-button>
+                <el-row>
+                    <el-col :span="11">
+                        <span><b>ប្រលងបញ្ចប់(State Exam)</b></span>
+                        <el-table
+                                :data="stateExam"
+                                stripe
+                                style="width: 100%">
+                            <el-table-column
+                                    type="index"
+                                    :index="indexMethod">
+                            </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['subject']">
+                                <template slot-scope="scope">
+                                    <el-select style="display: block !important;"
+                                               filterable
+                                               v-model="scope.row.subjectId"
+                                               @change="handleEditStateExam(scope.$index, scope.row)"
+                                               :placeholder="langConfig['chooseItem']">
+                                        <el-option
+                                                v-for="item in subjectList"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                                :disabled="item.disabled">
+                                        </el-option>
+                                    </el-select>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['score']">
+                                <template slot-scope="scope">
+                                    <el-input size="small" v-model="scope.row.score" type="number"
+                                              :placeholder="langConfig['score']"
+                                              @keyup.native="handleEditStateExam(scope.$index, scope.row)"
+                                              @change="handleEditStateExam(scope.$index, scope.row)"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['grades']">
+                                <template slot-scope="scope">
+                                    <el-input size="small" v-model="scope.row.grade"
+                                              :placeholder="langConfig['grades']"
+                                              @keyup.native="handleEditStateExam(scope.$index, scope.row)"
+                                              @change="handleEditStateExam(scope.$index, scope.row)"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['action']"
+                                    width="120"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
+                                               size="small"
+                                               @click="handleAddStateExam()"
+
+                                    ></el-button>
+                                    <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
+                                               size="small"
+                                               @click="removeStateExam(scope.$index,scope.row)"
+                                    ></el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+
+                    </el-col>
+                    <el-col :span="2">
+                        <div>&nbsp;</div>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item :label="langConfig['finalGrade']" prop="finalGrade">
+                            <el-input v-model="inputTranscriptForm.finalGrade"></el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
-                <br>
+                <hr>
             </el-form>
+            <span slot="footer" class="dialog-footer fix-dialog-footer"
+            >
+                <hr style="margin-top: 0px !important;">
+                 <el-row>
+                    <el-col :span="12" style="text-align: left !important;">
+                        <el-button type="danger" @click="dialoginputTranscript= false, cancel(),resetForm()"> <i
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                    </el-col>
+                    <el-col :span="11" class="pull-right">
+                         <el-button type="primary" @click.native="saveTranscript"><i
+                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                    </el-col>
+                </el-row>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -1482,16 +1568,22 @@
                 inputTranscriptForm: {
                     majorId: "",
                     curiculumnId: "",
-                    transcript: [],
+                    culumnSemester1: [],
+                    culumnSemester2: [],
                     studentName: "",
-                    studentId: ""
+                    studentId: "",
+                    finalGrade: ""
                 },
                 culumnData1: [
                     {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
                 ],
                 culumnData2: [
                     {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
-                ]
+                ],
+                stateExam: [
+                    {subjectId: "", score: 0, grade: ""}
+                ],
+                curiculumnList: []
             }
         },
         watch: {
@@ -1509,6 +1601,9 @@
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
+            },
+            "inputTranscriptForm.curiculumnId"(val) {
+                this.findCuriculumnById(val);
             }
         },
         methods: {
@@ -1582,6 +1677,13 @@
                     this.majorList = result;
                 })
             },
+            ciriculumnOpt(val) {
+                let selector = {};
+                selector.majorId = val;
+                Meteor.call('queryCiriculumnOption', selector, (err, result) => {
+                    this.curiculumnList = result;
+                })
+            },
             removeStudy(index, row) {
                 if (this.studyData.length > 1) {
                     this.studyData.splice(index, 1);
@@ -1647,7 +1749,7 @@
                             if (obj.name) {
                                 cousin.push(obj);
                             }
-                        })
+                        });
 
                         let parent = {
                             faName: vm.schStudentForm.faName,
@@ -1750,13 +1852,13 @@
                             if (obj.studyAt) {
                                 personalStudy.push(obj)
                             }
-                        })
+                        });
 
                         this.cousinData.map((obj) => {
                             if (obj.name) {
                                 cousin.push(obj);
                             }
-                        })
+                        });
 
                         let parent = {
                             faName: vm.schStudentForm.faName,
@@ -1919,6 +2021,7 @@
             },
             resetForm() {
                 this.schStudentForm._id = "";
+                this.inputTranscriptForm = {};
                 this.cousinData =
                     [{
                         name: "",
@@ -1934,6 +2037,13 @@
                         where: "",
                         graduatedYear: "",
                     }];
+
+                this.culumnData1 = [
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
+                ];
+                this.culumnData2 = [
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
+                ];
                 if (this.$refs["schStudentFormAdd"]) {
                     this.$refs["schStudentFormAdd"].resetFields();
                     this.schStudentForm = {
@@ -2055,7 +2165,8 @@
             findCuriculumnById(id) {
                 Meteor.call("querySchCiriculumnById", id, (err, result) => {
                     if (result) {
-                        this.inputTranscriptForm = result;
+                        this.culumnData1 = result.culumnSemester1;
+                        this.culumnData2 = result.culumnSemester2;
                     }
                 })
             },
@@ -2110,6 +2221,29 @@
             handleEditCulumn2(row, index) {
                 this.culumnData2[index] = row;
             },
+
+            removeStateExam(index, row) {
+                if (this.stateExam.length > 1) {
+                    this.stateExam.splice(index, 1);
+                    this.$message({
+                        message: `លុប បានជោគជ័យ`,
+                        type: 'success'
+                    });
+                } else {
+                    this.stateExam = [
+                        {subjectId: "", score: 0, grade: ""}
+                    ];
+                }
+            },
+
+            handleAddStateExam() {
+                this.stateExam.push(
+                    {subjectId: "", score: 0, grade: ""}
+                )
+            },
+            handleEditStateExam(row, index) {
+                this.stateExam[index] = row;
+            },
             subjectOpt() {
                 let selector = {};
                 Meteor.call('querySubjectOption', selector, (err, result) => {
@@ -2120,6 +2254,13 @@
                 this.inputTranscriptForm.studentName = data.personal.name;
                 this.inputTranscriptForm.studentId = data._id;
                 this.inputTranscriptForm.majorId = data.majorId;
+                this.ciriculumnOpt(data.majorId);
+                if (data.curiculumnId) {
+                    this.inputTranscriptForm.curiculumnId = data.curiculumnId;
+
+                }
+
+
             }
         },
         created() {

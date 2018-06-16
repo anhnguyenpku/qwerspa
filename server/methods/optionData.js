@@ -11,6 +11,7 @@ import {Pos_Unit} from '../../imports/collection/posUnit';
 import {SpaceChar} from "../../both/config.js/space"
 import {Sch_Major} from "../../imports/collection/schMajor";
 import {Sch_Subject} from "../../imports/collection/schSubject";
+import {Sch_Ciriculumn} from "../../imports/collection/schCiriculumn";
 
 Meteor.methods({
     queryItemOption(selector) {
@@ -18,7 +19,7 @@ Meteor.methods({
 
         Pos_Product.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
-        })
+        });
         return list;
     },
     queryMajorOption(selector) {
@@ -26,7 +27,15 @@ Meteor.methods({
 
         Sch_Major.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
-        })
+        });
+        return list;
+    },
+    queryCiriculumnOption(selector) {
+        let list = [];
+
+        Sch_Ciriculumn.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
+        });
         return list;
     },
     querySubjectOption(selector) {
@@ -34,28 +43,28 @@ Meteor.methods({
 
         Sch_Subject.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
-        })
+        });
         return list;
     },
     queryPosTermOption() {
         let list = [];
         Pos_Term.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
-        })
+        });
         return list;
     },
     queryPosUnitOption() {
         let list = [];
         Pos_Unit.find().fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
-        })
+        });
         return list;
     },
     queryPosVendorOption() {
         let list = [];
         Pos_Vendor.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
-        })
+        });
         return list;
     },
     queryPosCustomerOption(q) {

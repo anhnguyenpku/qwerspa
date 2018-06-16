@@ -73,12 +73,14 @@ Sch_Transcript.schema = new SimpleSchema({
     },
     "state.$.grade": {
         type: Number,
-        optional: true
+        optional: true,
+        defaultValue:0
     },
     "state.$.score": {
         type: Number,
         optional: true,
-        decimal: true
+        decimal: true,
+        defaultValue:0
     },
     finalGrade: {
         type: String
