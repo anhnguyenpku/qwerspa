@@ -1080,7 +1080,7 @@
                         <el-form-item :label="langConfig['curiculumn']" prop="curiculumnId">
                             <el-select style="display: block !important;"
                                        filterable
-                                       v-model="inputTranscriptForm.curiculumnId"
+                                       v-model="inputTranscriptForm.curiculumnId" :disabled="disabledCuriculumn"
                                        :placeholder="langConfig['chooseItem']">
                                 <el-option
                                         v-for="item in curiculumnList"
@@ -1164,27 +1164,11 @@
                                     :label="langConfig['grades']">
                                 <template slot-scope="scope">
                                     <el-input size="small" v-model="scope.row.grade"
-                                              :placeholder="langConfig['grades']"
+                                              :placeholder="langConfig['grades']" disabled
                                               @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
                                               @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
-                            <!--<el-table-column
-                                    :label="langConfig['action']"
-                                    width="120"
-                            >
-                                <template slot-scope="scope">
-                                    <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
-                                               size="small"
-                                               @click="handleAddCulumn1()"
-
-                                    ></el-button>
-                                    <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
-                                               size="small"
-                                               @click="removeCulumn1(scope.$index,scope.row)"
-                                    ></el-button>
-                                </template>
-                            </el-table-column>-->
                         </el-table>
 
                     </el-col>
@@ -1254,34 +1238,18 @@
                                     <el-input size="small" v-model="scope.row.score" type="number"
                                               :placeholder="langConfig['score']"
                                               @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
-                                              @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
+                                              @change.native="handleEditCulumn1(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column
                                     :label="langConfig['grades']">
                                 <template slot-scope="scope">
                                     <el-input size="small" v-model="scope.row.grade"
-                                              :placeholder="langConfig['grade']"
+                                              :placeholder="langConfig['grade']" disabled
                                               @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
                                               @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
-                            <!--<el-table-column
-                                    :label="langConfig['action']"
-                                    width="120"
-                            >
-                                <template slot-scope="scope">
-                                    <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
-                                               size="small"
-                                               @click="handleAddCulumn2()"
-
-                                    ></el-button>
-                                    <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
-                                               size="small"
-                                               @click="removeCulumn2(scope.$index,scope.row)"
-                                    ></el-button>
-                                </template>
-                            </el-table-column>-->
                         </el-table>
                     </el-col>
                 </el-row>
@@ -1321,14 +1289,14 @@
                                     <el-input size="small" v-model="scope.row.score" type="number"
                                               :placeholder="langConfig['score']"
                                               @keyup.native="handleEditStateExam(scope.$index, scope.row)"
-                                              @change="handleEditStateExam(scope.$index, scope.row)"></el-input>
+                                              @change.native="handleEditStateExam(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column
                                     :label="langConfig['grades']">
                                 <template slot-scope="scope">
                                     <el-input size="small" v-model="scope.row.grade"
-                                              :placeholder="langConfig['grades']"
+                                              :placeholder="langConfig['grades']" disabled
                                               @keyup.native="handleEditStateExam(scope.$index, scope.row)"
                                               @change="handleEditStateExam(scope.$index, scope.row)"></el-input>
                                 </template>
@@ -1419,7 +1387,7 @@
                 studyData: [{
                     studyAt: "",
                     duration: "",
-                    grade: "",
+                    grade: " ",
                     where: "",
                     graduatedYear: "",
                 }],
@@ -1572,18 +1540,21 @@
                     culumnSemester2: [],
                     studentName: "",
                     studentId: "",
-                    finalGrade: ""
+                    finalGrade: "",
+                    transcriptId: ""
                 },
                 culumnData1: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
                 ],
                 culumnData2: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
                 ],
                 stateExam: [
-                    {subjectId: "", score: 0, grade: ""}
+                    {subjectId: "", score: 0, grade: " "}
                 ],
-                curiculumnList: []
+                curiculumnList: [],
+                mentionRange: [],
+                disabledCuriculumn: false
             }
         },
         watch: {
@@ -1603,7 +1574,10 @@
                 this.queryData(val, skip, this.currentSize + skip);
             },
             "inputTranscriptForm.curiculumnId"(val) {
-                this.findCuriculumnById(val);
+
+                if (this.inputTranscriptForm.transcriptId === "") {
+                    this.findCuriculumnById(val);
+                }
             }
         },
         methods: {
@@ -1661,13 +1635,13 @@
                 this.studyData.push({
                     studyAt: "",
                     duration: "",
-                    grade: "",
+                    grade: " ",
                     where: "",
                     graduatedYear: "",
 
                 })
             },
-            handleEditStudy(row, index) {
+            handleEditStudy(index, row) {
                 this.studyData[index] = row;
 
             },
@@ -1695,7 +1669,7 @@
                     this.studyData = [{
                         studyAt: "",
                         duration: "",
-                        grade: "",
+                        grade: " ",
                         where: "",
                         graduatedYear: "",
                     }];
@@ -2033,16 +2007,19 @@
                     [{
                         studyAt: "",
                         duration: "",
-                        grade: "",
+                        grade: " ",
                         where: "",
                         graduatedYear: "",
                     }];
 
                 this.culumnData1 = [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
                 ];
                 this.culumnData2 = [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: ""}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
+                ];
+                this.stateExam = [
+                    {subjectId: "", score: 0, grade: ""}
                 ];
                 if (this.$refs["schStudentFormAdd"]) {
                     this.$refs["schStudentFormAdd"].resetFields();
@@ -2171,6 +2148,47 @@
                 })
             },
             saveTranscript() {
+                let vm = this;
+                this.$refs["inputTranscriptForm"].validate((valid) => {
+                    if (valid) {
+                        let data = {};
+                        data.studentId = vm.inputTranscriptForm.studentId;
+                        data.majorId = vm.inputTranscriptForm.majorId;
+                        data.curiculumnId = vm.inputTranscriptForm.curiculumnId;
+                        data.culumnSemester1 = vm.culumnData1;
+                        data.culumnSemester2 = vm.culumnData2;
+                        let stateList = [];
+                        this.stateExam.map((obj) => {
+                            if (obj.subjectId) {
+                                stateList.push(obj)
+                            }
+                        });
+                        data.state = stateList;
+                        data.finalGrade = vm.inputTranscriptForm.finalGrade;
+                        data.rolesArea = Session.get('area');
+
+                        Meteor.call("inputTranscript", data, (err, result) => {
+                            if (result !== false) {
+                                vm.$message({
+                                    duration: 1000,
+                                    message: this.langConfig['saveSuccess'],
+                                    type: 'success'
+                                });
+                                vm.dialoginputTranscript = false;
+                                vm.queryData();
+
+                                vm.$refs["inputTranscriptForm"].resetFields();
+                                vm.resetForm();
+                            } else {
+                                vm.$message({
+                                    duration: 1000,
+                                    message: err.message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                    }
+                })
 
             },
             removeCulumn1(index, row) {
@@ -2182,7 +2200,7 @@
                     });
                 } else {
                     this.culumnData1 = [
-                        {year: "", subjectId: "", credit: 0}
+                        {year: "", subjectId: "", credit: 0, grade: " "}
 
                     ];
                 }
@@ -2190,14 +2208,14 @@
 
             handleAddCulumn1() {
                 this.culumnData1.push(
-                    {year: "", subjectId: "", credit: 0}
+                    {year: "", subjectId: "", credit: 0, grade: " "}
                 )
             },
-            handleEditCulumn1(row, index) {
+            handleEditCulumn1(index, row) {
+                let gradeDoc = this.getMentionByScore(row.score);
+                row.grade = gradeDoc.grade;
                 this.culumnData1[index] = row;
-
             },
-
             removeCulumn2(index, row) {
                 if (this.culumnData2.length > 1) {
                     this.culumnData2.splice(index, 1);
@@ -2207,7 +2225,7 @@
                     });
                 } else {
                     this.culumnData2 = [
-                        {year: "", subjectId: "", credit: 0}
+                        {year: "", subjectId: "", credit: 0, grade: " "}
 
                     ];
                 }
@@ -2215,10 +2233,12 @@
 
             handleAddCulumn2() {
                 this.culumnData2.push(
-                    {year: "", subjectId: "", credit: 0}
+                    {year: "", subjectId: "", credit: 0, grade: " "}
                 )
             },
-            handleEditCulumn2(row, index) {
+            handleEditCulumn2(index, row) {
+                let gradeDoc = this.getMentionByScore(row.score);
+                row.grade = gradeDoc.grade;
                 this.culumnData2[index] = row;
             },
 
@@ -2231,17 +2251,19 @@
                     });
                 } else {
                     this.stateExam = [
-                        {subjectId: "", score: 0, grade: ""}
+                        {subjectId: "", score: 0, grade: " "}
                     ];
                 }
             },
 
             handleAddStateExam() {
                 this.stateExam.push(
-                    {subjectId: "", score: 0, grade: ""}
+                    {subjectId: "", score: 0, grade: " "}
                 )
             },
-            handleEditStateExam(row, index) {
+            handleEditStateExam(index, row) {
+                let gradeDoc = this.getMentionByScore(row.score);
+                row.grade = gradeDoc.grade;
                 this.stateExam[index] = row;
             },
             subjectOpt() {
@@ -2251,16 +2273,43 @@
                 })
             },
             popUpInputTranscript(data) {
+                let vm = this;
+                vm.resetForm();
                 this.inputTranscriptForm.studentName = data.personal.name;
                 this.inputTranscriptForm.studentId = data._id;
                 this.inputTranscriptForm.majorId = data.majorId;
                 this.ciriculumnOpt(data.majorId);
-                if (data.curiculumnId) {
-                    this.inputTranscriptForm.curiculumnId = data.curiculumnId;
+                vm.inputTranscriptForm.transcriptId = "";
+                vm.disabledCuriculumn = false;
+                Meteor.call("queryTranscriptByStudentIdMajorId", data._id, data.majorId, (err, result) => {
+                    if (result) {
+                        vm.inputTranscriptForm.curiculumnId = result.curiculumnId;
+                        vm.inputTranscriptForm.transcriptId = result._id;
 
+                        vm.culumnData1 = result.culumnSemester1;
+                        vm.culumnData2 = result.culumnSemester2;
+                        vm.stateExam = result.state;
+                        vm.disabledCuriculumn = true;
+                    }
+                });
+
+            },
+            getMention() {
+                Meteor.call("querySchMentionByActive", Session.get("area"), (err, result) => {
+                    if (result) {
+                        this.mentionRange = result.range;
+                    }
+                });
+            },
+            getMentionByScore(val) {
+                val = parseFloat(val) || 0;
+
+                function checkMention(range) {
+                    return range.from <= val && range.to > val;
                 }
 
-
+                let data = this.mentionRange.find(checkMention);
+                return data;
             }
         },
         created() {
@@ -2268,6 +2317,7 @@
             this.queryData();
             this.majorOpt();
             this.subjectOpt();
+            this.getMention();
         },
         computed: {
             langConfig() {

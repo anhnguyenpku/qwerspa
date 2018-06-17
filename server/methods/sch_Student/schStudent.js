@@ -1,4 +1,5 @@
 import {Sch_Student} from '../../../imports/collection/schStudent';
+import {Sch_Transcript} from '../../../imports/collection/schTranscript';
 
 import {SpaceChar} from "../../../both/config.js/space"
 
@@ -65,5 +66,26 @@ Meteor.methods({
     },
     removeSchStudent(id) {
         return Sch_Student.remove({_id: id});
+    },
+    inputTranscript(data) {
+
+        let stateList = [];
+        data.state.map((obj) => {
+            if (obj.subjectId) {
+                stateList.push(obj)
+            }
+        });
+        data.state = stateList;
+        let tranDoc = Sch_Transcript.findOne({studentId: data.studentId, majorId: data.majorId});
+        let isReturn;
+        if (tranDoc) {
+            isReturn = Sch_Transcript.update({studentId: data.studentId, majorId: data.majorId}, {$set: data});
+        } else {
+            isReturn = Sch_Transcript.insert(data);
+        }
+        return isReturn;
+    },
+    queryTranscriptByStudentIdMajorId(studentId, majorId) {
+        return Sch_Transcript.findOne({studentId: studentId, majorId: majorId});
     }
 });

@@ -79,4 +79,14 @@ schData.route('/schCiriculumn', {
         _Main('sch_ciriculumn');
     }
 });
+import "../../imports/ui/sch_mention/sch_mention";
+//Student
+schData.route('/schMention', {
+    name: 'sch.mention',
+    title: "Mention",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_mention');
+    }
+});
 
