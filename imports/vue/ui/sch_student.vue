@@ -85,7 +85,7 @@
                                            :disabled="disabledUpdate">T
                                 </el-button>
                                 <el-button type="warning" icon="el-icon-printer" size="small" class="cursor-pointer"
-                                           @click="dialogUpdateSchStudent= true"
+                                           @click="dialogUpdateSchStudent= true,printTranscript(scope.row)"
                                            :disabled="disabledUpdate">
                                 </el-button>
 
@@ -2325,6 +2325,9 @@
                     return newData;
                 }
                 return data;
+            },
+            printTranscript(data) {
+                FlowRouter.go('/sch-data/schTranscript/print?studentId=' + data._id + '&majorId=' + data.majorId);
             }
         },
         created() {

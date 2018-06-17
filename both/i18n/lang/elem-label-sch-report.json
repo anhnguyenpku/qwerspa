@@ -1,0 +1,58 @@
+[
+  {
+    "lang": "en",
+    "transcript": {
+      "date": "Date",
+      "dateRange": "Date Range",
+      "pickDate": "Pick a Date",
+      "pickDateRange": "Pick Date Range",
+      "all": "All",
+      "currency": "Currency",
+      "no": "No",
+      "productName": "Product Name",
+      "qty": "Qty",
+      "price": "Price",
+      "total": "Total",
+      "discount": "Discount",
+      "netTotal": "Net Total",
+      "paid": "Paid",
+      "totalDue": "Total Due",
+      "thankYou": "THANK YOU",
+      "pleaseCheck": "Please Check Your Invoice Before You Leave.",
+      "forQuestion": "For Questions concerning this invoice ,please contact ",
+      "address": "Address",
+      "customer": "Customer",
+      "saveSuccess": "Save Successfully!",
+      "location": "Location"
+    }
+  },
+  {
+    "lang": "km",
+    "transcript": {
+      "date": "កាលបរិច្ឆេទ",
+      "dateRange": "កាលបរិច្ឆេទចន្លោះ",
+      "pickDate": "ជ្រើសរើសកាលបរិច្ឆេទ",
+      "pickDateRange": "ជ្រើសរើសកាលបរិច្ឆេទចន្លោះ",
+      "all": "ទាំងអស់",
+      "currency": "រូបិយប័ណ្ណ",
+      "no": "ល.រ",
+      "phoneNumber": "លេខទូរស័ព្ទ",
+      "total": "សរុប",
+      "discount": "បញ្ចុះតម្លៃ",
+      "paid": "បានបង់",
+      "balanceUnPaid": "សមតុល្យមិនទាន់បង់",
+      "productName": "ឈ្មោះទំនិញ",
+      "qty": "ចំនួន",
+      "price": "តម្លៃ",
+      "netTotal": "សរុបសុទ្ធ",
+      "totalDue": "សរុបមិនទាន់បានបង់",
+      "thankYou": "អរគុណ",
+      "pleaseCheck": "សូមត្រួតពិនិត្យវិក័យបត្ររបស់អ្នកមុនពេលចាកចេញ.",
+      "forQuestion": "សម្រាប់សំនួនដែលទាក់ទងនឹងវិក័យប្រនេះ ,សូមទំនាក់ទំនងទៅកាន់ ",
+      "address": "អាស័យដ្ឋាន",
+      "customer": "អតិថិជន",
+      "saveSuccess": "រក្សាទុកបានជោគជ័យ!",
+      "location": "ទីតាំង"
+    }
+  }
+]

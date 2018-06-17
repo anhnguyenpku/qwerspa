@@ -144,7 +144,7 @@ posData.route('/posInvoice/print', {
         BlazeLayout.render('PrintLayout', {printLayout: 'pos_invoicePrintA4Report'});
     }
 
-})
+});
 
 
 //Vendor
@@ -176,30 +176,3 @@ posSale.route('/posSaleOrder', {
         _Main('pos_SaleOrder');
     }
 });
-
-/*
-posData.route('/journal/:journalId/edit', {
-    name: 'acc.journalEdit',
-    title: "Journal Entry Edit",
-    parent: 'acc.journal',
-    action: function (query, params) {
-        _Main('acc_journal');
-    }
-});
-posData.route('/journal/add', {
-    name: 'acc.journalAdd',
-    title: "Journal Entry Add",
-    parent: 'acc.journal',
-    action: function (query, params) {
-        _Main('acc_journal');
-    }
-});
-posData.route('/journal/:journalId/show', {
-    name: 'acc.journalShow',
-    title: "Journal Entry Show",
-    parent: 'acc.journal',
-    action: function (query, params) {
-        _Main('acc_journal');
-    }
-});
-*/

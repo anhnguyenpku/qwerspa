@@ -1,0 +1,15 @@
+@media print {
+    .blueOnPrint {
+        color: darkblue !important;
+    }
+    .balckOnPrint {
+        color: black !important;
+    }
+}
+
+.blueOnPrint {
+    color: darkblue !important;
+}
+.balckOnPrint {
+    color: black !important;
+}

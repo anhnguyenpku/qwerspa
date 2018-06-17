@@ -90,3 +90,14 @@ schData.route('/schMention', {
     }
 });
 
+
+import '../../imports/ui/report/schTranscript/schTranscript';
+
+schData.route('/schTranscript/print', {
+    name: 'sch.schTranscript-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'sch_transcriptReport'});
+    }
+
+});
+
