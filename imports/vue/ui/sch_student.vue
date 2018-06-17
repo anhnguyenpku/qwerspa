@@ -1237,8 +1237,8 @@
                                 <template slot-scope="scope">
                                     <el-input size="small" v-model="scope.row.score" type="number"
                                               :placeholder="langConfig['score']"
-                                              @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
-                                              @change.native="handleEditCulumn1(scope.$index, scope.row)"></el-input>
+                                              @keyup.native="handleEditCulumn2(scope.$index, scope.row)"
+                                              @change.native="handleEditCulumn2(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -1387,7 +1387,7 @@
                 studyData: [{
                     studyAt: "",
                     duration: "",
-                    grade: " ",
+                    grade: "Un Range",
                     where: "",
                     graduatedYear: "",
                 }],
@@ -1544,13 +1544,13 @@
                     transcriptId: ""
                 },
                 culumnData1: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
                 ],
                 culumnData2: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
                 ],
                 stateExam: [
-                    {subjectId: "", score: 0, grade: " "}
+                    {subjectId: "", score: 0, grade: "Un Range"}
                 ],
                 curiculumnList: [],
                 mentionRange: [],
@@ -1635,7 +1635,7 @@
                 this.studyData.push({
                     studyAt: "",
                     duration: "",
-                    grade: " ",
+                    grade: "",
                     where: "",
                     graduatedYear: "",
 
@@ -1669,7 +1669,7 @@
                     this.studyData = [{
                         studyAt: "",
                         duration: "",
-                        grade: " ",
+                        grade: "",
                         where: "",
                         graduatedYear: "",
                     }];
@@ -2007,19 +2007,19 @@
                     [{
                         studyAt: "",
                         duration: "",
-                        grade: " ",
+                        grade: "",
                         where: "",
                         graduatedYear: "",
                     }];
 
                 this.culumnData1 = [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
                 ];
                 this.culumnData2 = [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: " "}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
                 ];
                 this.stateExam = [
-                    {subjectId: "", score: 0, grade: ""}
+                    {subjectId: "", score: 0, grade: "Un Range"}
                 ];
                 if (this.$refs["schStudentFormAdd"]) {
                     this.$refs["schStudentFormAdd"].resetFields();
@@ -2142,7 +2142,17 @@
             findCuriculumnById(id) {
                 Meteor.call("querySchCiriculumnById", id, (err, result) => {
                     if (result) {
+
+                        result.culumnSemester1.map((obj) => {
+                            obj.score = 0;
+                            obj.grade = "Un Range";
+                        });
                         this.culumnData1 = result.culumnSemester1;
+
+                        result.culumnSemester2.map((obj) => {
+                            obj.score = 0;
+                            obj.grade = "Un Range";
+                        });
                         this.culumnData2 = result.culumnSemester2;
                     }
                 })
@@ -2200,7 +2210,7 @@
                     });
                 } else {
                     this.culumnData1 = [
-                        {year: "", subjectId: "", credit: 0, grade: " "}
+                        {year: "", subjectId: "", credit: 0, grade: "Un Range"}
 
                     ];
                 }
@@ -2208,7 +2218,7 @@
 
             handleAddCulumn1() {
                 this.culumnData1.push(
-                    {year: "", subjectId: "", credit: 0, grade: " "}
+                    {year: "", subjectId: "", credit: 0, grade: "Un Range"}
                 )
             },
             handleEditCulumn1(index, row) {
@@ -2225,7 +2235,7 @@
                     });
                 } else {
                     this.culumnData2 = [
-                        {year: "", subjectId: "", credit: 0, grade: " "}
+                        {year: "", subjectId: "", credit: 0, grade: "Un Range"}
 
                     ];
                 }
@@ -2233,7 +2243,7 @@
 
             handleAddCulumn2() {
                 this.culumnData2.push(
-                    {year: "", subjectId: "", credit: 0, grade: " "}
+                    {year: "", subjectId: "", credit: 0, grade: "Un Range"}
                 )
             },
             handleEditCulumn2(index, row) {
@@ -2251,14 +2261,14 @@
                     });
                 } else {
                     this.stateExam = [
-                        {subjectId: "", score: 0, grade: " "}
+                        {subjectId: "", score: 0, grade: "Un Range"}
                     ];
                 }
             },
 
             handleAddStateExam() {
                 this.stateExam.push(
-                    {subjectId: "", score: 0, grade: " "}
+                    {subjectId: "", score: 0, grade: "Un Range"}
                 )
             },
             handleEditStateExam(index, row) {
@@ -2309,6 +2319,11 @@
                 }
 
                 let data = this.mentionRange.find(checkMention);
+                if (data === null || data === undefined) {
+                    let newData = {};
+                    newData.grade = "Un Range";
+                    return newData;
+                }
                 return data;
             }
         },

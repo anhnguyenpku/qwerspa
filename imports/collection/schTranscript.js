@@ -23,14 +23,13 @@ Sch_Transcript.schema = new SimpleSchema({
     "culumnSemester1.$.subjectId": {
         type: String
     },
-    "culumnSemester1.$.name": {
-        type: String
-    },
     "culumnSemester1.$.credit": {
         type: Number
     },
     "culumnSemester1.$.grade": {
-        type: String
+        type: String,
+        optional: true,
+
     },
     "culumnSemester1.$.score": {
         type: Number,
@@ -45,14 +44,14 @@ Sch_Transcript.schema = new SimpleSchema({
     },
     "culumnSemester2.$.subjectId": {
         type: String
-    }, "culumnSemester2.$.name": {
-        type: String
     },
     "culumnSemester2.$.credit": {
         type: Number
     },
     "culumnSemester2.$.grade": {
-        type: String
+        type: String,
+        optional: true,
+
     },
     "culumnSemester2.$.score": {
         type: Number,
@@ -67,23 +66,20 @@ Sch_Transcript.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    "state.$.name": {
-        type: String,
-        optional: true
-    },
     "state.$.grade": {
-        type: Number,
+        type: String,
         optional: true,
-        defaultValue:0
+        defaultValue: 0
     },
     "state.$.score": {
         type: Number,
         optional: true,
         decimal: true,
-        defaultValue:0
+        defaultValue: 0
     },
     finalGrade: {
-        type: String
+        type: String,
+        optional: true
     },
     createdAt: {
         type: Date,
