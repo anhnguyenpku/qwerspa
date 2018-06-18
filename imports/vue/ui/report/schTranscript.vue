@@ -15,20 +15,20 @@
                                         <span class="blueOnPrint"
                                               style="font-family:Khmer os muol; font-size: 15px  !important;padding-top: 15px !important;float: left;text-align: left !important;">
 
-                                              <p style="font-family: 'Khmer OS Muol' !important;">ក្រសួងការងារ និង បណ្តុបណ្តាលវិជ្ជាជីវៈ</p>
-                                              <p style="font-family: 'Khmer OS Muol' !important;">Ministry of Labor and Vocational Training</p>
-                                              <p style="font-family: 'Khmer OS Muol' !important;">{{waterBillingSetup.khName}}</p>
-                                              <p style="font-family: 'Khmer OS Muol' !important;">    {{waterBillingSetup.enName}}</p>
-                                              <p style="font-family: 'Khmer OS Muol' !important;">    លេខ៖ .............................វ.ព.ភ.ត.ស.ប</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ក្រសួងការងារ និង បណ្តុបណ្តាលវិជ្ជាជីវៈ</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Ministry of Labor and Vocational Training</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">{{waterBillingSetup.khName}}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    {{waterBillingSetup.enName}}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    លេខ៖ .............................វ.ព.ភ.ត.ស.ប</p>
 
                                             </span>
 
                               <span style="text-align: center;font-size: 15px; border: 0px !important; float: right;"
-                                    class="blueOnPrint">
-                                  <p style="font-family: 'Khmer OS Muol' !important;">ព្រះរាជាណាចក្រកម្ពុជា</p>
-                                  <p style="font-family: 'Khmer OS Muol' !important;">Kingdom Of Cambodia</p>
-                                  <p style="font-family: 'Khmer OS Muol' !important;">ជាតិ សាសនា ព្រះមហាក្សត្រ</p>
-                                  <p style="font-family: 'Khmer OS Muol' !important;">Nation Religion King</p>
+                              >
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ព្រះរាជាណាចក្រកម្ពុជា</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Kingdom Of Cambodia</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ជាតិ សាសនា ព្រះមហាក្សត្រ</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Nation Religion King</p>
                               </span>
                               </div>
                           </div>
@@ -41,28 +41,73 @@
                               </div>
                           </div>
                           <div style="width: 100%; float: right">
-                              <div style="width: 70% !important; float: left">
-                                  {{langConfig['customer']}} : {{invoiceDoc && invoiceDoc.customerDoc && invoiceDoc.customerDoc.name || ""}}
+                              <div style="width: 20% !important; float: left">
+                                  Name
                               </div>
-                              <div style="width: 30% !important;float: right">
-                                  {{langConfig['date']}} : {{invoiceDoc && invoiceDoc.invoiceDateName || ""}}
+                              <div style="width: 80% !important;float: right">
+                                  :
                               </div>
                           </div>
                           <div style="width: 100%">
-                              <div style="width: 70% !important;float: left">
-                                  {{langConfig['address']}} : {{invoiceDoc && invoiceDoc.customerDoc && invoiceDoc.customerDoc.address || ""}}
+                              <div style="width: 20% !important; float: left">
+                                  Date of Birth
+                              </div>
+                              <div style="width: 80% !important;float: right">
+                                  :
+                              </div>
+                          </div>
+                          <div style="width: 100%">
+                              <div style="width: 20% !important; float: left">
+                                  Place of Birth
+                              </div>
+                              <div style="width: 80% !important;float: right">
+                                  :
+                              </div>
+                          </div>
+                          <div style="width: 100%">
+                              <div style="width: 20% !important; float: left">
+                                  Degree
+                              </div>
+                              <div style="width: 80% !important;float: right">
+                                  :
+                              </div>
+                          </div>
+                          <div style="width: 100%">
+                              <div style="width: 20% !important; float: left">
+                                  Faculty
+                              </div>
+                              <div style="width: 80% !important;float: right">
+                                  :
+                              </div>
+                          </div>
+                          <div style="width: 100%">
+                              <div style="width: 20% !important; float: left">
+                                  Academic Year
+                              </div>
+                              <div style="width: 80% !important;float: right">
+                                  :
                               </div>
                           </div>
                       </caption>
 
                 <thead style="margin-top: 5px">
                     <tr>
-                        <td>{{langConfig['no']}}</td>
-                        <td>{{langConfig['productName']}}</td>
-                        <td>{{langConfig['qty']}}</td>
-                        <td>{{langConfig['price']}}</td>
-                        <td>{{langConfig['total']}}</td>
+                        <th>Year</th>
+                        <th colspan="4">Semester I</th>
+                        <th colspan="4">Semester II</th>
                     </tr>
+                <tr>
+                    <th rowspan="2"></th>
+                        <th>No</th>
+                        <th>Subject</th>
+                        <th>Credit</th>
+                        <th>Grade</th>
+                        <th>No</th>
+                        <th>Subject</th>
+                        <th>Credit</th>
+                        <th>Grade</th>
+                </tr>
+                <tr></tr>
                 </thead>
                 <tbody style="margin-bottom: 5px;" v-html="printTranscriptHtml">
 
