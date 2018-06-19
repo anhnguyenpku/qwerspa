@@ -45,7 +45,7 @@
                                   Name
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  :
+                                  : {{transcriptDoc.studentDoc.personal.latinName}}
                               </div>
                           </div>
                           <div style="width: 100%">
@@ -53,7 +53,8 @@
                                   Date of Birth
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  :
+                                  : {{transcriptDoc.studentDoc.personal.dob}}
+
                               </div>
                           </div>
                           <div style="width: 100%">
@@ -61,7 +62,8 @@
                                   Place of Birth
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  :
+                                : {{transcriptDoc.studentDoc.personal.provinceCurrent}}
+
                               </div>
                           </div>
                           <div style="width: 100%">
@@ -69,7 +71,8 @@
                                   Degree
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  :
+                                  : {{transcriptDoc.studentDoc.personal.latinName}}
+
                               </div>
                           </div>
                           <div style="width: 100%">
@@ -77,7 +80,8 @@
                                   Faculty
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  :
+                                  : {{transcriptDoc.studentDoc.personal.latinName}}
+
                               </div>
                           </div>
                           <div style="width: 100%">
@@ -85,27 +89,27 @@
                                   Academic Year
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  :
+                                : {{transcriptDoc.yearFrom}} - {{transcriptDoc.yearTo}}
+
                               </div>
                           </div>
                       </caption>
 
                 <thead style="margin-top: 5px">
-                    <tr>
-                        <th>Year</th>
-                        <th colspan="4">Semester I</th>
-                        <th colspan="4">Semester II</th>
+                    <tr class="back_color">
+                        <th class="report-center" rowspan="2">Year</th>
+                        <th colspan="4" class="report-center">Semester I</th>
+                        <th colspan="4" class="report-center">Semester II</th>
                     </tr>
                 <tr>
-                    <th rowspan="2"></th>
-                        <th>No</th>
-                        <th>Subject</th>
-                        <th>Credit</th>
-                        <th>Grade</th>
-                        <th>No</th>
-                        <th>Subject</th>
-                        <th>Credit</th>
-                        <th>Grade</th>
+                        <th class="report-center">No</th>
+                        <th class="report-center">Subject</th>
+                        <th class="report-center">Credit</th>
+                        <th class="report-center">Grade</th>
+                        <th class="report-center">No</th>
+                        <th class="report-center">Subject</th>
+                        <th class="report-center">Credit</th>
+                        <th class="report-center">Grade</th>
                 </tr>
                 <tr></tr>
                 </thead>
@@ -146,6 +150,7 @@
                     address: "",
                     phoneNumber: ""
                 },
+                transcriptDoc: {},
 
                 loading: false,
                 onLoad: false,
@@ -178,6 +183,7 @@
                 Meteor.call('schTranscriptReport', studentId, majorId, this.langConfig, (err, result) => {
                     if (result) {
                         this.printTranscriptHtml = result.printTranscriptHtml;
+                        this.transcriptDoc = result.transcriptDoc;
                         this.loading = false;
                     } else {
                         this.loading = false;

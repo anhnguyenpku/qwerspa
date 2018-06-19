@@ -180,10 +180,10 @@ Sch_Student.schema = new SimpleSchema({
         optional: true
     },
     yearFrom: {
-        type: String
+        type: Date
     },
     yearTo: {
-        type: String
+        type: Date
     },
     transcriptId: {
         type: String,

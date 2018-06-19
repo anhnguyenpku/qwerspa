@@ -6,6 +6,10 @@
     .balckOnPrint {
         color: black !important;
     }
+
+    .back_color {
+        background-color: lightgray !important;
+    }
 }
 
 .blueOnPrint {
@@ -14,4 +18,13 @@
 
 .balckOnPrint {
     color: black !important;
+}
+
+.report-center {
+    text-align: center !important;
+    vertical-align: inherit !important;
+}
+
+.back_color {
+    background-color: lightgray !important;
 }

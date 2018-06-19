@@ -1959,9 +1959,9 @@
                 this.itemOpt();
                 let vm = this;
                 $(".el-dialog__title").text(this.langConfig['update']);
-                this.customerOpt();
-                this.termOpt();
                 if ((row.status == "Active" || row.paymentNumber < 2) && row.transactionType != "Invoice Sale Order") {
+                    this.customerOpt(row.customerDoc._id);
+                    this.termOpt();
                     vm.dialogUpdatePosInvoice = true;
                     vm.findPosInvoiceById(scope);
                 } else {

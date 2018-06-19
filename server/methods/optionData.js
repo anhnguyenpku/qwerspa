@@ -72,10 +72,14 @@ Meteor.methods({
         if (q != "") {
             q = q.replace(/[/\\]/g, '');
             let reg = new RegExp(q, 'mi');
-            selector.name = {$regex: reg};
+            selector.$or = [
+                {name: {$regex: reg}},
+                {_id: q}
+            ];
         }
         return Pos_Customer.find(selector, {limit: 100}).fetch().map(obj => ({label: obj.name, value: obj._id}));
-    },
+    }
+    ,
     queryPosCustomerOptionUnPaid(q) {
         let selector = {};
         if (q != "") {
@@ -117,7 +121,8 @@ Meteor.methods({
             {$limit: 100}
 
         ]).map(obj => ({label: obj._id.name, value: obj._id.id}));
-    },
+    }
+    ,
 
     queryPosVendorOptionUnPaid(q) {
         let selector = {};
@@ -159,7 +164,8 @@ Meteor.methods({
             {$limit: 100}
 
         ]).map(obj => ({label: obj._id.name, value: obj._id.id}));
-    },
+    }
+    ,
     queryAccountTypeOption() {
         let list = [];
 
@@ -167,7 +173,8 @@ Meteor.methods({
             list.push({label: obj._id + " : " + obj.name, value: obj._id});
         })
         return list;
-    },
+    }
+    ,
     queryParentChartAccountOption(selector, chartAccountId) {
         return Acc_ChartAccount.find(selector, {sort: {code: 1}}).fetch().map(function (obj) {
             let valDisable = false;
@@ -182,7 +189,8 @@ Meteor.methods({
             }
         })
 
-    },
+    }
+    ,
     queryParentPosCategoryOption(selector, categoryId) {
         return Pos_Category.find(selector, {sort: {code: 1}}).fetch().map(function (obj) {
             let valDisable = false;
@@ -197,7 +205,8 @@ Meteor.methods({
             }
         })
 
-    },
+    }
+    ,
     queryChartAccountOption(selector) {
         let list = [];
         Acc_ChartAccount.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
@@ -213,7 +222,8 @@ Meteor.methods({
             })
         })
         return list;
-    },
+    }
+    ,
     queryChartAccountMethodOption(selector) {
         let list = [];
         selector.isPayment = true;
@@ -230,7 +240,8 @@ Meteor.methods({
             })
         })
         return list;
-    },
+    }
+    ,
     queryCategoryOption(selector) {
         let list = [];
         Pos_Category.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
@@ -246,13 +257,15 @@ Meteor.methods({
             })
         })
         return list;
-    },
+    }
+    ,
     queryUserOption() {
         let data = Meteor.users.find().fetch().map((obj) => {
             return {label: obj.username, value: obj._id};
         });
         return data;
-    },
+    }
+    ,
     queryLocationOption() {
         let userId = Meteor.userId();
         let data = Pos_Location.aggregate([

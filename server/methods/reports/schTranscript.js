@@ -32,13 +32,15 @@ Meteor.methods({
                 }
             }
         ]);
-        console.log(transcriptList);
         let printTranscriptHtml = "";
         let ind = 1;
         if (transcriptList.length > 0) {
 
         }
-        data.transcriptDoc = transcriptList[0];
+        let transcriptDoc = transcriptList[0];
+        transcriptDoc.yearFrom = moment(transcriptDoc.yearFrom).format("YYYY");
+        transcriptDoc.yearTo = moment(transcriptDoc.yearTo).format("YYYY");
+        data.transcriptDoc = transcriptDoc;
         data.printTranscriptHtml = printTranscriptHtml;
         return data;
     }
