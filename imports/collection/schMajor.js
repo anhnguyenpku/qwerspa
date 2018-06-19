@@ -18,6 +18,12 @@ Sch_Major.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    faculty: {
+        type: String
+    },
+    degree: {
+        type: String
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

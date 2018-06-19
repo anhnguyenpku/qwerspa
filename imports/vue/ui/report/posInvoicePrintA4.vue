@@ -140,7 +140,7 @@
                         vm.printInvoiceA4Html = "";
                         vm.$message({
                             duration: 1000,
-                            message: this.langConfig['saveSuccess'],
+                            message: vm.langConfig['saveSuccess'],
                             type: 'success'
                         });
 

@@ -89,7 +89,6 @@ Meteor.methods({
                     }
                 }
             ]);
-
             if (saleOrderList.length > 0) {
                 saleOrderList[0].data.forEach((obj) => {
                     let saleOrderTemp = "";
@@ -100,7 +99,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                            let remainQty = o.qty - o.receive;
+                            let remainQty = o.qty - (o.receive || 0);
                             if (remainQty > 0) {
 
                                 bal += o.price * remainQty;
@@ -193,7 +192,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                                let remainQty = o.qty - o.receive;
+                                let remainQty = o.qty - (o.receive || 0);
                                 if (remainQty > 0) {
 
                                     bal += o.price * remainQty;
@@ -282,7 +281,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                            let remainQty = o.qty - o.receive;
+                            let remainQty = o.qty - (o.receive || 0);
                             if (remainQty > 0) {
 
                                 bal += o.price * remainQty;
@@ -385,7 +384,7 @@ Meteor.methods({
 
 
                     obj.data.forEach((ob) => {
-                            let remainQty = ob.item.qty - ob.item.receive;
+                            let remainQty = ob.item.qty - (ob.item.receive || 0);
                             if (remainQty > 0) {
 
                                 bal += ob.item.price * remainQty;
@@ -479,7 +478,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                                let remainQty = o.qty - o.receive;
+                                let remainQty = o.qty - (o.receive || 0);
                                 if (remainQty > 0) {
 
                                     bal += o.price * remainQty;
@@ -576,7 +575,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                            let remainQty = o.qty - o.receive;
+                            let remainQty = o.qty - (o.receive || 0);
                             if (remainQty > 0) {
 
                                 bal += o.price * remainQty;
@@ -670,7 +669,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                                let remainQty = o.qty - o.receive;
+                                let remainQty = o.qty - (o.receive || 0);
                                 if (remainQty > 0) {
 
                                     bal += o.price * remainQty;
@@ -777,7 +776,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                            let remainQty = o.qty - o.receive;
+                            let remainQty = o.qty - (o.receive || 0);
                             if (remainQty > 0) {
 
                                 bal += o.price * remainQty;
@@ -869,7 +868,7 @@ Meteor.methods({
 
                     obj.data.forEach((ob) => {
                         ob.item.forEach((o) => {
-                            let remainQty = o.qty - o.receive;
+                            let remainQty = o.qty - (o.receive || 0);
                             if (remainQty > 0) {
 
                                 bal += o.price * remainQty;

@@ -115,6 +115,12 @@
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schMajorForm.code"></el-input>
                 </el-form-item>
+                <el-form-item :label="langConfig['faculty']" prop="faculty">
+                    <el-input v-model="schMajorForm.faculty"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['degree']" prop="degree">
+                    <el-input v-model="schMajorForm.degree"></el-input>
+                </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schMajorForm.desc"></el-input>
                 </el-form-item>
@@ -147,6 +153,12 @@
                 </el-form-item>
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schMajorForm.code"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['faculty']" prop="faculty">
+                    <el-input v-model="schMajorForm.faculty"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['degree']" prop="degree">
+                    <el-input v-model="schMajorForm.degree"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schMajorForm.desc"></el-input>
@@ -195,11 +207,15 @@
                     khName: "",
                     code: "",
                     desc: "",
-                    _id: ""
+                    _id: "",
+                    faculty: "",
+                    degree: ""
                 },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
                     code: [{required: true, message: 'Please input code', trigger: 'blur'}],
+                    faculty: [{required: true, message: 'Please input faculty', trigger: 'blur'}],
+                    degree: [{required: true, message: 'Please input degree', trigger: 'blur'}],
                 },
             }
         },
@@ -255,6 +271,8 @@
                             name: vm.schMajorForm.name,
                             khName: vm.schMajorForm.khName,
                             desc: vm.schMajorForm.desc,
+                            faculty: vm.schMajorForm.faculty,
+                            degree: vm.schMajorForm.degree,
                             rolesArea: Session.get('area')
                         };
 
@@ -291,6 +309,8 @@
                             name: vm.schMajorForm.name,
                             khName: vm.schMajorForm.khName,
                             desc: vm.schMajorForm.desc,
+                            faculty: vm.schMajorForm.faculty,
+                            degree: vm.schMajorForm.degree,
                             rolesArea: Session.get('area')
                         };
 

@@ -1529,6 +1529,13 @@
                             type: 'string',
                             message: 'Please choose Major',
                             trigger: 'change'
+                        }],
+                    curiculumnId:
+                        [{
+                            required: true,
+                            type: 'string',
+                            message: 'Please choose Curriculumn',
+                            trigger: 'change'
                         }]
 
                 }
@@ -1544,10 +1551,10 @@
                     transcriptId: ""
                 },
                 culumnData1: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", ind: 1, sem: 1}
                 ],
                 culumnData2: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", ind: 1, sem: 2}
                 ],
                 stateExam: [
                     {subjectId: "", score: 0, grade: "Un Range"}
@@ -2012,11 +2019,22 @@
                         graduatedYear: "",
                     }];
 
+
+                this.inputTranscriptForm = {
+                    majorId: "",
+                    curiculumnId: "",
+                    culumnSemester1: [],
+                    culumnSemester2: [],
+                    studentName: "",
+                    studentId: "",
+                    finalGrade: "",
+                    transcriptId: ""
+                };
                 this.culumnData1 = [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", ind: 1, sem: 1}
                 ];
                 this.culumnData2 = [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range"}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", ind: 1, sem: 2}
                 ];
                 this.stateExam = [
                     {subjectId: "", score: 0, grade: "Un Range"}
@@ -2142,16 +2160,25 @@
             findCuriculumnById(id) {
                 Meteor.call("querySchCiriculumnById", id, (err, result) => {
                     if (result) {
-
+                        let i = 1;
+                        let j = 1;
                         result.culumnSemester1.map((obj) => {
                             obj.score = 0;
                             obj.grade = "Un Range";
+                            obj.ind = i;
+                            obj.sem = 1;
+                            i++;
+                            return obj;
                         });
                         this.culumnData1 = result.culumnSemester1;
 
                         result.culumnSemester2.map((obj) => {
                             obj.score = 0;
                             obj.grade = "Un Range";
+                            obj.ind = j;
+                            obj.sem = 2;
+                            j++;
+                            return obj;
                         });
                         this.culumnData2 = result.culumnSemester2;
                     }
@@ -2210,7 +2237,7 @@
                     });
                 } else {
                     this.culumnData1 = [
-                        {year: "", subjectId: "", credit: 0, grade: "Un Range"}
+                        {year: "", subjectId: "", credit: 0, grade: "Un Range", ind: 1, sem: 1}
 
                     ];
                 }
@@ -2218,7 +2245,7 @@
 
             handleAddCulumn1() {
                 this.culumnData1.push(
-                    {year: "", subjectId: "", credit: 0, grade: "Un Range"}
+                    {year: "", subjectId: "", credit: 0, grade: "Un Range", ind: 1, sem: 1}
                 )
             },
             handleEditCulumn1(index, row) {
@@ -2288,6 +2315,7 @@
                 this.inputTranscriptForm.studentName = data.personal.name;
                 this.inputTranscriptForm.studentId = data._id;
                 this.inputTranscriptForm.majorId = data.majorId;
+                this.inputTranscriptForm.finalGrade = data.finalGrade;
                 this.ciriculumnOpt(data.majorId);
                 vm.inputTranscriptForm.transcriptId = "";
                 vm.disabledCuriculumn = false;
@@ -2298,7 +2326,13 @@
 
                         vm.culumnData1 = result.culumnSemester1;
                         vm.culumnData2 = result.culumnSemester2;
-                        vm.stateExam = result.state;
+                        if (result.state.length > 0) {
+                            vm.stateExam = result.state;
+                        } else {
+                            vm.stateExam = [
+                                {subjectId: "", score: 0, grade: "Un Range"}
+                            ];
+                        }
                         vm.disabledCuriculumn = true;
                     }
                 });

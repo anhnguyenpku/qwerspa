@@ -45,7 +45,7 @@
                                   Name
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{transcriptDoc.studentDoc.personal.latinName}}
+                                  : {{transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.personal && transcriptDoc.studentDoc.personal.latinName || ""}}
                               </div>
                           </div>
                           <div style="width: 100%">
@@ -53,7 +53,7 @@
                                   Date of Birth
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{transcriptDoc.studentDoc.personal.dob}}
+                                  : {{transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.personal && transcriptDoc.studentDoc.personal.dob | switchDate}}
 
                               </div>
                           </div>
@@ -62,7 +62,7 @@
                                   Place of Birth
                               </div>
                               <div style="width: 80% !important;float: right">
-                                : {{transcriptDoc.studentDoc.personal.provinceCurrent}}
+                                : {{transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.personal && transcriptDoc.studentDoc.personal.provinceCurrent || ""}}
 
                               </div>
                           </div>
@@ -71,7 +71,7 @@
                                   Degree
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{transcriptDoc.studentDoc.personal.latinName}}
+                                  : {{majorDoc && majorDoc.degree || ""}}
 
                               </div>
                           </div>
@@ -80,7 +80,7 @@
                                   Faculty
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{transcriptDoc.studentDoc.personal.latinName}}
+                                  : {{majorDoc && majorDoc.faculty || ""}}
 
                               </div>
                           </div>
@@ -89,12 +89,11 @@
                                   Academic Year
                               </div>
                               <div style="width: 80% !important;float: right">
-                                : {{transcriptDoc.yearFrom}} - {{transcriptDoc.yearTo}}
+                                : {{transcriptDoc && transcriptDoc.yearFrom || ""}} - {{transcriptDoc && transcriptDoc.yearTo || ""}}
 
                               </div>
                           </div>
                       </caption>
-
                 <thead style="margin-top: 5px">
                     <tr class="back_color">
                         <th class="report-center" rowspan="2">Year</th>
@@ -102,19 +101,19 @@
                         <th colspan="4" class="report-center">Semester II</th>
                     </tr>
                 <tr>
-                        <th class="report-center">No</th>
                         <th class="report-center">Subject</th>
                         <th class="report-center">Credit</th>
                         <th class="report-center">Grade</th>
-                        <th class="report-center">No</th>
+                        <th class="report-center">Grade Point</th>
                         <th class="report-center">Subject</th>
                         <th class="report-center">Credit</th>
                         <th class="report-center">Grade</th>
+                        <th class="report-center">Grade Point</th>
+
                 </tr>
                 <tr></tr>
                 </thead>
                 <tbody style="margin-bottom: 5px;" v-html="printTranscriptHtml">
-
                 </tbody>
 
 
@@ -128,6 +127,7 @@
 <script>
     import PageA4 from '/imports/vue/ui/report/page/PageA4.vue';
     import {GenerateFile} from '/imports/api/mixins/file-saver-fn.js';
+    import '../../../../client/config/plugin/plugin';
     import compoLangReport from '../../../../both/i18n/lang/elem-label-sch-report';
 
     export default {
@@ -151,6 +151,7 @@
                     phoneNumber: ""
                 },
                 transcriptDoc: {},
+                majorDoc: {},
 
                 loading: false,
                 onLoad: false,
@@ -184,6 +185,7 @@
                     if (result) {
                         this.printTranscriptHtml = result.printTranscriptHtml;
                         this.transcriptDoc = result.transcriptDoc;
+                        this.majorDoc = result.majorDoc;
                         this.loading = false;
                     } else {
                         this.loading = false;
@@ -202,15 +204,9 @@
                 if (vm.printTranscriptHtml != "" && vm.onLoad == true) {
                     setTimeout(function () {
                         window.print();
-                        FlowRouter.go('/sch-data/schStudent');
                         vm.printTranscriptHtml = "";
-                        vm.$message({
-                            duration: 1000,
-                            message: this.langConfig['saveSuccess'],
-                            type: 'success'
-                        });
-
-                    }, 400);
+                        FlowRouter.go('/sch-data/schStudent');
+                    }, 600);
 
                 }
             })

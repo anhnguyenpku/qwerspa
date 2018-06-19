@@ -310,6 +310,85 @@ Vue.filter('switchMonth', (val) => {
     return str;
 });
 
+Vue.filter('switchDate', (date) => {
+    let str;
+    let val = moment(date).format("MM");
+    let d = moment(date).format("DD");
+    let y = moment(date).format("YYYY");
+    switch (val) {
+        case "01":
+            str = 'January';
+            break;
+        case "1":
+            str = 'January';
+            break;
+
+        case "02":
+            str = 'February';
+            break;
+        case "2":
+            str = 'February';
+            break;
+        case "03":
+            str = 'March';
+            break;
+        case "3":
+            str = 'March';
+            break;
+        case "04":
+            str = 'April';
+            break;
+        case "4":
+            str = 'April';
+            break;
+
+        case "05":
+            str = 'May';
+            break;
+        case "5":
+            str = 'May';
+            break;
+        case "06":
+            str = 'June';
+            break;
+        case "6":
+            str = 'June';
+            break;
+        case "07":
+            str = 'July';
+            break;
+        case "7":
+            str = 'July';
+            break;
+        case "08":
+            str = 'August';
+            break;
+        case "8":
+            str = 'August';
+            break;
+        case "09":
+            str = 'September';
+            break;
+        case "9":
+            str = 'September';
+            break;
+
+        case "10":
+            str = 'October';
+            break;
+        case "11":
+            str = 'November';
+            break;
+        case "12":
+            str = 'December';
+            break;
+    }
+
+    let dateString = d + " " + str + " " + y;
+    return dateString;
+});
+
+
 Vue.filter('subStringVoucher', (val) => {
     return val.substr(9, 13);
 });

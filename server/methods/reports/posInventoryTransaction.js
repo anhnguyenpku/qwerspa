@@ -129,7 +129,7 @@ Meteor.methods({
                             <td style="text-align: left !important;">${ind}</td>
                             <td style="text-align: left !important;">${ob.averageInventoryDateName}</td>
                             <td style="text-align: left !important;">${ob.cusVendName || ""}</td>
-                            <td style="text-align: left !important;">${ob.productDoc.name}</td>
+                            <td style="text-align: left !important;">${ob.productDoc && ob.productDoc.name || ""}</td>
                             <td style="text-align: left !important;">${ob.transactionType}</td>
                             <td style="text-align: left !important;">${ob.qty || ""}</td>
                             <td style="text-align: left !important;">${ob.unitDoc && ob.unitDoc.name || ""}</td>

@@ -17,6 +17,12 @@ Sch_Transcript.schema = new SimpleSchema({
     culumnSemester1: {
         type: [Object]
     },
+    "culumnSemester1.$.ind": {
+        type: Number
+    },
+    "culumnSemester1.$.sem": {
+        type: Number
+    },
     "culumnSemester1.$.year": {
         type: Number
     },
@@ -38,6 +44,12 @@ Sch_Transcript.schema = new SimpleSchema({
     },
     culumnSemester2: {
         type: [Object]
+    },
+    "culumnSemester2.$.ind": {
+        type: Number
+    },
+    "culumnSemester2.$.sem": {
+        type: Number
     },
     "culumnSemester2.$.year": {
         type: Number

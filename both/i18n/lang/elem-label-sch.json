@@ -94,7 +94,9 @@
       "code": "Code",
       "desc": "desc",
       "add": "Add Major",
-      "update": "Update Major"
+      "update": "Update Major",
+      "faculty": "Faculty",
+      "degree": "Degree"
     },
     "mention": {
       "searchHere": "Search Here ...",
@@ -265,7 +267,9 @@
       "code": "កូដ",
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានជំនាញ",
-      "update": "កែប្រែព័តមានជំនាញ"
+      "update": "កែប្រែព័តមានជំនាញ",
+      "faculty": "មហាវិទ្យាល័យ",
+      "degree": "សញ្ញាបត្រទទួលបាន"
     },
     "mention": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
