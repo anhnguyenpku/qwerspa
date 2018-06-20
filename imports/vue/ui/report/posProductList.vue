@@ -67,6 +67,7 @@
                         <th>{{langConfig['price']}}</th>
                         <th>{{langConfig['cost']}}</th>
                         <th>{{langConfig['qtyOnHand']}}</th>
+                        <th>{{langConfig['barcode']}}</th>
                     </tr>
                 </thead>
                 <tbody style="margin-bottom: 5px;" v-html="productListHtml">
@@ -96,8 +97,14 @@
     import {GenerateFile} from '/imports/api/mixins/file-saver-fn.js';
     import compoLangReport from '../../../../both/i18n/lang/elem-label-report';
 
+    import PosBarcodeProduct from '/imports/vue/components/posBarcodeProduct/PosBarcodeProduct';
+
+
     export default {
         mixins: [GenerateFile],
+        components: {
+            PosBarcodeProduct
+        },
         data() {
             return {
                 params: {

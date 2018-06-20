@@ -351,7 +351,8 @@
       "price": "Price",
       "no": "No",
       "cost": "Cost",
-      "qtyOnHand": "Qty On Hand"
+      "qtyOnHand": "Qty On Hand",
+      "barcode": "Barcode"
     },
     "purchaseByVendorSummary": {
       "run": "RUN REPORT",
@@ -1044,7 +1045,8 @@
       "cost": "ថ្លៃដើម",
       "no": "ល.រ",
       "qtyOnHand": "ចំនួនមានក្នុងដៃ",
-      "location": "ទីតាំង"
+      "location": "ទីតាំង",
+      "barcode": "លេខកូដ"
     },
     "purchaseByVendorSummary": {
       "run": "ដំណើរការរបាយការណ៍",
