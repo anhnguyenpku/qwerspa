@@ -3,19 +3,17 @@
         <svg class="barcode"></svg>
     </div>
 </template>
-
-
 <script>
     export default {
         props: ['doc', 'company'],
         mounted() {
             this.$nextTick(function () {
-                JsBarcode(this.$el.querySelector('svg.barcode'), (this.doc.barcode || ""), {
+                JsBarcode(this.$el.querySelector('svg.barcode'), (this.doc.barcode || "Hello"), {
                     textAlign: 'right',
                     fontSize: 9,
                     width: 1.6,
                     height: 40,
-                    text: this.doc.waterBillingDoc.enShortName + (this.doc.barcode || "")
+                    text: this.company.enShortName + (this.doc.barcode || "Hello")
 //                marginLeft: 920.7
                 });
             });

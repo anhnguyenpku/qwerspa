@@ -70,8 +70,17 @@
                         <th>{{langConfig['barcode']}}</th>
                     </tr>
                 </thead>
-                <tbody style="margin-bottom: 5px;" v-html="productListHtml">
-
+                <tbody style="margin-bottom: 5px;">
+                    <tr v-for="obj in productDoc.data">
+                            <td style="text-align: center !important;">1</td>
+                            <td style="text-align: left !important;">{{obj.code}} : {{obj.name}}</td>
+                            <td>{{obj.productType}}</td>
+                            <td>{{obj.description || ""}}</td>
+                            <td>{{obj.rePrice}}</td>
+                            <td>{{obj.cost}}</td>
+                            <td>{{obj.qtyOnHand}}</td>
+                            <td><barcode :doc="obj" :company="waterBillingSetup"></barcode></td>
+                    </tr>
                 </tbody>
 
 
@@ -98,12 +107,10 @@
     import compoLangReport from '../../../../both/i18n/lang/elem-label-report';
 
     import PosBarcodeProduct from '/imports/vue/components/posBarcodeProduct/PosBarcodeProduct';
-
-
     export default {
         mixins: [GenerateFile],
         components: {
-            PosBarcodeProduct
+            barcode: PosBarcodeProduct
         },
         data() {
             return {
@@ -114,7 +121,7 @@
                 },
                 rolesArea: '',
                 activeName: '1',
-                productListHtml: "",
+                productDoc: {},
                 labelPosition: 'top',
                 branchOptions: [],
                 areaOptions: [],
@@ -175,7 +182,7 @@
                 this.loading = true;
                 Meteor.call('posProductListReport', this.params, (err, result) => {
                     if (result) {
-                        this.productListHtml = result.productListHTML;
+                        this.productDoc = result.productDoc;
                     }
                     this.loading = false;
                 });

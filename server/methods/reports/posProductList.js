@@ -9,10 +9,7 @@ import {exchangeCoefficient} from "../../../imports/api/methods/roundCurrency"
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 import {roundCurrency} from "../../../imports/api/methods/roundCurrency"
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
-
-let JsBarcode = require('jsbarcode');
-let Canvas = require("canvas");
-let canvas = new Canvas();
+import JsBarcode from "jsbarcode";
 
 Meteor.methods({
     posProductListReport() {
@@ -38,8 +35,8 @@ Meteor.methods({
                 }
             }
         ]);
-        let productListHTML = "";
-        if (productList.length > 0) {
+        // let productListHTML = "";
+        /*if (productList.length > 0) {
             let ind = 1;
             productList[0].data.forEach((obj) => {
                 productListHTML += `
@@ -51,18 +48,20 @@ Meteor.methods({
                             <td>${formatCurrency(obj.rePrice)}</td>
                             <td>${formatCurrency(obj.cost)}</td>
                             <td>${obj.qtyOnHand}</td>
-                            <td>${JsBarcode(canvas, "Hello")};
-                    </td>
+                            <td><svg class="barcode"></svg></td>
                     </tr>
             
             `;
                 ind++;
             })
 
-        }
-        data.productListHTML = productListHTML;
+        }*/
+        // data.productListHTML = productListHTML;
+        data.productDoc = productList[0];
         return data;
     }
 })
 ;
+
+
 
