@@ -80,9 +80,14 @@ Meteor.methods({
             return data;
         }
     },
-    queryPosProductById(id) {
-        let data = Pos_Product.findOne({_id: id});
-        if (data.unitId) {
+    queryPosProductById(val) {
+        let selector = {};
+        selector.$or = [
+            {_id: val},
+            {code: val + ""}
+        ];
+        let data = Pos_Product.findOne(selector);
+        if (data && data.unitId) {
             let unitDoc = Pos_Unit.findOne({_id: data.unitId});
             if (unitDoc) {
                 data.unitName = unitDoc.name;

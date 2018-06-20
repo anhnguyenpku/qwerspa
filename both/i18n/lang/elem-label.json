@@ -86,7 +86,8 @@
       "receiveItem": "Receive Item",
       "qtyReceive": "Qty Receive",
       "paidOnSaleOrder": "Paid On Prepay",
-      "paidOnSaleOrderRaw": "Prepay"
+      "paidOnSaleOrderRaw": "Prepay",
+      "barcode": "Barcode"
     },
     "receivePayment": {
       "searchHere": "Search Here ...",
@@ -223,7 +224,8 @@
       "location": "Location",
       "chooseItem": "Choose Item",
       "chooseLocation": "Choose Location",
-      "unit": "Unit"
+      "unit": "Unit",
+      "barcode": "Barcode"
     },
     "vendor": {
       "searchHere": "Search Here ...",
@@ -482,7 +484,8 @@
       "locationTo": "Location To",
       "chooseItem": "Choose Item",
       "chooseLocation": "Choose Location",
-      "balanceTransfer": "Balance Transfer"
+      "balanceTransfer": "Balance Transfer",
+      "barcode": "Barcode"
     },
     "saleOrder": {
       "searchHere": "Search Here ...",
@@ -536,7 +539,8 @@
       "chooseItem": "Choose Item",
       "location": "Location",
       "chooseLocation": "Choose Location",
-      "unit": "Unit"
+      "unit": "Unit",
+      "barcode": "Barcode"
     }
   },
   {
@@ -624,7 +628,8 @@
       "receiveItem": "ទទួលទំនិញ",
       "qtyReceive": "ចំនួនបានទទួល",
       "paidOnSaleOrder": "កាត់ពីប្រាក់កក់",
-      "paidOnSaleOrderRaw": "ប្រាក់កក់"
+      "paidOnSaleOrderRaw": "ប្រាក់កក់",
+      "barcode": "លេខកូដ"
     },
     "receivePayment": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -758,7 +763,8 @@
       "chooseItem": "ជ្រើសរើសទំនិញ",
       "location": "ទីតាំង",
       "chooseLocation": "ជ្រើសរើសទីតាំង",
-      "unit": "ឯកតា"
+      "unit": "ឯកតា",
+      "barcode": "លេខកូដ"
     },
     "vendor": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1014,7 +1020,8 @@
       "locationTo": "ទៅកាន់ទីតាំង",
       "chooseItem": "ជ្រើសរើសទំនិញ",
       "chooseLocation": "ជ្រើសរើសទីតាំង",
-      "balanceTransfer": "សមតុល្យត្រូវផ្ទេរ"
+      "balanceTransfer": "សមតុល្យត្រូវផ្ទេរ",
+      "barcode": "លេខកូដ"
     },
     "saleOrder": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1067,7 +1074,8 @@
       "location": "ទីតាំង",
       "chooseItem": "ជ្រើសរើសទំនិញ",
       "chooseLocation": "ជ្រើសរើសទីតាំង",
-      "unit": "ឯកតា"
+      "unit": "ឯកតា",
+      "barcode": "លេខកូដ"
     }
   }
 ]

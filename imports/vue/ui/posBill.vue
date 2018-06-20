@@ -155,9 +155,17 @@
                                         </el-select>
                                     </el-form-item>
                                 </th>
-                                <th colspan="2" style="width: 40% !important;">
+                                <th style="width: 20% !important;">
                                     <el-form-item label="">
-
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
+                                                  v-model.number="posBillForm.code" autofocus
+                                                  @keyup.native.13="addToPosBillData(null)"
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th style="width: 20% !important;">
+                                    <el-form-item label="">
                                         <el-select style="display: block !important;"
                                                    filterable clearable
                                                    v-model="posBillForm.itemId" :disabled="disabledItem"
@@ -482,7 +490,16 @@
                                         </el-select>
                                     </el-form-item>
                                 </th>
-                                <th colspan="2" style="width: 40% !important;">
+                                <th style="width: 20% !important;">
+                                    <el-form-item label="">
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
+                                                  @keyup.native.13="addToPosBillData(null)"
+                                                  v-model="posBillForm.code" autofocus
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th style="width: 20% !important;">
                                     <el-form-item label="">
                                         <el-select style="display: block !important;" :disabled="disabledItem"
                                                    filterable clearable
@@ -979,7 +996,8 @@
                 ],
                 locationOption: [],
                 disabledItem: true,
-                currencySymbol: ""
+                currencySymbol: "",
+                isFocus: false
             }
         },
         mounted() {
@@ -1070,7 +1088,7 @@
                 }
             },
             "posBillForm.locationId"(val) {
-                if (val && val != "") {
+                if (val && val !== "") {
                     this.disabledItem = false;
                 } else {
                     this.disabledItem = true;
@@ -1394,7 +1412,7 @@
                             remainKHR: data.remainKHR,
                             remainTHB: data.remainTHB,
                             locationId: data.locationId
-                        }
+                        };
                         vm.getTotal();
                     }
                 })
@@ -1402,7 +1420,11 @@
             },
             addToPosBillData(val) {
                 let vm = this;
-                if (val == "" || val == undefined) {
+                if (val === null) {
+                    val = vm.posBillForm.code;
+                }
+
+                if (val === "" || val === undefined) {
                     this.$message({
                         duration: 1000,
                         message: "Item Can't Empty!!",
@@ -1410,11 +1432,10 @@
                     });
                     return false;
                 }
-
                 let isFound = vm.posBillData.find(function (element) {
-                    return element.itemId == val;
+                    return element.itemId === val || element.code === val;
                 });
-                if (isFound != undefined) {
+                if (isFound !== undefined) {
                     this.$message({
                         type: 'error',
                         message: 'Item already add!'
@@ -1433,8 +1454,9 @@
                             unitId: data.unitId,
                             unitName: data.unitName,
 
-                        })
+                        });
                         vm.posBillForm.itemId = "";
+                        vm.posBillForm.code = "";
                         vm.$message({
                             duration: 1000,
                             message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",

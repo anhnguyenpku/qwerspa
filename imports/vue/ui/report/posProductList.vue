@@ -11,7 +11,13 @@
                             {{langConfig['titleFilter']}} <i class="header-icon el-icon-information"></i>
                         </span>
                                 <!--<el-form :inline="true">-->
-                                <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
+                                <el-button :loading="loading" @click="handleRun(),isBarcode=true" type="primary"
+                                           icon="caret-right"
+                                           style="float: right"
+                                           size="small">{{langConfig['runBarcode']}}
+                                </el-button>
+                                <el-button :loading="loading" @click="handleRun(),isBarcode=false" type="success"
+                                           icon="caret-right"
                                            style="float: right"
                                            size="small">{{langConfig['run']}}
                                 </el-button>
@@ -58,10 +64,11 @@
                           </div>
                       </caption>
 
-                <thead style="margin-top: 5px">
+                <thead style="margin-top: 5px" v-if="isBarcode===true">
                     <tr>
                         <th>{{langConfig['no']}}</th>
                         <th>{{langConfig['product']}}</th>
+
                         <!--  <th>{{langConfig['type']}}</th>
                           <th>{{langConfig['description']}}</th>-->
                         <th>{{langConfig['price']}}</th>
@@ -74,15 +81,27 @@
                     <tr v-for="(obj ,index) in productDoc.data">
                             <td style="text-align: center !important;">{{index+1}}</td>
                             <td style="text-align: left !important;">{{obj.code}} : {{obj.name}}</td>
-                        <!-- <td>{{obj.productType}}</td>
-                         <td>{{obj.description || ""}}</td>-->
+                         <td v-if="isBarcode==false">{{obj.productType}}</td>
+                         <td v-if="isBarcode==false">{{obj.description || ""}}</td>
                             <td>{{obj.rePrice}}</td>
                             <td>{{obj.cost}}</td>
                             <td>{{obj.qtyOnHand}}</td>
-                            <td><barcode :doc="obj" :company="waterBillingSetup"></barcode></td>
+                            <td v-if="isBarcode==true"><barcode :doc="obj" :company="waterBillingSetup"></barcode></td>
                     </tr>
                 </tbody>
 
+                     <thead style="margin-top: 5px" v-if="isBarcode===false">
+                    <tr>
+                        <th>{{langConfig['no']}}</th>
+                        <th>{{langConfig['product']}}</th>
+
+                          <th>{{langConfig['type']}}</th>
+                          <th>{{langConfig['description']}}</th>
+                        <th>{{langConfig['price']}}</th>
+                        <th>{{langConfig['cost']}}</th>
+                        <th>{{langConfig['qtyOnHand']}}</th>
+                    </tr>
+                </thead>
 
             </table>
                  <div class="row" style="width: 100% !important;">
@@ -127,7 +146,7 @@
                 labelPosition: 'top',
                 branchOptions: [],
                 areaOptions: [],
-
+                isBarcode: true,
 
                 waterBillingSetup: {
                     khName: '',
@@ -184,6 +203,7 @@
                 this.loading = true;
                 Meteor.call('posProductListReport', this.params, (err, result) => {
                     if (result) {
+                        console.log(result.productDoc);
                         this.productDoc = result.productDoc;
                     }
                     this.loading = false;
