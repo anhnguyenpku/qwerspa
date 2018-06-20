@@ -1,5 +1,6 @@
 <template>
-    <div class="barcode-product-component" style="margin-right: -11px; margin-top: -11px;">
+    <div class="barcode-product-component">
+        <!--<div class="barcode-product-component" style="margin-right: -11px; margin-top: -11px;">-->
         <svg class="barcode"></svg>
     </div>
 </template>
@@ -8,12 +9,12 @@
         props: ['doc', 'company'],
         mounted() {
             this.$nextTick(function () {
-                JsBarcode(this.$el.querySelector('svg.barcode'), (this.doc.barcode || "Hello"), {
-                    textAlign: 'right',
+                JsBarcode(this.$el.querySelector('svg.barcode'), (this.doc && this.doc.code || ""), {
+                    textAlign: 'left',
                     fontSize: 9,
                     width: 1.6,
                     height: 40,
-                    text: this.company.enShortName + (this.doc.barcode || "Hello")
+                    text: this.company.enShortName + (this.doc && this.doc.code || "")
 //                marginLeft: 920.7
                 });
             });

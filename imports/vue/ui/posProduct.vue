@@ -230,11 +230,6 @@
                 </el-row>
 
 
-                <el-form-item :label="langConfig['barCode']" prop="barcode">
-                    <el-input v-model="posProductForm.barcode"></el-input>
-                </el-form-item>
-
-
                 <el-form-item :label="langConfig['memo']" prop="description">
                     <el-input type="textarea" v-model="posProductForm.description"></el-input>
                 </el-form-item>
@@ -355,9 +350,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item :label="langConfig['barCode']" prop="barcode">
-                    <el-input v-model="posProductForm.barcode"></el-input>
-                </el-form-item>
 
                 <el-form-item :label="langConfig['memo']" prop="description">
                     <el-input type="textarea" v-model="posProductForm.description"></el-input>
@@ -439,7 +431,6 @@
                     whPrice: 0,
                     rePrice: 0,
                     cost: 0,
-                    barcode: "",
                     _id: "",
                     minimumStock: "",
                     unitId: ""
@@ -541,7 +532,6 @@
                             cost: vm.posProductForm.cost,
                             qtyOnHand: vm.posProductForm.qtyOnHand,
                             isTaxable: vm.posProductForm.isTaxable,
-                            barcode: vm.posProductForm.barcode,
                             description: vm.posProductForm.description,
                             minimumStock: vm.posProductForm.minimumStock,
                             unitId: vm.posProductForm.unitId
@@ -587,7 +577,6 @@
                             cost: vm.posProductForm.cost,
                             qtyOnHand: vm.posProductForm.qtyOnHand,
                             isTaxable: vm.posProductForm.isTaxable,
-                            barcode: vm.posProductForm.barcode,
                             description: vm.posProductForm.description,
                             minimumStock: vm.posProductForm.minimumStock,
                             unitId: vm.posProductForm.unitId

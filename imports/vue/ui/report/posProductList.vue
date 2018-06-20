@@ -62,8 +62,8 @@
                     <tr>
                         <th>{{langConfig['no']}}</th>
                         <th>{{langConfig['product']}}</th>
-                        <th>{{langConfig['type']}}</th>
-                        <th>{{langConfig['description']}}</th>
+                        <!--  <th>{{langConfig['type']}}</th>
+                          <th>{{langConfig['description']}}</th>-->
                         <th>{{langConfig['price']}}</th>
                         <th>{{langConfig['cost']}}</th>
                         <th>{{langConfig['qtyOnHand']}}</th>
@@ -71,11 +71,11 @@
                     </tr>
                 </thead>
                 <tbody style="margin-bottom: 5px;">
-                    <tr v-for="obj in productDoc.data">
-                            <td style="text-align: center !important;">1</td>
+                    <tr v-for="(obj ,index) in productDoc.data">
+                            <td style="text-align: center !important;">{{index+1}}</td>
                             <td style="text-align: left !important;">{{obj.code}} : {{obj.name}}</td>
-                            <td>{{obj.productType}}</td>
-                            <td>{{obj.description || ""}}</td>
+                        <!-- <td>{{obj.productType}}</td>
+                         <td>{{obj.description || ""}}</td>-->
                             <td>{{obj.rePrice}}</td>
                             <td>{{obj.cost}}</td>
                             <td>{{obj.qtyOnHand}}</td>
@@ -107,10 +107,12 @@
     import compoLangReport from '../../../../both/i18n/lang/elem-label-report';
 
     import PosBarcodeProduct from '/imports/vue/components/posBarcodeProduct/PosBarcodeProduct';
+
     export default {
-        mixins: [GenerateFile],
+        //mixins: [GenerateFile],
         components: {
-            barcode: PosBarcodeProduct
+            "barcode": PosBarcodeProduct,
+            a4: PageA4
         },
         data() {
             return {
@@ -198,9 +200,6 @@
                 let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['productList'];
                 return data;
             }
-        },
-        components: {
-            a4: PageA4
-        },
+        }
     }
 </script>
