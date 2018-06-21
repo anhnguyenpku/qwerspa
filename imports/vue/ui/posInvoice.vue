@@ -136,6 +136,7 @@
                 :title="langConfig['add']"
                 :visible.sync="dialogAddPosInvoice"
                 :fullscreen="fullScreen"
+                class="dialogInvoice"
 
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
@@ -164,7 +165,16 @@
                                         </el-select>
                                     </el-form-item>
                                 </th>
-                                <th colspan="2" style="width: 40% !important;">
+                                <th style="width: 20% !important;">
+                                    <el-form-item label="">
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
+                                                  v-model="posInvoiceForm.code" autofocus
+                                                  @keyup.native.13="addToPosInvoiceData(null)"
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th style="width: 20% !important;">
                                     <el-form-item label="">
                                         <el-select style="display: block !important;"
                                                    filterable clearable
@@ -495,6 +505,7 @@
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdatePosInvoice"
                 :fullscreen="fullScreen"
+                class="dialogInvoice"
 
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
@@ -522,7 +533,16 @@
                                         </el-select>
                                     </el-form-item>
                                 </th>
-                                <th colspan="2" style="width: 40% !important;">
+                                <th style="width: 20% !important;">
+                                    <el-form-item label="">
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
+                                                  v-model="posInvoiceForm.code" autofocus
+                                                  @keyup.native.13="addToPosInvoiceData(null)"
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th style="width: 20% !important;">
                                     <el-form-item label="">
                                         <el-select style="display: block !important;"
                                                    filterable clearable
@@ -1318,6 +1338,7 @@
         },
         data() {
             return {
+                keyCode: [],
                 refForm: '',
                 posInvoiceData: [],
                 posInvoiceDataDisplay: [],
@@ -1377,7 +1398,8 @@
                     rawQty: 0,
                     isReceiveAll: false,
                     balanceNotCut: 0,
-                    balanceNotCutFull: 0
+                    balanceNotCutFull: 0,
+                    code: ""
 
                 },
                 rules: {
@@ -1440,7 +1462,9 @@
                     {label: "percent", value: "Percent"}
                 ],
                 locationOption: [],
-                disabledItem: true
+                disabledItem: true,
+                timeStamp: [],
+                takeBarcode: ''
             }
         },
         mounted() {
@@ -1450,6 +1474,14 @@
                     let min = moment(vm.closeDate).add(1, "days").toDate().getTime();
                     return time.getTime() < min;
                 }
+            };
+
+            let elem = this.$jQuery('el-dialog.dialogInvoice');
+            let checkEvent = $._data($('body').get(0), 'events');
+            if (checkEvent.keyup.length <= 1) {
+                this.$nextTick(() => {
+                    this.$jQuery('body').on('keyup', elem, this.barcodeScanInvoice);
+                })
             }
         },
         watch: {
@@ -1470,10 +1502,10 @@
             },
             "posInvoiceForm.invoiceDate"(val) {
                 let vm = this;
-                if (vm.dialogUpdatePosInvoice == false) {
+                if (vm.dialogUpdatePosInvoice === false) {
                     vm.posInvoiceForm.posInvoiceDate = val;
                 }
-                if (vm.closeDate && vm.closeDate != "" && vm.closeDate != undefined) {
+                if (vm.closeDate && vm.closeDate !== "" && vm.closeDate !== undefined) {
                     vm.options = {
                         disabledDate(time) {
                             let min = moment(vm.closeDate).add(1, "days").toDate().getTime();
@@ -1513,7 +1545,7 @@
                         if (result) {
                             vm.posInvoiceForm.address = result.address;
 
-                            if (vm.refForm == "posInvoiceFormAdd") {
+                            if (vm.refForm === "posInvoiceFormAdd") {
                                 vm.posInvoiceForm.termId = result.termId;
                             }
                         }
@@ -1526,7 +1558,7 @@
 
             },
             "posInvoiceForm.discount"(val) {
-                if (val || val == 0) {
+                if (val || val === 0) {
                     this.posInvoiceForm.discount = val;
                     // this.posInvoiceForm.discount = this.$_numeral(val).format("0,00");
                     this.getTotal();
@@ -1540,7 +1572,7 @@
                 }
             },
             "posInvoiceForm.locationId"(val) {
-                if (val && val != "") {
+                if (val && val !== "") {
                     this.disabledItem = false;
                 } else {
                     this.disabledItem = true;
@@ -1549,14 +1581,14 @@
             "posInvoiceForm.isReceiveAll"(val) {
 
                 let vm = this;
-                if (vm.refForm == "posReceiveItem") {
+                if (vm.refForm === "posReceiveItem") {
                     let ind = 0;
-                    if (val == false) {
+                    if (val === false) {
                         vm.posInvoiceForm.isReceiveAll = false;
                     }
                     vm.posInvoiceData.map((obj) => {
                         obj.isReceive = val;
-                        if (obj.isReceive == false) {
+                        if (obj.isReceive === false) {
                             obj.isReceiveAll = false;
                         }
                         vm.updatePosInvoiceDetailReceiveItem(obj, ind);
@@ -1602,6 +1634,28 @@
 
 
                 }, 200)*/
+            },
+            barcodeScanInvoice(e) {
+                if (this.dialogAddPosInvoice === true || this.dialogUpdatePosInvoice === true) {
+                    let scannerSensitivity = 100;
+                    if (e.keyCode !== 13 && !isNaN(e.key)) {
+                        this.takeBarcode += e.key;
+                    }
+                    this.timeStamp.push(Date.now());
+                    if (this.timeStamp.length > 1) {
+                        if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
+                            this.takeBarcode = '';
+                            this.timeStamp = [];
+                        } else {
+                            if (e.keyCode === 13) {
+                                this.posInvoiceForm.code = this.takeBarcode;
+                                this.addToPosInvoiceData(null);
+                                this.timeStamp = [];
+                                this.takeBarcode = ''
+                            }
+                        }
+                    }
+                }
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('queryPosInvoice', {
@@ -1706,7 +1760,7 @@
                             paymentNumber: 1,
                             customerId: vm.posInvoiceForm.customerId,
                             locationId: vm.posInvoiceForm.locationId,
-                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
+                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posInvoiceDoc.item = vm.posInvoiceData;
                         Meteor.call("insertPosInvoice", posInvoiceDoc, (err, result) => {
@@ -1775,7 +1829,7 @@
                             customerId: vm.posInvoiceForm.customerId,
                             _id: id,
                             locationId: vm.posInvoiceForm.locationId,
-                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
+                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posInvoiceDoc.item = vm.posInvoiceData;
                         Meteor.call("updatePosInvoice", posInvoiceDoc, id, (err, result) => {
@@ -1847,14 +1901,14 @@
                             paymentNumber: 1,
                             customerId: vm.posInvoiceForm.customerId,
                             locationId: vm.posInvoiceForm.locationId,
-                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
+                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         let newPosInvoiceData = [];
                         vm.posInvoiceData.map((obj) => {
-                            if (obj.isReceive == true) {
+                            if (obj.isReceive === true) {
                                 newPosInvoiceData.push(obj);
                             }
-                        })
+                        });
                         posInvoiceDoc.item = newPosInvoiceData;
                         Meteor.call("insertPosInvoice", posInvoiceDoc, true, (err, result) => {
                             if (!err) {
@@ -1884,7 +1938,7 @@
             },
             removePosInvoice(index, row, rows) {
                 let vm = this;
-                if (row.status == "Active" || row.paymentNumber < 2) {
+                if (row.status === "Active" || row.paymentNumber < 2) {
 
                     vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
                         confirmButtonText: 'OK',
@@ -1959,7 +2013,7 @@
                 this.itemOpt();
                 let vm = this;
                 $(".el-dialog__title").text(this.langConfig['update']);
-                if ((row.status == "Active" || row.paymentNumber < 2) && row.transactionType != "Invoice Sale Order") {
+                if ((row.status === "Active" || row.paymentNumber < 2) && row.transactionType !== "Invoice Sale Order") {
                     this.customerOpt(row.customerDoc._id);
                     this.termOpt();
                     vm.dialogUpdatePosInvoice = true;
@@ -2003,7 +2057,7 @@
                             rolesArea: Session.get('area'),
                             customerId: data.customerId,
                             locationId: data.locationId
-                        }
+                        };
 
                         vm.getTotal();
                     }
@@ -2014,49 +2068,58 @@
             },
             addToPosInvoiceData(val) {
                 let vm = this;
-                if (val == "" || val == undefined) {
+
+                if (val === null) {
+                    val = vm.posInvoiceForm.code;
+                }
+                if (val === "" || val === undefined) {
                     this.$message({
                         duration: 1000,
                         message: "Item Can't Empty!!",
                         type: 'error'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
 
                 let isFound = vm.posInvoiceData.find(function (element) {
-                    return element.itemId == val;
+                    return element.itemId === val || element.code === val;
                 });
-                if (isFound != undefined) {
+                if (isFound !== undefined) {
                     this.$message({
                         type: 'error',
                         message: 'Item already add!'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
                 vm.posInvoiceForm.isRetail = true;
-
-                Meteor.call("queryPosAverageCostById", val, Session.get("area"), vm.posInvoiceForm.locationId, (err, dataStock) => {
-                    if (dataStock) {
-
-                        Meteor.call("queryPosProductById", val, (err, data) => {
-                            if (data) {
+                Meteor.call("queryPosProductById", val, (err, data) => {
+                    if (data) {
+                        Meteor.call("queryPosAverageCostById", data._id, Session.get("area"), vm.posInvoiceForm.locationId, (err, dataStock) => {
+                            if (dataStock) {
                                 vm.posInvoiceData.push({
                                     itemId: data._id,
                                     itemName: data.code + " : " + data.name,
+                                    code: data.code,
                                     unit1: 1,
                                     unit2: 1,
                                     totalUnit: 1,
                                     unitId: data.unitId,
                                     unitName: data.unitName,
 
-                                    price: vm.posInvoiceForm.isRetail == true ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
+                                    price: vm.posInvoiceForm.isRetail === true ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
                                     qty: vm.$_numeral(1).value(),
-                                    amount: vm.posInvoiceForm.isRetail == true ? formatCurrency(data.rePrice) : formatCurrency(data.whPrice),
+                                    amount: vm.posInvoiceForm.isRetail === true ? formatCurrency(data.rePrice) : formatCurrency(data.whPrice),
                                     isRetail: true,
                                     desc: "",
                                     rawQty: vm.$_numeral(dataStock.qtyEnding).value()
-                                })
+                                });
+
                                 vm.posInvoiceForm.itemId = "";
+                                vm.posInvoiceForm.code = "";
                                 vm.$message({
                                     duration: 1000,
                                     message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",
@@ -2064,20 +2127,25 @@
                                 });
 
                                 this.getTotal();
+
                             } else {
                                 vm.$message({
-                                    duration: 1000,
-                                    message: "មិនមានឈ្មេាះនេះឡើយ!!",
+                                    duration: 3000,
+                                    message: "ទំនិញនេះ អស់ពីស្តុកហើយ!!",
                                     type: 'error'
                                 });
+                                let s = new buzz.sound('/the-calling.mp3');
+                                s.play();
                             }
                         })
                     } else {
                         vm.$message({
-                            duration: 3000,
-                            message: "ទំនិញនេះ អស់ពីស្តុកហើយ!!",
+                            duration: 1000,
+                            message: "មិនមានឈ្មេាះនេះឡើយ!!",
                             type: 'error'
                         });
+                        let s = new buzz.sound('/the-calling.mp3');
+                        s.play();
                     }
                 })
             },
@@ -2194,6 +2262,7 @@
             resetForm() {
                 this.posInvoiceData = [];
                 this.posInvoiceForm.discountValue = 0;
+                this.posInvoiceForm.code = "";
                 this.posInvoiceForm.paidUSD = 0;
                 this.posInvoiceForm.paidKHR = 0;
                 this.posInvoiceForm.paidTHB = 0;

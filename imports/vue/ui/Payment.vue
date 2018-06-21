@@ -7,20 +7,21 @@
             <div class="card-content">
                 <h4 class="card-title" style="font-family: 'Khmer OS Battambang'"><b>ទទួលប្រាក់</b></h4>
                 <div style="background: white" labelPosition="top" :inline="true"
-                         class="demo-form-inline">
-                        <br>
-                        <div class="payment-hide-low-1365" style="width: 100%">
+                     class="demo-form-inline">
+                    <br>
+                    <div class="payment-hide-low-1365" style="width: 100%">
                         <el-row style="color:darkblue;">
                             <el-col style="width: 30%" align="right">
                                 <img style="width: 150px;height: 150px" src="/images/wb.jpg" alt="MIH Logo">
                             </el-col>
                             <el-col :span="1"></el-col>
                             <el-col style="width: 70%;max-width: 550px" align="left">
-                                <h1 style="font-family: 'Khmer OS Muol';text-align: center">អង្គភាពរដ្ឋាករទឹកបាត់ដំបង</h1>
+                                <h1 style="font-family: 'Khmer OS Muol';text-align: center">
+                                    អង្គភាពរដ្ឋាករទឹកបាត់ដំបង</h1>
                                 <h1 style="font-family: 'Khmer OS Muol';text-align: center">Battambang Water Supply</h1>
                             </el-col>
                         </el-row>
-                        </div>
+                    </div>
 
                     <div class="payment-hide-low-767 payment-hide-high-1366" style="width: 100%">
                         <el-row style="color:darkblue;">
@@ -29,27 +30,28 @@
                             </el-col>
                             <el-col :span="1"></el-col>
                             <el-col style="width: 70%;max-width: 550px" align="left">
-                                <h2 style="font-family: 'Khmer OS Muol';text-align: center">អង្គភាពរដ្ឋាករទឹកបាត់ដំបង</h2>
+                                <h2 style="font-family: 'Khmer OS Muol';text-align: center">
+                                    អង្គភាពរដ្ឋាករទឹកបាត់ដំបង</h2>
                                 <h2 style="font-family: 'Khmer OS Muol';text-align: center">Battambang Water Supply</h2>
                             </el-col>
                         </el-row>
                     </div>
-                        <br>
+                    <br>
                     <div style="width: 100%">
-            <!--show payment 1025 up-->
+                        <!--show payment 1025 up-->
                         <div class="payment-hide-low-1365">
-                        <div style="width: 40%; float: right;display: flex;margin-top: 10px;margin-bottom: 10px; font-size: 15px">
-                            <div style="width: 50%; float: left; display: block; text-align: center">
-                                <span style="color: #93939E; font-size: 18px; padding-bottom: 15px">ទឹកប្រាក់ដកក្នុងគណនី</span><br>
-                                <span style="font-weight: 600; font-size: 23px"><b>៛ {{withdrawAmount}}</b></span>
-                            </div>
-                            <div style="width: 50%; float: right; display: block; text-align: center">
-                                <span style="color: #93939E; font-size: 18px; padding-bottom: 15px">ទឹកប្រាក់បានទទួល</span><br>
-                                <span style="font-weight: 600; font-size: 23px"><b>៛ {{paidAmount}}</b></span>
+                            <div style="width: 40%; float: right;display: flex;margin-top: 10px;margin-bottom: 10px; font-size: 15px">
+                                <div style="width: 50%; float: left; display: block; text-align: center">
+                                    <span style="color: #93939E; font-size: 18px; padding-bottom: 15px">ទឹកប្រាក់ដកក្នុងគណនី</span><br>
+                                    <span style="font-weight: 600; font-size: 23px"><b>៛ {{withdrawAmount}}</b></span>
+                                </div>
+                                <div style="width: 50%; float: right; display: block; text-align: center">
+                                    <span style="color: #93939E; font-size: 18px; padding-bottom: 15px">ទឹកប្រាក់បានទទួល</span><br>
+                                    <span style="font-weight: 600; font-size: 23px"><b>៛ {{paidAmount}}</b></span>
+                                </div>
                             </div>
                         </div>
-                        </div>
-             <!--show payment 767 to 1024-->
+                        <!--show payment 767 to 1024-->
                         <div class="payment-hide-low-767 payment-hide-high-1366">
                             <div style="width: 40%; float: right;display: flex;margin-top: 10px;margin-bottom: 10px; font-size: 15px">
                                 <div style="width: 50%; float: left; display: block; text-align: center">
@@ -67,166 +69,184 @@
                                     height: 36px;
                                     font-size: 32px;
                                     color: darkslategrey;"></i>
-                                <el-autocomplete style="max-width: 400px; width: 100%" class="inline-input" v-model="customerId"
-                                                 :fetch-suggestions="queryCustomerSearch"
-                                                 placeholder="Search Customer" :trigger-on-focus="false"
-                                                 @select="handleSelectCustomer"
-                                ></el-autocomplete>
+                            <el-autocomplete style="max-width: 400px; width: 100%" class="inline-input"
+                                             v-model="customerId"
+                                             :fetch-suggestions="queryCustomerSearch"
+                                             placeholder="Search Customer" :trigger-on-focus="false"
+                                             @select="handleSelectCustomer"
+                            ></el-autocomplete>
                         </div>
-                    <div style="width: 100%">
-                        <div style="display: flex; padding-top: 15px; padding-bottom: 5px">
-                        <div style="display: flex">
-                            <i class="fa fa-barcode" style="width: 50px;
+                        <div style="width: 100%">
+                            <div style="display: flex; padding-top: 15px; padding-bottom: 5px">
+                                <div style="display: flex">
+                                    <i class="fa fa-barcode" style="width: 50px;
                                     height: 36px;
                                     font-size: 32px;
                                     color: darkslategrey;"></i>
-                                <el-autocomplete class="inline-input" v-model="barcode" v-loading="autoCompleteLoading"
-                                                 :fetch-suggestions="querySearch" placeholder="Barcode"
-                                                 :trigger-on-focus="false" @select="handleSelect"
-                                                 @keyup.native.13="getMeterJournalByBarcode(null)"
-                                                 autofocus></el-autocomplete>
-                        </div>
-                            <div class="payment-hide-low-1023" style="padding-left: 10px">
-                                <el-date-picker disabled v-model="date" type="date" placeholder="Pick a day">
-                                </el-date-picker>
+                                    <el-autocomplete class="inline-input" v-model="barcode"
+                                                     v-loading="autoCompleteLoading"
+                                                     :fetch-suggestions="querySearch" placeholder="Barcode"
+                                                     :trigger-on-focus="false" @select="handleSelect"
+                                                     @keyup.native.13="getMeterJournalByBarcode(null)"
+                                                     autofocus></el-autocomplete>
+                                </div>
+                                <div class="payment-hide-low-1023" style="padding-left: 10px">
+                                    <el-date-picker disabled v-model="date" type="date" placeholder="Pick a day">
+                                    </el-date-picker>
+                                </div>
                             </div>
-                        </div>
-                        <div class="payment-hide-high-768" style="margin-top: 10px;margin-bottom: 5px">
-                            <div>
-                                <span style="min-width: 200px"><h5>ទឹកប្រាក់ដកក្នុងគណនី <b>៛ {{withdrawAmount}}</b></h5></span>
-                            </div>
-                            <div>
-                                <span style="min-width: 200px"><h5>ទឹកប្រាក់បានទទួល <b>៛ {{paidAmount}}</b></h5></span>
+                            <div class="payment-hide-high-768" style="margin-top: 10px;margin-bottom: 5px">
+                                <div>
+                                    <span style="min-width: 200px"><h5>ទឹកប្រាក់ដកក្នុងគណនី <b>៛ {{withdrawAmount}}</b></h5></span>
+                                </div>
+                                <div>
+                                    <span style="min-width: 200px"><h5>ទឹកប្រាក់បានទទួល <b>៛ {{paidAmount}}</b></h5></span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="payment-hide-high-1024" style="padding-top: 5px">
+                        <div style="display: flex; margin-bottom: 15px;">
+                            <el-button size="large"
+                                       style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;"
+                                       type="info" @click="toggleSelection(meterJournal)">
+                                <i class="fa fa-check-square"></i>
+                                All
+                            </el-button>
+                            <el-button size="large"
+                                       style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;"
+                                       type="warning" @click="toggleSelection()">
+                                <i class="fa fa-eraser"></i>
+                            </el-button>
+                            <el-button size="large"
+                                       style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;"
+                                       type="danger" :disabled="hasSelection"
+                                       @click.native="deleteSelected()">
+                                <i class="fa fa-trash-o"></i>
+                            </el-button>
+                            <el-button size="large"
+                                       style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;"
+                                       type="success" :disabled="hasSelection"
+                                       @click.native="savePayment($event)">
+                                <i class="fa fa-hdd-o"></i>({{countInvoices}})
+                            </el-button>
+                        </div>
                     </div>
-                <div class="payment-hide-high-1024" style="padding-top: 5px">
-                    <div style="display: flex; margin-bottom: 15px;">
-                        <el-button size="large" style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;" type="info" @click="toggleSelection(meterJournal)">
-                            <i class="fa fa-check-square"></i>
-                            All
-                        </el-button>
-                        <el-button size="large" style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;" type="warning" @click="toggleSelection()">
-                            <i class="fa fa-eraser"></i>
-                        </el-button>
-                        <el-button size="large" style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;" type="danger" :disabled="hasSelection"
-                                   @click.native="deleteSelected()">
-                            <i class="fa fa-trash-o"></i>
-                        </el-button>
-                        <el-button size="large" style="max-width: 100px; width: 25%; font-size: 14px; padding: 5px 10px;" type="success" :disabled="hasSelection"
-                                   @click.native="savePayment($event)">
-                            <i class="fa fa-hdd-o"></i>({{countInvoices}})
-                        </el-button>
-                    </div>
-                </div>
                     <div class="payment-hide-low-1023" style="padding-top: 10px">
                         <div style="display: flex; margin-bottom: 15px;">
-                            <el-button size="large" style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;" type="info" @click="toggleSelection(meterJournal)">
+                            <el-button size="large"
+                                       style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;"
+                                       type="info" @click="toggleSelection(meterJournal)">
                                 <i class="fa fa-check-square"></i>
                                 <b>ជ្រើសទាំងអស់</b>
                             </el-button>
-                            <el-button size="large" style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;" type="warning" @click="toggleSelection()">
+                            <el-button size="large"
+                                       style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;"
+                                       type="warning" @click="toggleSelection()">
                                 <i class="fa fa-eraser"></i>
                                 <b>លុបការជ្រើស</b>
                             </el-button>
-                            <el-button size="large" style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;" type="danger" :disabled="hasSelection"
+                            <el-button size="large"
+                                       style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;"
+                                       type="danger" :disabled="hasSelection"
                                        @click.native="deleteSelected()">
                                 <i class="fa fa-trash-o"></i>
                                 <b>លុបវិក្កយបត្រ</b>
                             </el-button>
-                            <el-button size="large" style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;" type="success" :disabled="hasSelection"
+                            <el-button size="large"
+                                       style="max-width: 180px; width: 25%; font-size: 14px; padding: 10px 15px;"
+                                       type="success" :disabled="hasSelection"
                                        @click.native="savePayment($event)">
                                 <i class="fa fa-hdd-o"></i>({{countInvoices}})
                                 <b>ទទួលប្រាក់</b>
                             </el-button>
                         </div>
                     </div>
-                <el-row>
-                    <el-table ref="multipleTable" :data="meterJournal" border style="width: 100% !important;"
-                              @selection-change="handleSelectionChange">
-                        <el-table-column type="selection" width="55">
-                        </el-table-column>
-                        <el-table-column
-                                label="លេខ"
-                                type="index"
-                                width="80">
-                        </el-table-column>
-                        <el-table-column label="ថ្ងៃ ខែ ឆ្នាំ" min-width="150" max-width="250">
-                            <template slot-scope="scope">
-                                {{invoiceDate(scope.row.newReadingDate)}}
-                                <el-tooltip class="item" effect="dark" content="Expired" placement="top">
-                                    <span class="cursor-pointer expired-badge">{{expiredInDays(scope.row)}}</span>
-                                </el-tooltip>
-                            </template>
-                        </el-table-column>
-                        <el-table-column property="streetNo" label="លេខប្លុក" min-width="100" max-width="200">
-                        </el-table-column>
-                        <el-table-column property="address" label="អាស័យដ្ឋាន" min-width="120" max-width="200">
-                        </el-table-column>
-                        <el-table-column property="customer" label="ឈ្មោះអតិថិជន"
-                                         min-width="120" max-width="220">
-                        </el-table-column>
-                        <el-table-column label="កំណត់បង្ហាញ"
-                                         min-width="120" max-width="200">
-                            <template slot-scope="scope">
-                                <small style="font-size: 12px;">{{statusCuttingWater(scope.row)}}
-                                </small>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="គណនី"
-                                         min-width="100" max-width="200" show-overflow-tooltip>
-                            <template slot-scope="scope">
-                                <h5 class="fz15">
-                                    <a class="cursor-pointer"
-                                       @click="handleLinkToSavingBalance(scope.row)">{{numFormatter(scope.row.savingBalance)}}</a>
-                                </h5>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="ដកគណនី"
-                                         min-width="150" max-width="250" show-overflow-tooltip>
-                            <template slot-scope="scope">
-                                <div style="width: 100%; padding-right: 23px">
-                                <el-input @blur="handleSavingChange(scope.row)"
-                                          @keyup.native.enter="handleSavingChange(scope.row)"
-                                          v-model.number="scope.row.withdrawSaving"></el-input>
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="ទឹកប្រាក់"
-                                         min-width="100" max-width="200" show-overflow-tooltip>
-                            <template slot-scope="scope">
-                                <h5 class="fz15">{{numFormatter(scope.row.dueAmount)}}</h5>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="ទទួលបង់"
-                                         fixed="right"
-                                         min-width="150" max-width="250">
-                            <template slot-scope="scope">
-                                <div style="width: 100%; padding-right: 18px">
-                                <el-input @blur="tmpSave(scope.row)"
-                                          @keyup.native.enter="tmpSave(scope.row)"
-                                          v-model.number="scope.row.paidAmount"></el-input>
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <!--<el-table-column label="Fee" show-overflow-tooltip fit>
-                            <template slot-scope="scope">
-                                <el-input v-model.number="scope.row.feeAmount"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Penalty" show-overflow-tooltip fit>
-                            <template slot-scope="scope">
-                                <el-input v-model.number="scope.row.penaltyAmount"></el-input>
-                            </template>
-                        </el-table-column>-->
-                    </el-table>
-                </el-row>
+                    <el-row>
+                        <el-table ref="multipleTable" :data="meterJournal" border style="width: 100% !important;"
+                                  @selection-change="handleSelectionChange">
+                            <el-table-column type="selection" width="55">
+                            </el-table-column>
+                            <el-table-column
+                                    label="លេខ"
+                                    type="index"
+                                    width="80">
+                            </el-table-column>
+                            <el-table-column label="ថ្ងៃ ខែ ឆ្នាំ" min-width="150" max-width="250">
+                                <template slot-scope="scope">
+                                    {{invoiceDate(scope.row.newReadingDate)}}
+                                    <el-tooltip class="item" effect="dark" content="Expired" placement="top">
+                                        <span class="cursor-pointer expired-badge">{{expiredInDays(scope.row)}}</span>
+                                    </el-tooltip>
+                                </template>
+                            </el-table-column>
+                            <el-table-column property="streetNo" label="លេខប្លុក" min-width="100" max-width="200">
+                            </el-table-column>
+                            <el-table-column property="address" label="អាស័យដ្ឋាន" min-width="120" max-width="200">
+                            </el-table-column>
+                            <el-table-column property="customer" label="ឈ្មោះអតិថិជន"
+                                             min-width="120" max-width="220">
+                            </el-table-column>
+                            <el-table-column label="កំណត់បង្ហាញ"
+                                             min-width="120" max-width="200">
+                                <template slot-scope="scope">
+                                    <small style="font-size: 12px;">{{statusCuttingWater(scope.row)}}
+                                    </small>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="គណនី"
+                                             min-width="100" max-width="200" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <h5 class="fz15">
+                                        <a class="cursor-pointer"
+                                           @click="handleLinkToSavingBalance(scope.row)">{{numFormatter(scope.row.savingBalance)}}</a>
+                                    </h5>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="ដកគណនី"
+                                             min-width="150" max-width="250" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <div style="width: 100%; padding-right: 23px">
+                                        <el-input @blur="handleSavingChange(scope.row)"
+                                                  @keyup.native.enter="handleSavingChange(scope.row)"
+                                                  v-model.number="scope.row.withdrawSaving"></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="ទឹកប្រាក់"
+                                             min-width="100" max-width="200" show-overflow-tooltip>
+                                <template slot-scope="scope">
+                                    <h5 class="fz15">{{numFormatter(scope.row.dueAmount)}}</h5>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="ទទួលបង់"
+                                             fixed="right"
+                                             min-width="150" max-width="250">
+                                <template slot-scope="scope">
+                                    <div style="width: 100%; padding-right: 18px">
+                                        <el-input @blur="tmpSave(scope.row)"
+                                                  @keyup.native.enter="tmpSave(scope.row)"
+                                                  v-model.number="scope.row.paidAmount"></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <!--<el-table-column label="Fee" show-overflow-tooltip fit>
+                                <template slot-scope="scope">
+                                    <el-input v-model.number="scope.row.feeAmount"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="Penalty" show-overflow-tooltip fit>
+                                <template slot-scope="scope">
+                                    <el-input v-model.number="scope.row.penaltyAmount"></el-input>
+                                </template>
+                            </el-table-column>-->
+                        </el-table>
+                    </el-row>
 
+                </div>
             </div>
-        </div>
 
-    </div>
+        </div>
     </div>
 </template>
 
@@ -319,7 +339,9 @@
             }, 300);
             let vm = this;
             let elem = this.$jQuery('div.receive-payment');
+
             let checkEvent = $._data($('body').get(0), 'events');
+
             if (checkEvent.keyup.length <= 1) {
                 this.$nextTick(() => {
                     this.$jQuery('body').on('keyup', elem, this.barcodeScan);
@@ -358,10 +380,10 @@
             }
         },
         methods: {
-            statusCuttingWater(row){
-              if(row.requestCuttingWaterDoc){
-                  return !!row.requestCuttingWaterDoc.closedAt ? 'ទឹកត្រូវបានបិទ' : '';
-              }
+            statusCuttingWater(row) {
+                if (row.requestCuttingWaterDoc) {
+                    return !!row.requestCuttingWaterDoc.closedAt ? 'ទឹកត្រូវបានបិទ' : '';
+                }
             },
             invoiceDate(date) {
                 return moment(date).format('MMM DD, YYYY');
@@ -371,7 +393,7 @@
             },
             barcodeScan(e) {
                 if (FlowRouter.current().path === "/wb-debt/payment/new") {
-                    let scannerSensitivity = 100
+                    let scannerSensitivity = 100;
                     if (e.keyCode !== 13 && !isNaN(e.key)) {
                         this.takeBarcode += e.key;
                     }
@@ -640,7 +662,7 @@
                                             }
                                         }
 
-                                    } else if (meterJournal.barcode == barcode || meterJournal.sumBarcode === barcode ) {
+                                    } else if (meterJournal.barcode == barcode || meterJournal.sumBarcode === barcode) {
                                         vm.$message({
                                             duration: 3000,
                                             message: `តម្លៃការប្រើប្រាស់ទឹក​ស្មើ ០ មិនចាំបាច់ត្រូវការបង់ប្រាក់.`,

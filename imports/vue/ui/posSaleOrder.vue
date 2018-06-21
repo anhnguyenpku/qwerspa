@@ -131,6 +131,7 @@
                 :title="langConfig['add']"
                 :visible.sync="dialogAddPosSaleOrder"
                 :fullscreen="fullScreen"
+                class="dialogSaleOrder"
 
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
@@ -159,7 +160,16 @@
                                         </el-select>
                                     </el-form-item>
                                 </th>
-                                <th colspan="2" style="width: 40% !important;">
+                                <th style="width: 20% !important;">
+                                    <el-form-item label="">
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
+                                                  v-model="posSaleOrderForm.code" autofocus
+                                                  @keyup.native.13="addToPosSaleOrderData(null)"
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th style="width: 20% !important;">
                                     <el-form-item label="">
                                         <el-select style="display: block !important;"
                                                    filterable clearable
@@ -473,6 +483,7 @@
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdatePosSaleOrder"
                 :fullscreen="fullScreen"
+                class="dialogSaleOrder"
 
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
@@ -500,7 +511,16 @@
                                         </el-select>
                                     </el-form-item>
                                 </th>
-                                <th colspan="2" style="width: 40% !important;">
+                                <th style="width: 20% !important;">
+                                    <el-form-item label="">
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
+                                                  v-model="posSaleOrderForm.code" autofocus
+                                                  @keyup.native.13="addToPosSaleOrderData(null)"
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th style="width: 20% !important;">
                                     <el-form-item label="">
                                         <el-select style="display: block !important;"
                                                    filterable clearable
@@ -918,6 +938,7 @@
         },
         data() {
             return {
+                keyCode: [],
                 refForm: '',
                 posSaleOrderData: [],
                 posSaleOrderDataDisplay: [],
@@ -972,7 +993,8 @@
                     unit2: 1,
                     totalUnit: 1,
                     desc: "",
-                    locationId: ""
+                    locationId: "",
+                    code: ""
 
                 },
                 rules: {
@@ -1040,7 +1062,10 @@
                     {label: "percent", value: "Percent"}
                 ],
                 locationOption: [],
-                disabledItem: true
+                disabledItem: true,
+                timeStamp: [],
+                takeBarcode: ''
+
             }
         },
         mounted() {
@@ -1050,7 +1075,17 @@
                     let min = moment(vm.closeDate).add(1, "days").toDate().getTime();
                     return time.getTime() < min;
                 }
+            };
+
+
+            let elem = this.$jQuery('el-dialog.dialogSaleOrder');
+            let checkEvent = $._data($('body').get(0), 'events');
+            if (checkEvent.keyup.length <= 1) {
+                this.$nextTick(() => {
+                    this.$jQuery('body').on('keyup', elem, this.barcodeScanSaleOrder);
+                })
             }
+
         },
         watch: {
             currentSize(val) {
@@ -1113,7 +1148,7 @@
                         if (result) {
                             vm.posSaleOrderForm.address = result.address;
 
-                            if (vm.refForm == "posSaleOrderFormAdd") {
+                            if (vm.refForm === "posSaleOrderFormAdd") {
                                 vm.posSaleOrderForm.termId = result.termId;
                             }
                         }
@@ -1121,7 +1156,7 @@
                 }
             },
             "posSaleOrderForm.discount"(val) {
-                if (val || val == 0) {
+                if (val || val === 0) {
                     this.posSaleOrderForm.discount = val;
                     // this.posSaleOrderForm.discount = this.$_numeral(val).format("0,00");
                     this.getTotal();
@@ -1135,7 +1170,7 @@
                 }
             },
             "posSaleOrderForm.locationId"(val) {
-                if (val && val != "") {
+                if (val && val !== "") {
                     this.disabledItem = false;
                 } else {
                     this.disabledItem = true;
@@ -1179,6 +1214,28 @@
 
 
                 }, 200)*/
+            },
+            barcodeScanSaleOrder(e) {
+                if (this.dialogAddPosSaleOrder === true || this.dialogUpdatePosSaleOrder === true) {
+                    let scannerSensitivity = 100;
+                    if (e.keyCode !== 13 && !isNaN(e.key)) {
+                        this.takeBarcode += e.key;
+                    }
+                    this.timeStamp.push(Date.now());
+                    if (this.timeStamp.length > 1) {
+                        if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
+                            this.takeBarcode = '';
+                            this.timeStamp = [];
+                        } else {
+                            if (e.keyCode === 13) {
+                                this.posSaleOrderForm.code = this.takeBarcode;
+                                this.addToPosSaleOrderData(null);
+                                this.timeStamp = [];
+                                this.takeBarcode = ''
+                            }
+                        }
+                    }
+                }
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('queryPosSaleOrder', {
@@ -1508,23 +1565,31 @@
             },
             addToPosSaleOrderData(val) {
                 let vm = this;
-                if (val == "" || val == undefined) {
+
+                if (val === null) {
+                    val = vm.posSaleOrderForm.code;
+                }
+                if (val === "" || val === undefined) {
                     this.$message({
                         duration: 1000,
                         message: "Item Can't Empty!!",
                         type: 'error'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
 
                 let isFound = vm.posSaleOrderData.find(function (element) {
-                    return element.itemId == val;
+                    return element.itemId === val || element.code === val;
                 });
-                if (isFound != undefined) {
+                if (isFound !== undefined) {
                     this.$message({
                         type: 'error',
                         message: 'Item already add!'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
                 vm.posSaleOrderForm.isRetail = true;
@@ -1533,19 +1598,21 @@
                         vm.posSaleOrderData.push({
                             itemId: data._id,
                             itemName: data.code + " : " + data.name,
+                            code: data.code,
                             unit1: 1,
                             unit2: 1,
                             totalUnit: 1,
                             unitId: data.unitId,
                             unitName: data.unitName,
 
-                            price: vm.posSaleOrderForm.isRetail == true ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
+                            price: vm.posSaleOrderForm.isRetail === true ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
                             qty: vm.$_numeral(1).value(),
-                            amount: vm.posSaleOrderForm.isRetail == true ? formatCurrency(data.rePrice) : formatCurrency(data.whPrice),
+                            amount: vm.posSaleOrderForm.isRetail === true ? formatCurrency(data.rePrice) : formatCurrency(data.whPrice),
                             isRetail: true,
                             desc: ""
-                        })
+                        });
                         vm.posSaleOrderForm.itemId = "";
+                        vm.posSaleOrderForm.code = "";
                         vm.$message({
                             duration: 1000,
                             message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",
@@ -1559,6 +1626,8 @@
                             message: "មិនមានឈ្មេាះនេះឡើយ!!",
                             type: 'error'
                         });
+                        let s = new buzz.sound('/the-calling.mp3');
+                        s.play();
                     }
                 })
 
@@ -1644,6 +1713,7 @@
                 this.posSaleOrderForm.saleOrderNo = "";
                 this.posSaleOrderForm.customerId = "";
                 this.posSaleOrderForm.locationId = "";
+                this.posSaleOrderForm.code = "";
 
 
                 if (this.$refs["posSaleOrderFormAdd"]) {

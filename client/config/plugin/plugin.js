@@ -9,6 +9,7 @@ import math from 'mathjs';
 import GoogleMapsLoader from 'google-maps';
 import Cleave from 'cleave.js';
 import bodymovin from 'bodymovin';
+import $ from 'jQuery';
 
 GoogleMapsLoader.KEY = 'AIzaSyDOld0lTG5Ku15U-p-kyhohZXmZra2rG1k';
 
@@ -18,12 +19,15 @@ Vue.prototype.$_numeral = numeral;
 Vue.prototype.$_math = math;
 Vue.prototype.$_GoogleMapsLoader = GoogleMapsLoader;
 Vue.prototype.$_bodymovin = bodymovin;
+Vue.prototype.$jQuery = $;
+
 Vue.use(VueMask);
 Vue.use(CollapseTransition);
 Vue.use(ElementUI, {locale});
 Vue.use(VeeValidate, {fieldsBagName: 'formFields'});
 Vue.use(numeral);
 Vue.use(math);
+// Vue.use($);
 
 Vue.filter('numFormat', (val) => {
     return numeral(val).format('0,0.00');

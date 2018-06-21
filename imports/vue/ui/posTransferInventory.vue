@@ -113,6 +113,8 @@
                 :title="langConfig['add']"
                 :visible.sync="dialogAddTransferInventory"
                 :fullscreen="fullscreen"
+                class="transferInventory"
+
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="posTransferInventoryForm" :rules="rules" :ref="refForm" label-width="120px"
@@ -123,7 +125,16 @@
                         <table class="table table-responsive​​​ table-striped table-hover responstable">
                             <thead>
                             <tr>
-                                <th colspan="3" style="width: 50% !important;">
+                                <th colspan="2" style="width: 40% !important;">
+                                    <el-form-item label="">
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disableItem"
+                                                  @keyup.native.13="addToTransferInventoryData(null)"
+                                                  v-model="posTransferInventoryForm.code" autofocus
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th colspan="3" style="width: 40% !important;">
                                     <el-form-item label="">
 
                                         <el-select style="display: block !important;"
@@ -141,7 +152,7 @@
                                     </el-form-item>
                                 </th>
 
-                                <th colspan="4">
+                                <th colspan="3">
 
                                 </th>
                             </tr>
@@ -305,6 +316,7 @@
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdateTransferInventory"
                 :fullscreen="fullscreen"
+                class="transferInventory"
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="posTransferInventoryForm" :rules="rules" :ref="refForm" label-width="120px"
@@ -315,7 +327,16 @@
                         <table class="table table-responsive​​​ table-striped table-hover responstable">
                             <thead>
                             <tr>
-                                <th colspan="3" style="width: 50% !important;">
+                                <th colspan="2" style="width: 40% !important;">
+                                    <el-form-item label="">
+                                        <el-input :placeholder="langConfig['barcode']" :disabled="disableItem"
+                                                  @keyup.native.13="addToTransferInventoryData(null)"
+                                                  v-model="posTransferInventoryForm.code" autofocus
+                                        >
+                                        </el-input>
+                                    </el-form-item>
+                                </th>
+                                <th colspan="3" style="width: 40% !important;">
                                     <el-form-item label="">
 
                                         <el-select style="display: block !important;"
@@ -333,7 +354,7 @@
                                     </el-form-item>
                                 </th>
 
-                                <th colspan="4">
+                                <th colspan="3">
 
                                 </th>
                             </tr>
@@ -593,6 +614,10 @@
         },
         data() {
             return {
+                keyCode: [],
+                timeStamp: [],
+                takeBarcode: '',
+
                 fullscreen: true,
                 refForm: "",
                 posTransferInventoryData: [],
@@ -623,7 +648,8 @@
                     note: "",
                     desc: "",
                     locationFromId: "",
-                    locationToId: ""
+                    locationToId: "",
+                    code: ""
 
                 },
                 rules: {
@@ -676,6 +702,14 @@
                     let min = moment(vm.closeDate).add(1, "days").toDate().getTime();
                     return time.getTime() < min;
                 }
+            };
+
+            let elem = this.$jQuery('el-dialog.transferInventory');
+            let checkEvent = $._data($('body').get(0), 'events');
+            if (checkEvent.keyup.length <= 1) {
+                this.$nextTick(() => {
+                    this.$jQuery('body').on('keyup', elem, this.barcodeScanTransferInventory);
+                })
             }
         },
         watch: {
@@ -765,6 +799,28 @@
 
 
                 }, 200)*/
+            },
+            barcodeScanTransferInventory(e) {
+                if (this.dialogAddTransferInventory === true || this.dialogUpdateTransferInventory === true) {
+                    let scannerSensitivity = 100;
+                    if (e.keyCode !== 13 && !isNaN(e.key)) {
+                        this.takeBarcode += e.key;
+                    }
+                    this.timeStamp.push(Date.now());
+                    if (this.timeStamp.length > 1) {
+                        if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
+                            this.takeBarcode = '';
+                            this.timeStamp = [];
+                        } else {
+                            if (e.keyCode === 13) {
+                                this.posTransferInventoryForm.code = this.takeBarcode;
+                                this.addToTransferInventoryData(null);
+                                this.timeStamp = [];
+                                this.takeBarcode = ''
+                            }
+                        }
+                    }
+                }
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('queryTransferInventory', {
@@ -954,55 +1010,77 @@
             },
             addToTransferInventoryData(val) {
                 let vm = this;
-                if (val == "" || val == undefined) {
+                if (val === null) {
+                    val = vm.posTransferInventoryForm.code;
+                }
+                if (val === "" || val === undefined) {
                     this.$message({
                         duration: 1000,
                         message: "Item Can't Empty!!",
                         type: 'error'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
 
                 let isFound = vm.posTransferInventoryData.find(function (element) {
-                    return element.itemId == val;
+                    return element.itemId === val || element.code === val;
                 });
-                if (isFound != undefined) {
+                if (isFound !== undefined) {
                     this.$message({
                         type: 'error',
                         message: 'Item already add!'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
-                Meteor.call("queryPosAverageCostById", val, Session.get("area"), this.posTransferInventoryForm.locationFromId, (err, data) => {
-                    if (data) {
-                        vm.posTransferInventoryData.push({
-                            itemId: data.itemId,
-                            itemName: data.code + " : " + data.name,
-                            cost: formatCurrency(data.averageCost),
-                            rawQty: vm.$_numeral(data.qtyEnding).value(),
-                            qty: 0,
-                            amount: 0,
-                            desc: ""
-                        })
-                        vm.disableLocationFrom = vm.posTransferInventoryData.length > 0 ? true : false;
-                        vm.posTransferInventoryForm.itemId = "";
-                        vm.$message({
-                            duration: 1000,
-                            message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",
-                            type: 'success'
-                        });
+                Meteor.call("queryPosProductById", val, (err, dataRaw) => {
+                    if (dataRaw) {
+                        Meteor.call("queryPosAverageCostById", dataRaw._id, Session.get("area"), this.posTransferInventoryForm.locationFromId, (err, data) => {
+                            if (data) {
+                                vm.posTransferInventoryData.push({
+                                    itemId: data.itemId,
+                                    itemName: data.code + " : " + data.name,
+                                    cost: formatCurrency(data.averageCost),
+                                    rawQty: vm.$_numeral(data.qtyEnding).value(),
+                                    qty: 0,
+                                    code: dataRaw.code,
+                                    amount: 0,
+                                    desc: ""
+                                });
+                                vm.disableLocationFrom = vm.posTransferInventoryData.length > 0 ? true : false;
+                                vm.posTransferInventoryForm.itemId = "";
+                                vm.posTransferInventoryForm.code = "";
+                                vm.$message({
+                                    duration: 1000,
+                                    message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",
+                                    type: 'success'
+                                });
 
-                        this.getTotal();
+                                this.getTotal();
+                            } else {
+                                vm.$message({
+                                    duration: 3000,
+                                    message: "ទំនិញនេះ អស់ពីស្តុកហើយ!!",
+                                    type: 'error'
+                                });
+                                let s = new buzz.sound('/the-calling.mp3');
+                                s.play();
+                            }
+
+                        })
                     } else {
                         vm.$message({
-                            duration: 3000,
-                            message: "ទំនិញនេះ អស់ពីស្តុកហើយ!!",
+                            duration: 1000,
+                            message: "មិនមានឈ្មេាះនេះឡើយ!!",
                             type: 'error'
                         });
+                        let s = new buzz.sound('/the-calling.mp3');
+                        s.play();
                     }
                 })
-
-
             },
             removeTransferInventoryDetailByIndex(index, row) {
                 this.$confirm('This will permanently delete the file. Continue?', 'Warning', {

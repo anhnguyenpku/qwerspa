@@ -128,6 +128,7 @@
                 :title="langConfig['addBill']"
                 :visible.sync="dialogAddPosBill"
                 :fullscreen="fullScreen"
+                class="dialogBill"
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="posBillForm" :rules="rules" :ref="refForm" label-width="120px"
@@ -158,7 +159,7 @@
                                 <th style="width: 20% !important;">
                                     <el-form-item label="">
                                         <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
-                                                  v-model.number="posBillForm.code" autofocus
+                                                  v-model="posBillForm.code" autofocus
                                                   @keyup.native.13="addToPosBillData(null)"
                                         >
                                         </el-input>
@@ -464,6 +465,7 @@
                 :title="langConfig['updateBill']"
                 :visible.sync="dialogUpdatePosBill"
                 :fullscreen="fullScreen"
+                class="dialogBill"
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="posBillForm" :rules="rules" :ref="refForm" label-width="120px"
@@ -871,6 +873,7 @@
     import compoLang from '../../../both/i18n/lang/elem-label'
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
+    //import $ from 'jQuery';
 
     export default {
         meteor: {
@@ -889,6 +892,7 @@
         },
         data() {
             return {
+                keyCode: [],
                 refForm: "",
                 posBillData: [],
                 posBillShowData: {},
@@ -906,6 +910,7 @@
                 dialogShowPosBill: false,
                 typeDiscount: "",
                 fullScreen: true,
+                timeStamp: [],
 
                 posBillForm: {
                     itemId: "",
@@ -938,7 +943,8 @@
                     remainKHR: 0,
                     remainTHB: 0,
                     desc: "",
-                    locationId: ""
+                    locationId: "",
+                    code: ""
 
 
                 },
@@ -997,7 +1003,8 @@
                 locationOption: [],
                 disabledItem: true,
                 currencySymbol: "",
-                isFocus: false
+                isFocus: false,
+                takeBarcode: ''
             }
         },
         mounted() {
@@ -1007,7 +1014,35 @@
                     let min = moment(vm.closeDate).add(1, "days").toDate().getTime();
                     return time.getTime() < min;
                 }
+            };
+
+            let elem = this.$jQuery('el-dialog.dialogBill');
+            let checkEvent = $._data($('body').get(0), 'events');
+            if (checkEvent.keyup.length <= 1) {
+                this.$nextTick(() => {
+                    this.$jQuery('body').on('keyup', elem, this.barcodeScanBill);
+                })
             }
+
+            /*$(window).ready(function () {
+
+                //$("#bCode").scannerDetection();
+
+                console.log('all is well');
+
+                $(window).scannerDetection();
+                $(window).bind('scannerDetectionComplete', function (e, data) {
+                    console.log('complete ' + data.string);
+                    //$("#bCode").val(data.string);
+                })
+                    .bind('scannerDetectionError', function (e, data) {
+                        console.log('detection error ' + data.string);
+                    })
+                    .bind('scannerDetectionReceive', function (e, data) {
+                        console.log('Recieve');
+                        console.log(data.evt.which);
+                    })
+            });*/
         },
         watch: {
             currentSize(val) {
@@ -1076,7 +1111,7 @@
                 }
             },
             "posBillForm.discount"(val) {
-                if (val || val == 0) {
+                if (val || val === 0) {
                     this.posBillForm.discount = val;
                     this.getTotal();
                 }
@@ -1132,6 +1167,28 @@
 
 
                 }, 200)*/
+            },
+            barcodeScanBill(e) {
+                if (this.dialogAddPosBill === true || this.dialogUpdatePosBill === true) {
+                    let scannerSensitivity = 100;
+                    if (e.keyCode !== 13 && !isNaN(e.key)) {
+                        this.takeBarcode += e.key;
+                    }
+                    this.timeStamp.push(Date.now());
+                    if (this.timeStamp.length > 1) {
+                        if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
+                            this.takeBarcode = '';
+                            this.timeStamp = [];
+                        } else {
+                            if (e.keyCode === 13) {
+                                this.posBillForm.code = this.takeBarcode;
+                                this.addToPosBillData(null);
+                                this.timeStamp = [];
+                                this.takeBarcode = ''
+                            }
+                        }
+                    }
+                }
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('queryPosBill', {
@@ -1270,7 +1327,7 @@
                             remainTHB: vm.$_numeral(vm.posBillForm.remainTHB).value(),
                             _id: id,
                             locationId: vm.posBillForm.locationId,
-                            status: vm.$_numeral(vm.posBillForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posBillForm.balanceUnpaid).value() < vm.$_numeral(vm.posBillForm.netTotal).value() ? "Partial" : "Active"
+                            status: vm.$_numeral(vm.posBillForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posBillForm.balanceUnpaid).value() < vm.$_numeral(vm.posBillForm.netTotal).value() ? "Partial" : "Active"
 
 
                         };
@@ -1302,7 +1359,7 @@
             },
             removePosBill(index, row, rows) {
                 let vm = this;
-                if (row.status == "Active" || row.paymentNumber < 2) {
+                if (row.status === "Active" || row.paymentNumber < 2) {
                     vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
                         confirmButtonText: 'OK',
                         cancelButtonText: 'Cancel',
@@ -1362,7 +1419,7 @@
                 $(".el-dialog__title").text(this.langConfig['update']);
                 this.vendorOpt();
                 this.termOpt();
-                if (row.status == "Active" || row.paymentNumber < 2) {
+                if (row.status === "Active" || row.paymentNumber < 2) {
                     vm.dialogUpdatePosBill = true;
                     vm.findPosBillById(scope);
                 } else {
@@ -1430,6 +1487,8 @@
                         message: "Item Can't Empty!!",
                         type: 'error'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
                 let isFound = vm.posBillData.find(function (element) {
@@ -1440,6 +1499,8 @@
                         type: 'error',
                         message: 'Item already add!'
                     });
+                    let s = new buzz.sound('/the-calling.mp3');
+                    s.play();
                     return false;
                 }
                 Meteor.call("queryPosProductById", val, (err, data) => {
@@ -1447,6 +1508,7 @@
                         vm.posBillData.push({
                             itemId: data._id,
                             itemName: data.code + " : " + data.name,
+                            code: data.code,
                             cost: vm.$_numeral(data.cost).value(),
                             qty: vm.$_numeral(1).value(),
                             amount: formatCurrency(data.cost),
@@ -1470,6 +1532,8 @@
                             message: "មិនមានឈ្មេាះនេះឡើយ!!",
                             type: 'error'
                         });
+                        let s = new buzz.sound('/the-calling.mp3');
+                        s.play();
                     }
                 })
 
@@ -1519,6 +1583,7 @@
                 this.posBillData = [];
                 this.posBillForm.discountValue = 0;
                 this.posBillForm.discount = 0;
+                this.posBillForm.code = "";
 
                 this.posBillForm.paidUSD = 0;
                 this.posBillForm.paidKHR = 0;
