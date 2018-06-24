@@ -85,8 +85,8 @@
                                            :disabled="disabledUpdate">T
                                 </el-button>
                                 <el-button type="warning" icon="el-icon-printer" size="small" class="cursor-pointer"
-                                           @click="dialogUpdateSchStudent= true,printTranscript(scope.row)"
-                                           :disabled="disabledUpdate">
+                                           @click="printTranscript(scope.row)"
+                                >
                                 </el-button>
 
                             </el-button-group>
@@ -1169,6 +1169,15 @@
                                               @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['gradePoint']">
+                                <template slot-scope="scope">
+                                    <el-input size="small" v-model="scope.row.gradePoint"
+                                              :placeholder="langConfig['gradePoint']" disabled
+                                              @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
+                                              @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
+                                </template>
+                            </el-table-column>
                         </el-table>
 
                     </el-col>
@@ -1250,6 +1259,15 @@
                                               @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['gradePoint']">
+                                <template slot-scope="scope">
+                                    <el-input size="small" v-model="scope.row.gradePoint"
+                                              :placeholder="langConfig['gradePoint']" disabled
+                                              @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
+                                              @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
+                                </template>
+                            </el-table-column>
                         </el-table>
                     </el-col>
                 </el-row>
@@ -1297,6 +1315,15 @@
                                 <template slot-scope="scope">
                                     <el-input size="small" v-model="scope.row.grade"
                                               :placeholder="langConfig['grades']" disabled
+                                              @keyup.native="handleEditStateExam(scope.$index, scope.row)"
+                                              @change="handleEditStateExam(scope.$index, scope.row)"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['gradePoint']">
+                                <template slot-scope="scope">
+                                    <el-input size="small" v-model="scope.row.gradePoint"
+                                              :placeholder="langConfig['gradePoint']" disabled
                                               @keyup.native="handleEditStateExam(scope.$index, scope.row)"
                                               @change="handleEditStateExam(scope.$index, scope.row)"></el-input>
                                 </template>
@@ -1551,13 +1578,13 @@
                     transcriptId: ""
                 },
                 culumnData1: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", ind: 1, sem: 1}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", gradePoint: 0, ind: 1, sem: 1}
                 ],
                 culumnData2: [
-                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", ind: 1, sem: 2}
+                    {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", gradePoint: 0, ind: 1, sem: 2}
                 ],
                 stateExam: [
-                    {subjectId: "", score: 0, grade: "Un Range"}
+                    {subjectId: "", score: 0, grade: "Un Range", gradePoint: 0}
                 ],
                 curiculumnList: [],
                 mentionRange: [],
@@ -2162,21 +2189,34 @@
                     if (result) {
                         let i = 1;
                         let j = 1;
+                        let cul1Dif = 0;
+                        let cul2Dif = 0;
                         result.culumnSemester1.map((obj) => {
+                            if (cul1Dif !== obj.year) {
+                                i = 1;
+                            }
                             obj.score = 0;
                             obj.grade = "Un Range";
+                            obj.gradePoint = 0;
                             obj.ind = i;
                             obj.sem = 1;
+                            cul1Dif = obj.year;
                             i++;
                             return obj;
                         });
                         this.culumnData1 = result.culumnSemester1;
 
                         result.culumnSemester2.map((obj) => {
+                            if (cul2Dif !== obj.year) {
+                                j = 1;
+                            }
                             obj.score = 0;
                             obj.grade = "Un Range";
+                            obj.gradePoint = 0;
                             obj.ind = j;
                             obj.sem = 2;
+
+                            cul2Dif = obj.year;
                             j++;
                             return obj;
                         });
@@ -2237,7 +2277,7 @@
                     });
                 } else {
                     this.culumnData1 = [
-                        {year: "", subjectId: "", credit: 0, grade: "Un Range", ind: 1, sem: 1}
+                        {year: "", subjectId: "", credit: 0, grade: "Un Range", gradePoint: 0, ind: 1, sem: 1}
 
                     ];
                 }
@@ -2245,12 +2285,14 @@
 
             handleAddCulumn1() {
                 this.culumnData1.push(
-                    {year: "", subjectId: "", credit: 0, grade: "Un Range", ind: 1, sem: 1}
+                    {year: "", subjectId: "", credit: 0, grade: "Un Range", gradePoint: 0, ind: 1, sem: 1}
                 )
             },
             handleEditCulumn1(index, row) {
                 let gradeDoc = this.getMentionByScore(row.score);
                 row.grade = gradeDoc.grade;
+                row.gradePoint = gradeDoc.gradePoint;
+
                 this.culumnData1[index] = row;
             },
             removeCulumn2(index, row) {
@@ -2262,7 +2304,7 @@
                     });
                 } else {
                     this.culumnData2 = [
-                        {year: "", subjectId: "", credit: 0, grade: "Un Range"}
+                        {year: "", subjectId: "", credit: 0, grade: "Un Range", gradePoint: 0}
 
                     ];
                 }
@@ -2270,12 +2312,13 @@
 
             handleAddCulumn2() {
                 this.culumnData2.push(
-                    {year: "", subjectId: "", credit: 0, grade: "Un Range"}
+                    {year: "", subjectId: "", credit: 0, grade: "Un Range", gradePoint: 0}
                 )
             },
             handleEditCulumn2(index, row) {
                 let gradeDoc = this.getMentionByScore(row.score);
                 row.grade = gradeDoc.grade;
+                row.gradePoint = gradeDoc.gradePoint;
                 this.culumnData2[index] = row;
             },
 
@@ -2301,6 +2344,8 @@
             handleEditStateExam(index, row) {
                 let gradeDoc = this.getMentionByScore(row.score);
                 row.grade = gradeDoc.grade;
+                row.gradePoint = gradeDoc.gradePoint;
+
                 this.stateExam[index] = row;
             },
             subjectOpt() {
@@ -2356,6 +2401,7 @@
                 if (data === null || data === undefined) {
                     let newData = {};
                     newData.grade = "Un Range";
+                    newData.gradePoint = 0;
                     return newData;
                 }
                 return data;

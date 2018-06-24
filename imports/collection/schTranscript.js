@@ -37,6 +37,12 @@ Sch_Transcript.schema = new SimpleSchema({
         optional: true,
 
     },
+    "culumnSemester1.$.gradePoint": {
+        type: Number,
+        decimal: true,
+        optional: true,
+
+    },
     "culumnSemester1.$.score": {
         type: Number,
         optional: true,
@@ -63,7 +69,11 @@ Sch_Transcript.schema = new SimpleSchema({
     "culumnSemester2.$.grade": {
         type: String,
         optional: true,
-
+    },
+    "culumnSemester2.$.gradePoint": {
+        type: Number,
+        decimal: true,
+        optional: true,
     },
     "culumnSemester2.$.score": {
         type: Number,
@@ -80,6 +90,12 @@ Sch_Transcript.schema = new SimpleSchema({
     },
     "state.$.grade": {
         type: String,
+        optional: true,
+        defaultValue: 0
+    },
+    "state.$.gradePoint": {
+        type: Number,
+        decimal: true,
         optional: true,
         defaultValue: 0
     },

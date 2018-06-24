@@ -33,104 +33,206 @@ Meteor.methods({
                     preserveNullAndEmptyArrays: true
                 }
             },
+            {
+                $project: {newArr: {$concatArrays: ["$culumnSemester1", "$culumnSemester2"]}, studentDoc: 1}
+            },
+            {
+                $unwind: {
+                    path: "$newArr",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $group: {
+                    _id: {
+                        year: "$newArr.year",
+                        ind: "$newArr.ind"
+                    },
+                    data: {$push: "$newArr"},
+                    studentDoc: {$last: "$studentDoc"}
+                }
+            },
+            {
+                $sort: {
+                    "_id.ind": -1
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        year: "$_id.year"
+                    },
+                    data: {$addToSet: "$$ROOT"},
+                    studentDoc: {$last: "$studentDoc"}
+                }
+            },
+            {
+                $sort: {
+                    "_id.year": 1
+                }
+            }
 
         ]);
         let printTranscriptHtml = "";
-        let ind = 1;
-        let year;
         let subjectList = Sch_Subject.find().fetch();
-
 
         if (transcriptList.length > 0) {
             /*let newArr = transcriptList[0].culumnSemester1.concat(transcriptList[0].culumnSemester2 || []);
             newArr.sort(orderByProperty("ind", "sem"));*/
-            for (let i = 1; i <= 4; i++) {
-
-                let printTranscriptHtmlGradePoint1 = "";
-                let printTranscriptHtmlSubject1 = "";
-                let printTranscriptHtmlCredit1 = "";
-                let printTranscriptHtmlGrade1 = "";
-
-                let printTranscriptHtmlGradePoint2 = "";
-                let printTranscriptHtmlSubject2 = "";
-                let printTranscriptHtmlCredit2 = "";
-                let printTranscriptHtmlGrade2 = "";
-
-                let ind1 = 1;
-                let ind2 = 1;
-                printTranscriptHtml += `
-                        <tr>
-                            <td colspan="4">
-                            <table>
-                                
-                `;
-
-                transcriptList[0].culumnSemester1.forEach((obj) => {
-                    if (obj.year === i && obj.grade !== "Un Range") {
-                        let subjectDoc = subjectList.find((elem) => {
-                            return elem._id === obj.subjectId;
-                        });
-
-
-                        /*printTranscriptHtmlSubject1 += `${subjectDoc.name}<br>`;
-                        printTranscriptHtmlCredit1 += `${obj.credit}<br>`;
-                        printTranscriptHtmlGrade1 += `${obj.grade}<br>`;
-                        printTranscriptHtmlGradePoint1 += `${obj.gradePoint || ""}<br>`;*/
-                        printTranscriptHtml += `
-                            <tr>
-                                <td>${subjectDoc.name}</td>
-                                <td>${subjectDoc.name}</td>
-                                <td>${subjectDoc.name}</td>
-                                <td>${subjectDoc.name}</td>
-                            </tr>
-                            </td>
-                        `;
-
-                        ind1++;
+            // console.log(transcriptList);
+            transcriptList.forEach((o) => {
+                let countY = 0;
+                let countFirstGPA = 0;
+                console.log(o.data);
+                let gpa1 = 0;
+                let gpa2 = 0;
+                let lengSem1 = 0;
+                let lengSem2 = 0;
+                o.data.forEach((obj) => {
+                    if (obj) {
+                        if (obj.data[0].grade !== "Un Range") {
+                            obj.data.forEach((ob) => {
+                                if (ob.grade !== "Un Range") {
+                                    if (ob.sem === 1) {
+                                        gpa1 += ob.gradePoint;
+                                        lengSem1++;
+                                    } else if (ob.sem === 2) {
+                                        gpa2 += ob.gradePoint;
+                                        lengSem2++;
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
+                gpa1 = numeral(gpa1 / lengSem1).format("0,00.00");
+                gpa2 = numeral(gpa2 / lengSem2).format("0,00.00");
+                let rowSpanYear = lengSem1 >= lengSem2 ? lengSem1 : lengSem2;
+                o.data.forEach((obj) => {
+                        if (obj) {
+                            if (obj.data[0].grade !== "Un Range") {
+                                let lengthSeme = obj.data.length;
 
-                printTranscriptHtml += `
-                            </table>
-                        </tr>`;
+                                obj.data.forEach((ob) => {
+                                    let subjectDoc = subjectList.find((elem) => {
+                                        return elem._id === ob.subjectId;
+                                    });
+                                    ob.gradePoint = numeral(ob.gradePoint).format("0,00.00");
+                                    if (countY === 0) {
+                                        if (ob.sem === 1) {
+                                            printTranscriptHtml += `
+                                                <tr>
+                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${obj._id.year}</td>
+                                                    <td style="border-bottom: 0px !important;">${subjectDoc.name}</td>
+                                                    <td style="border-bottom: 0px !important;">${ob.credit || ""}</td>
+                                                    <td style="border-bottom: 0px !important;">${ob.grade || ""}</td>
+                                                    <td style="border-bottom: 0px !important;">${ob.gradePoint || ""}</td>
+                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${gpa1 || ""}</td>
+                                                `;
 
+                                            if (lengthSeme !== 2) {
+                                                printTranscriptHtml += `
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                </tr>
+                                                `;
+                                            }
+                                            countY++;
+                                        } else if (ob.sem === 2) {
+                                            if (lengthSeme !== 2) {
+                                                printTranscriptHtml += `
+                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${obj._id.year}</td>
+                                                    <td  style="border-bottom: 0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;"></td>
+                                                </tr>
+                                                `;
+                                                countY++;
+                                            }
+                                            printTranscriptHtml += `
+                                                    <td  style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
+                                                    <td  style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
+                                                    <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
+                                                    <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
+                                                     <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${gpa2}</td>
 
-                transcriptList[0].culumnSemester2.forEach((obj) => {
-                    if (obj.year === i && obj.grade !== "Un Range") {
-                        let subjectDoc = subjectList.find((elem) => {
-                            return elem._id === obj.subjectId;
-                        });
-                        printTranscriptHtmlSubject2 += `${subjectDoc.name}<br>`;
-                        printTranscriptHtmlCredit2 += `${obj.credit}<br>`;
-                        printTranscriptHtmlGrade2 += `${obj.grade}<br>`;
-                        printTranscriptHtmlGradePoint2 += `${obj.gradePoint2 || ""}<br>`;
+                                                    </tr>
+                                            `;
+                                        }
+                                    } else {
+                                        if (ob.sem === 1) {
+                                            printTranscriptHtml += `
+                                           <tr>
+                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${subjectDoc.name}</td>
+                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.credit || ""}</td>
+                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade || ""}</td>
+                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.gradePoint || ""}</td>
+                                       
+                                            `;
 
+                                            if (lengthSeme !== 2) {
+                                                printTranscriptHtml += `
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                </tr>
+                                                `;
+                                            }
+                                        } else {
+                                            if (lengthSeme !== 2) {
+                                                printTranscriptHtml += `
+                                                <tr>
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                `;
+                                            }
+                                            if (countFirstGPA === 0) {
+                                                printTranscriptHtml += `
+                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
+                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
+                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
+                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
+                                            <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${gpa2}</td>
 
-                        ind2++;
+                                        </tr>
+                                        `;
+                                                countFirstGPA++;
+
+                                            } else {
+
+                                                printTranscriptHtml += `
+                                            <td  style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
+                                            <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
+                                            <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
+                                            <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
+                                        </tr>
+                                        `;
+                                            }
+                                        }
+                                    }
+                                })
+                            }
+                        }
+
                     }
-                });
+                );
+            })
+            ;
 
-                if (ind1 > 1 || ind2 > 1) {
-                    printTranscriptHtml += `
-                      <tr>
-                            <td style="text-align: center !important; vertical-align: inherit !important;">${i}</td>  
-                `;
-                    printTranscriptHtml += `
-                            <td>${printTranscriptHtmlSubject1}</td>
-                            <td>${printTranscriptHtmlCredit1}</td>
-                            <td>${printTranscriptHtmlGrade1}</td>
-                            <td>${printTranscriptHtmlGradePoint1}</td>
-
-                            <td>${printTranscriptHtmlSubject2}</td>
-                            <td>${printTranscriptHtmlCredit2}</td>
-                            <td>${printTranscriptHtmlGrade2}</td>
-                            <td>${printTranscriptHtmlGradePoint2}</td>
-
-                           
-                            </tr>
-                `;
-                }
-            }
+            printTranscriptHtml += `
+                <tr>
+                    <td colspan="11" style="border-bottom: 0px !important;border-left: 0px !important;border-right: 0px !important;"></td>
+                </tr>
+            `;
 
 
             let majorDoc = Sch_Major.findOne({_id: majorId});
@@ -145,7 +247,8 @@ Meteor.methods({
         data.printTranscriptHtml = printTranscriptHtml;
         return data;
     }
-});
+})
+;
 
 function pad(number, length) {
     let str = '' + number;

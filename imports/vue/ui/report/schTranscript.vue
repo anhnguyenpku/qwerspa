@@ -94,26 +94,28 @@
                               </div>
                           </div>
                       </caption>
-                <thead style="margin-top: 5px">
+                <thead style="margin-top: 5px;">
                     <tr class="back_color">
-                        <th class="report-center" rowspan="2">Year</th>
-                        <th colspan="4" class="report-center">Semester I</th>
-                        <th colspan="4" class="report-center">Semester II</th>
+                        <th class="report-center" rowspan="2" style="width: 6% !important;">Year</th>
+                        <th colspan="5" class="report-center" style="width:47% !important;">Semester I</th>
+                        <th colspan="5" class="report-center" style="width:47% !important;">Semester II</th>
                     </tr>
-                <tr>
-                        <th class="report-center">Subject</th>
-                        <th class="report-center">Credit</th>
-                        <th class="report-center">Grade</th>
-                        <th class="report-center">Grade Point</th>
-                        <th class="report-center">Subject</th>
-                        <th class="report-center">Credit</th>
-                        <th class="report-center">Grade</th>
-                        <th class="report-center">Grade Point</th>
+                <tr style="font-size: 12pz !important;">
+                        <th class="report-center">Course Title</th>
+                        <th class="report-center">Cr</th>
+                        <th class="report-center">Gr</th>
+                        <th class="report-center">GP</th>
+                        <th class="report-center">GPA</th>
+                        <th class="report-center">Course Title</th>
+                        <th class="report-center">Cr</th>
+                        <th class="report-center">Gr</th>
+                        <th class="report-center">GP</th>
+                        <th class="report-center">GPA</th>
 
                 </tr>
                 <tr></tr>
                 </thead>
-                <tbody style="margin-bottom: 5px;" v-html="printTranscriptHtml">
+                <tbody style="margin-bottom: 5px;font-size: 12px !important;" v-html="printTranscriptHtml">
                 </tbody>
 
 
@@ -201,11 +203,11 @@
             vm.$nextTick(function () {
                 // Code that will run only after the
                 // entire view has been rendered
-                if (vm.printTranscriptHtml != "" && vm.onLoad == true) {
+                if (vm.printTranscriptHtml !== "" && vm.onLoad === true) {
                     setTimeout(function () {
-                        window.print();
-                        vm.printTranscriptHtml = "";
-                        FlowRouter.go('/sch-data/schStudent');
+                        // window.print();
+                        // vm.printTranscriptHtml = "";
+                        // FlowRouter.go('/sch-data/schStudent');
                     }, 600);
 
                 }

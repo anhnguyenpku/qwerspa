@@ -29,6 +29,12 @@ Sch_Mention.schema = new SimpleSchema({
         optional: true,
         defaultValue: ""
     },
+    "range.$.gradePoint": {
+        type: Number,
+        decimal: true,
+        optional: true,
+        defaultValue: 0
+    },
     status: {
         type: Boolean,
         optional: true

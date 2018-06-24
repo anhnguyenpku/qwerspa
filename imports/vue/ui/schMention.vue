@@ -141,6 +141,15 @@
                             </template>
                         </el-table-column>
                         <el-table-column
+                                :label="langConfig['gradePoint']">
+                            <template slot-scope="scope">
+                                <el-input size="small" v-model="scope.row.gradePoint"
+                                          :placeholder="langConfig['gradePoint']"
+                                          @change="handleEditRange(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
                                 :label="langConfig['action']"
                                 width="120"
                         >
@@ -229,6 +238,15 @@
                                           @change="handleEditRange(scope.$index, scope.row)"></el-input>
                             </template>
                         </el-table-column>
+
+                        <el-table-column
+                                :label="langConfig['gradePoint']">
+                            <template slot-scope="scope">
+                                <el-input size="small" v-model="scope.row.gradePoint"
+                                          :placeholder="langConfig['gradePoint']"
+                                          @change="handleEditRange(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
                         <el-table-column
                                 :label="langConfig['action']"
                                 width="120"
@@ -314,7 +332,7 @@
                     date: [{required: true, message: 'Please input date', trigger: 'blur'}],
                 },
                 rangeData: [
-                    {from: "", to: "", grade: ""}
+                    {from: "", to: "", grade: "", gradePoint: ""}
                 ]
 
             }
@@ -522,7 +540,8 @@
                 this.rangeData = [{
                     from: "",
                     to: "",
-                    grade: ""
+                    grade: "",
+                    gradePoint: ""
                 }];
 
                 if (this.$refs["schMentionFormAdd"]) {
