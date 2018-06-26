@@ -38,27 +38,20 @@
 }
 
 .tran-first {
-    border-bottom: none !important;
     text-align: center !important;
     vertical-align: inherit !important;
 }
 
 .tran-second {
-    border-bottom: none !important;
-    border-top: none !important;
     text-align: center !important;
     vertical-align: inherit !important;
 }
 
 .tran-third {
-    border-bottom: none !important;
-    border-top: none !important;
     text-align: center !important;
     vertical-align: inherit !important;
 }
 
 .tran-forth {
-    border-bottom: none !important;
-    border-top: none !important;
     vertical-align: inherit !important;
 }

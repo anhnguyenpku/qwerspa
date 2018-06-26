@@ -4,7 +4,7 @@
         <a4>
             <span slot="content" style="margin: 0px !important;">
                 <div class="printInvoice">
-                <table class="table">
+                <table class="table table-bordered">
                       <caption style="padding-top: 0px !important;">
                           <div class="row">
                                 <div class="col-md-12" style="text-align: center !important;">
