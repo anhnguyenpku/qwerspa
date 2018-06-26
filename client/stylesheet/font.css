@@ -1,7 +1,14 @@
 @font-face {
-    font-family: 'element-icons';
-    src: url('/fonts/element-icons.woff') format('woff'),
-    url('/fonts/element-icons.ttf') format('truetype');
+    font-family: 'winding2';
+    src: url('WINGDNG2.TTF') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
+
+@font-face {
+    font-family: 'element-icons';
+    src: url('element-icons.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+

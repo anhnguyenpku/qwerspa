@@ -4,7 +4,7 @@
         <a4>
             <span slot="content" style="margin: 0px !important;">
                 <div class="printInvoice">
-                <table class="table table-bordered">
+                <table class="table">
                       <caption style="padding-top: 0px !important;">
                           <div class="row">
                                 <div class="col-md-12" style="text-align: center !important;">
@@ -19,7 +19,7 @@
                                               <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Ministry of Labor and Vocational Training</p>
                                               <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">{{waterBillingSetup.khName}}</p>
                                               <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    {{waterBillingSetup.enName}}</p>
-                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    លេខ៖ .............................វ.ព.ភ.ត.ស.ប</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    លេខ៖ .............................{{waterBillingSetup.khShortName}}</p>
 
                                             </span>
 
@@ -37,7 +37,7 @@
                               <div class="col-md-12  balckOnPrint" style="text-align: center;">
                                   ACADEMIC TRANSCRIPT
                                   <br>
-                                  
+                                  <p style="font-family:winding2 "></p>
                               </div>
                           </div>
                           <div style="width: 100%; float: right">
@@ -115,7 +115,8 @@
                 </tr>
                 <tr></tr>
                 </thead>
-                <tbody style="margin-bottom: 5px;font-size: 12px !important;" v-html="printTranscriptHtml">
+                <tbody style="margin-bottom: 5px;font-size: 12px !important;" class="transcript"
+                       v-html="printTranscriptHtml">
                 </tbody>
 
 

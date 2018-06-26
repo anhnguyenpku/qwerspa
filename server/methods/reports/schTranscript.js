@@ -124,20 +124,20 @@ Meteor.methods({
                                             printTranscriptHtml += `
                                                 <tr>
                                                     <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${obj._id.year}</td>
-                                                    <td style="border-bottom: 0px !important;">${subjectDoc.name}</td>
-                                                    <td style="border-bottom: 0px !important;">${ob.credit || ""}</td>
-                                                    <td style="border-bottom: 0px !important;">${ob.grade || ""}</td>
-                                                    <td style="border-bottom: 0px !important;">${ob.gradePoint || ""}</td>
-                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${gpa1 || ""}</td>
+                                                    <td class="tran-forth">${subjectDoc.name}</td>
+                                                    <td class="tran-first">${ob.credit || ""}</td>
+                                                    <td class="tran-first">${ob.grade || ""}</td>
+                                                    <td class="tran-first">${ob.gradePoint || ""}</td>
+                                                    <td rowspan="${rowSpanYear}" class="tran-second" style="vertical-align: inherit !important; text-align: center !important;">${gpa1 || ""}</td>
                                                 `;
 
                                             if (lengthSeme !== 2) {
                                                 printTranscriptHtml += `
-                                                    <td style="border-bottom: 0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important;"></td>
+                                                    <td class="tran-first"></td>
+                                                    <td class="tran-first"></td>
+                                                    <td class="tran-first"></td>
+                                                    <td class="tran-first"></td>
+                                                    <td class="tran-first"></td>
                                                 </tr>
                                                 `;
                                             }
@@ -145,22 +145,22 @@ Meteor.methods({
                                         } else if (ob.sem === 2) {
                                             if (lengthSeme !== 2) {
                                                 printTranscriptHtml += `
-                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${obj._id.year}</td>
-                                                    <td  style="border-bottom: 0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important;"></td>
-                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;"></td>
+                                                    <td rowspan="${rowSpanYear}" class="tran-second">${obj._id.year}</td>
+                                                    <td class="tran-first"></td>
+                                                    <td class="tran-first"></td>
+                                                    <td class="tran-first"></td>
+                                                    <td  class="tran-first"></td>
+                                                    <td rowspan="${rowSpanYear}" class="tran-second"></td>
                                                 </tr>
                                                 `;
                                                 countY++;
                                             }
                                             printTranscriptHtml += `
-                                                    <td  style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
-                                                    <td  style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
-                                                    <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
-                                                    <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
-                                                     <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${gpa2}</td>
+                                                    <td  class="tran-forth">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
+                                                    <td  class="tran-first">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
+                                                    <td class="tran-first">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
+                                                    <td class="tran-first">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
+                                                     <td rowspan="${rowSpanYear}" class="tran-second">${gpa2}</td>
 
                                                     </tr>
                                             `;
@@ -169,19 +169,19 @@ Meteor.methods({
                                         if (ob.sem === 1) {
                                             printTranscriptHtml += `
                                            <tr>
-                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${subjectDoc.name}</td>
-                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.credit || ""}</td>
-                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade || ""}</td>
-                                                <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.gradePoint || ""}</td>
+                                                <td class="tran-forth">${subjectDoc.name}</td>
+                                                <td class="tran-third">${ob.credit || ""}</td>
+                                                <td  class="tran-third">${ob.grade || ""}</td>
+                                                <td  class="tran-third">${ob.gradePoint || ""}</td>
                                        
                                             `;
 
                                             if (lengthSeme !== 2) {
                                                 printTranscriptHtml += `
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td  class="tran-third"></td>
+                                                    <td  class="tran-third"></td>
+                                                    <td  class="tran-third"></td>
+                                                    <td  class="tran-third"></td>
                                                 </tr>
                                                 `;
                                             }
@@ -189,31 +189,30 @@ Meteor.methods({
                                             if (lengthSeme !== 2) {
                                                 printTranscriptHtml += `
                                                 <tr>
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
-                                                    <td style="border-bottom: 0px !important; border-top:0px !important;"></td>
+                                                    <td  class="tran-third"></td>
+                                                    <td  class="tran-third"></td>
+                                                    <td  class="tran-third"></td>
+                                                    <td  class="tran-third"></td>
                                                 `;
                                             }
                                             if (countFirstGPA === 0) {
                                                 printTranscriptHtml += `
-                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
-                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
-                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
-                                            <td style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
-                                            <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${gpa2}</td>
+                                            <td  class="tran-forth">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
+                                            <td class="tran-first">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
+                                            <td class="tran-first">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
+                                            <td class="tran-first">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
+                                            <td rowspan="${rowSpanYear}" class="tran-second">${gpa2}</td>
 
                                         </tr>
                                         `;
                                                 countFirstGPA++;
 
                                             } else {
-
                                                 printTranscriptHtml += `
-                                            <td  style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
-                                            <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
-                                            <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
-                                            <td style="border-bottom: 0px !important; border-top:0px !important;">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
+                                            <td class="tran-forth">${ob.grade !== "Un Range" ? subjectDoc.name : ""}</td>
+                                            <td class="tran-third">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
+                                            <td class="tran-third">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
+                                            <td class="tran-third">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
                                         </tr>
                                         `;
                                             }

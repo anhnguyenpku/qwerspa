@@ -3,6 +3,10 @@
         color: darkblue !important;
     }
 
+    .back_color {
+        color: lightgray !important;
+    }
+
     .balckOnPrint {
         color: black !important;
     }
@@ -27,4 +31,34 @@
 
 .back_color {
     background-color: lightgray !important;
+}
+
+.transcript > tr > td {
+    padding: 4px !important;
+}
+
+.tran-first {
+    border-bottom: none !important;
+    text-align: center !important;
+    vertical-align: inherit !important;
+}
+
+.tran-second {
+    border-bottom: none !important;
+    border-top: none !important;
+    text-align: center !important;
+    vertical-align: inherit !important;
+}
+
+.tran-third {
+    border-bottom: none !important;
+    border-top: none !important;
+    text-align: center !important;
+    vertical-align: inherit !important;
+}
+
+.tran-forth {
+    border-bottom: none !important;
+    border-top: none !important;
+    vertical-align: inherit !important;
 }
