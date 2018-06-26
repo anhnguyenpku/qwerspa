@@ -101,7 +101,7 @@
                                     <el-form-item label="Email" prop="email">
                                         <el-input v-model="form.email" auto-complete="off"></el-input>
                                     </el-form-item>
-                                    <el-form-item label="Website" prop="websit">
+                                    <el-form-item label="Website" prop="website">
                                         <el-input v-model="form.website" auto-complete="off"></el-input>
                                     </el-form-item>
 
@@ -110,6 +110,9 @@
 
                             <el-form-item label="Address" prop="address">
                                 <el-input v-model="form.address" auto-complete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Khmer Address" prop="khAddress">
+                                <el-input v-model="form.khAddress" auto-complete="off"></el-input>
                             </el-form-item>
 
 
@@ -123,8 +126,17 @@
                                         </el-radio-group>
                                     </el-form-item>
                                 </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="Director">
+                                        <el-input v-model="form.director" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="Province">
+                                        <el-input v-model="form.province"></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-row>
-
 
                             <el-form-item label="Round Type">
                                 <el-select v-model="form.roundType" filterable placeholder="Select">
@@ -236,6 +248,9 @@
                     phoneNumber: "",
                     email: "",
                     website: "",
+                    director: "",
+                    province: "",
+                    khAddress: ""
                 },
                 rules: {
                     khName: [
@@ -326,6 +341,9 @@
                             phoneNumber: '',
                             email: '',
                             website: '',
+                            director: '',
+                            province: '',
+                            khAddress: ""
                         };
                         this.$message({
                             message: 'Successfully',

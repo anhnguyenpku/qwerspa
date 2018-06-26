@@ -17,6 +17,7 @@ Meteor.methods({
         let data = {};
 
         let companyDoc = WB_waterBillingSetup.findOne({});
+
         //Range Date
         let transcriptList = Sch_Transcript.aggregate([
             {$match: {studentId: studentId, majorId: majorId}},
@@ -74,6 +75,7 @@ Meteor.methods({
             }
 
         ]);
+        let transcriptDoc = transcriptList[0];
 
         let finalGPA = 0;
         let countFinalGPA = 0;
@@ -122,6 +124,7 @@ Meteor.methods({
                     finalGPA += numeral(gpa2).value();
                     countFinalGPA++;
                 }
+                transcriptDoc.yearTo = parseInt(moment(transcriptDoc.studentDoc.yearFrom).add(1, "month").format("YYYY"));
 
 
                 let rowSpanYear = lengSem1 >= lengSem2 ? lengSem1 : lengSem2;
@@ -136,6 +139,7 @@ Meteor.methods({
                                     });
                                     ob.gradePoint = numeral(ob.gradePoint).format("0,00.00");
                                     if (countY === 0) {
+                                        transcriptDoc.yearTo++;
                                         if (ob.sem === 1) {
                                             printTranscriptHtml += `
                                                 <tr>
@@ -243,17 +247,18 @@ Meteor.methods({
             })
             ;
 
-            if (stateEx.state.length > 0) {
-                let gpaState = 0;
-                stateEx.state.forEach((obj) => {
-                    gpaState += obj.gradePoint;
-                });
-                gpaState = numeral(gpaState / stateEx.state.length).format("0,00.00");
-                finalGPA += numeral(gpaState).value();
-                countFinalGPA++;
-                finalGPA = numeral(finalGPA / countFinalGPA).format("0,00.00");
+            if (stateEx.isCompleted == true) {
+                if (stateEx.state.length > 0) {
+                    let gpaState = 0;
+                    stateEx.state.forEach((obj) => {
+                        gpaState += obj.gradePoint;
+                    });
+                    gpaState = numeral(gpaState / stateEx.state.length).format("0,00.00");
+                    finalGPA += numeral(gpaState).value();
+                    countFinalGPA++;
+                    finalGPA = numeral(finalGPA / countFinalGPA).format("0,00.00");
 
-                printTranscriptHtml += `
+                    printTranscriptHtml += `
                         <tr>
                             <th colspan="6" rowspan="${stateEx.state.length + 1}">
                                     Gross (Total) GPA :  ${finalGPA}<br>
@@ -264,12 +269,12 @@ Meteor.methods({
                             <th rowspan="${stateEx.state.length + 1}" style="text-align: center !important; vertical-align: inherit !important;">${gpaState}</th>
                         </tr>
                 `;
-                stateEx.state.forEach((obj) => {
+                    stateEx.state.forEach((obj) => {
 
-                    let subjectDoc = subjectList.find((elem) => {
-                        return elem._id === obj.subjectId;
-                    });
-                    printTranscriptHtml += `
+                        let subjectDoc = subjectList.find((elem) => {
+                            return elem._id === obj.subjectId;
+                        });
+                        printTranscriptHtml += `
                         <tr>
                             <td>${subjectDoc.name}</td>
                             <td></td>
@@ -278,7 +283,19 @@ Meteor.methods({
                         </tr>
                        
                 `;
-                });
+                    });
+                } else {
+                    finalGPA = numeral(finalGPA / countFinalGPA).format("0,00.00");
+                    printTranscriptHtml += `
+                        <tr>
+                            <th colspan="11" >
+                                    Gross (Total) GPA :  ${finalGPA}<br>
+                                    Credits Gained &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:  ${credit} credits <br>
+                                    Credits Required &nbsp; :  ${stateEx.requiredCredit}  credits
+                            </th>
+                         </tr>
+                `;
+                }
             } else {
                 printTranscriptHtml += `
                 <tr style="border-bottom: 0px !important;border-left: 0px !important;border-right: 0px !important;">
@@ -289,9 +306,8 @@ Meteor.methods({
 
 
             let majorDoc = Sch_Major.findOne({_id: majorId});
-            let transcriptDoc = transcriptList[0];
             transcriptDoc.yearFrom = moment(transcriptDoc.studentDoc.yearFrom).add(1, "month").format("YYYY");
-            transcriptDoc.yearTo = moment(transcriptDoc.studentDoc.yearTo).add(1, "month").format("YYYY");
+            transcriptDoc.yearTo = transcriptDoc.yearTo + "";
             data.transcriptDoc = transcriptDoc;
             data.majorDoc = majorDoc;
 

@@ -20,6 +20,14 @@ WB_waterBillingSetup.schema = new SimpleSchema({
     rolesArea: {
         type: String
     },
+    director: {
+        type: String,
+        optional: true
+    },
+    province: {
+        type: String,
+        optional: true
+    },
     invoiceExpiredAfter: {
         type: Number,
         autoValue() {
@@ -63,6 +71,10 @@ WB_waterBillingSetup.schema = new SimpleSchema({
         defaultValue: 480
     },
     address: {
+        type: String,
+        optional: true
+    },
+    khAddress: {
         type: String,
         optional: true
     },

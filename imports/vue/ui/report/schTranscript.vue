@@ -118,9 +118,32 @@
                 <tbody style="margin-bottom: 5px;font-size: 12px !important;" class="transcript"
                        v-html="printTranscriptHtml">
                 </tbody>
-
-
+                    <thead>
+                        <tr></tr>
+                     <tr>
+                            <td colspan="6"
+                                style="text-align: center; font-size: 11px;border: 0px !important;"></td>
+                            <td colspan="4"
+                                style="text-align: left; font-size: 11px;border: 0px !important;">
+                                <br><br><br>
+                                <hr>
+                                {{waterBillingSetup.province}}...............................................................................<br>
+                                {{waterBillingSetup.director}}<br>
+                                Director of Institute
+                            </td>
+                         <td style="text-align: center; font-size: 11px;border: 0px !important;"></td>
+                        </tr>
+                    </thead>
             </table>
+<footer style="border-top: 1px solid darkblue; text-align: center !important; font-size: 10px !important;">
+  <p style="padding: 0px !important; margin: 0px !important;">
+       អាស័យដ្ឋានទំនាក់ទំនង ៖ {{waterBillingSetup.khAddress || ""}}
+  </p>
+    <p style="padding: 0px !important;; margin: 0px !important;">
+       Address : {{waterBillingSetup.address || ""}}
+  </p>
+    <p style="padding: 0px !important;; margin: 0px !important;"> Tel : {{waterBillingSetup.phoneNumber}}, Fax: {{waterBillingSetup.phoneNumber}}, Website : {{waterBillingSetup.website}}, Email : {{waterBillingSetup.email}}</p>
+</footer>
                     </div>
            </span>
         </a4>
