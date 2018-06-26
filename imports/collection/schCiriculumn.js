@@ -13,6 +13,9 @@ Sch_Ciriculumn.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    requiredCredit: {
+        type: Number
+    },
     culumnSemester1: {
         type: [Object]
     },

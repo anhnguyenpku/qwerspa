@@ -1105,11 +1105,14 @@
                                     type="index"
                                     :index="indexMethod">
                             </el-table-column>
-                            <el-table-column
-                                    :label="langConfig['year']">
+                            <el-table-column width="70"
+                                             :label="langConfig['year']">
                                 <template slot-scope="scope">
-
-                                    <el-select style="display: block !important;"
+                                    <el-input size="small" v-model="scope.row.year" type="number"
+                                              :placeholder="langConfig['chooseItem']" :disabled="true"
+                                              @keyup.native="handleEditCulumn2(scope.$index, scope.row)"
+                                              @change="handleEditCulumn2(scope.$index, scope.row)"></el-input>
+                                    <!--<el-select style="display: block !important;"
                                                filterable
                                                v-model="scope.row.year" :disabled="true"
                                                @change="handleEditCulumn1(scope.$index, scope.row)"
@@ -1121,11 +1124,11 @@
                                                 :value="item.value"
                                                 :disabled="item.disabled">
                                         </el-option>
-                                    </el-select>
+                                    </el-select>-->
                                 </template>
                             </el-table-column>
-                            <el-table-column
-                                    :label="langConfig['subject']">
+                            <el-table-column min-width="250"
+                                             :label="langConfig['subject']">
                                 <template slot-scope="scope">
                                     <el-select style="display: block !important;"
                                                filterable
@@ -1194,27 +1197,18 @@
                                     type="index"
                                     :index="indexMethod">
                             </el-table-column>
-                            <el-table-column
-                                    :label="langConfig['year']">
+                            <el-table-column width="70"
+                                             :label="langConfig['year']">
                                 <template slot-scope="scope">
-
-                                    <el-select style="display: block !important;"
-                                               filterable
-                                               v-model="scope.row.year" :disabled="true"
-                                               @change="handleEditCulumn2(scope.$index, scope.row)"
-                                               :placeholder="langConfig['chooseItem']">
-                                        <el-option
-                                                v-for="item in yearList"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"
-                                                :disabled="item.disabled">
-                                        </el-option>
-                                    </el-select>
+                                    <el-input size="small" v-model="scope.row.year" type="number"
+                                              :placeholder="langConfig['chooseItem']" :disabled="true"
+                                              @keyup.native="handleEditCulumn2(scope.$index, scope.row)"
+                                              @change="handleEditCulumn2(scope.$index, scope.row)"></el-input>
                                 </template>
+
                             </el-table-column>
-                            <el-table-column
-                                    :label="langConfig['subject']">
+                            <el-table-column min-width="250"
+                                             :label="langConfig['subject']">
                                 <template slot-scope="scope">
                                     <el-select style="display: block !important;"
                                                filterable
@@ -1350,9 +1344,19 @@
                     <el-col :span="2">
                         <div>&nbsp;</div>
                     </el-col>
-                    <el-col :span="11">
-                        <el-form-item :label="langConfig['finalGrade']" prop="finalGrade">
-                            <el-input v-model="inputTranscriptForm.finalGrade"></el-input>
+                    <el-col :span="6">
+                        <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit">
+                            <el-input v-model="inputTranscriptForm.requiredCredit" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-form-item :label="langConfig['isCompleted']" prop="isCompleted">
+                            <el-switch
+                                    v-model="inputTranscriptForm.isCompleted"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                            >
+                            </el-switch>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -1574,8 +1578,9 @@
                     culumnSemester2: [],
                     studentName: "",
                     studentId: "",
-                    finalGrade: "",
-                    transcriptId: ""
+                    requiredCredit: 0,
+                    transcriptId: "",
+                    isCompleted: false
                 },
                 culumnData1: [
                     {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", gradePoint: 0, ind: 1, sem: 1}
@@ -1751,7 +1756,7 @@
                             if (obj.studyAt) {
                                 personalStudy.push(obj)
                             }
-                        })
+                        });
 
                         this.cousinData.map((obj) => {
                             if (obj.name) {
@@ -2054,8 +2059,9 @@
                     culumnSemester2: [],
                     studentName: "",
                     studentId: "",
-                    finalGrade: "",
-                    transcriptId: ""
+                    requiredCredit: "",
+                    transcriptId: "",
+                    isCompleted: false
                 };
                 this.culumnData1 = [
                     {year: "", subjectId: "", credit: 0, score: 0, grade: "Un Range", ind: 1, sem: 1}
@@ -2185,12 +2191,17 @@
 
             },
             findCuriculumnById(id) {
+                let vm = this;
+                vm.inputTranscriptForm.isCompleted = false;
                 Meteor.call("querySchCiriculumnById", id, (err, result) => {
                     if (result) {
                         let i = 1;
                         let j = 1;
                         let cul1Dif = 0;
                         let cul2Dif = 0;
+                        vm.inputTranscriptForm.requiredCredit = result.requiredCredit;
+                        vm.inputTranscriptForm.isCompleted = false;
+
                         result.culumnSemester1.map((obj) => {
                             if (cul1Dif !== obj.year) {
                                 i = 1;
@@ -2204,7 +2215,7 @@
                             i++;
                             return obj;
                         });
-                        this.culumnData1 = result.culumnSemester1;
+                        vm.culumnData1 = result.culumnSemester1;
 
                         result.culumnSemester2.map((obj) => {
                             if (cul2Dif !== obj.year) {
@@ -2220,7 +2231,7 @@
                             j++;
                             return obj;
                         });
-                        this.culumnData2 = result.culumnSemester2;
+                        vm.culumnData2 = result.culumnSemester2;
                     }
                 })
             },
@@ -2241,7 +2252,8 @@
                             }
                         });
                         data.state = stateList;
-                        data.finalGrade = vm.inputTranscriptForm.finalGrade;
+                        data.requiredCredit = vm.inputTranscriptForm.requiredCredit;
+                        data.isCompleted = vm.inputTranscriptForm.isCompleted;
                         data.rolesArea = Session.get('area');
 
                         Meteor.call("inputTranscript", data, (err, result) => {
@@ -2360,7 +2372,9 @@
                 this.inputTranscriptForm.studentName = data.personal.name;
                 this.inputTranscriptForm.studentId = data._id;
                 this.inputTranscriptForm.majorId = data.majorId;
-                this.inputTranscriptForm.finalGrade = data.finalGrade;
+                this.inputTranscriptForm.requiredCredit = data.requiredCredit;
+
+                this.inputTranscriptForm.isCompleted = false;
                 this.ciriculumnOpt(data.majorId);
                 vm.inputTranscriptForm.transcriptId = "";
                 vm.disabledCuriculumn = false;
@@ -2368,6 +2382,8 @@
                     if (result) {
                         vm.inputTranscriptForm.curiculumnId = result.curiculumnId;
                         vm.inputTranscriptForm.transcriptId = result._id;
+                        vm.inputTranscriptForm.requiredCredit = result.requiredCredit;
+                        vm.inputTranscriptForm.isCompleted = result.isCompleted;
 
                         vm.culumnData1 = result.culumnSemester1;
                         vm.culumnData2 = result.culumnSemester2;

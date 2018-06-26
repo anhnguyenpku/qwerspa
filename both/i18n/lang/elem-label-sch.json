@@ -73,7 +73,9 @@
       "curiculumn": "Curiculumn",
       "inputTranscript": "Input Transcript",
       "finalGrade": "Grade",
-      "gradePoint": "GPA"
+      "gradePoint": "GPA",
+      "requiredCredit": "Required Credit",
+      "isCompleted": "Completed"
     },
     "major": {
       "searchHere": "Search Here ...",
@@ -149,7 +151,8 @@
       "semester": "Semester",
       "subject": "Subject",
       "credit": "Credit",
-      "major": "Major"
+      "major": "Major",
+      "requiredCredit": "Required Credit"
     },
     "subject": {
       "searchHere": "Search Here ...",
@@ -247,7 +250,9 @@
       "curiculumn": "កម្មវិធីសិក្សា",
       "inputTranscript": "បញ្ចូលព្រឹត្តបត្រពិន្ទុ",
       "finalGrade": "និទ្ទេស",
-      "gradePoint": "មធ្យមភាគ"
+      "gradePoint": "មធ្យមភាគ",
+      "requiredCredit": "ទាមទារចំនួនក្រេឌីត",
+      "isCompleted": "បំពេញរួចរាល់"
     },
     "major": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -326,7 +331,8 @@
       "semester": "ឆមាស",
       "subject": "មុខវិជ្ជា",
       "credit": "Credit",
-      "major": "ជំនាញ"
+      "major": "ជំនាញ",
+      "requiredCredit": "ទាមទារចំនួនក្រេឌីត"
     },
     "subject": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

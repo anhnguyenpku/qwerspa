@@ -77,6 +77,7 @@ Meteor.methods({
 
         let finalGPA = 0;
         let countFinalGPA = 0;
+        let credit = 0;
         let stateEx = Sch_Transcript.findOne({studentId: studentId, majorId: majorId});
         let printTranscriptHtml = "";
         let subjectList = Sch_Subject.find().fetch();
@@ -88,7 +89,6 @@ Meteor.methods({
             transcriptList.forEach((o) => {
                 let countY = 0;
                 let countFirstGPA = 0;
-                console.log(o.data);
                 let gpa1 = 0;
                 let gpa2 = 0;
                 let lengSem1 = 0;
@@ -101,9 +101,11 @@ Meteor.methods({
                                     if (ob.sem === 1) {
                                         gpa1 += ob.gradePoint;
                                         lengSem1++;
+                                        credit += ob.credit;
                                     } else if (ob.sem === 2) {
                                         gpa2 += ob.gradePoint;
                                         lengSem2++;
+                                        credit += ob.credit;
                                     }
                                 }
                             });
@@ -142,7 +144,7 @@ Meteor.methods({
                                                     <td class="tran-first" style="border-bottom: 0px !important;">${ob.credit || ""}</td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;">${ob.grade || ""}</td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;">${ob.gradePoint || ""}</td>
-                                                    <td rowspan="${rowSpanYear}" class="tran-second" style="vertical-align: inherit !important; text-align: center !important;">${gpa1 || ""}</td>
+                                                    <td rowspan="${rowSpanYear}" class="tran-second" style="vertical-align: inherit !important; text-align: center !important;">${ob.grade !== "Un Range" ? gpa1 || "" : ""}</td>
                                                 `;
 
                                             if (lengthSeme !== 2) {
@@ -174,7 +176,7 @@ Meteor.methods({
                                                     <td  class="tran-first" style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
-                                                     <td rowspan="${rowSpanYear}" class="tran-second">${gpa2}</td>
+                                                     <td rowspan="${rowSpanYear}" class="tran-second">${ob.grade !== "Un Range" ? gpa2 : ""}</td>
 
                                                     </tr>
                                             `;
@@ -215,7 +217,7 @@ Meteor.methods({
                                             <td class="tran-first" style="border-bottom: 0px !important; ">${ob.grade !== "Un Range" ? ob.credit || "" : ""}</td>
                                             <td class="tran-first" style="border-bottom: 0px !important; ">${ob.grade !== "Un Range" ? ob.grade || "" : ""}</td>
                                             <td class="tran-first" style="border-bottom: 0px !important; ">${ob.grade !== "Un Range" ? ob.gradePoint || "" : ""}</td>
-                                            <td rowspan="${rowSpanYear}" class="tran-second">${gpa2}</td>
+                                            <td rowspan="${rowSpanYear}" class="tran-second">${ob.grade !== "Un Range" ? gpa2 : ""}</td>
 
                                         </tr>
                                         `;
@@ -241,7 +243,6 @@ Meteor.methods({
             })
             ;
 
-
             if (stateEx.state.length > 0) {
                 let gpaState = 0;
                 stateEx.state.forEach((obj) => {
@@ -255,9 +256,9 @@ Meteor.methods({
                 printTranscriptHtml += `
                         <tr>
                             <th colspan="6" rowspan="${stateEx.state.length + 1}">
-                                    Gross (Total) GPA : ${finalGPA}<br>
-                                    Credits Gained &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <br>
-                                    Credits Required &nbsp;: 
+                                    Gross (Total) GPA :  ${finalGPA}<br>
+                                    Credits Gained &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:  ${credit} credits <br>
+                                    Credits Required &nbsp; :  ${stateEx.requiredCredit}  credits
                             </th>
                             <th colspan="4" style="text-align: center !important;">State Exam</th>
                             <th rowspan="${stateEx.state.length + 1}" style="text-align: center !important; vertical-align: inherit !important;">${gpaState}</th>

@@ -98,12 +98,12 @@
                      class="schCiriculumnForm">
 
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item :label="langConfig['name']" prop="name">
                             <el-input v-model="schCiriculumnForm.name"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item :label="langConfig['major']" prop="majorId">
                             <el-select style="display: block !important;"
                                        filterable
@@ -119,7 +119,12 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
+                        <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit">
+                            <el-input v-model="schCiriculumnForm.requiredCredit"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="langConfig['desc']" prop="desc">
                             <el-input v-model="schCiriculumnForm.desc"></el-input>
                         </el-form-item>
@@ -301,12 +306,12 @@
                      class="schCiriculumnForm">
 
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item :label="langConfig['name']" prop="name">
                             <el-input v-model="schCiriculumnForm.name"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-form-item :label="langConfig['major']" prop="majorId">
                             <el-select style="display: block !important;"
                                        filterable
@@ -322,7 +327,12 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
+                        <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit">
+                            <el-input v-model="schCiriculumnForm.requiredCredit"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
                         <el-form-item :label="langConfig['desc']" prop="desc">
                             <el-input v-model="schCiriculumnForm.desc"></el-input>
                         </el-form-item>
@@ -541,6 +551,7 @@
                     majorId: "",
                     desc: "",
                     _id: "",
+                    requiredCredit: "",
                     culumn: []
                 },
                 rules: {
@@ -664,18 +675,19 @@
                             if (obj.year) {
                                 culumnData1Temp.push(obj);
                             }
-                        })
+                        });
 
                         vm.culumnData2.map((obj) => {
                             if (obj.year) {
                                 culumnData2Temp.push(obj);
 
                             }
-                        })
+                        });
 
                         let schCiriculumnDoc = {
                             name: vm.schCiriculumnForm.name,
                             desc: vm.schCiriculumnForm.desc,
+                            requiredCredit: vm.schCiriculumnForm.requiredCredit,
                             culumnSemester1: culumnData1Temp,
                             culumnSemester2: culumnData2Temp,
                             majorId: vm.schCiriculumnForm.majorId,
@@ -728,6 +740,7 @@
                             _id: vm.schCiriculumnForm._id,
                             name: vm.schCiriculumnForm.name,
                             desc: vm.schCiriculumnForm.desc,
+                            requiredCredit: vm.schCiriculumnForm.requiredCredit,
                             culumnSemester1: culumnData1Temp,
                             culumnSemester2: culumnData2Temp,
                             majorId: vm.schCiriculumnForm.majorId,
@@ -784,7 +797,7 @@
                         } else {
                             vm.$message({
                                 type: 'error',
-                                message: 'Delete Fialed'
+                                message: 'Delete Failed'
                             });
                         }
 

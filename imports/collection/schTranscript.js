@@ -10,6 +10,13 @@ Sch_Transcript.schema = new SimpleSchema({
     majorId: {
         type: String
     },
+    requiredCredit: {
+        type: Number
+    },
+    isCompleted: {
+        type: Boolean,
+        defaultValue: false
+    },
     rolesArea: {
         type: String,
         label: "Role Area"
@@ -104,10 +111,6 @@ Sch_Transcript.schema = new SimpleSchema({
         optional: true,
         decimal: true,
         defaultValue: 0
-    },
-    finalGrade: {
-        type: String,
-        optional: true
     },
     createdAt: {
         type: Date,

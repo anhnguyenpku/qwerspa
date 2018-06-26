@@ -101,12 +101,12 @@
                         <th colspan="5" class="report-center" style="width:47% !important;">Semester II</th>
                     </tr>
                 <tr style="font-size: 12pz !important;">
-                        <th class="report-center">Course Title</th>
+                        <th class="report-center" style="width: 200px !important;">Course Title</th>
                         <th class="report-center">Cr</th>
                         <th class="report-center">Gr</th>
                         <th class="report-center">GP</th>
                         <th class="report-center">GPA</th>
-                        <th class="report-center">Course Title</th>
+                        <th class="report-center" style="width: 200px !important;">Course Title</th>
                         <th class="report-center">Cr</th>
                         <th class="report-center">Gr</th>
                         <th class="report-center">GP</th>
