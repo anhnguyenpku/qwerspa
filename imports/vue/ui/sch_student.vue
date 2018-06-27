@@ -1382,7 +1382,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <hr>
             </el-form>
             <span slot="footer" class="dialog-footer fix-dialog-footer"
             >

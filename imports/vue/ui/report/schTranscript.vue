@@ -98,12 +98,13 @@
                           </div>
                       </caption>
                 <thead style="margin-top: 5px;-webkit-print-color-adjust: exact !important;">
-                    <tr class="back_color" style="-webkit-print-color-adjust: exact !important">
+                    <tr class="back_color"
+                        style="-webkit-print-color-adjust: exact !important;">
                         <th class="report-center" rowspan="2" style="width: 6% !important;">Year</th>
                         <th colspan="5" class="report-center" style="width:47% !important;">Semester I</th>
                         <th colspan="5" class="report-center" style="width:47% !important;">Semester II</th>
                     </tr>
-                <tr style="font-size: 12pz !important;-webkit-print-color-adjust: exact !important">
+                <tr style="font-size: 12pz !important;-webkit-print-color-adjust: exact !important;">
                         <th class="report-center" style="width: 200px !important;">Course Title</th>
                         <th class="report-center">Cr</th>
                         <th class="report-center">Gr</th>
