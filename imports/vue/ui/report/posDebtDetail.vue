@@ -8,7 +8,7 @@
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
                                 <span> {{langConfig['titleFilter']}} <i
-                                        class="header-icon el-icon-information"></i></span>
+                                        class="header-icon el-icon-info"></i></span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
                                            style="float: right"
                                            size="small">{{langConfig['run']}}

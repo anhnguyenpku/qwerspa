@@ -2122,7 +2122,7 @@
                                 vm.posInvoiceForm.code = "";
                                 vm.$message({
                                     duration: 1000,
-                                    message: `បន្្ថែម​ ` + data.code + " : " + data.name + " បានជោគជ័យ !",
+                                    message: `បន្ថែម ` + data.code + " : " + data.name + " បានជោគជ័យ !",
                                     type: 'success'
                                 });
 

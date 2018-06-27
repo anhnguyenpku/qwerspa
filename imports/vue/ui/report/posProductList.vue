@@ -5,12 +5,10 @@
             <div slot="header" class="no-print">
                 <el-row type="flex" class="row-bg" justify="center">
                     <el-col :span="24">
-                        <el-collapse v-model="activeName" accordion>
-                            <el-collapse-item name="1">
-                        <span slot="title" style="width: auto !important;">
-                            {{langConfig['titleFilter']}} <i class="header-icon el-icon-information"></i>
-                        </span>
-                                <!--<el-form :inline="true">-->
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>{{langConfig['titleFilter']}} <i
+                                        class="header-icon el-icon-info"></i></span>
                                 <el-button :loading="loading" @click="handleRun(),isBarcode=true" type="primary"
                                            icon="caret-right"
                                            style="float: right"
@@ -21,12 +19,8 @@
                                            style="float: right"
                                            size="small">{{langConfig['run']}}
                                 </el-button>
-                                <!--<el-button v-show="dataExist" :loading="exportLoading" type="success"
-                                           @click="exportToExcel" size="small"><i class="fa fa-file-excel-o"></i>
-                                    Export to Excel
-                                </el-button>-->
-                            </el-collapse-item>
-                        </el-collapse>
+                            </div>
+                        </el-card>
                     </el-col>
                 </el-row>
             </div>
@@ -223,3 +217,26 @@
         }
     }
 </script>
+<style>
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 100%;
+    }
+</style>

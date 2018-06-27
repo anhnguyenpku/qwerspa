@@ -8,7 +8,7 @@
                         <el-collapse v-model="activeName" accordion>
                             <el-collapse-item name="1">
                         <span slot="title">
-                            Meter Change Report Filter <i class="header-icon el-icon-information"></i>
+                            Meter Change Report Filter <i class="header-icon el-icon-info"></i>
                         </span>
                                 <el-form :inline="true">
                                     <el-row type="flex" class="row-bg" justify="center">

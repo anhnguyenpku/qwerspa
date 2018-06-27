@@ -7,7 +7,7 @@
                         <el-collapse v-model="activeName" accordion>
                             <el-collapse-item name="1">
                         <span slot="title">
-                            Meter Reading Journal Filter <i class="header-icon el-icon-information"></i>
+                            Meter Reading Journal Filter <i class="header-icon el-icon-info"></i>
                         </span>
                                 <el-form inline :rules="rules" ref="journalReading" :label-position="labelPosition"
                                          label-width="100px" :model="journalReading">

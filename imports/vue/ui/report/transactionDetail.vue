@@ -8,7 +8,7 @@
 
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>Transaction Detail Report Filter <i class="header-icon el-icon-information"></i>
+                                <span>Transaction Detail Report Filter <i class="header-icon el-icon-info"></i>
                             This report lists transactions subtotaled by each account on your chart of accounts. It is like General Ledger without opening balances.
                        </span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"

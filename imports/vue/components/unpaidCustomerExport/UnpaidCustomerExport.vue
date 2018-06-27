@@ -7,7 +7,7 @@
                         <el-collapse v-model="activeName" accordion>
                             <el-collapse-item name="0">
                                 <span slot="title" style="width: auto !important;">
-                                    Unpaid Customer Export <i class="header-icon el-icon-information"></i>
+                                    Unpaid Customer Export <i class="header-icon el-icon-info"></i>
                                     Provides the ability to export all of unpaid customer to xlsx.
                                     <br>
                                 </span>

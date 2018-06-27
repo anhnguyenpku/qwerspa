@@ -8,7 +8,7 @@
 
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span> Account List Report Filter <i class="header-icon el-icon-information"></i>
+                                <span> Account List Report Filter <i class="header-icon el-icon-info"></i>
                             Provides the name, type for each account listed in your Chart of Accounts.</span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
                                            style="float: right"

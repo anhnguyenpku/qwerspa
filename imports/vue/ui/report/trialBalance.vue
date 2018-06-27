@@ -8,7 +8,7 @@
 
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>Trial Balance Report Filter <i class="header-icon el-icon-information"></i>
+                                <span>Trial Balance Report Filter <i class="header-icon el-icon-info"></i>
                              This report summarizes the debit and credit balances of each account on your chart of accounts during a period of time.
                         </span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"

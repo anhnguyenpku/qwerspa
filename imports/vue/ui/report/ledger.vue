@@ -9,7 +9,7 @@
 
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>Ledger Report Filter <i class="header-icon el-icon-information"></i>
+                                <span>Ledger Report Filter <i class="header-icon el-icon-info"></i>
                             For each account in your chart of accounts, the report shows all the transactions that occurred in that account over a period of time. It includes the beginning balance and total for each account.
                        </span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"

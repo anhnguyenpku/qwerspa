@@ -7,7 +7,7 @@
                     <el-col :span="24">
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>Journal Report Filter <i class="header-icon el-icon-information"></i>
+                                <span>Journal Report Filter <i class="header-icon el-icon-info"></i>
                             This report breaks down every transaction during a period of time into debits and credits and displays them chronologically. Transaction List by Date also lists transactions chronologically, but not as debits and credits.
                       </span>
 

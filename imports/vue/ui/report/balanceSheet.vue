@@ -8,7 +8,7 @@
 
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span> Balance Sheet Report Filter <i class="header-icon el-icon-information"></i>
+                                <span> Balance Sheet Report Filter <i class="header-icon el-icon-info"></i>
                             Lists what you own (assets), what your debts are (liabilities), and what you’ve invested in your company (equity).
                        </span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"

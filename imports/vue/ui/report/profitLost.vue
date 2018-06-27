@@ -7,7 +7,7 @@
                     <el-col :span="24">
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>Profit Lost Report Filter <i class="header-icon el-icon-information"></i>
+                                <span>Profit Lost Report Filter <i class="header-icon el-icon-info"></i>
                             Shows money you earned (income) and money you spent (expenses) so you can see how profitable you are. Also called an income statement.
                         </span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"

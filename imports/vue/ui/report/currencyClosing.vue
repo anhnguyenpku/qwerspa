@@ -8,7 +8,7 @@
                         <el-collapse v-model="activeName" accordion>
                             <el-collapse-item name="1">
                         <span slot="title" style="width: auto !important;">
-                            Currency Closing Report Filter <i class="header-icon el-icon-information"></i>
+                            Currency Closing Report Filter <i class="header-icon el-icon-info"></i>
                             Closing income and expense with different currency to base currency.
                             <br>
                         </span>
