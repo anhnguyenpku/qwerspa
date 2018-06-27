@@ -83,7 +83,8 @@ Meteor.methods({
         let stateEx = Sch_Transcript.findOne({studentId: studentId, majorId: majorId});
         let printTranscriptHtml = "";
         let subjectList = Sch_Subject.find().fetch();
-
+        let yearTo = 0;
+        yearTo = parseInt(moment(transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.yearFrom || "").add(1, "month").format("YYYY"));
         if (transcriptList.length > 0) {
             /*let newArr = transcriptList[0].culumnSemester1.concat(transcriptList[0].culumnSemester2 || []);
             newArr.sort(orderByProperty("ind", "sem"));*/
@@ -124,7 +125,6 @@ Meteor.methods({
                     finalGPA += numeral(gpa2).value();
                     countFinalGPA++;
                 }
-                transcriptDoc.yearTo = parseInt(moment(transcriptDoc.studentDoc.yearFrom).add(1, "month").format("YYYY"));
 
 
                 let rowSpanYear = lengSem1 >= lengSem2 ? lengSem1 : lengSem2;
@@ -139,11 +139,11 @@ Meteor.methods({
                                     });
                                     ob.gradePoint = numeral(ob.gradePoint).format("0,00.00");
                                     if (countY === 0) {
-                                        transcriptDoc.yearTo++;
+                                        yearTo++;
                                         if (ob.sem === 1) {
                                             printTranscriptHtml += `
                                                 <tr>
-                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${obj._id.year}</td>
+                                                    <td rowspan="${rowSpanYear}" style="vertical-align: inherit !important; text-align: center !important;">${obj._id.year}<sup>${getNumber(obj._id.year)}</sup> </td>
                                                     <td class="tran-forth" style="border-bottom: 0px !important;">${subjectDoc.name}</td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;">${ob.credit || ""}</td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;">${ob.grade || ""}</td>
@@ -165,7 +165,7 @@ Meteor.methods({
                                         } else if (ob.sem === 2) {
                                             if (lengthSeme !== 2) {
                                                 printTranscriptHtml += `
-                                                    <td rowspan="${rowSpanYear}" class="tran-second">${obj._id.year}</td>
+                                                    <td rowspan="${rowSpanYear}" class="tran-second">${obj._id.year}<sup>${getNumber(obj._id.year)}</sup></td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;"></td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;"></td>
                                                     <td class="tran-first" style="border-bottom: 0px !important;"></td>
@@ -260,11 +260,12 @@ Meteor.methods({
 
                     printTranscriptHtml += `
                         <tr>
-                            <th colspan="6" rowspan="${stateEx.state.length + 1}">
-                                    Gross (Total) GPA :  ${finalGPA}<br>
-                                    Credits Gained &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:  ${credit} credits <br>
-                                    Credits Required &nbsp; :  ${stateEx.requiredCredit}  credits
+                            <th colspan="2" rowspan="${stateEx.state.length + 1}" style="vertical-align: inherit">
+                                    Gross (Total) GPA   <br>
+                                    Credits Gained &nbsp;&nbsp;&nbsp;<br>
+                                    Credits Required &nbsp;<br>
                             </th>
+                            <th colspan="4" style="vertical-align: inherit"  rowspan="${stateEx.state.length + 1}">${finalGPA}<br>${credit} credits <br>${stateEx.requiredCredit}  credits</th>
                             <th colspan="4" style="text-align: center !important;">State Exam</th>
                             <th rowspan="${stateEx.state.length + 1}" style="text-align: center !important; vertical-align: inherit !important;">${gpaState}</th>
                         </tr>
@@ -278,8 +279,8 @@ Meteor.methods({
                         <tr>
                             <td>${subjectDoc.name}</td>
                             <td></td>
-                            <td>${obj.grade}</td>
-                            <td>${obj.gradePoint}</td>
+                            <td class="tran-first">${obj.grade}</td>
+                            <td class="tran-first">${obj.gradePoint}</td>
                         </tr>
                        
                 `;
@@ -288,11 +289,13 @@ Meteor.methods({
                     finalGPA = numeral(finalGPA / countFinalGPA).format("0,00.00");
                     printTranscriptHtml += `
                         <tr>
-                            <th colspan="11" >
-                                    Gross (Total) GPA :  ${finalGPA}<br>
-                                    Credits Gained &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:  ${credit} credits <br>
-                                    Credits Required &nbsp; :  ${stateEx.requiredCredit}  credits
+                            <th colspan="2" style="vertical-align: inherit" >
+                                    Gross (Total) GPA   ${finalGPA}<br>
+                                    Credits Gained &nbsp;&nbsp;&nbsp;  ${credit} credits <br>
+                                    Credits Required &nbsp;${stateEx.requiredCredit}  credits
                             </th>
+                            <th colspan="9" style="vertical-align: inherit"  rowspan="${stateEx.state.length + 1}">${finalGPA}<br>${credit} credits <br>${stateEx.requiredCredit}  credits</th>
+
                          </tr>
                 `;
                 }
@@ -306,8 +309,8 @@ Meteor.methods({
 
 
             let majorDoc = Sch_Major.findOne({_id: majorId});
-            transcriptDoc.yearFrom = moment(transcriptDoc.studentDoc.yearFrom).add(1, "month").format("YYYY");
-            transcriptDoc.yearTo = transcriptDoc.yearTo + "";
+            transcriptDoc.yearFrom = moment(transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.yearFrom || "").add(1, "month").format("YYYY");
+            transcriptDoc.yearTo = yearTo + "";
             data.transcriptDoc = transcriptDoc;
             data.majorDoc = majorDoc;
 
@@ -339,5 +342,19 @@ function orderByProperty(prop) {
         }
         return equality;
     };
+}
+
+function getNumber(val) {
+    let str = "";
+    if (val === 1 || val === "1") {
+        str = "st"
+    } else if (val === 2 || val === "2") {
+        str = "nd"
+    } else if (val === 3 || val === "3") {
+        str = "rd"
+    } else if (val === 4 || val === "4") {
+        str = "th"
+    }
+    return str;
 }
 

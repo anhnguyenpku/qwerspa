@@ -1181,6 +1181,17 @@
                                               @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
                                 </template>
                             </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['action']"
+                                    width="60"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button type="danger" class="cursor-pointer" icon="el-icon-refresh"
+                                               size="small"
+                                               @click="removeCulumn1(scope.$index,scope.row)"
+                                    ></el-button>
+                                </template>
+                            </el-table-column>
                         </el-table>
 
                     </el-col>
@@ -1260,6 +1271,17 @@
                                               :placeholder="langConfig['gradePoint']" disabled
                                               @keyup.native="handleEditCulumn1(scope.$index, scope.row)"
                                               @change="handleEditCulumn1(scope.$index, scope.row)"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                    :label="langConfig['action']"
+                                    width="60"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button type="danger" class="cursor-pointer" icon="el-icon-refresh"
+                                               size="small"
+                                               @click="removeCulumn2(scope.$index,scope.row)"
+                                    ></el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -2281,18 +2303,14 @@
 
             },
             removeCulumn1(index, row) {
-                if (this.culumnData1.length > 1) {
-                    this.culumnData1.splice(index, 1);
-                    this.$message({
-                        message: `លុប បានជោគជ័យ`,
-                        type: 'success'
-                    });
-                } else {
-                    this.culumnData1 = [
-                        {year: "", subjectId: "", credit: 0, grade: "Un Range", gradePoint: 0, ind: 1, sem: 1}
-
-                    ];
-                }
+                row.grade = "Un Range";
+                row.gradePoint = 0;
+                row.score = 0;
+                this.culumnData1[index] = row;
+                this.$message({
+                    message: `លុប បានជោគជ័យ`,
+                    type: 'success'
+                });
             },
 
             handleAddCulumn1() {
@@ -2308,18 +2326,14 @@
                 this.culumnData1[index] = row;
             },
             removeCulumn2(index, row) {
-                if (this.culumnData2.length > 1) {
-                    this.culumnData2.splice(index, 1);
-                    this.$message({
-                        message: `លុប បានជោគជ័យ`,
-                        type: 'success'
-                    });
-                } else {
-                    this.culumnData2 = [
-                        {year: "", subjectId: "", credit: 0, grade: "Un Range", gradePoint: 0}
-
-                    ];
-                }
+                row.grade = "Un Range";
+                row.gradePoint = 0;
+                row.score = 0;
+                this.culumnData2[index] = row;
+                this.$message({
+                    message: `លុប បានជោគជ័យ`,
+                    type: 'success'
+                });
             },
 
             handleAddCulumn2() {

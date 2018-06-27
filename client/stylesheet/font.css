@@ -6,6 +6,13 @@
 }
 
 @font-face {
+    font-family: 'tacteing';
+    src: url('TACTENG_0.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'element-icons';
     src: url('element-icons.ttf') format('truetype');
     font-weight: normal;

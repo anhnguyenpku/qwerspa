@@ -28,7 +28,10 @@
                                   <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ព្រះរាជាណាចក្រកម្ពុជា</p>
                                   <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Kingdom Of Cambodia</p>
                                   <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ជាតិ សាសនា ព្រះមហាក្សត្រ</p>
-                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Nation Religion King</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important; margin-bottom: 0px !important;"
+                                     class="blueOnPrint">Nation Religion King</p>
+                                  <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
+
                               </span>
                               </div>
                           </div>
@@ -37,7 +40,7 @@
                               <div class="col-md-12  balckOnPrint" style="text-align: center;">
                                   ACADEMIC TRANSCRIPT
                                   <br>
-                                  <p style="font-family:winding2 "></p>
+                                  <p style="font-family:tacteing ">rs</p>
                               </div>
                           </div>
                           <div style="width: 100%; float: right">
@@ -94,13 +97,13 @@
                               </div>
                           </div>
                       </caption>
-                <thead style="margin-top: 5px;">
-                    <tr class="back_color">
+                <thead style="margin-top: 5px;-webkit-print-color-adjust: exact !important;">
+                    <tr class="back_color" style="-webkit-print-color-adjust: exact !important">
                         <th class="report-center" rowspan="2" style="width: 6% !important;">Year</th>
                         <th colspan="5" class="report-center" style="width:47% !important;">Semester I</th>
                         <th colspan="5" class="report-center" style="width:47% !important;">Semester II</th>
                     </tr>
-                <tr style="font-size: 12pz !important;">
+                <tr style="font-size: 12pz !important;-webkit-print-color-adjust: exact !important">
                         <th class="report-center" style="width: 200px !important;">Course Title</th>
                         <th class="report-center">Cr</th>
                         <th class="report-center">Gr</th>
@@ -122,16 +125,16 @@
                         <tr></tr>
                      <tr>
                             <td colspan="6"
-                                style="text-align: center; font-size: 11px;border: 0px !important;"></td>
+                                style="text-align: center; font-size: 12px;border: 0px !important;"></td>
                             <td colspan="4"
-                                style="text-align: left; font-size: 11px;border: 0px !important;">
+                                style="text-align: left; font-size: 12px;border: 0px !important;">
                                 <br><br><br>
                                 <hr>
                                 {{waterBillingSetup.province}}...............................................................................<br>
                                 {{waterBillingSetup.director}}<br>
                                 Director of Institute
                             </td>
-                         <td style="text-align: center; font-size: 11px;border: 0px !important;"></td>
+                         <td style="text-align: center; font-size: 12px;border: 0px !important;"></td>
                         </tr>
                     </thead>
             </table>
@@ -229,9 +232,9 @@
                 // entire view has been rendered
                 if (vm.printTranscriptHtml !== "" && vm.onLoad === true) {
                     setTimeout(function () {
-                        // window.print();
-                        // vm.printTranscriptHtml = "";
-                        // FlowRouter.go('/sch-data/schStudent');
+                        window.print();
+                        vm.printTranscriptHtml = "";
+                        FlowRouter.go('/sch-data/schStudent');
                     }, 600);
 
                 }

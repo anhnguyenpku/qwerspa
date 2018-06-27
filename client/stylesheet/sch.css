@@ -14,6 +14,15 @@
     .back_color {
         background-color: lightgray !important;
     }
+
+    .transcriptHeading {
+        -webkit-print-color-adjust: exact !important;
+    }
+
+}
+
+.transcriptHeading {
+    -webkit-print-color-adjust: exact !important;
 }
 
 .blueOnPrint {
@@ -34,24 +43,29 @@
 }
 
 .transcript > tr > td {
-    padding: 4px !important;
+    padding: 1px !important;
 }
 
 .tran-first {
     text-align: center !important;
     vertical-align: inherit !important;
+
 }
 
 .tran-second {
     text-align: center !important;
     vertical-align: inherit !important;
+
 }
 
 .tran-third {
     text-align: center !important;
     vertical-align: inherit !important;
+
 }
 
 .tran-forth {
     vertical-align: inherit !important;
+
 }
+
