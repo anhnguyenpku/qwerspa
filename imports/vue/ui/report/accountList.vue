@@ -5,20 +5,20 @@
             <div slot="header" class="no-print">
                 <el-row type="flex" class="row-bg" justify="center">
                     <el-col :span="24">
-                        <el-collapse v-model="activeName" accordion>
-                            <el-collapse-item name="1">
-                        <span slot="title" style="width: auto !important;">
-                            Account List Report Filter <i class="header-icon el-icon-information"></i>
-                            Provides the name, type for each account listed in your Chart of Accounts.
-                            <br>
-                            <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
-                                       style="float: right"
-                                       size="small">RUN REPORT
-                                </el-button>
-                        </span>
 
-                            </el-collapse-item>
-                        </el-collapse>
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span> Account List Report Filter <i class="header-icon el-icon-information"></i>
+                            Provides the name, type for each account listed in your Chart of Accounts.</span>
+                                <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
+                                           style="float: right"
+                                           size="small">RUN REPORT
+                                </el-button>
+                            </div>
+
+                        </el-card>
+
+
                     </el-col>
                 </el-row>
             </div>
@@ -36,6 +36,7 @@
                                       style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
                                      <span style="text-align: center">
                                          ព្រះរាជាណាចក្រកម្ពុជា <br> ជាតិ សាសនា ព្រះមហាក្សត្រ
+                                          <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
                                      </span>
 
                                 </div>
@@ -131,3 +132,26 @@
         },
     }
 </script>
+<style>
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 100%;
+    }
+</style>

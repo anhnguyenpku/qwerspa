@@ -5,66 +5,65 @@
             <div slot="header" class="no-print">
                 <el-row type="flex" class="row-bg" justify="center">
                     <el-col :span="24">
-                        <el-collapse v-model="activeName" accordion>
-                            <el-collapse-item name="1">
-                        <span slot="title">
-                            Journal Report Filter <i class="header-icon el-icon-information"></i>
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>Journal Report Filter <i class="header-icon el-icon-information"></i>
                             This report breaks down every transaction during a period of time into debits and credits and displays them chronologically. Transaction List by Date also lists transactions chronologically, but not as debits and credits.
-                        </span>
-                                <el-form :inline="true">
-                                    <el-row type="flex" class="row-bg" justify="center">
+                      </span>
 
-                                        <el-form-item label="Branch">
-                                            <el-select filterable v-model="params.branch"
-                                                       placeholder="All" clearable>
-                                                <el-option
-                                                        v-for="item in branchOptions"
-                                                        :label="item.label"
-                                                        :value="item.value" :key="item._id">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                        <el-form-item label="Area">
-                                            <el-select filterable v-model="params.area" clearable placeholder="All">
-                                                <el-option
-                                                        v-for="item in areaOptions"
-                                                        :label="item.label"
-                                                        :value="item.value" :key="item._id">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-
-                                        <el-form-item label="Date">
-                                            <el-date-picker
-                                                    v-model="params.date"
-                                                    type="daterange"
-                                                    :picker-options="pickerDateOptions"
-                                                    placeholder="Select Date range"
-                                                    align="right">
-                                            </el-date-picker>
-
-                                        </el-form-item>
-                                        <el-form-item label="Currency">
-                                            <el-select filterable v-model="params.currency" placeholder="All" clearable>
-                                                <el-option
-                                                        v-for="item in currencyOptions"
-                                                        :label="item.label"
-                                                        :value="item.value" :key="item._id">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-row>
-                                </el-form>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
                                            style="float: right"
                                            size="small">RUN REPORT
                                 </el-button>
-                                <!--<el-button v-show="dataExist" :loading="exportLoading" type="success"
-                                           @click="exportToExcel" size="small"><i class="fa fa-file-excel-o"></i>
-                                    Export to Excel
-                                </el-button>-->
-                            </el-collapse-item>
-                        </el-collapse>
+                            </div>
+
+                            <el-form :inline="true">
+                                <el-row type="flex" class="row-bg" justify="center">
+
+                                    <el-form-item label="Branch">
+                                        <el-select filterable v-model="params.branch"
+                                                   placeholder="All" clearable>
+                                            <el-option
+                                                    v-for="item in branchOptions"
+                                                    :label="item.label"
+                                                    :value="item.value" :key="item._id">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item label="Area">
+                                        <el-select filterable v-model="params.area" clearable placeholder="All">
+                                            <el-option
+                                                    v-for="item in areaOptions"
+                                                    :label="item.label"
+                                                    :value="item.value" :key="item._id">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+
+                                    <el-form-item label="Date">
+                                        <el-date-picker
+                                                v-model="params.date"
+                                                type="daterange"
+                                                :picker-options="pickerDateOptions"
+                                                placeholder="Select Date range"
+                                                align="right">
+                                        </el-date-picker>
+
+                                    </el-form-item>
+                                    <el-form-item label="Currency">
+                                        <el-select filterable v-model="params.currency" placeholder="All" clearable>
+                                            <el-option
+                                                    v-for="item in currencyOptions"
+                                                    :label="item.label"
+                                                    :value="item.value" :key="item._id">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-row>
+                            </el-form>
+
+                        </el-card>
+
                     </el-col>
                 </el-row>
             </div>
@@ -82,6 +81,7 @@
                                       style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
                                      <span style="text-align: center">
                                          ព្រះរាជាណាចក្រកម្ពុជា <br> ជាតិ សាសនា ព្រះមហាក្សត្រ
+                                          <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
                                      </span>
 
                                 </div>
@@ -265,3 +265,26 @@
         },
     }
 </script>
+<style>
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 100%;
+    }
+</style>

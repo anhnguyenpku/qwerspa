@@ -678,11 +678,23 @@
                     type: 'info',
                     message: 'Canceled'
                 });
+                this.resetForm();
             },
             resetForm() {
                 this.chartAccountForm.isPayment = false;
                 this.chartAccountForm.isPaidTax = false;
                 this.mapToAccount = "";
+                this.chartAccountForm = {
+                    name: "",
+                    khName: "",
+                    code: "",
+                    subAccountOf: "",
+                    accountTypeId: "",
+                    description: "",
+                    isPaidTax: false,
+                    isPayment: false,
+                    _id: ""
+                };
                 if (this.$refs["chartAccountFormAdd"]) {
                     this.$refs["chartAccountFormAdd"].resetFields();
                 }

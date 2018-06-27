@@ -5,80 +5,75 @@
             <div slot="header" class="no-print">
                 <el-row type="flex" class="row-bg" justify="center">
                     <el-col :span="24">
-                        <el-collapse v-model="activeName" accordion>
-                            <el-collapse-item name="1">
-                        <span slot="title" style="width: auto !important;">
-                            {{langConfig['titleFilter']}} <i class="header-icon el-icon-information"></i>
-                        </span>
-                                <!--<el-form :inline="true">-->
-                                <el-form :label-position="labelPosition">
-                                    <el-row type="flex" class="row-bg" justify="center">
-                                        <el-col>
-                                            <el-form-item :label="langConfig['branch']">
-                                                <el-select filterable v-model="params.branch"
-                                                           :placeholder="langConfig['all']" clearable
-                                                           style="width: 95%">
-                                                    <el-option
-                                                            v-for="item in branchOptions"
-                                                            :label="item.label"
-                                                            :value="item.value" :key="item._id">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-form-item>
-                                        </el-col>
-                                        <el-col>
-                                            <el-form-item :label="langConfig['area']">
-                                                <el-select filterable v-model="params.area" clearable
-                                                           :placeholder="langConfig['all']"
-                                                           style="width: 95%">
-                                                    <el-option
-                                                            v-for="item in areaOptions"
-                                                            :label="item.label"
-                                                            :value="item.value" :key="item._id">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-form-item>
-
-                                        </el-col>
-                                        <el-col>
-                                            <el-form-item :label="langConfig['location']">
-                                                <el-select filterable v-model="params.locationId" clearable
-                                                           :placeholder="langConfig['all']"
-                                                           style="width: 95%">
-                                                    <el-option
-                                                            v-for="item in locationOptions"
-                                                            :label="item.label"
-                                                            :value="item.value" :key="item._id">
-                                                    </el-option>
-                                                </el-select>
-                                            </el-form-item>
-
-                                        </el-col>
-                                        <el-col>
-                                            <el-form-item :label="langConfig['dateRange']">
-                                                <el-date-picker
-                                                        align="right" style="width: 95%"
-                                                        v-model="params.date"
-                                                        type="daterange"
-                                                        :picker-options="pickerDateOptions"
-                                                        :placeholder="langConfig['pickDateRange']"
-                                                >
-                                                </el-date-picker>
-                                            </el-form-item>
-                                        </el-col>
-
-                                    </el-row>
-                                </el-form>
+                        <el-card class="box-card">
+                            <div slot="header" class="clearfix">
+                                <span>{{langConfig['titleFilter']}} <i
+                                        class="header-icon el-icon-information"></i></span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
                                            style="float: right"
                                            size="small">{{langConfig['run']}}
                                 </el-button>
-                                <!--<el-button v-show="dataExist" :loading="exportLoading" type="success"
-                                           @click="exportToExcel" size="small"><i class="fa fa-file-excel-o"></i>
-                                    Export to Excel
-                                </el-button>-->
-                            </el-collapse-item>
-                        </el-collapse>
+                            </div>
+                            <el-form :label-position="labelPosition">
+                                <el-row type="flex" class="row-bg" justify="center">
+                                    <el-col>
+                                        <el-form-item :label="langConfig['branch']">
+                                            <el-select filterable v-model="params.branch"
+                                                       :placeholder="langConfig['all']" clearable
+                                                       style="width: 95%">
+                                                <el-option
+                                                        v-for="item in branchOptions"
+                                                        :label="item.label"
+                                                        :value="item.value" :key="item._id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['area']">
+                                            <el-select filterable v-model="params.area" clearable
+                                                       :placeholder="langConfig['all']"
+                                                       style="width: 95%">
+                                                <el-option
+                                                        v-for="item in areaOptions"
+                                                        :label="item.label"
+                                                        :value="item.value" :key="item._id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+
+                                    </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['location']">
+                                            <el-select filterable v-model="params.locationId" clearable
+                                                       :placeholder="langConfig['all']"
+                                                       style="width: 95%">
+                                                <el-option
+                                                        v-for="item in locationOptions"
+                                                        :label="item.label"
+                                                        :value="item.value" :key="item._id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+
+                                    </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['dateRange']">
+                                            <el-date-picker
+                                                    align="right" style="width: 95%"
+                                                    v-model="params.date"
+                                                    type="daterange"
+                                                    :picker-options="pickerDateOptions"
+                                                    :placeholder="langConfig['pickDateRange']"
+                                            >
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+
+                                </el-row>
+                            </el-form>
+
+                        </el-card>
                     </el-col>
                 </el-row>
             </div>
@@ -315,3 +310,26 @@
         },
     }
 </script>
+<style>
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 100%;
+    }
+</style>

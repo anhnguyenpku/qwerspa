@@ -19,12 +19,12 @@
                         <el-col :span="15">
                             <div class="block">
                                <span class="wrapper">
-                                      <el-button :plain="true" type="success" icon="arrow-up"
+                                      <el-button :plain="true" type="warning" icon="arrow-up"
                                                  @click="popupJournalPayment(),dialogPaid = true,autoIncreseVoucher(),resetForm()">
                                 Payment (Account)
                                          </el-button>
                                       <el-button :plain="true" icon="arrow-down"
-                                                 type="info"
+                                                 type="success"
                                                  @click="popupJournalReceive(),dialogPaid = true,autoIncreseVoucher(),resetForm()"> Receive (Account)</el-button>
                                 </span>
                             </div>
@@ -273,7 +273,7 @@
                                 </el-col>
                             </el-row>
                             <el-form-item label="Journal No" prop="voucherId">
-                                <el-input v-model="journalForm.voucherId" icon="el-icon-edit" size="small"></el-input>
+                                <el-input v-model="journalForm.voucherId" icon="el-icon-edit"></el-input>
                             </el-form-item>
                             <el-form-item label="Name">
                                 <el-input v-model="journalForm.name"></el-input>
@@ -287,7 +287,7 @@
                 </el-row>
             </el-form>
             <span slot="footer" class="dialog-footer fix-dialog-footer"
-                  >
+            >
                 <hr style="margin-top: 0px !important;">
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
@@ -326,7 +326,7 @@
                             <tr>
                                 <th colspan="4">
                                     <el-radio-group v-model="journalForm.method">
-                                        <el-radio v-for="mt in methodOption" :label="mt.value" :key="mt.value">
+                                        <el-radio v-for="mt in methodOption" :label="mt.value" :key="mt.value" border>
                                             {{mt.label}}
                                         </el-radio>
                                     </el-radio-group>
@@ -427,7 +427,7 @@
                                 </el-col>
                             </el-row>
                             <el-form-item label="Journal No" prop="voucherId">
-                                <el-input v-model="journalForm.voucherId" icon="el-icon-edit" size="small"></el-input>
+                                <el-input v-model="journalForm.voucherId" icon="el-icon-edit"></el-input>
                             </el-form-item>
                             <el-form-item label="Name">
                                 <el-input v-model="journalForm.name"></el-input>
@@ -441,7 +441,7 @@
                 </el-row>
             </el-form>
             <span slot="footer" class="dialog-footer fix-dialog-footer"
-               >
+            >
                 <hr style="margin-top: 0px !important;">
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
@@ -609,7 +609,7 @@
                 </el-row>
             </el-form>
             <span slot="footer" class="dialog-footer fix-dialog-footer"
-                 >
+            >
                 <hr style="margin-top: 0px !important;">
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
