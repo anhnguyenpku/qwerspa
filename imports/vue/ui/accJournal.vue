@@ -214,11 +214,13 @@
                                     <td>{{journalDoc.accountName}}</td>
                                     <td>
                                         <el-input placeholder="Please input Dr" v-model.number=journalDoc.dr
-                                                  @keyup.native.enter="updateJournalDetail(journalDoc, index)"></el-input>
+                                                  @keyup.native="updateJournalDetail(journalDoc, index)"
+                                                  @change="updateJournalDetail(journalDoc, index)"></el-input>
                                     </td>
                                     <td>
                                         <el-input placeholder="Please input Cr" v-model.number=journalDoc.cr
-                                                  @keyup.native.enter="updateJournalDetail(journalDoc, index)"></el-input>
+                                                  @keyup.native="updateJournalDetail(journalDoc, index)"
+                                                  @change="updateJournalDetail(journalDoc, index)"></el-input>
                                     </td>
                                     <!--<td>
                                         <el-input placeholder="Please input Cr" :value=journalDoc.cr></el-input>
@@ -379,7 +381,8 @@
                                     <td>
                                         <el-input placeholder="Please input Amount"
                                                   v-model.number=journalDoc.amount
-                                                  @keyup.native.enter="updateJournalDetailPaymentReceive(journalDoc, index)"></el-input>
+                                                  @keyup.native="updateJournalDetailPaymentReceive(journalDoc, index)"
+                                                  @change="updateJournalDetailPaymentReceive(journalDoc, index)"></el-input>
                                     </td>
                                     <td style="text-align: center">
                                         <el-button type="danger" icon="el-icon-remove" size="small"
@@ -539,11 +542,13 @@
                                     <td>{{journalDoc.accountName}}</td>
                                     <td>
                                         <el-input placeholder="Please input Dr" v-model.number=journalDoc.dr
-                                                  @keyup.native.enter="updateJournalDetail(journalDoc, index)"></el-input>
+                                                  @keyup.native="updateJournalDetail(journalDoc, index)"
+                                                  @change="updateJournalDetail(journalDoc, index)"></el-input>
                                     </td>
                                     <td>
                                         <el-input placeholder="Please input Cr" v-model.number=journalDoc.cr
-                                                  @keyup.native.enter="updateJournalDetail(journalDoc, index)"></el-input>
+                                                  @keyup.native="updateJournalDetail(journalDoc, index)"
+                                                  @change="updateJournalDetail(journalDoc, index)"></el-input>
                                     </td>
                                     <td style="text-align: center">
                                         <el-button type="danger" icon="el-icon-remove" size="small"
@@ -1314,22 +1319,22 @@
             updateJournalDetail(row, index) {
                 this.journalData[index] = row;
                 let newIndex = index + 1;
-                this.$message({
+                /*this.$message({
                     duration: 1000,
                     message: `Update Row Number ` + newIndex + " Successfully !",
                     type: 'success'
-                });
+                });*/
                 this.getTotalDrCr();
 
             },
             updateJournalDetailPaymentReceive(row, index) {
                 this.journalData[index] = row;
                 let newIndex = index + 1;
-                this.$message({
+                /*this.$message({
                     duration: 1000,
                     message: `Update Row Number ` + newIndex + " Successfully !",
                     type: 'success'
-                });
+                });*/
                 this.getTotalAmount();
 
             },
@@ -1392,7 +1397,7 @@
             },
             checkDrCr() {
                 let vm = this;
-                if (vm.$_numeral(vm.journalForm.totalDr).value() == vm.$_numeral(vm.journalForm.totalCr).value()) {
+                if (vm.$_numeral(vm.journalForm.totalDr).value() === vm.$_numeral(vm.journalForm.totalCr).value()) {
                     return true;
                 }
                 return false;

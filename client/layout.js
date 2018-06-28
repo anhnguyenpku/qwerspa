@@ -55,7 +55,6 @@ Template.MainLayout.onCreated(function () {
     this.autorun = (() => {
         let path = FlowRouter.current().path;
         this.currentPath.set(path);
-
     });
 
 });
