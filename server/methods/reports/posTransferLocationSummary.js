@@ -42,7 +42,7 @@ Meteor.methods({
             },
             {
                 $sort: {
-                    transferInventoryDate: -1
+                    transferInventoryDate: 1
                 }
             },
             {
@@ -77,15 +77,19 @@ Meteor.methods({
                             }
                         }
                     },
+                    item: {
+                        $let: {
+                            vars: {parts: {$split: ["$itemName", " : "]}},
+                            in: {
+                                $arrayElemAt: ["$$parts", 1]
+                            }
+                        }
+                    },
                     qty: 1,
                     amount: 1,
                 }
             },
-            {
-                $sort: {
-                    code: 1
-                }
-            },
+
 
             {
                 $lookup: {
@@ -114,7 +118,11 @@ Meteor.methods({
                     preserveNullAndEmptyArrays: true
                 }
             },
-
+            {
+                $sort: {
+                    item: 1
+                }
+            },
             {
                 $group: {
                     _id: {
@@ -136,7 +144,7 @@ Meteor.methods({
                     data: {$addToSet: "$$ROOT"}
                 }
             }
-        ])
+        ]);
 
         data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");
         data.currencyHeader = companyDoc.baseCurrency;

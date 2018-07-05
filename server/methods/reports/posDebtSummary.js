@@ -60,7 +60,7 @@ Meteor.methods({
             }
 
 
-        ]
+        ];
 
         let debtList = Pos_Invoice.aggregate([
             {
@@ -150,11 +150,11 @@ Meteor.methods({
             {
                 $group: {
                     _id: null,
-                    data: {$addToSet: "$$ROOT"},
+                    data: {$push: "$$ROOT"},
                     total: {$sum: "$invoiceTotal"}
                 }
             }
-        ])
+        ]);
 
 
         data.dateHeader = moment(params.date).format("DD/MM/YYYY");

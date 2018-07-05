@@ -39,7 +39,7 @@ Meteor.methods({
             },
             {
                 $sort: {
-                    createdAt: 1
+                    averageInventoryDate: 1
                 }
             },
             {
@@ -78,7 +78,7 @@ Meteor.methods({
                         locationId: "$locationId"
 
                     },
-                    data: {$addToSet: "$$ROOT"}
+                    data: {$push: "$$ROOT"}
 
                 }
             },
@@ -105,7 +105,7 @@ Meteor.methods({
                     data: {$addToSet: "$$ROOT"}
                 }
             }
-        ])
+        ]);
 
 
         data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");

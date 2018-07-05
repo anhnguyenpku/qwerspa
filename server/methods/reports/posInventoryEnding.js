@@ -70,6 +70,11 @@ Meteor.methods({
                 }
             },
             {
+                $sort: {
+                    "productDoc.name": 1
+                }
+            },
+            {
                 $lookup: {
                     from: 'pos_unit',
                     localField: 'productDoc.unitId',
@@ -90,7 +95,7 @@ Meteor.methods({
                         locationId: "$_id.locationId"
 
                     },
-                    data: {$addToSet: "$$ROOT"}
+                    data: {$push: "$$ROOT"}
 
                 }
             },
@@ -118,7 +123,7 @@ Meteor.methods({
                     totalAmount: {$sum: "$amountEnding"}
                 }
             }
-        ])
+        ]);
 
 
         data.dateHeader = moment(params.date).format("DD/MM/YYYY");

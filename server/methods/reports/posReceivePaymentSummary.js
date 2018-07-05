@@ -70,15 +70,20 @@ Meteor.methods({
                 }
             },
             {
+                $sort: {
+                    "customerDoc.name": 1
+                }
+            },
+            {
                 $group: {
                     _id: null,
-                    data: {$addToSet: "$$ROOT"},
+                    data: {$push: "$$ROOT"},
                     totalPaid: {$sum: "$totalPaid"},
                     totalDiscount: {$sum: "$totalDiscount"},
                     balanceUnPaid: {$sum: "$balanceUnPaid"},
                 }
             }
-        ])
+        ]);
 
         data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");
         data.currencyHeader = companyDoc.baseCurrency;

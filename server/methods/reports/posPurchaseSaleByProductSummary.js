@@ -49,22 +49,44 @@ Meteor.methods({
                 }
             },
             {
+                $project: {
+                    itemId: "$item.itemId",
+                    itemName: "$item.itemName",
+                    amount: "$item.amount",
+                    item: {
+                        $let: {
+                            vars: {parts: {$split: ["$item.itemName", " : "]}},
+                            in: {
+                                $arrayElemAt: ["$$parts", 1]
+                            }
+                        }
+                    },
+                }
+            },
+
+            {
                 $group: {
                     _id: {
-                        itemId: "$item.itemId",
-                        itemName: "$item.itemName"
+                        itemId: "$itemId",
+                        itemName: "$itemName",
+                        item: "$item"
                     },
-                    total: {$sum: "$item.amount"},
+                    total: {$sum: "$amount"},
+                }
+            },
+            {
+                $sort: {
+                    "_id.item": 1
                 }
             },
             {
                 $group: {
                     _id: null,
-                    data: {$addToSet: "$$ROOT"},
+                    data: {$push: "$$ROOT"},
                     total: {$sum: "$total"}
                 }
             }
-        ])
+        ]);
 
         data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");
         data.currencyHeader = companyDoc.baseCurrency;
@@ -100,7 +122,7 @@ Meteor.methods({
 
         let paramPurchase = {};
 
-        if (params.area != "") {
+        if (params.area !== "") {
             paramPurchase.rolesArea = params.area;
 
         }

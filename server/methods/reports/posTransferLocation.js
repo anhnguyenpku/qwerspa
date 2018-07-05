@@ -42,7 +42,7 @@ Meteor.methods({
             },
             {
                 $sort: {
-                    transferInventoryDate: -1
+                    transferInventoryDate: 1
                 }
             },
             {
@@ -81,7 +81,7 @@ Meteor.methods({
                     },
                     locationFromDoc: {$last: "$locationFromDoc"},
                     locationToDoc: {$last: "$locationToDoc"},
-                    data: {$addToSet: "$$ROOT"}
+                    data: {$push: "$$ROOT"}
                 }
             },
             {

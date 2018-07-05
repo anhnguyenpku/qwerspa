@@ -60,7 +60,7 @@ Meteor.methods({
             }
 
 
-        ]
+        ];
 
         let unPaidList = Pos_Bill.aggregate([
             {
@@ -150,11 +150,11 @@ Meteor.methods({
             {
                 $group: {
                     _id: null,
-                    data: {$addToSet: "$$ROOT"},
+                    data: {$push: "$$ROOT"},
                     total: {$sum: "$billTotal"}
                 }
             }
-        ])
+        ]);
 
 
         data.dateHeader = moment(params.date).format("DD/MM/YYYY");
