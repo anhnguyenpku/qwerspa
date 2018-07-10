@@ -21,6 +21,14 @@ Meteor.startup(function () {
         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
     });
 
+    JsonRoutes.add("get", "/api_fetchProducts", function (req, res, next) {
+        res.charset = "utf-8";
+        let doc = Meteor.call("api_fetchProduct", {name: "", color: ""});
+        return JsonRoutes.sendResult(res, {
+            data: doc
+        });
+    });
+
     /*Accounts.config({
         loginExpirationInDays: (1 / 24 / 60) / 20
     })*/

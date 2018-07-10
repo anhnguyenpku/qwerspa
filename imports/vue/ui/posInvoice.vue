@@ -1684,10 +1684,8 @@
             },
             customerOpt(query) {
                 if (!!query) {
-                    this.loading = true;
                     setTimeout(() => {
                         let lists = [];
-                        this.loading = false;
                         Meteor.call('queryPosCustomerOption', query, (err, result) => {
                             if (!err) {
                                 this.customerOption = result;

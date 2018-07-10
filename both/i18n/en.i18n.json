@@ -306,14 +306,14 @@
       "student": "Student",
       "teacher": "Teacher",
       "setting": "Setting",
-      "major": "Major",
       "level": "Level",
       "subject": "Subject",
       "ciriculumn": "Ciriculumn",
       "mention": "Mention",
       "class": "Class",
       "data": "Data",
-      "program": "Program"
+      "program": "Program",
+      "register": "Register"
     }
   },
   "global": {

@@ -168,7 +168,7 @@ Sch_Student.schema = new SimpleSchema({
     level: {
         type: String
     },
-    majorId: {
+    programId: {
         type: String
     },
     fromSchool: {

@@ -132,3 +132,13 @@ schData.route('/schProgram', {
         _Main('sch_program');
     }
 });
+import "../../imports/ui/sch_register/sch_register";
+//Student
+schData.route('/schRegister', {
+    name: 'sch.register',
+    title: "Register",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_register');
+    }
+});

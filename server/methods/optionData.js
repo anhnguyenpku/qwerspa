@@ -14,8 +14,24 @@ import {Sch_Level} from "../../imports/collection/schLevel";
 import {Sch_Subject} from "../../imports/collection/schSubject";
 import {Sch_Ciriculumn} from "../../imports/collection/schCiriculumn";
 import {Sch_Teacher} from "../../imports/collection/schTeacher";
+import {Sch_Student} from "../../imports/collection/schStudent";
 
 Meteor.methods({
+    querySchStudentOption(q) {
+        let selector = {};
+        if (q != "") {
+            q = q.replace(/[/\\]/g, '');
+            let reg = new RegExp(q, 'mi');
+            selector.$or = [
+                {"personal.name": {$regex: reg}},
+                {_id: q}
+            ];
+        }
+        return Sch_Student.find(selector, {limit: 100}).fetch().map(obj => ({
+            label: obj.personal.name,
+            value: obj._id
+        }));
+    },
     queryItemOption(selector) {
         let list = [];
 

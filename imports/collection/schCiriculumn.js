@@ -5,7 +5,7 @@ Sch_Ciriculumn.schema = new SimpleSchema({
         type: String,
         label: "Name"
     },
-    majorId: {
+    programId: {
         type: String,
 
     },
