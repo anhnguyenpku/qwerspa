@@ -9,6 +9,18 @@ import {Accounts} from 'meteor/accounts-base'
 
 Meteor.startup(function () {
 
+    // Enable cross origin requests for all endpoints
+    JsonRoutes.setResponseHeaders({
+        "content-type": "application/json; charset=utf-8"
+    });
+    JsonRoutes.setResponseHeaders({
+        "Cache-Control": "no-store",
+        "Pragma": "no-cache",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
+    });
+
     /*Accounts.config({
         loginExpirationInDays: (1 / 24 / 60) / 20
     })*/

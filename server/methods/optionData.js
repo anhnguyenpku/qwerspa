@@ -10,8 +10,10 @@ import {Pos_Unit} from '../../imports/collection/posUnit';
 
 import {SpaceChar} from "../../both/config.js/space"
 import {Sch_Major} from "../../imports/collection/schMajor";
+import {Sch_Level} from "../../imports/collection/schLevel";
 import {Sch_Subject} from "../../imports/collection/schSubject";
 import {Sch_Ciriculumn} from "../../imports/collection/schCiriculumn";
+import {Sch_Teacher} from "../../imports/collection/schTeacher";
 
 Meteor.methods({
     queryItemOption(selector) {
@@ -27,6 +29,21 @@ Meteor.methods({
 
         Sch_Major.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryLevelOption(selector) {
+        let list = [];
+
+        Sch_Level.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
+            list.push({label: obj.code + " : " + obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryTeacherOption(selector) {
+        let list = [];
+        Sch_Teacher.find(selector, {sort: {"personal.name": 1}}).fetch().forEach(function (obj) {
+            list.push({label: obj.personal.name, value: obj._id});
         });
         return list;
     },

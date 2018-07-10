@@ -1443,12 +1443,7 @@
                     where: "",
                     graduatedYear: "",
                 }],
-                levelList: [
-                    {label: "អនុបណ្ឌិត", value: "master"},
-                    {label: "បរិញ្ញាបត្របច្ចេកវិទ្យាបន្តឆ្នាំទី៣", value: "bachelor3"},
-                    {label: "បរិញ្ញាបត្របច្ចេកវិទ្យាឆ្នាំទី១", value: "bachelor1"},
-                    {label: "បរិញ្ញាបត្ររង", value: "associate"},
-                    {label: "សញ្ញាបត្របច្ចេកទេសវិជ្ជាជីវៈ", value: "level"}]
+                levelList: []
                 ,
                 yearList: [
                     {label: "1", value: 1},
@@ -1709,6 +1704,12 @@
                 let selector = {};
                 Meteor.call('queryMajorOption', selector, (err, result) => {
                     this.majorList = result;
+                })
+            },
+            levelOpt() {
+                let selector = {};
+                Meteor.call('queryLevelOption', selector, (err, result) => {
+                    this.levelList = result;
                 })
             },
             ciriculumnOpt(val) {
@@ -2443,6 +2444,7 @@
             this.isSearching = true;
             this.queryData();
             this.majorOpt();
+            this.levelOpt();
             this.subjectOpt();
             this.getMention();
         },

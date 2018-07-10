@@ -116,11 +116,16 @@
     "sidebarMenu": {
       "home": "home",
       "student": "សិស្ស",
+      "teacher": "គ្រូ",
       "setting": "ការកំណត់",
       "major": "ជំនាញ",
+      "level": "កម្រិត",
       "subject": "មុខវិជ្ជា",
       "ciriculumn": "កម្មវិធិសិក្សា",
-      "mention": "និទ្ទេស"
+      "mention": "និទ្ទេស",
+      "class": "ថ្នាក់",
+      "data": "ទិន្នន័យ",
+      "program": "កម្មវិធីសិក្សា"
     }
   }
 }
