@@ -115,7 +115,20 @@
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schClassForm.code"></el-input>
                 </el-form-item>
-
+                <el-form-item :label="langConfig['program']" prop="programId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schClassForm.programId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in programList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item :label="langConfig['teacher']" prop="teacherId">
                     <el-select style="display: block !important;"
                                filterable
@@ -162,6 +175,20 @@
                 </el-form-item>
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schClassForm.code"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['program']" prop="programId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schClassForm.programId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in programList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item :label="langConfig['teacher']" prop="teacherId">
                     <el-select style="display: block !important;"
@@ -225,9 +252,11 @@
                     code: "",
                     desc: "",
                     _id: "",
-                    teacherId: ""
+                    teacherId: "",
+                    programId: ""
                 },
                 teacherList: [],
+                programList: [],
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
                     code: [{required: true, message: 'Please input code', trigger: 'blur'}],
@@ -236,6 +265,13 @@
                             required: true,
                             type: 'string',
                             message: 'Please choose Teacher',
+                            trigger: 'change'
+                        }],
+                    programId:
+                        [{
+                            required: true,
+                            type: 'string',
+                            message: 'Please choose Program',
                             trigger: 'change'
                         }],
                 },
@@ -290,6 +326,12 @@
                     this.teacherList = result;
                 })
             },
+            programOpt() {
+                let selector = {};
+                Meteor.call("queryProgramOption", selector, (err, result) => {
+                    this.programList = result;
+                })
+            },
             saveSchClass() {
                 let vm = this;
                 this.$refs["schClassFormAdd"].validate((valid) => {
@@ -300,6 +342,7 @@
                             khName: vm.schClassForm.khName,
                             desc: vm.schClassForm.desc,
                             teacherId: vm.schClassForm.teacherId,
+                            programId: vm.schClassForm.programId,
                             rolesArea: Session.get('area')
                         };
 
@@ -337,6 +380,7 @@
                             khName: vm.schClassForm.khName,
                             desc: vm.schClassForm.desc,
                             teacherId: vm.schClassForm.teacherId,
+                            programId: vm.schClassForm.programId,
                             rolesArea: Session.get('area')
                         };
 
@@ -437,6 +481,7 @@
             this.isSearching = true;
             this.fetchUser();
             this.teacherOpt();
+            this.programOpt();
             this.queryData();
         },
         computed: {

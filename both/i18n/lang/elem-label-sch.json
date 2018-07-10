@@ -55,7 +55,7 @@
       "grade": "Grade?",
       "pob": "Place Of Birth",
       "parent": "Parent",
-      "major": "Major",
+      "program": "Program",
       "level": "Level",
       "fromSchool": "From School",
       "provinceSchool": "Province School",
@@ -131,7 +131,7 @@
       "grade": "Grade?",
       "pob": "Place Of Birth",
       "parent": "Parent",
-      "major": "Major",
+      "program": "Program",
       "level": "Level",
       "fromSchool": "From School",
       "provinceSchool": "Province School",
@@ -146,30 +146,6 @@
       "credit": "Credit",
       "score": "Score",
       "grades": "Grade"
-    },
-    "major": {
-      "searchHere": "Search Here ...",
-      "title": "Major",
-      "action": "Action",
-      "save": "Save",
-      "cancel": "Cancel",
-      "warning": "Warning",
-      "messageWarning": "This will permanently delete the file. Continue?",
-      "saveSuccess": "Save Successfully!",
-      "saveFail": "Save Fail!",
-      "updateSuccess": "Update Successfully!",
-      "updateFail": "Update Fail!",
-      "removeSuccess": "Remove Successfully!",
-      "removeFail": "Remove Fail!",
-      "removeCancel": "Remove Cancel",
-      "name": "Name",
-      "khName": "Khmer Name",
-      "code": "Code",
-      "desc": "desc",
-      "add": "Add Major",
-      "update": "Update Major",
-      "faculty": "Faculty",
-      "degree": "Degree"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -191,7 +167,11 @@
       "code": "Code",
       "desc": "desc",
       "add": "Add Program",
-      "update": "Update Program"
+      "update": "Update Program",
+      "price": "Price",
+      "term": "Term (Months)",
+      "faculty": "Faculty",
+      "degree": "Degree"
     },
     "class": {
       "searchHere": "Search Here ...",
@@ -214,7 +194,8 @@
       "desc": "desc",
       "add": "Add Class",
       "update": "Update Class",
-      "teacher": "Teacher"
+      "teacher": "Teacher",
+      "program": "Program"
     },
     "level": {
       "searchHere": "Search Here ...",
@@ -288,7 +269,7 @@
       "semester": "Semester",
       "subject": "Subject",
       "credit": "Credit",
-      "major": "Major",
+      "program": "Program",
       "requiredCredit": "Required Credit"
     },
     "subject": {
@@ -369,7 +350,7 @@
       "grade": "ពីថ្នាក់ទីប៉ុន្មានដល់ទី?",
       "pob": "ទីកន្លែងកណើត",
       "parent": "អំពីឪពុកម្តាយបង្កើត",
-      "major": "ជំនាញ",
+      "program": "កម្មវិធីសិក្សា",
       "level": "កម្រិត",
       "fromSchool": "មកពីសាលា",
       "provinceSchool": "ខេ្តត",
@@ -444,7 +425,7 @@
       "grade": "ពីថ្នាក់ទីប៉ុន្មានដល់ទី?",
       "pob": "ទីកន្លែងកណើត",
       "parent": "អំពីឪពុកម្តាយបង្កើត",
-      "major": "ជំនាញ",
+      "program": "កម្មវិធីសិក្សា",
       "level": "កម្រិត",
       "fromSchool": "មកពីសាលា",
       "provinceSchool": "ខេ្តត",
@@ -458,34 +439,9 @@
       "subject": "មុខវិជ្ជា",
       "credit": "ក្រេឌីត"
     },
-    "major": {
-      "searchHere": "ស្វែងរក​នៅទីនេះ ...",
-      "title": "ជំនាញ",
-      "show": "បង្ហាញជំនាញ",
-      "action": "សកម្មភាព",
-      "save": "រក្សាទុក",
-      "cancel": "បោះបង់",
-      "warning": "ប្រយ័ត្ន",
-      "messageWarning": "នេះគឺលុបបាត់មិនអាចយកមកវិញបានទេ. ចង់បន្ត?",
-      "saveSuccess": "រក្សាទុកបានជោគជ័យ!",
-      "saveFail": "រក្សាទុកមិនបានជោគជ័យទេ!",
-      "updateSuccess": "កែប្រែបានជោគជ័យ!",
-      "updateFail": "កែប្រែមិនបានជោគជ័យទេ!",
-      "removeSuccess": "លុបបានជោជ័យ!",
-      "removeFail": "លុបមិនបានជោគជ័យទេ!",
-      "message": "អ្នកផ្គត់ផ្គង់នេះមិនអាចលុបបានទេ!",
-      "name": "ឈ្មោះ",
-      "khName": "ឈ្មោះខ្មែរ",
-      "code": "កូដ",
-      "desc": "សម្គាល់",
-      "add": "បញ្ចូលព័តមានជំនាញ",
-      "update": "កែប្រែព័តមានជំនាញ",
-      "faculty": "មហាវិទ្យាល័យ",
-      "degree": "សញ្ញាបត្រទទួលបាន"
-    },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
-      "title": "ជំនាញ",
+      "title": "កម្មវិធីសិក្សា",
       "show": "បង្ហាញកម្មវិធីសិក្សា",
       "action": "សកម្មភាព",
       "save": "រក្សាទុក",
@@ -504,7 +460,11 @@
       "code": "កូដ",
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានកម្មវិធីសិក្សា",
-      "update": "កែប្រែព័តមានកម្មវិធីសិក្សា"
+      "update": "កែប្រែព័តមានកម្មវិធីសិក្សា",
+      "price": "តម្លៃ",
+      "term": "រយៈពេល (ខែ)",
+      "faculty": "មហាវិទ្យាល័យ",
+      "degree": "សញ្ញាបត្រទទួលបាន"
     },
     "class": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -528,7 +488,8 @@
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានថ្នាក់",
       "update": "កែប្រែព័តមានថ្នាក់",
-      "teacher": "គ្រូ/សាស្ត្រាចារ្យ"
+      "teacher": "គ្រូ/សាស្ត្រាចារ្យ",
+      "program": "កម្មវិធីសិក្សា"
     },
     "level": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -605,7 +566,7 @@
       "semester": "ឆមាស",
       "subject": "មុខវិជ្ជា",
       "credit": "Credit",
-      "major": "ជំនាញ",
+      "program": "កម្មវិធីសិក្សា",
       "requiredCredit": "ទាមទារចំនួនក្រេឌីត"
     },
     "subject": {

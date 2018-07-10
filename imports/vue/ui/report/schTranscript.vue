@@ -74,7 +74,7 @@
                                   Degree
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{majorDoc && majorDoc.degree || ""}}
+                                  : {{programDoc && programDoc.degree || ""}}
 
                               </div>
                           </div>
@@ -83,7 +83,7 @@
                                   Faculty
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{majorDoc && majorDoc.faculty || ""}}
+                                  : {{programDoc && programDoc.faculty || ""}}
 
                               </div>
                           </div>
@@ -181,7 +181,7 @@
                     phoneNumber: ""
                 },
                 transcriptDoc: {},
-                majorDoc: {},
+                programDoc: {},
 
                 loading: false,
                 onLoad: false,
@@ -206,16 +206,16 @@
                     this.waterBillingSetup = result;
                 }
             })
-            this.handleRun(FlowRouter.query.get('studentId'), FlowRouter.query.get('majorId'));
+            this.handleRun(FlowRouter.query.get('studentId'), FlowRouter.query.get('programId'));
         },
         methods: {
-            handleRun(studentId, majorId) {
+            handleRun(studentId, programId) {
                 this.loading = true;
-                Meteor.call('schTranscriptReport', studentId, majorId, this.langConfig, (err, result) => {
+                Meteor.call('schTranscriptReport', studentId, programId, this.langConfig, (err, result) => {
                     if (result) {
                         this.printTranscriptHtml = result.printTranscriptHtml;
                         this.transcriptDoc = result.transcriptDoc;
-                        this.majorDoc = result.majorDoc;
+                        this.programDoc = result.programDoc;
                         this.loading = false;
                     } else {
                         this.loading = false;

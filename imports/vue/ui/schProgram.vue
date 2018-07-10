@@ -58,6 +58,15 @@
                             prop="khName"
                             :label="langConfig['khName']">
                     </el-table-column>
+
+                    <el-table-column
+                            prop="price"
+                            :label="langConfig['price']">
+                    </el-table-column>
+                    <el-table-column
+                            prop="term"
+                            :label="langConfig['term']">
+                    </el-table-column>
                     <el-table-column
                             prop="note"
                             :label="langConfig['desc']">
@@ -115,6 +124,29 @@
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schProgramForm.code"></el-input>
                 </el-form-item>
+                <el-form-item :label="langConfig['price']" prop="price">
+                    <el-input v-model="schProgramForm.price"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['term']" prop="term">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schProgramForm.term"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in termList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['faculty']" prop="faculty">
+                    <el-input v-model="schProgramForm.faculty"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['degree']" prop="degree">
+                    <el-input v-model="schProgramForm.degree"></el-input>
+                </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schProgramForm.desc"></el-input>
                 </el-form-item>
@@ -147,6 +179,29 @@
                 </el-form-item>
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schProgramForm.code"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['price']" prop="price">
+                    <el-input v-model="schProgramForm.price"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['term']" prop="term">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schProgramForm.term"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in termList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['faculty']" prop="faculty">
+                    <el-input v-model="schProgramForm.faculty"></el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['degree']" prop="degree">
+                    <el-input v-model="schProgramForm.degree"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schProgramForm.desc"></el-input>
@@ -189,17 +244,43 @@
                 count: 0,
                 dialogAddSchProgram: false,
                 dialogUpdateSchProgram: false,
-
+                termList: [
+                    {label: "1 month", value: 1},
+                    {label: "2 months", value: 2},
+                    {label: "3 months", value: 3},
+                    {label: "4 months", value: 4},
+                    {label: "5 months", value: 5},
+                    {label: "6 months", value: 6},
+                    {label: "7 months", value: 7},
+                    {label: "8 months", value: 8},
+                    {label: "9 months", value: 9},
+                    {label: "10 months", value: 10},
+                    {label: "11 months", value: 11},
+                    {label: "12 months", value: 12},
+                ],
                 schProgramForm: {
                     name: "",
                     khName: "",
                     code: "",
                     desc: "",
-                    _id: ""
+                    _id: "",
+                    price: "",
+                    term: "",
+                    faculty: "",
+                    degree: ""
+
                 },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
                     code: [{required: true, message: 'Please input code', trigger: 'blur'}],
+                    price: [{required: true, message: 'Please input Price', trigger: 'blur'}],
+                    term:
+                        [{
+                            required: true,
+                            type: "number",
+                            message: 'Please choose Term',
+                            trigger: 'change'
+                        }],
                 },
             }
         },
@@ -255,6 +336,10 @@
                             name: vm.schProgramForm.name,
                             khName: vm.schProgramForm.khName,
                             desc: vm.schProgramForm.desc,
+                            price: vm.schProgramForm.price,
+                            term: vm.schProgramForm.term,
+                            faculty: vm.schProgramForm.faculty,
+                            degree: vm.schProgramForm.degree,
                             rolesArea: Session.get('area')
                         };
 
@@ -291,6 +376,10 @@
                             name: vm.schProgramForm.name,
                             khName: vm.schProgramForm.khName,
                             desc: vm.schProgramForm.desc,
+                            price: vm.schProgramForm.price,
+                            term: vm.schProgramForm.term,
+                            faculty: vm.schProgramForm.faculty,
+                            degree: vm.schProgramForm.degree,
                             rolesArea: Session.get('area')
                         };
 

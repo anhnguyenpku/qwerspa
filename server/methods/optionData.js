@@ -9,7 +9,7 @@ import {Pos_Location} from '../../imports/collection/posLocation';
 import {Pos_Unit} from '../../imports/collection/posUnit';
 
 import {SpaceChar} from "../../both/config.js/space"
-import {Sch_Major} from "../../imports/collection/schMajor";
+import {Sch_Program} from "../../imports/collection/schProgram";
 import {Sch_Level} from "../../imports/collection/schLevel";
 import {Sch_Subject} from "../../imports/collection/schSubject";
 import {Sch_Ciriculumn} from "../../imports/collection/schCiriculumn";
@@ -24,14 +24,7 @@ Meteor.methods({
         });
         return list;
     },
-    queryMajorOption(selector) {
-        let list = [];
 
-        Sch_Major.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
-            list.push({label: obj.code + " : " + obj.name, value: obj._id});
-        });
-        return list;
-    },
     queryLevelOption(selector) {
         let list = [];
 
@@ -44,6 +37,13 @@ Meteor.methods({
         let list = [];
         Sch_Teacher.find(selector, {sort: {"personal.name": 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.personal.name, value: obj._id});
+        });
+        return list;
+    },
+    queryProgramOption(selector) {
+        let list = [];
+        Sch_Program.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
         });
         return list;
     },

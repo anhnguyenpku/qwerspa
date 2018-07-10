@@ -251,13 +251,13 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
-                                        <el-form-item :label="langConfig['major']" prop="majorId">
+                                        <el-form-item :label="langConfig['program']" prop="programId">
                                             <el-select style="display: block !important;"
                                                        filterable
-                                                       v-model="schStudentForm.majorId"
+                                                       v-model="schStudentForm.programId"
                                                        :placeholder="langConfig['chooseItem']">
                                                 <el-option
-                                                        v-for="item in majorList"
+                                                        v-for="item in programList"
                                                         :key="item.value"
                                                         :label="item.label"
                                                         :value="item.value"
@@ -718,13 +718,13 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
-                                        <el-form-item :label="langConfig['major']" prop="majorId">
+                                        <el-form-item :label="langConfig['program']" prop="programId">
                                             <el-select style="display: block !important;"
                                                        filterable
-                                                       v-model="schStudentForm.majorId"
+                                                       v-model="schStudentForm.programId"
                                                        :placeholder="langConfig['chooseItem']">
                                                 <el-option
-                                                        v-for="item in majorList"
+                                                        v-for="item in programList"
                                                         :key="item.value"
                                                         :label="item.label"
                                                         :value="item.value"
@@ -1061,13 +1061,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item :label="langConfig['major']" prop="majorId">
+                        <el-form-item :label="langConfig['program']" prop="programId">
                             <el-select style="display: block !important;"
                                        filterable :disabled="true"
-                                       v-model="inputTranscriptForm.majorId"
+                                       v-model="inputTranscriptForm.programId"
                                        :placeholder="langConfig['chooseItem']">
                                 <el-option
-                                        v-for="item in majorList"
+                                        v-for="item in programList"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
@@ -1451,7 +1451,7 @@
                     {label: "3", value: 3},
                     {label: "4", value: 4},
                 ],
-                majorList: [],
+                programList: [],
                 subjectList: [],
 
                 genderList: [
@@ -1549,7 +1549,7 @@
                             "",
                         level:
                             "",
-                        majorId:
+                        programId:
                             "",
                         fromSchool: "",
                         provinceSchool: "",
@@ -1563,18 +1563,18 @@
                         [{required: true, message: 'Please input name', trigger: 'blur'}],
                     "latinName":
                         [{required: true, message: 'Please input latin name', trigger: 'blur'}],
-                    majorId:
+                    programId:
                         [{
                             required: true,
                             type: 'string',
-                            message: 'Please choose Major',
+                            message: 'Please choose Program',
                             trigger: 'change'
                         }],
                     level:
                         [{
                             required: true,
                             type: 'string',
-                            message: 'Please choose Major',
+                            message: 'Please choose Program',
                             trigger: 'change'
                         }],
                     curiculumnId:
@@ -1588,7 +1588,7 @@
                 }
                 ,
                 inputTranscriptForm: {
-                    majorId: "",
+                    programId: "",
                     curiculumnId: "",
                     culumnSemester1: [],
                     culumnSemester2: [],
@@ -1700,10 +1700,10 @@
                 this.studyData[index] = row;
 
             },
-            majorOpt() {
+            programOpt() {
                 let selector = {};
-                Meteor.call('queryMajorOption', selector, (err, result) => {
-                    this.majorList = result;
+                Meteor.call('queryProgramOption', selector, (err, result) => {
+                    this.programList = result;
                 })
             },
             levelOpt() {
@@ -1714,7 +1714,7 @@
             },
             ciriculumnOpt(val) {
                 let selector = {};
-                selector.majorId = val;
+                selector.programId = val;
                 Meteor.call('queryCiriculumnOption', selector, (err, result) => {
                     this.curiculumnList = result;
                 })
@@ -1810,7 +1810,7 @@
                             personalStudy: personalStudy,
                             personalContract: vm.schStudentForm.personalContract,
                             level: vm.schStudentForm.level,
-                            majorId: vm.schStudentForm.majorId,
+                            programId: vm.schStudentForm.programId,
                             fromSchool: vm.schStudentForm.fromSchool,
                             provinceSchool: vm.schStudentForm.provinceSchool,
                             yearFrom: vm.schStudentForm.yearFrom,
@@ -1919,7 +1919,7 @@
                             personalStudy: personalStudy,
                             personalContract: vm.schStudentForm.personalContract,
                             level: vm.schStudentForm.level,
-                            majorId: vm.schStudentForm.majorId,
+                            programId: vm.schStudentForm.programId,
                             fromSchool: vm.schStudentForm.fromSchool,
                             provinceSchool: vm.schStudentForm.provinceSchool,
                             yearFrom: vm.schStudentForm.yearFrom,
@@ -2038,7 +2038,7 @@
 
                         vm.schStudentForm.personalContract = result.personalContract;
                         vm.schStudentForm.level = result.level;
-                        vm.schStudentForm.majorId = result.majorId;
+                        vm.schStudentForm.programId = result.programId;
                         vm.schStudentForm.fromSchool = result.fromSchool;
                         vm.schStudentForm.provinceSchool = result.provinceSchool;
                         vm.schStudentForm.yearFrom = result.yearFrom;
@@ -2075,7 +2075,7 @@
 
 
                 this.inputTranscriptForm = {
-                    majorId: "",
+                    programId: "",
                     curiculumnId: "",
                     culumnSemester1: [],
                     culumnSemester2: [],
@@ -2142,7 +2142,7 @@
                         personalContract: "",
                         level:
                             "",
-                        majorId:
+                        programId:
                             "",
                         fromSchool: "",
                         provinceSchool: "",
@@ -2200,7 +2200,7 @@
                         personalContract: "",
                         level:
                             "",
-                        majorId:
+                        programId:
                             "",
                         fromSchool: "",
                         provinceSchool: "",
@@ -2263,7 +2263,7 @@
                     if (valid) {
                         let data = {};
                         data.studentId = vm.inputTranscriptForm.studentId;
-                        data.majorId = vm.inputTranscriptForm.majorId;
+                        data.programId = vm.inputTranscriptForm.programId;
                         data.curiculumnId = vm.inputTranscriptForm.curiculumnId;
                         data.culumnSemester1 = vm.culumnData1;
                         data.culumnSemester2 = vm.culumnData2;
@@ -2385,14 +2385,14 @@
                 vm.resetForm();
                 this.inputTranscriptForm.studentName = data.personal.name;
                 this.inputTranscriptForm.studentId = data._id;
-                this.inputTranscriptForm.majorId = data.majorId;
+                this.inputTranscriptForm.programId = data.programId;
                 this.inputTranscriptForm.requiredCredit = data.requiredCredit;
 
                 this.inputTranscriptForm.isCompleted = false;
-                this.ciriculumnOpt(data.majorId);
+                this.ciriculumnOpt(data.programId);
                 vm.inputTranscriptForm.transcriptId = "";
                 vm.disabledCuriculumn = false;
-                Meteor.call("queryTranscriptByStudentIdMajorId", data._id, data.majorId, (err, result) => {
+                Meteor.call("queryTranscriptByStudentIdProgramId", data._id, data.programId, (err, result) => {
                     if (result) {
                         vm.inputTranscriptForm.curiculumnId = result.curiculumnId;
                         vm.inputTranscriptForm.transcriptId = result._id;
@@ -2437,13 +2437,13 @@
                 return data;
             },
             printTranscript(data) {
-                FlowRouter.go('/sch-data/schTranscript/print?studentId=' + data._id + '&majorId=' + data.majorId);
+                FlowRouter.go('/sch-data/schTranscript/print?studentId=' + data._id + '&programId=' + data.programId);
             }
         },
         created() {
             this.isSearching = true;
             this.queryData();
-            this.majorOpt();
+            this.programOpt();
             this.levelOpt();
             this.subjectOpt();
             this.getMention();

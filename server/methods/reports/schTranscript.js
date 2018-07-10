@@ -9,18 +9,18 @@ import {exchangeCoefficient} from "../../../imports/api/methods/roundCurrency"
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 import {roundCurrency} from "../../../imports/api/methods/roundCurrency"
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
-import {Sch_Major} from "../../../imports/collection/schMajor";
+import {Sch_Program} from "../../../imports/collection/schProgram";
 import {Sch_Subject} from "../../../imports/collection/schSubject";
 
 Meteor.methods({
-    schTranscriptReport(studentId, majorId, translate) {
+    schTranscriptReport(studentId, programId, translate) {
         let data = {};
 
         let companyDoc = WB_waterBillingSetup.findOne({});
 
         //Range Date
         let transcriptList = Sch_Transcript.aggregate([
-            {$match: {studentId: studentId, majorId: majorId}},
+            {$match: {studentId: studentId, programId: programId}},
             {
                 $lookup: {
                     from: 'sch_student',
@@ -80,7 +80,7 @@ Meteor.methods({
         let finalGPA = 0;
         let countFinalGPA = 0;
         let credit = 0;
-        let stateEx = Sch_Transcript.findOne({studentId: studentId, majorId: majorId});
+        let stateEx = Sch_Transcript.findOne({studentId: studentId, programId: programId});
         let printTranscriptHtml = "";
         let subjectList = Sch_Subject.find().fetch();
         let yearTo = 0;
@@ -308,11 +308,11 @@ Meteor.methods({
             }
 
 
-            let majorDoc = Sch_Major.findOne({_id: majorId});
+            let programDoc = Sch_Program.findOne({_id: programId});
             transcriptDoc.yearFrom = moment(transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.yearFrom || "").add(1, "month").format("YYYY");
             transcriptDoc.yearTo = yearTo + "";
             data.transcriptDoc = transcriptDoc;
-            data.majorDoc = majorDoc;
+            data.programDoc = programDoc;
 
         }
 

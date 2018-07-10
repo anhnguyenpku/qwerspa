@@ -918,7 +918,7 @@
                     where: "",
                     graduatedYear: "",
                 }],
-                majorList: [],
+                programList: [],
                 subjectList: [],
 
                 genderList: [

@@ -18,6 +18,13 @@ Sch_Program.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    price: {
+        type: Number,
+        decimal: true
+    },
+    term: {
+        type: Number
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

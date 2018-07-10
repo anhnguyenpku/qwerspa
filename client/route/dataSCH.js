@@ -49,16 +49,6 @@ schData.route('/schStudent', {
     }
 });
 
-import "../../imports/ui/sch_major/sch_major";
-//Student
-schData.route('/schMajor', {
-    name: 'sch.major',
-    title: "Major",
-    parent: "wb.home",
-    action: function (query, params) {
-        _Main('sch_major');
-    }
-});
 import "../../imports/ui/sch_subject/sch_subject";
 //Student
 schData.route('/schSubject', {

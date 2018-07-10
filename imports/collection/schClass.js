@@ -21,6 +21,9 @@ Sch_Class.schema = new SimpleSchema({
     teacherId: {
         type: String
     },
+    programId: {
+        type: String
+    },
     rolesArea: {
         type: String,
         label: "Role Area"
