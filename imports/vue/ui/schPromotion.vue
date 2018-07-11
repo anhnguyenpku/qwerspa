@@ -1,5 +1,5 @@
 <template>
-    <div class="sch_class">
+    <div class="sch_promotion">
         <div class="card card-stats">
             <div class="card-header card-header-icon" data-background-color="purple">
                 <i class="material-icons"><i class="material-icons">streetview</i></i>
@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="dialogAddSchClass = true,resetForm()">
+                        <a class="cursor-pointer" @click="dialogAddSchPromotion = true,resetForm()">
                             <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>
@@ -39,16 +39,10 @@
             </slot>
             <slot v-else>
                 <el-table
-                        :data="schClassData"
+                        :data="schPromotionData"
                         stripe
                         border
                         style="width: 100%">
-                    <el-table-column
-                            prop="code"
-                            :label="langConfig['code']"
-                            width="120"
-                            sortable>
-                    </el-table-column>
                     <el-table-column
                             prop="name"
                             :label="langConfig['name']"
@@ -57,6 +51,15 @@
                     <el-table-column
                             prop="khName"
                             :label="langConfig['khName']">
+                    </el-table-column>
+
+                    <el-table-column
+                            prop="promotionType"
+                            :label="langConfig['promotionType']">
+                    </el-table-column>
+                    <el-table-column
+                            prop="value"
+                            :label="langConfig['value']">
                     </el-table-column>
                     <el-table-column
                             prop="note"
@@ -81,10 +84,10 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button type="danger" class="cursor-pointer" icon="el-icon-delete" size="small"
-                                           @click="removeSchClass(scope.$index,scope.row,schClassData)"
+                                           @click="removeSchPromotion(scope.$index,scope.row,schPromotionData)"
                                            :disabled="disabledRemove"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
-                                           @click="findSchClassById(scope),dialogUpdateSchClass= true"
+                                           @click="findSchPromotionById(scope),dialogUpdateSchPromotion= true"
                                            :disabled="disabledUpdate"></el-button>
                             </el-button-group>
 
@@ -113,54 +116,35 @@
         <!--Form Modal-->
         <el-dialog
                 :title="langConfig['add']"
-                :visible.sync="dialogAddSchClass"
+                :visible.sync="dialogAddSchPromotion"
                 width="30%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="schClassForm" :rules="rules" ref="schClassFormAdd" label-width="120px"
-                     class="schClassForm">
+            <el-form :model="schPromotionForm" :rules="rules" ref="schPromotionFormAdd" label-width="120px"
+                     class="schPromotionForm">
+
                 <el-form-item :label="langConfig['name']" prop="name">
-                    <el-input v-model="schClassForm.name"></el-input>
+                    <el-input v-model="schPromotionForm.name"></el-input>
                 </el-form-item>
+
                 <el-form-item :label="langConfig['khName']" prop="khName">
-                    <el-input v-model="schClassForm.khName"></el-input>
+                    <el-input v-model="schPromotionForm.khName"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['code']" prop="code">
-                    <el-input v-model="schClassForm.code"></el-input>
+                <el-form-item :label="langConfig['promotionType']" prop="promotionType">
+                    <el-radio-group v-model="schPromotionForm.promotionType">
+                        <el-radio v-for="mt in promotionTypeList" :label="mt.value" :key="mt.value" border>
+                            {{mt.label}}
+                        </el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item :label="langConfig['program']" prop="programId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.programId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in programList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['teacher']" prop="teacherId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.teacherId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in teacherList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
+                <el-form-item :label="langConfig['value']" prop="value">
+                    <el-input v-model="schPromotionForm.value"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schClassForm.desc"></el-input>
+                    <el-input type="textarea" v-model="schPromotionForm.desc"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['status']" prop="status">
                     <el-switch
-                            v-model="schClassForm.status"
+                            v-model="schPromotionForm.status"
                             active-color="#13ce66"
                             inactive-color="#ff4949"
                     >
@@ -169,8 +153,8 @@
                 </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchClass = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchClass">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchPromotion = false, cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="saveSchPromotion">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -180,68 +164,46 @@
         <!--Form Modal-->
         <el-dialog
                 :title="langConfig['update']"
-                :visible.sync="dialogUpdateSchClass"
+                :visible.sync="dialogUpdateSchPromotion"
                 width="30%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="schClassForm" :rules="rules" ref="schClassFormUpdate" label-width="120px"
-                     class="schClassForm">
+            <el-form :model="schPromotionForm" :rules="rules" ref="schPromotionFormUpdate" label-width="120px"
+                     class="schPromotionForm">
 
                 <el-form-item :label="langConfig['name']" prop="name">
-                    <el-input v-model="schClassForm.name"></el-input>
+                    <el-input v-model="schPromotionForm.name"></el-input>
                 </el-form-item>
 
                 <el-form-item :label="langConfig['khName']" prop="khName">
-                    <el-input v-model="schClassForm.khName"></el-input>
+                    <el-input v-model="schPromotionForm.khName"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['code']" prop="code">
-                    <el-input v-model="schClassForm.code"></el-input>
+                <el-form-item :label="langConfig['promotionType']" prop="promotionType">
+                    <el-radio-group v-model="schPromotionForm.promotionType">
+                        <el-radio v-for="mt in promotionTypeList" :label="mt.value" :key="mt.value" border>
+                            {{mt.label}}
+                        </el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item :label="langConfig['program']" prop="programId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.programId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in programList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['teacher']" prop="teacherId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.teacherId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in teacherList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
+                <el-form-item :label="langConfig['value']" prop="value">
+                    <el-input v-model="schPromotionForm.value"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schClassForm.desc"></el-input>
+                    <el-input type="textarea" v-model="schPromotionForm.desc"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['status']" prop="status">
                     <el-switch
-                            v-model="schClassForm.status"
+                            v-model="schPromotionForm.status"
                             active-color="#13ce66"
                             inactive-color="#ff4949"
                     >
                     </el-switch>
 
                 </el-form-item>
-
-                <input type="hidden" v-model="schClassForm._id"/>
+                <input type="hidden" v-model="schPromotionForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchClass = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateSchClass">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateSchPromotion = false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="updateSchPromotion">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -265,43 +227,37 @@
         },
         data() {
             return {
-                schClassData: [],
+                schPromotionData: [],
                 loading: false,
                 searchData: '',
                 isSearching: false,
                 currentPage: 1,
                 currentSize: 10,
                 count: 0,
-                dialogAddSchClass: false,
-                dialogUpdateSchClass: false,
-
-                schClassForm: {
+                dialogAddSchPromotion: false,
+                dialogUpdateSchPromotion: false,
+                promotionTypeList: [
+                    {label: "Amount", value: "Amount"},
+                    {label: "Percent (%)", value: "Percent"},
+                ],
+                schPromotionForm: {
                     name: "",
                     khName: "",
-                    code: "",
                     desc: "",
                     _id: "",
-                    teacherId: "",
-                    programId: "",
+                    value: 0,
+                    promotionType: "",
                     status: false
+
                 },
-                teacherList: [],
-                programList: [],
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
-                    code: [{required: true, message: 'Please input code', trigger: 'blur'}],
-                    teacherId:
+                    value: [{required: true, message: 'Please input Price', trigger: 'blur'}],
+                    promotionType:
                         [{
                             required: true,
-                            type: 'string',
-                            message: 'Please choose Teacher',
-                            trigger: 'change'
-                        }],
-                    programId:
-                        [{
-                            required: true,
-                            type: 'string',
-                            message: 'Please choose Program',
+                            type: "string",
+                            message: 'Please choose Promotion Type',
                             trigger: 'change'
                         }],
                 },
@@ -332,14 +288,14 @@
                 this.currentPage = val;
             },
             queryData: _.debounce(function (val, skip, limit) {
-                Meteor.call('querySchClass', {
+                Meteor.call('querySchPromotion', {
                     q: val,
                     filter: this.filter,
                     options: {skip: skip || 0, limit: limit || 10}
                 }, (err, result) => {
                     if (!err) {
-                        this.schClassData = result.content;
-                        this.count = result.countSchClass;
+                        this.schPromotionData = result.content;
+                        this.count = result.countSchPromotion;
                     }
                     this.isSearching = false;
                 });
@@ -350,44 +306,32 @@
                     this.applyUserOption = result;
                 })
             },
-            teacherOpt() {
-                let selector = {};
-                Meteor.call("queryTeacherOption", selector, (err, result) => {
-                    this.teacherList = result;
-                })
-            },
-            programOpt() {
-                let selector = {};
-                Meteor.call("queryProgramOption", selector, (err, result) => {
-                    this.programList = result;
-                })
-            },
-            saveSchClass() {
+            saveSchPromotion() {
                 let vm = this;
-                this.$refs["schClassFormAdd"].validate((valid) => {
+                this.$refs["schPromotionFormAdd"].validate((valid) => {
                     if (valid) {
-                        let schClassDoc = {
-                            code: vm.schClassForm.code,
-                            name: vm.schClassForm.name,
-                            khName: vm.schClassForm.khName,
-                            desc: vm.schClassForm.desc,
-                            teacherId: vm.schClassForm.teacherId,
-                            programId: vm.schClassForm.programId,
-                            status: vm.schClassForm.status,
+                        let schPromotionDoc = {
+                            name: vm.schPromotionForm.name,
+                            khName: vm.schPromotionForm.khName,
+                            desc: vm.schPromotionForm.desc,
+                            value: vm.schPromotionForm.value,
+                            promotionType: vm.schPromotionForm.promotionType,
+                            status: vm.schPromotionForm.status,
+
                             rolesArea: Session.get('area')
                         };
 
-                        Meteor.call("insertSchClass", schClassDoc, (err, result) => {
+                        Meteor.call("insertSchPromotion", schPromotionDoc, (err, result) => {
                             if (!err) {
                                 vm.$message({
                                     duration: 1000,
                                     message: `Save Successfully!`,
                                     type: 'success'
                                 });
-                                vm.dialogAddSchClass = false;
+                                vm.dialogAddSchPromotion = false;
                                 vm.queryData();
 
-                                vm.$refs["schClassFormAdd"].resetFields();
+                                vm.$refs["schPromotionFormAdd"].resetFields();
                             } else {
                                 vm.$message({
                                     duration: 1000,
@@ -400,23 +344,22 @@
                 })
 
             },
-            updateSchClass() {
+            updateSchPromotion() {
                 let vm = this;
-                this.$refs["schClassFormUpdate"].validate((valid) => {
+                this.$refs["schPromotionFormUpdate"].validate((valid) => {
                     if (valid) {
-                        let schClassDoc = {
-                            _id: vm.schClassForm._id,
-                            code: vm.schClassForm.code,
-                            name: vm.schClassForm.name,
-                            khName: vm.schClassForm.khName,
-                            desc: vm.schClassForm.desc,
-                            teacherId: vm.schClassForm.teacherId,
-                            programId: vm.schClassForm.programId,
-                            status: vm.schClassForm.status,
+                        let schPromotionDoc = {
+                            _id: vm.schPromotionForm._id,
+                            name: vm.schPromotionForm.name,
+                            khName: vm.schPromotionForm.khName,
+                            desc: vm.schPromotionForm.desc,
+                            value: vm.schPromotionForm.value,
+                            promotionType: vm.schPromotionForm.promotionType,
+                            status: vm.schPromotionForm.status,
                             rolesArea: Session.get('area')
                         };
 
-                        Meteor.call("updateSchClass", schClassDoc, (err, result) => {
+                        Meteor.call("updateSchPromotion", schPromotionDoc, (err, result) => {
                             if (!err) {
                                 vm.$message({
                                     duration: 1000,
@@ -426,10 +369,10 @@
                         !`,
                                     type: 'success'
                                 });
-                                vm.dialogUpdateSchClass = false;
+                                vm.dialogUpdateSchPromotion = false;
                                 vm.queryData();
 
-                                vm.$refs["schClassFormUpdate"].resetFields();
+                                vm.$refs["schPromotionFormUpdate"].resetFields();
                             } else {
                                 vm.$message({
                                     duration: 1000,
@@ -445,14 +388,14 @@
                 })
 
             },
-            removeSchClass(index, row, rows) {
+            removeSchPromotion(index, row, rows) {
                 let vm = this;
                 this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    Meteor.call("removeSchClass", row._id, (err, result) => {
+                    Meteor.call("removeSchPromotion", row._id, (err, result) => {
                         if (!err) {
                             rows.splice(index, 1);
 
@@ -481,13 +424,13 @@
 
 
             },
-            findSchClassById(doc) {
+            findSchPromotionById(doc) {
                 let vm = this;
-                vm.schClassForm = {};
-                Meteor.call("querySchClassById", doc.row._id, (err, result) => {
+                vm.schPromotionForm = {};
+                Meteor.call("querySchPromotionById", doc.row._id, (err, result) => {
                     if (result) {
-                        vm.schClassForm._id = result._id;
-                        vm.schClassForm = result;
+                        vm.schPromotionForm._id = result._id;
+                        vm.schPromotionForm = result;
                     }
                 })
             },
@@ -498,13 +441,13 @@
                 });
             },
             resetForm() {
-                this.schClassForm._id = "";
-                if (this.$refs["schClassFormAdd"]) {
-                    this.$refs["schClassFormAdd"].resetFields();
+                this.schPromotionForm._id = "";
+                if (this.$refs["schPromotionFormAdd"]) {
+                    this.$refs["schPromotionFormAdd"].resetFields();
                 }
 
-                if (this.$refs["schClassFormUpdate"]) {
-                    this.$refs["schClassFormUpdate"].resetFields();
+                if (this.$refs["schPromotionFormUpdate"]) {
+                    this.$refs["schPromotionFormUpdate"].resetFields();
                 }
 
             }
@@ -512,13 +455,11 @@
         created() {
             this.isSearching = true;
             this.fetchUser();
-            this.teacherOpt();
-            this.programOpt();
             this.queryData();
         },
         computed: {
             langConfig() {
-                let data = compoLang.filter(config => config.lang === this.langSession)[0]['class'];
+                let data = compoLang.filter(config => config.lang === this.langSession)[0]['promotion'];
                 return data;
             }
         }

@@ -142,3 +142,23 @@ schData.route('/schRegister', {
         _Main('sch_register');
     }
 });
+import "../../imports/ui/sch_promotion/sch_promotion";
+//Student
+schData.route('/schPromotion', {
+    name: 'sch.promotion',
+    title: "Promotion",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_promotion');
+    }
+});
+import "../../imports/ui/sch_class/sch_classBoard";
+//Student
+schData.route('/schClassBoard', {
+    name: 'sch.classBoard',
+    title: "Class Board",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_classBoard');
+    }
+});

@@ -52,6 +52,56 @@ Meteor.methods({
             return data;
         }
     },
+    querySchClassBoard({q, filter, options = {limit: 10, skip: 0}}) {
+        if (Meteor.userId()) {
+            let data = {
+                content: [],
+                countSchClass: 0,
+            };
+            let selector = {};
+            selector.status = true;
+            if (!!q) {
+                let reg = new RegExp(q);
+                if (!!filter) {
+                    selector[filter] = {$regex: reg, $options: 'mi'}
+                } else {
+                    selector.$or = [{name: {$regex: reg, $options: 'mi'}}, {
+                        code: {
+                            $regex: reg,
+                            $options: 'mi'
+                        }
+                    }, {
+                        khName: {
+                            $regex: reg,
+                            $options: 'mi'
+                        }
+                    }, {desc: {$regex: reg, $options: 'mi'}}];
+                }
+            }
+            let shcClasss = Sch_Class.aggregate([
+                {
+                    $match: selector
+                },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                }
+            ]);
+            if (shcClasss.length > 0) {
+                data.content = shcClasss;
+                let shcClassTotal = Sch_Class.find(selector).count();
+                data.countSchClass = shcClassTotal;
+            }
+            return data;
+        }
+    },
     querySchClassById(id) {
         let data = Sch_Class.findOne({_id: id});
         return data;
@@ -69,5 +119,8 @@ Meteor.methods({
     },
     removeSchClass(id) {
         return Sch_Class.remove({_id: id});
+    },
+    updateSchClassById(id) {
+        return Sch_Class.update({_id: id}, {$set: {status: false}});
     }
 });

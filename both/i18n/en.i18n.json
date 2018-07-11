@@ -311,8 +311,10 @@
       "ciriculumn": "Ciriculumn",
       "mention": "Mention",
       "class": "Class",
+      "classBoard": "Class Board",
       "data": "Data",
       "program": "Program",
+      "promotion": "Promotion",
       "register": "Register"
     }
   },

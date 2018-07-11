@@ -143,7 +143,34 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-
+                <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.promotionId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in promotionList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['term']" prop="term">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.term"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in termList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchRegister = false, cancel()">{{langConfig['cancel']}}</el-button>
@@ -205,6 +232,34 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.promotionId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in promotionList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['term']" prop="term">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.term"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in termList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <input type="hidden" v-model="schRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
@@ -245,14 +300,31 @@
                 studentList: [],
                 levelList: [],
                 programList: [],
+                promotionList: [],
                 schRegisterForm: {
                     studentId: "",
                     levelId: "",
                     programId: "",
+                    promotionId: "",
+                    term: "",
 
                     _id: "",
 
                 },
+                termList: [
+                    {label: "1 month", value: 1},
+                    {label: "2 months", value: 2},
+                    {label: "3 months", value: 3},
+                    {label: "4 months", value: 4},
+                    {label: "5 months", value: 5},
+                    {label: "6 months", value: 6},
+                    {label: "7 months", value: 7},
+                    {label: "8 months", value: 8},
+                    {label: "9 months", value: 9},
+                    {label: "10 months", value: 10},
+                    {label: "11 months", value: 11},
+                    {label: "12 months", value: 12},
+                ],
                 rules: {
 
                     studentId:
@@ -267,6 +339,20 @@
                             required: true,
                             type: "string",
                             message: 'Please choose Level',
+                            trigger: 'change'
+                        }],
+                    promotionId:
+                        [{
+                            required: true,
+                            type: "string",
+                            message: 'Please choose Promotion',
+                            trigger: 'change'
+                        }],
+                    term:
+                        [{
+                            required: true,
+                            type: "number",
+                            message: 'Please choose term',
                             trigger: 'change'
                         }],
                     programId:
@@ -328,6 +414,12 @@
                     this.programList = result;
                 })
             },
+            promotionOpt() {
+                let selector = {};
+                Meteor.call("queryPromotionOption", selector, (err, result) => {
+                    this.promotionList = result;
+                })
+            },
             levelOpt() {
                 let selector = {};
                 Meteor.call("queryLevelOption", selector, (err, result) => {
@@ -366,6 +458,8 @@
                             studentId: vm.schRegisterForm.studentId,
                             levelId: vm.schRegisterForm.levelId,
                             programId: vm.schRegisterForm.programId,
+                            promotionId: vm.schRegisterForm.promotionId,
+                            term: vm.schRegisterForm.term,
                             rolesArea: Session.get('area')
                         };
 
@@ -401,6 +495,8 @@
                             studentId: vm.schRegisterForm.studentId,
                             levelId: vm.schRegisterForm.levelId,
                             programId: vm.schRegisterForm.programId,
+                            promotionId: vm.schRegisterForm.promotionId,
+                            term: vm.schRegisterForm.term,
                             rolesArea: Session.get('area')
                         };
 
@@ -501,6 +597,7 @@
                 this.studentOpt();
                 this.levelOpt();
                 this.programOpt();
+                this.promotionOpt();
 
             },
             popupSchRegisterUpdate() {
@@ -508,6 +605,7 @@
                 this.studentOpt();
                 this.levelOpt();
                 this.programOpt();
+                this.promotionOpt();
 
             },
         },

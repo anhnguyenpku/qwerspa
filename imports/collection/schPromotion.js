@@ -1,22 +1,28 @@
-export const Sch_Register = new Mongo.Collection('sch_register');
+export const Sch_Promotion = new Mongo.Collection('sch_promotion');
 
-Sch_Register.schema = new SimpleSchema({
-    studentId: {
+Sch_Promotion.schema = new SimpleSchema({
+    name: {
         type: String,
-        label: "Student"
+        label: "Name"
     },
-    levelId: {
+    khName: {
         type: String,
-        label: "Level",
+        label: "Khmer",
+        optional: true
     },
-    programId: {
+    promotionType: {
         type: String
     },
-    promotionId: {
-        type: String
+    desc: {
+        type: String,
+        optional: true
     },
-    term: {
-        type: Number
+    value: {
+        type: Number,
+        decimal: true
+    },
+    status: {
+        type: Boolean
     },
     rolesArea: {
         type: String,
@@ -64,4 +70,4 @@ Sch_Register.schema = new SimpleSchema({
     }
 });
 
-Sch_Register.attachSchema(Sch_Register.schema);
+Sch_Promotion.attachSchema(Sch_Promotion.schema);

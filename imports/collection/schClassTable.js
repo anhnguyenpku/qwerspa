@@ -1,22 +1,13 @@
-export const Sch_Register = new Mongo.Collection('sch_register');
+export const Sch_ClassTable = new Mongo.Collection('sch_classTable');
 
-Sch_Register.schema = new SimpleSchema({
-    studentId: {
+Sch_ClassTable.schema = new SimpleSchema({
+    classId: {
         type: String,
-        label: "Student"
+        label: "Class"
     },
-    levelId: {
-        type: String,
-        label: "Level",
-    },
-    programId: {
-        type: String
-    },
-    promotionId: {
-        type: String
-    },
-    term: {
-        type: Number
+    studentList: {
+        type: [Object],
+        optional: true
     },
     rolesArea: {
         type: String,
@@ -64,4 +55,4 @@ Sch_Register.schema = new SimpleSchema({
     }
 });
 
-Sch_Register.attachSchema(Sch_Register.schema);
+Sch_ClassTable.attachSchema(Sch_ClassTable.schema);

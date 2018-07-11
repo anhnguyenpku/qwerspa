@@ -24,6 +24,9 @@ Sch_Class.schema = new SimpleSchema({
     programId: {
         type: String
     },
+    status: {
+        type: Boolean
+    },
     rolesArea: {
         type: String,
         label: "Role Area"
