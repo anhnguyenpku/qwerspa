@@ -1,6 +1,8 @@
 import {Sch_Register} from '../../../imports/collection/schRegister';
+import {Sch_ClassTable} from '../../../imports/collection/schClassTable';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_Class} from "../../../imports/collection/schClass";
 
 Meteor.methods({
     querySchRegister({q, filter, options = {limit: 10, skip: 0}}) {
@@ -166,6 +168,62 @@ Meteor.methods({
         return doc;
     },
     updateSchRegister(data) {
+        if (data.classId !== "") {
+            let registerDoc = Sch_Register.findOne({_id: data._id});
+            let classDoc = Sch_ClassTable.findOne({classId: data.classId});
+            let takeOutClassDoc = Sch_ClassTable.findOne({classId: registerDoc.classId});
+
+            let classTBDoc = {};
+            let classTBDocTakeOut = {};
+            let studentList = [];
+            let studentListTakeOut = [];
+            classTBDoc.classId = data.classId;
+            classTBDoc.rolesArea = data.rolesArea;
+            if (classDoc) {
+                //Take In
+                if (classDoc.studentList && classDoc.studentList.length > 0) {
+                    classDoc.studentList.forEach((obj) => {
+                        if (obj._id !== registerDoc._id) {
+                            studentList.push(obj);
+                        }
+                    });
+                }
+                studentList.push(data);
+                classTBDoc.studentList = studentList;
+                Sch_ClassTable.update({_id: classDoc._id}, {$set: classTBDoc});
+
+                //Take out
+                if (takeOutClassDoc && (classDoc.classId !== takeOutClassDoc.classId)) {
+                    if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {
+                        takeOutClassDoc.studentList.forEach((obj) => {
+                            if (obj._id !== registerDoc._id) {
+                                studentListTakeOut.push(obj);
+                            }
+                        });
+                    }
+                    classTBDocTakeOut.studentList = studentListTakeOut;
+                    Sch_ClassTable.update({_id: takeOutClassDoc._id}, {$set: classTBDocTakeOut});
+
+                }
+            } else {
+                studentList.push(data);
+                classTBDoc.studentList = studentList;
+                Sch_ClassTable.insert(classTBDoc);
+
+                //Take out
+                if (takeOutClassDoc && (classTBDoc.classId !== takeOutClassDoc.classId)) {
+                    if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {
+                        takeOutClassDoc.studentList.forEach((obj) => {
+                            if (obj._id !== registerDoc._id) {
+                                studentListTakeOut.push(obj);
+                            }
+                        });
+                    }
+                    classTBDocTakeOut.studentList = studentListTakeOut;
+                    Sch_ClassTable.update({_id: takeOutClassDoc._id}, {$set: classTBDocTakeOut});
+                }
+            }
+        }
         let doc = Sch_Register.update({_id: data._id},
             {
                 $set: data
@@ -173,6 +231,22 @@ Meteor.methods({
         return doc;
     },
     removeSchRegister(id) {
+        let registerDoc = Sch_Register.findOne({_id: id});
+        if (registerDoc.classId) {
+            let classTBDoc = {};
+            let studentList = [];
+            let classDoc = Sch_ClassTable.findOne({classId: registerDoc.classId});
+            if (classDoc && classDoc.studentList && classDoc.studentList.length > 0) {
+                classDoc.studentList.forEach((obj) => {
+                    if (obj._id !== registerDoc._id) {
+                        studentList.push(obj);
+                    }
+                });
+                classTBDoc.studentList = studentList;
+                Sch_ClassTable.update({_id: classDoc._id}, {$set: classTBDoc});
+            }
+
+        }
         return Sch_Register.remove({_id: id});
     }
 });

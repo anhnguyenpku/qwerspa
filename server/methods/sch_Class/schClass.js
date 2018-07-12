@@ -1,6 +1,7 @@
 import {Sch_Class} from '../../../imports/collection/schClass';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_ClassTable} from "../../../imports/collection/schClassTable";
 
 Meteor.methods({
     querySchClass({q, filter, options = {limit: 10, skip: 0}}) {
@@ -85,6 +86,34 @@ Meteor.methods({
                 {
                     $sort: {
                         createdAt: -1
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "sch_classTable",
+                        localField: "_id",
+                        foreignField: "classId",
+                        as: "classTableDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$classTableDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "sch_teacher",
+                        localField: "teacherId",
+                        foreignField: "_id",
+                        as: "teacherDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$teacherDoc",
+                        preserveNullAndEmptyArrays: true
                     }
                 },
                 {

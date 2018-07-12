@@ -19,9 +19,16 @@ Sch_Class.schema = new SimpleSchema({
         optional: true
     },
     teacherId: {
-        type: String
+        type: String,
+        optional: true
     },
     programId: {
+        type: String
+    },
+    classDate: {
+        type: Date
+    },
+    classDateName: {
         type: String
     },
     status: {

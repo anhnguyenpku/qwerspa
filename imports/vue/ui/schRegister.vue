@@ -59,7 +59,7 @@
                     </el-table-column>
                     <el-table-column
                             :label="langConfig['action']"
-                            width="120"
+                            width="160"
                     >
                         <template slot-scope="scope">
                             <el-button-group>
@@ -68,6 +68,9 @@
                                            :disabled="disabledRemove"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
                                            @click="popupSchRegisterUpdate(),findSchRegisterById(scope),dialogUpdateSchRegister= true"
+                                           :disabled="disabledUpdate"></el-button>
+                                <el-button type="success" icon="el-icon-caret-right" size="small" class="cursor-pointer"
+                                           @click="popupSchRegisterUpdateToClass(),findSchRegisterById(scope),dialogUpdateSchRegisterToClass= true"
                                            :disabled="disabledUpdate"></el-button>
                             </el-button-group>
 
@@ -269,6 +272,109 @@
                 <br>
             </el-form>
         </el-dialog>
+
+        <el-dialog
+                :title="langConfig['addToClass']"
+                :visible.sync="dialogUpdateSchRegisterToClass"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="schRegisterForm" :rules="rules" ref="schRegisterFormUpdate" label-width="120px"
+                     class="schRegisterForm">
+
+                <el-form-item :label="langConfig['class']" prop="classId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.classId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in classList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <hr>
+                <el-form-item :label="langConfig['student']" prop="studentId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.studentId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in studentList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['level']" prop="levelId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.levelId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in levelList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['program']" prop="programId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.programId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in programList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.promotionId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in promotionList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['term']" prop="term">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.term"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in termList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <input type="hidden" v-model="schRegisterForm._id"/>
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogUpdateSchRegister = false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="updateSchRegister">{{langConfig['save']}}</el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -297,17 +403,19 @@
                 count: 0,
                 dialogAddSchRegister: false,
                 dialogUpdateSchRegister: false,
+                dialogUpdateSchRegisterToClass: false,
                 studentList: [],
                 levelList: [],
                 programList: [],
                 promotionList: [],
+                classList: [],
                 schRegisterForm: {
                     studentId: "",
                     levelId: "",
                     programId: "",
                     promotionId: "",
                     term: "",
-
+                    classId: "",
                     _id: "",
 
                 },
@@ -420,6 +528,12 @@
                     this.promotionList = result;
                 })
             },
+            classOpt() {
+                let selector = {};
+                Meteor.call("queryClassOption", selector, (err, result) => {
+                    this.classList = result;
+                })
+            },
             levelOpt() {
                 let selector = {};
                 Meteor.call("queryLevelOption", selector, (err, result) => {
@@ -462,7 +576,6 @@
                             term: vm.schRegisterForm.term,
                             rolesArea: Session.get('area')
                         };
-
                         Meteor.call("insertSchRegister", schRegisterDoc, (err, result) => {
                             if (!err) {
                                 vm.$message({
@@ -497,6 +610,7 @@
                             programId: vm.schRegisterForm.programId,
                             promotionId: vm.schRegisterForm.promotionId,
                             term: vm.schRegisterForm.term,
+                            classId: vm.schRegisterForm.classId,
                             rolesArea: Session.get('area')
                         };
 
@@ -511,6 +625,7 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchRegister = false;
+                                vm.dialogUpdateSchRegisterToClass = false;
                                 vm.queryData();
 
                                 vm.$refs["schRegisterFormUpdate"].resetFields();
@@ -608,6 +723,14 @@
                 this.promotionOpt();
 
             },
+            popupSchRegisterUpdateToClass() {
+                this.resetForm();
+                this.studentOpt();
+                this.levelOpt();
+                this.programOpt();
+                this.promotionOpt();
+                this.classOpt();
+            }
         },
         created() {
             this.isSearching = true;

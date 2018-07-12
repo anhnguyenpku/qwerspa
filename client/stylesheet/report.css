@@ -178,35 +178,35 @@
 
     .table-report > thead > tr > th {
         text-align: center !important;
-        font-size: 8px !important;
+        font-size: 11px !important;
         padding-right: 0px;
         padding-left: 0px;
     }
 
     .table-report > tbody > tr > td {
-        font-size: 10px !important;
+        font-size: 11px !important;
 
     }
 
     .table-report > tbody > tr > th {
-        font-size: 10px !important;
+        font-size: 11px !important;
 
     }
 
     .table-report-block-summary > thead > tr > th {
         text-align: center !important;
-        font-size: 8px !important;
+        font-size: 11px !important;
         padding-right: 0px;
         padding-left: 0px;
     }
 
     .table-report-block-summary > tbody > tr > td {
-        font-size: 9px !important;
+        font-size: 11px !important;
 
     }
 
     .table-report-block-summary > tbody > tr > th {
-        font-size: 9px !important;
+        font-size: 11px !important;
 
     }
 

@@ -9,6 +9,31 @@ Sch_ClassTable.schema = new SimpleSchema({
         type: [Object],
         optional: true
     },
+    "studentList.$._id": {
+        type: String,
+        label: "Register Id"
+    },
+    "studentList.$.studentId": {
+        type: String,
+        label: "Student"
+    },
+    "studentList.$.levelId": {
+        type: String,
+        label: "Level",
+    },
+    "studentList.$.programId": {
+        type: String
+    },
+    "studentList.$.promotionId": {
+        type: String
+    },
+    "studentList.$.classId": {
+        type: String,
+        optional: true
+    },
+    "studentList.$.term": {
+        type: Number
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

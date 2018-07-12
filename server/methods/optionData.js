@@ -16,6 +16,7 @@ import {Sch_Ciriculumn} from "../../imports/collection/schCiriculumn";
 import {Sch_Teacher} from "../../imports/collection/schTeacher";
 import {Sch_Student} from "../../imports/collection/schStudent";
 import {Sch_Promotion} from "../../imports/collection/schPromotion";
+import {Sch_Class} from "../../imports/collection/schClass";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -60,6 +61,14 @@ Meteor.methods({
     queryProgramOption(selector) {
         let list = [];
         Sch_Program.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryClassOption(selector) {
+        let list = [];
+        selector.status = true;
+        Sch_Class.find(selector).fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
         });
         return list;

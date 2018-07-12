@@ -55,12 +55,19 @@
                         <el-col style="padding-bottom: 40px !important;" :span="5" v-for="(d, index) in schClassData"
                                 :key="d._id"
                                 :offset="index > 0 ? index%4===0 ? 0 : 1 : 0">
-                            <el-card :body-style="{ padding: '0px' }">
+                            <el-card :body-style="{ padding: '0px' }" @dblclick.native="popUpSchAddStudentToClass(d)">
                                 <transition v-show=true name="el-zoom-in-center">
-                                    <div class="transition-box">{{d.name}}</div>
+                                    <div class="transition-box">
+                                        {{d.name}}<br> <span
+                                            style="float: left !important;"> <i
+                                            class="material-icons">group</i> &nbsp;<span
+                                            style="padding-top: 12px !important;">{{d.classTableDoc && d.classTableDoc.studentList &&d.classTableDoc.studentList.length || 0}}</span>
+                                        </span><span
+                                            style="float: right !important;bottom: 0px !important;padding-top: 12px !important;">{{langConfig['code']}} : {{d.code || ""}}</span>
+                                    </div>
                                 </transition>
                                 <div style="padding: 14px;">
-                                    <span>{{langConfig['numberStudent']}}</span>
+                                    <span>{{langConfig['teacher']}} : {{d.teacherDoc && d.teacherDoc.personal.name || ""}}</span>
                                     <div class="bottom clearfix">
                                         <time class="time">{{ d.createdAt | momentFormat }}</time>
                                         <el-button type="text" class="button">
@@ -83,6 +90,48 @@
             </slot>
             <!--End Pagination-->
         </div>
+
+        <el-dialog
+                @close="handleCloseModal"
+                :title="langConfig['addStudentToClass']"
+                :visible.sync="dialogAddSchStudentToClass"
+                :fullscreen="fullScreen"
+                class="dialogSchStudentToClass"
+
+        >
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="schAddStudentToClass" :rules="rules" ref="schAddStudentToClass" label-width="120px"
+                     :label-schition="labelPosition"
+                     class="schAddStudentToClass">
+                <el-row :gutter="20">
+                    <el-transfer
+                            filterable
+                            :filter-method="filterMethod"
+                            :titles="['Source', 'Target']"
+                            filter-placeholder="State Abbreviations"
+                            v-model="schAddStudentToClass.value"
+                            :data="studentList">
+                    </el-transfer>
+                    <!--</el-card>-->
+                </el-row>
+            </el-form>
+            <span slot="footer" class="dialog-footer fix-dialog-footer"
+            >
+                <hr style="margin-top: 0px !important;">
+                <el-row>
+                    <el-col :span="12" style="text-align: left !important;">
+                        <el-button type="danger"
+                                   @click.native="dialogAddSchStudentToClass= false, cancel(),resetForm()"> <i
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                    </el-col>
+                    <el-col :span="11" class="pull-right">
+                        <el-button type="primary" @click.native="saveSchStudentToClass(true,$event,false)"><i
+                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+
+                    </el-col>
+                </el-row>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -101,7 +150,23 @@
             }
         },
         data() {
+
+            /*const generateStudentList = _ => {
+                const data = [];
+                const states = ['California', 'Illinois', 'Maryland', 'Texas', 'Florida', 'Colorado', 'Connecticut '];
+                const initials = ['CA', 'IL', 'MD', 'TX', 'FL', 'CO', 'CT'];
+                states.forEach((city, index) => {
+                    data.push({
+                        label: city,
+                        key: index,
+                        initial: initials[index]
+                    });
+                });
+                return data;
+            };*/
             return {
+                fullScreen: true,
+                labelPosition: top,
                 schClassData: [],
                 loading: false,
                 searchData: '',
@@ -109,8 +174,7 @@
                 currentPage: 1,
                 currentSize: 12,
                 count: 0,
-                dialogAddSchClass: false,
-                dialogUpdateSchClass: false,
+                dialogAddSchStudentToClass: false,
 
                 schClassForm: {
                     name: "",
@@ -122,8 +186,13 @@
                     programId: "",
                     status: false
                 },
+                schAddStudentToClass: {
+                    value: [1]
+                },
                 teacherList: [],
                 programList: [],
+                rules: {},
+                studentList: []
             }
         },
         watch: {
@@ -149,6 +218,11 @@
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
+            },
+            handleCloseModal() {
+
+                this.resetForm();
+                this.refForm = "";
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('querySchClassBoard', {
@@ -180,7 +254,8 @@
                     type: 'info',
                     message: 'Canceled'
                 });
-            },closeSchClass(index, row, rows) {
+            },
+            closeSchClass(index, row, rows) {
                 let vm = this;
                 this.$confirm('This will end your class. Continue?', 'Warning', {
                     confirmButtonText: 'OK',
@@ -216,6 +291,30 @@
 
 
             },
+            popUpSchAddStudentToClass(doc) {
+                this.dialogAddSchStudentToClass = true;
+                this.generateStudentList(doc);
+            },
+            generateStudentList(data) {
+                Meteor.call("queryStudentByProgram", data.programId, (err, result) => {
+                    if (!err) {
+                        this.studentList = result;
+                    }
+                })
+            },
+            filterMethod(query, item) {
+                return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            },
+            resetForm() {
+                this.schAddStudentToClass = {
+                    value: []
+                }
+            },
+            saveSchStudentToClass(isCloseDialog, event, isPrint) {
+                event.preventDefault();
+                console.log(this.schAddStudentToClass.value)
+
+            }
 
         },
 

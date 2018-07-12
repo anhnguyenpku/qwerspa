@@ -2,6 +2,7 @@ import {Sch_Student} from '../../../imports/collection/schStudent';
 import {Sch_Transcript} from '../../../imports/collection/schTranscript';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_Register} from "../../../imports/collection/schRegister";
 
 Meteor.methods({
     querySchStudent({q, filter, options = {limit: 10, skip: 0}}) {
@@ -87,5 +88,32 @@ Meteor.methods({
     },
     queryTranscriptByStudentIdProgramId(studentId, programId) {
         return Sch_Transcript.findOne({studentId: studentId, programId: programId});
+    },
+    queryStudentByProgram(programId) {
+        let data = Sch_Register.aggregate([
+            {
+                $match: {programId: programId}
+            },
+            {
+                $lookup: {
+                    from: "sch_student",
+                    localField: "studentId",
+                    foreignField: "_id",
+                    as: "studentDoc"
+                }
+            }, {
+                $unwind: {
+                    path: "$studentDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+        ]);
+        let newData = [];
+        data.map((obj, index) => {
+            console.log(index);
+            newData.push({initial: obj._id, label: obj.studentDoc.personal.name, key: index});
+        });
+        console.log(newData);
+        return newData;
     }
 });

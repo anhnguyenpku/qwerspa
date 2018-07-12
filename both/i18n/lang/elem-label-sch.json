@@ -221,7 +221,9 @@
       "level": "Level",
       "program": "Program",
       "promotion": "Promotion",
-      "term": "Term"
+      "term": "Term",
+      "addToClass": "Add To Class",
+      "class": "Class"
     },
     "class": {
       "searchHere": "Search Here ...",
@@ -240,13 +242,14 @@
       "removeCancel": "Remove Cancel",
       "name": "Name",
       "khName": "Khmer Name",
-      "code": "Code",
+      "code": "Room",
       "desc": "desc",
       "add": "Add Class",
       "update": "Update Class",
       "teacher": "Teacher",
       "program": "Program",
-      "status": "Status"
+      "status": "Status",
+      "classDate": "Class Date"
     },
     "classBoard": {
       "searchHere": "Search Here ...",
@@ -265,14 +268,15 @@
       "removeCancel": "Remove Cancel",
       "name": "Name",
       "khName": "Khmer Name",
-      "code": "Code",
+      "code": "Room",
       "desc": "desc",
       "add": "Add Class Board",
       "update": "Update Class Board",
       "teacher": "Teacher",
       "program": "Program",
       "status": "Status",
-      "numberStudent": "Number Student"
+      "numberStudent": "Number Student",
+      "addStudentToClass": "Add Student To Class"
     },
     "level": {
       "searchHere": "Search Here ...",
@@ -593,7 +597,9 @@
       "level": "កម្រិត",
       "program": "កម្មវិធីសិក្សា",
       "promotion": "ប្រូមូសិន",
-      "term": "រយៈពេលក្នុងការបង់"
+      "term": "រយៈពេលក្នុងការបង់",
+      "addToClass": "បញ្ចូលទៅថ្នាក់",
+      "class": "ថ្នាក់"
     },
     "class": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -613,13 +619,14 @@
       "message": "អ្នកផ្គត់ផ្គង់នេះមិនអាចលុបបានទេ!",
       "name": "ឈ្មោះ",
       "khName": "ឈ្មោះខ្មែរ",
-      "code": "កូដ",
+      "code": "បន្ទប់",
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានថ្នាក់",
       "update": "កែប្រែព័តមានថ្នាក់",
       "teacher": "គ្រូ/សាស្ត្រាចារ្យ",
       "program": "កម្មវិធីសិក្សា",
-      "status": "ស្ថានភាព"
+      "status": "ស្ថានភាព",
+      "classDate": "ថ្ងៃបង្កើតថ្នាក់"
     },
     "classBoard": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -639,14 +646,15 @@
       "message": "អ្នកផ្គត់ផ្គង់នេះមិនអាចលុបបានទេ!",
       "name": "ឈ្មោះ",
       "khName": "ឈ្មោះខ្មែរ",
-      "code": "កូដ",
+      "code": "បន្ទប់",
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានផ្ទាំងថ្នាក់",
       "update": "កែប្រែព័តមានផ្ទាំងថ្នាក់",
       "teacher": "គ្រូ/សាស្ត្រាចារ្យ",
       "program": "កម្មវិធីសិក្សា",
       "status": "ស្ថានភាព",
-      "numberStudent": "ចំនួនសិស្ស"
+      "numberStudent": "ចំនួនសិស្ស",
+      "addStudentToClass": "បញ្ចូលឈ្មោះសិស្សទៅតាមថ្នាក់"
     },
     "level": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

@@ -63,6 +63,10 @@
                             :label="langConfig['desc']">
                     </el-table-column>
                     <el-table-column
+                            prop="classDateName"
+                            :label="langConfig['classDate']">
+                    </el-table-column>
+                    <el-table-column
                             prop="status"
                             :label="langConfig['status']"
                             width="150"
@@ -118,6 +122,15 @@
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schClassForm" :rules="rules" ref="schClassFormAdd" label-width="120px"
                      class="schClassForm">
+                <el-form-item :label="langConfig['classDate']" prop="classDate">
+                    <el-date-picker
+                            v-model="schClassForm.classDate"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Pick a day"
+                    >
+                    </el-date-picker>
+                </el-form-item>
                 <el-form-item :label="langConfig['name']" prop="name">
                     <el-input v-model="schClassForm.name"></el-input>
                 </el-form-item>
@@ -185,7 +198,15 @@
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schClassForm" :rules="rules" ref="schClassFormUpdate" label-width="120px"
                      class="schClassForm">
-
+                <el-form-item :label="langConfig['classDate']" prop="classDate">
+                    <el-date-picker
+                            v-model="schClassForm.classDate"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Pick a day"
+                    >
+                    </el-date-picker>
+                </el-form-item>
                 <el-form-item :label="langConfig['name']" prop="name">
                     <el-input v-model="schClassForm.name"></el-input>
                 </el-form-item>
@@ -283,20 +304,27 @@
                     _id: "",
                     teacherId: "",
                     programId: "",
-                    status: false
+                    status: false,
+                    classDate: moment().toDate()
                 },
                 teacherList: [],
                 programList: [],
                 rules: {
+                    classDate: [{
+                        type: 'date',
+                        required: true,
+                        message: 'Please input Class Date',
+                        trigger: 'blur'
+                    }],
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
-                    code: [{required: true, message: 'Please input code', trigger: 'blur'}],
-                    teacherId:
-                        [{
-                            required: true,
-                            type: 'string',
-                            message: 'Please choose Teacher',
-                            trigger: 'change'
-                        }],
+                    //code: [{required: true, message: 'Please input code', trigger: 'blur'}],
+                    /*  teacherId:
+                          [{
+                              required: true,
+                              type: 'string',
+                              message: 'Please choose Teacher',
+                              trigger: 'change'
+                          }],*/
                     programId:
                         [{
                             required: true,
@@ -374,6 +402,8 @@
                             teacherId: vm.schClassForm.teacherId,
                             programId: vm.schClassForm.programId,
                             status: vm.schClassForm.status,
+                            classDate: vm.schClassForm.classDate,
+                            classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };
 
@@ -413,8 +443,11 @@
                             teacherId: vm.schClassForm.teacherId,
                             programId: vm.schClassForm.programId,
                             status: vm.schClassForm.status,
+                            classDate: vm.schClassForm.classDate,
+                            classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };
+                        console.log(schClassDoc);
 
                         Meteor.call("updateSchClass", schClassDoc, (err, result) => {
                             if (!err) {

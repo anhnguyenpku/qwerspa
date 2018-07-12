@@ -15,6 +15,10 @@ Sch_Register.schema = new SimpleSchema({
     promotionId: {
         type: String
     },
+    classId: {
+        type: String,
+        optional: true
+    },
     term: {
         type: Number
     },
