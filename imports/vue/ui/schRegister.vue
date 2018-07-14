@@ -118,20 +118,6 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
@@ -139,6 +125,34 @@
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in programList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['major']" prop="majorId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.majorId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in majorList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['level']" prop="levelId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.levelId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in levelList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -207,20 +221,6 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
@@ -228,6 +228,34 @@
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in programList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['major']" prop="majorId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.majorId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in majorList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['level']" prop="levelId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.levelId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in levelList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -310,20 +338,6 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
@@ -338,6 +352,35 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['major']" prop="majorId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.majorId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in majorList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['level']" prop="levelId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schRegisterForm.levelId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in levelList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
                 <el-form-item :label="langConfig['promotion']" prop="promotionId">
                     <el-select style="display: block !important;"
                                filterable
@@ -409,9 +452,11 @@
                 programList: [],
                 promotionList: [],
                 classList: [],
+                majorList: [],
                 schRegisterForm: {
                     studentId: "",
                     levelId: "",
+                    majorId: "",
                     programId: "",
                     promotionId: "",
                     term: "",
@@ -456,6 +501,13 @@
                             message: 'Please choose Promotion',
                             trigger: 'change'
                         }],
+                    majorId:
+                        [{
+                            required: true,
+                            type: "string",
+                            message: 'Please choose Major',
+                            trigger: 'change'
+                        }],
                     term:
                         [{
                             required: true,
@@ -488,6 +540,15 @@
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
+            },
+            "schRegisterForm.programId"(val) {
+                this.majorOpt(val);
+                this.schRegisterForm.majorId = "";
+            },
+            "schRegisterForm.majorId"(val) {
+                this.levelOpt(val);
+                this.schRegisterForm.levelId = "";
+
             }
         },
         methods: {
@@ -522,6 +583,13 @@
                     this.programList = result;
                 })
             },
+            majorOpt(val) {
+                let selector = {};
+                selector.programId = val;
+                Meteor.call("queryMajorOption", selector, (err, result) => {
+                    this.majorList = result;
+                })
+            },
             promotionOpt() {
                 let selector = {};
                 Meteor.call("queryPromotionOption", selector, (err, result) => {
@@ -534,8 +602,9 @@
                     this.classList = result;
                 })
             },
-            levelOpt() {
+            levelOpt(val) {
                 let selector = {};
+                selector.majorId = val;
                 Meteor.call("queryLevelOption", selector, (err, result) => {
                     this.levelList = result;
                 })
@@ -726,7 +795,6 @@
             popupSchRegisterUpdateToClass() {
                 this.resetForm();
                 this.studentOpt();
-                this.levelOpt();
                 this.programOpt();
                 this.promotionOpt();
                 this.classOpt();

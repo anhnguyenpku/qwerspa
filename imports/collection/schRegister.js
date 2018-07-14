@@ -9,6 +9,10 @@ Sch_Register.schema = new SimpleSchema({
         type: String,
         label: "Level",
     },
+    majorId: {
+        type: String,
+        label: "Major",
+    },
     programId: {
         type: String
     },

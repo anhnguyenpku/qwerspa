@@ -112,13 +112,13 @@
                 <el-form-item :label="langConfig['khName']" prop="khName">
                     <el-input v-model="schMajorForm.khName"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
+                <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schMajorForm.levelId"
+                               v-model="schMajorForm.programId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
-                                v-for="item in levelList"
+                                v-for="item in programList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -176,13 +176,13 @@
                 <el-form-item :label="langConfig['khName']" prop="khName">
                     <el-input v-model="schMajorForm.khName"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
+                <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schMajorForm.levelId"
+                               v-model="schMajorForm.programId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
-                                v-for="item in levelList"
+                                v-for="item in programList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -251,7 +251,7 @@
                 count: 0,
                 dialogAddSchMajor: false,
                 dialogUpdateSchMajor: false,
-                levelList: [],
+                programList: [],
                 facultyList: [],
                 schMajorForm: {
                     name: "",
@@ -259,24 +259,24 @@
                     code: "",
                     desc: "",
                     _id: "",
-                    levelId: "",
+                    programId: "",
                     facultyId: "",
                     degree: ""
                 },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
-                    levelId:
+                    programId:
                         [{
                             required: true,
                             type: "string",
-                            message: 'Please choose Level',
+                            message: 'Please choose program',
                             trigger: 'change'
                         }],
                     facultyId:
                         [{
                             required: true,
                             type: "string",
-                            message: 'Please choose Level',
+                            message: 'Please choose faculty',
                             trigger: 'change'
                         }],
                     //code: [{required: true, message: 'Please input code', trigger: 'blur'}]
@@ -326,10 +326,10 @@
                     this.applyUserOption = result;
                 })
             },
-            levelOpt() {
+            programOpt() {
                 let selector = {};
-                Meteor.call("queryLevelOption", selector, (err, result) => {
-                    this.levelList = result;
+                Meteor.call("queryProgramOption", selector, (err, result) => {
+                    this.programList = result;
                 })
             },
             facultyOpt() {
@@ -347,7 +347,7 @@
                             name: vm.schMajorForm.name,
                             khName: vm.schMajorForm.khName,
                             desc: vm.schMajorForm.desc,
-                            levelId: vm.schMajorForm.levelId,
+                            programId: vm.schMajorForm.programId,
                             facultyId: vm.schMajorForm.facultyId,
                             degree: vm.schMajorForm.degree,
                             rolesArea: Session.get('area')
@@ -386,7 +386,7 @@
                             name: vm.schMajorForm.name,
                             khName: vm.schMajorForm.khName,
                             desc: vm.schMajorForm.desc,
-                            levelId: vm.schMajorForm.levelId,
+                            programId: vm.schMajorForm.programId,
                             facultyId: vm.schMajorForm.facultyId,
                             degree: vm.schMajorForm.degree,
                             rolesArea: Session.get('area')
@@ -488,7 +488,7 @@
         created() {
             this.isSearching = true;
             this.fetchUser();
-            this.levelOpt();
+            this.programOpt();
             this.facultyOpt();
             this.queryData();
         },

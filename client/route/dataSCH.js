@@ -92,14 +92,14 @@ schData.route('/schTranscript/print', {
 });
 
 
-import "../../imports/ui/sch_level/sch_level";
+import "../../imports/ui/sch_program/sch_program";
 //Student
-schData.route('/schLevel', {
-    name: 'sch.level',
-    title: "Level",
+schData.route('/schProgram', {
+    name: 'sch.program',
+    title: "Program",
     parent: "wb.home",
     action: function (query, params) {
-        _Main('sch_level');
+        _Main('sch_program');
     }
 });
 import "../../imports/ui/sch_class/sch_class";
@@ -122,14 +122,14 @@ schData.route('/schTeacher', {
         _Main('sch_teacher');
     }
 });
-import "../../imports/ui/sch_program/sch_program";
+import "../../imports/ui/sch_level/sch_level";
 //Student
-schData.route('/schProgram', {
-    name: 'sch.program',
-    title: "Program",
+schData.route('/schLevel', {
+    name: 'sch.level',
+    title: "Level",
     parent: "wb.home",
     action: function (query, params) {
-        _Main('sch_program');
+        _Main('sch_level');
     }
 });
 import "../../imports/ui/sch_register/sch_register";

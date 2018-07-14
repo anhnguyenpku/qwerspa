@@ -147,9 +147,9 @@
       "score": "Score",
       "grades": "Grade"
     },
-    "program": {
+    "level": {
       "searchHere": "Search Here ...",
-      "title": "Program",
+      "title": "Level",
       "action": "Action",
       "save": "Save",
       "cancel": "Cancel",
@@ -166,13 +166,13 @@
       "khName": "Khmer Name",
       "code": "Code",
       "desc": "desc",
-      "add": "Add Program",
-      "update": "Update Program",
+      "add": "Add Level",
+      "update": "Update Level",
       "price": "Price",
       "term": "Term (Months)",
       "faculty": "Faculty",
       "degree": "Degree",
-      "level": "Level",
+      "program": "Program",
       "major": "Major"
     },
     "promotion": {
@@ -225,7 +225,8 @@
       "promotion": "Promotion",
       "term": "Term",
       "addToClass": "Add To Class",
-      "class": "Class"
+      "class": "Class",
+      "major": "Major"
     },
     "class": {
       "searchHere": "Search Here ...",
@@ -249,7 +250,7 @@
       "add": "Add Class",
       "update": "Update Class",
       "teacher": "Teacher",
-      "program": "Program",
+      "level": "Level",
       "status": "Status",
       "classDate": "Class Date"
     },
@@ -281,9 +282,9 @@
       "studentClass": "Student in Class",
       "student": "Student"
     },
-    "level": {
+    "program": {
       "searchHere": "Search Here ...",
-      "title": "Level",
+      "title": "Program",
       "action": "Action",
       "save": "Save",
       "cancel": "Cancel",
@@ -300,8 +301,8 @@
       "khName": "Khmer Name",
       "code": "Code",
       "desc": "desc",
-      "add": "Add Level",
-      "update": "Update Level"
+      "add": "Add Program",
+      "update": "Update Program"
     },
     "faculty": {
       "searchHere": "Search Here ...",
@@ -342,7 +343,7 @@
       "name": "Name",
       "khName": "Khmer Name",
       "code": "Code",
-      "level": "Level",
+      "program": "Program",
       "desc": "desc",
       "add": "Add Major",
       "update": "Update Major",
@@ -569,10 +570,10 @@
       "subject": "មុខវិជ្ជា",
       "credit": "ក្រេឌីត"
     },
-    "program": {
+    "level": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
-      "title": "កម្មវិធី",
-      "show": "បង្ហាញកម្មវិធីសិក្សា",
+      "title": "កម្រិត",
+      "show": "បង្ហាញកម្រិត",
       "action": "សកម្មភាព",
       "save": "រក្សាទុក",
       "cancel": "បោះបង់",
@@ -589,13 +590,13 @@
       "khName": "ឈ្មោះខ្មែរ",
       "code": "កូដ",
       "desc": "សម្គាល់",
-      "add": "បញ្ចូលព័តមានកម្មវិធីសិក្សា",
-      "update": "កែប្រែព័តមានកម្មវិធីសិក្សា",
+      "add": "បញ្ចូលព័តមានកម្រិត",
+      "update": "កែប្រែព័តមានកម្រិត",
       "price": "តម្លៃ",
       "term": "រយៈពេល (ខែ)",
       "faculty": "មហាវិទ្យាល័យ",
       "degree": "សញ្ញាបត្រទទួលបាន",
-      "level": "កម្រិត",
+      "program": "កម្មវិធី",
       "major": "ជំនាញ"
     },
     "promotion": {
@@ -650,7 +651,8 @@
       "promotion": "ប្រូមូសិន",
       "term": "រយៈពេលក្នុងការបង់",
       "addToClass": "បញ្ចូលទៅថ្នាក់",
-      "class": "ថ្នាក់"
+      "class": "ថ្នាក់",
+      "major": "ជំនាញ"
     },
     "class": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -675,7 +677,7 @@
       "add": "បញ្ចូលព័តមានថ្នាក់",
       "update": "កែប្រែព័តមានថ្នាក់",
       "teacher": "គ្រូ/សាស្ត្រាចារ្យ",
-      "program": "កម្មវិធី",
+      "level": "កម្រិត",
       "status": "ស្ថានភាព",
       "classDate": "ថ្ងៃបង្កើតថ្នាក់"
     },
@@ -708,10 +710,10 @@
       "studentClass": "ឈ្មោះសិស្សទៅតាមថ្នាក់",
       "student": "សិស្ស"
     },
-    "level": {
+    "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
-      "title": "កម្រិត",
-      "show": "បង្ហាញកម្រិត",
+      "title": "កម្មវិធី",
+      "show": "បង្ហាញកម្មវិធី",
       "action": "សកម្មភាព",
       "save": "រក្សាទុក",
       "cancel": "បោះបង់",
@@ -728,8 +730,8 @@
       "khName": "ឈ្មោះខ្មែរ",
       "code": "កូដ",
       "desc": "សម្គាល់",
-      "add": "បញ្ចូលព័តមានកម្រិត",
-      "update": "កែប្រែព័តមានកម្រិត"
+      "add": "បញ្ចូលព័តមានកម្មវិធី",
+      "update": "កែប្រែព័តមានកម្មវិធី"
     },
     "faculty": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -772,7 +774,7 @@
       "name": "ឈ្មោះ",
       "khName": "ឈ្មោះខ្មែរ",
       "code": "កូដ",
-      "level": "កម្រិត",
+      "program": "កម្មវិធី",
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានជំនាញ",
       "update": "កែប្រែព័តមានជំនាញ",

@@ -14,7 +14,7 @@ Sch_Major.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    levelId: {
+    programId: {
         type: String
     },
     facultyId: {

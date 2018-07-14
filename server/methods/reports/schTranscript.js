@@ -9,7 +9,7 @@ import {exchangeCoefficient} from "../../../imports/api/methods/roundCurrency"
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 import {roundCurrency} from "../../../imports/api/methods/roundCurrency"
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
-import {Sch_Program} from "../../../imports/collection/schProgram";
+import {Sch_Level} from "../../../imports/collection/schLevel";
 import {Sch_Subject} from "../../../imports/collection/schSubject";
 
 Meteor.methods({
@@ -308,7 +308,7 @@ Meteor.methods({
             }
 
 
-            let programDoc = Sch_Program.findOne({_id: programId});
+            let programDoc = Sch_Level.findOne({_id: programId});
             transcriptDoc.yearFrom = moment(transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.yearFrom || "").add(1, "month").format("YYYY");
             transcriptDoc.yearTo = yearTo + "";
             data.transcriptDoc = transcriptDoc;

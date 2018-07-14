@@ -22,7 +22,7 @@ Sch_Class.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    programId: {
+    levelId: {
         type: String
     },
     classDate: {

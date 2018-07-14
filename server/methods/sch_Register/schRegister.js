@@ -49,7 +49,7 @@ Meteor.methods({
                     }
                 }, {
                     $lookup: {
-                        from: "sch_level",
+                        from: "sch_program",
                         localField: "levelId",
                         foreignField: "_id",
                         as: "levelDoc"
@@ -64,7 +64,7 @@ Meteor.methods({
                 },
                 {
                     $lookup: {
-                        from: "sch_program",
+                        from: "sch_level",
                         localField: "programId",
                         foreignField: "_id",
                         as: "programDoc"
@@ -111,7 +111,7 @@ Meteor.methods({
                         }
                     }, {
                         $lookup: {
-                            from: "sch_level",
+                            from: "sch_program",
                             localField: "levelId",
                             foreignField: "_id",
                             as: "levelDoc"
@@ -126,7 +126,7 @@ Meteor.methods({
                     },
                     {
                         $lookup: {
-                            from: "sch_program",
+                            from: "sch_level",
                             localField: "programId",
                             foreignField: "_id",
                             as: "programDoc"

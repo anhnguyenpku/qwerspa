@@ -18,6 +18,19 @@ Sch_Level.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    price: {
+        type: Number,
+        decimal: true
+    },
+    term: {
+        type: Number
+    },
+    levelId: {
+        type: String
+    },
+    majorId: {
+        type: String
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

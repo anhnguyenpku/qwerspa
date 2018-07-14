@@ -28,7 +28,7 @@ Meteor.methods({
                     }, {desc: {$regex: reg, $options: 'mi'}}];
                 }
             }
-            let shcPrograms = Sch_Program.aggregate([
+            let schPrograms = Sch_Program.aggregate([
                 {
                     $match: selector
                 },
@@ -44,10 +44,10 @@ Meteor.methods({
                     $skip: options.skip
                 }
             ]);
-            if (shcPrograms.length > 0) {
-                data.content = shcPrograms;
-                let shcProgramTotal = Sch_Program.find(selector).count();
-                data.countSchProgram = shcProgramTotal;
+            if (schPrograms.length > 0) {
+                data.content = schPrograms;
+                let schProgramTotal = Sch_Program.find(selector).count();
+                data.countSchProgram = schProgramTotal;
             }
             return data;
         }

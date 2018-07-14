@@ -28,7 +28,7 @@ Meteor.methods({
                     }, {desc: {$regex: reg, $options: 'mi'}}];
                 }
             }
-            let shcLevels = Sch_Level.aggregate([
+            let schLevels = Sch_Level.aggregate([
                 {
                     $match: selector
                 },
@@ -44,10 +44,10 @@ Meteor.methods({
                     $skip: options.skip
                 }
             ]);
-            if (shcLevels.length > 0) {
-                data.content = shcLevels;
-                let shcLevelTotal = Sch_Level.find(selector).count();
-                data.countSchLevel = shcLevelTotal;
+            if (schLevels.length > 0) {
+                data.content = schLevels;
+                let schLevelTotal = Sch_Level.find(selector).count();
+                data.countSchLevel = schLevelTotal;
             }
             return data;
         }

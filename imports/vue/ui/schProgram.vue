@@ -58,15 +58,6 @@
                             prop="khName"
                             :label="langConfig['khName']">
                     </el-table-column>
-
-                    <el-table-column
-                            prop="price"
-                            :label="langConfig['price']">
-                    </el-table-column>
-                    <el-table-column
-                            prop="term"
-                            :label="langConfig['term']">
-                    </el-table-column>
                     <el-table-column
                             prop="note"
                             :label="langConfig['desc']">
@@ -124,53 +115,6 @@
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schProgramForm.code"></el-input>
                 </el-form-item>
-
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['major']" prop="majorId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.majorId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in majorList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schProgramForm.price"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['term']" prop="term">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.term"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in termList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schProgramForm.desc"></el-input>
                 </el-form-item>
@@ -203,53 +147,6 @@
                 </el-form-item>
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schProgramForm.code"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['major']" prop="majorId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.majorId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in majorList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schProgramForm.price"></el-input>
-                </el-form-item>
-
-                <el-form-item :label="langConfig['term']" prop="term">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.term"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in termList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
                 </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schProgramForm.desc"></el-input>
@@ -292,58 +189,17 @@
                 count: 0,
                 dialogAddSchProgram: false,
                 dialogUpdateSchProgram: false,
-                termList: [
-                    {label: "1 month", value: 1},
-                    {label: "2 months", value: 2},
-                    {label: "3 months", value: 3},
-                    {label: "4 months", value: 4},
-                    {label: "5 months", value: 5},
-                    {label: "6 months", value: 6},
-                    {label: "7 months", value: 7},
-                    {label: "8 months", value: 8},
-                    {label: "9 months", value: 9},
-                    {label: "10 months", value: 10},
-                    {label: "11 months", value: 11},
-                    {label: "12 months", value: 12},
-                ],
-                majorList: [],
-                levelList: [],
+
                 schProgramForm: {
                     name: "",
                     khName: "",
                     code: "",
                     desc: "",
-                    _id: "",
-                    price: "",
-                    term: "",
-                    majorId: "",
-                    levelId: ""
+                    _id: ""
                 },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
-                    code: [{required: true, message: 'Please input code', trigger: 'blur'}],
-                    price: [{required: true, message: 'Please input Price', trigger: 'blur'}],
-                    term:
-                        [{
-                            required: true,
-                            type: "number",
-                            message: 'Please choose Term',
-                            trigger: 'change'
-                        }],
-                    levelId:
-                        [{
-                            required: true,
-                            type: "string",
-                            message: 'Please choose Level',
-                            trigger: 'change'
-                        }],
-                    majorId:
-                        [{
-                            required: true,
-                            type: "string",
-                            message: 'Please choose Major',
-                            trigger: 'change'
-                        }],
+                    code: [{required: true, message: 'Please input code', trigger: 'blur'}]
                 },
             }
         },
@@ -362,10 +218,6 @@
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
-            },
-            "schProgramForm.levelId"(val) {
-                this.majorOpt(val);
-                this.schProgramForm.majorId = ""
             }
         },
         methods: {
@@ -394,23 +246,6 @@
                     this.applyUserOption = result;
                 })
             },
-            levelOpt() {
-                let selector = {};
-                Meteor.call("queryLevelOption", selector, (err, result) => {
-                    this.levelList = result;
-                })
-            },
-            majorOpt(levelId) {
-                let selector = {};
-                if (levelId === "") {
-                    this.majorList = result;
-                } else {
-                    selector.levelId = levelId;
-                    Meteor.call("queryMajorOption", selector, (err, result) => {
-                        this.majorList = result;
-                    })
-                }
-            },
             saveSchProgram() {
                 let vm = this;
                 this.$refs["schProgramFormAdd"].validate((valid) => {
@@ -420,10 +255,6 @@
                             name: vm.schProgramForm.name,
                             khName: vm.schProgramForm.khName,
                             desc: vm.schProgramForm.desc,
-                            price: vm.schProgramForm.price,
-                            term: vm.schProgramForm.term,
-                            levelId: vm.schProgramForm.levelId,
-                            majorId: vm.schProgramForm.majorId,
                             rolesArea: Session.get('area')
                         };
 
@@ -460,10 +291,6 @@
                             name: vm.schProgramForm.name,
                             khName: vm.schProgramForm.khName,
                             desc: vm.schProgramForm.desc,
-                            price: vm.schProgramForm.price,
-                            term: vm.schProgramForm.term,
-                            levelId: vm.schProgramForm.levelId,
-                            majorId: vm.schProgramForm.majorId,
                             rolesArea: Session.get('area')
                         };
 
@@ -563,7 +390,6 @@
         created() {
             this.isSearching = true;
             this.fetchUser();
-            this.levelOpt();
             this.queryData();
         },
         computed: {

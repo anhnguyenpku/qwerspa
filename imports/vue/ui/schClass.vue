@@ -140,13 +140,13 @@
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schClassForm.code"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['program']" prop="programId">
+                <el-form-item :label="langConfig['level']" prop="levelId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schClassForm.programId"
+                               v-model="schClassForm.levelId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
-                                v-for="item in programList"
+                                v-for="item in levelList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -217,13 +217,13 @@
                 <el-form-item :label="langConfig['code']" prop="code">
                     <el-input v-model="schClassForm.code"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['program']" prop="programId">
+                <el-form-item :label="langConfig['level']" prop="levelId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schClassForm.programId"
+                               v-model="schClassForm.levelId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
-                                v-for="item in programList"
+                                v-for="item in levelList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -303,12 +303,12 @@
                     desc: "",
                     _id: "",
                     teacherId: "",
-                    programId: "",
+                    levelId: "",
                     status: false,
                     classDate: moment().toDate()
                 },
                 teacherList: [],
-                programList: [],
+                levelList: [],
                 rules: {
                     classDate: [{
                         type: 'date',
@@ -325,11 +325,11 @@
                               message: 'Please choose Teacher',
                               trigger: 'change'
                           }],*/
-                    programId:
+                    levelId:
                         [{
                             required: true,
                             type: 'string',
-                            message: 'Please choose Program',
+                            message: 'Please choose Level',
                             trigger: 'change'
                         }],
                 },
@@ -384,10 +384,10 @@
                     this.teacherList = result;
                 })
             },
-            programOpt() {
+            levelOpt() {
                 let selector = {};
-                Meteor.call("queryProgramOption", selector, (err, result) => {
-                    this.programList = result;
+                Meteor.call("queryLevelOption", selector, (err, result) => {
+                    this.levelList = result;
                 })
             },
             saveSchClass() {
@@ -400,7 +400,7 @@
                             khName: vm.schClassForm.khName,
                             desc: vm.schClassForm.desc,
                             teacherId: vm.schClassForm.teacherId,
-                            programId: vm.schClassForm.programId,
+                            levelId: vm.schClassForm.levelId,
                             status: vm.schClassForm.status,
                             classDate: vm.schClassForm.classDate,
                             classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
@@ -441,7 +441,7 @@
                             khName: vm.schClassForm.khName,
                             desc: vm.schClassForm.desc,
                             teacherId: vm.schClassForm.teacherId,
-                            programId: vm.schClassForm.programId,
+                            levelId: vm.schClassForm.levelId,
                             status: vm.schClassForm.status,
                             classDate: vm.schClassForm.classDate,
                             classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
@@ -546,7 +546,7 @@
             this.isSearching = true;
             this.fetchUser();
             this.teacherOpt();
-            this.programOpt();
+            this.levelOpt();
             this.queryData();
         },
         computed: {
