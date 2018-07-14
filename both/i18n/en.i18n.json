@@ -308,14 +308,16 @@
       "setting": "Setting",
       "level": "Level",
       "subject": "Subject",
-      "ciriculumn": "Ciriculumn",
+      "ciriculumn": "Curriculum",
       "mention": "Mention",
       "class": "Class",
       "classBoard": "Class Board",
       "data": "Data",
       "program": "Program",
       "promotion": "Promotion",
-      "register": "Register"
+      "register": "Register",
+      "major": "Major",
+      "faculty": "Faculty"
     }
   },
   "global": {

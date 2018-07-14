@@ -1,5 +1,5 @@
 <template>
-    <div class="sch_program">
+    <div class="sch_major">
         <div class="card card-stats">
             <div class="card-header card-header-icon" data-background-color="purple">
                 <i class="material-icons"><i class="material-icons">streetview</i></i>
@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="dialogAddSchProgram = true,resetForm()">
+                        <a class="cursor-pointer" @click="dialogAddSchMajor = true,resetForm()">
                             <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>
@@ -39,7 +39,7 @@
             </slot>
             <slot v-else>
                 <el-table
-                        :data="schProgramData"
+                        :data="schMajorData"
                         stripe
                         border
                         style="width: 100%">
@@ -58,15 +58,6 @@
                             prop="khName"
                             :label="langConfig['khName']">
                     </el-table-column>
-
-                    <el-table-column
-                            prop="price"
-                            :label="langConfig['price']">
-                    </el-table-column>
-                    <el-table-column
-                            prop="term"
-                            :label="langConfig['term']">
-                    </el-table-column>
                     <el-table-column
                             prop="note"
                             :label="langConfig['desc']">
@@ -78,10 +69,10 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button type="danger" class="cursor-pointer" icon="el-icon-delete" size="small"
-                                           @click="removeSchProgram(scope.$index,scope.row,schProgramData)"
+                                           @click="removeSchMajor(scope.$index,scope.row,schMajorData)"
                                            :disabled="disabledRemove"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
-                                           @click="findSchProgramById(scope),dialogUpdateSchProgram= true"
+                                           @click="findSchMajorById(scope),dialogUpdateSchMajor= true"
                                            :disabled="disabledUpdate"></el-button>
                             </el-button-group>
 
@@ -110,25 +101,21 @@
         <!--Form Modal-->
         <el-dialog
                 :title="langConfig['add']"
-                :visible.sync="dialogAddSchProgram"
+                :visible.sync="dialogAddSchMajor"
                 width="30%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="schProgramForm" :rules="rules" ref="schProgramFormAdd" label-width="120px"
-                     class="schProgramForm">
+            <el-form :model="schMajorForm" :rules="rules" ref="schMajorFormAdd" label-width="120px"
+                     class="schMajorForm">
                 <el-form-item :label="langConfig['name']" prop="name">
-                    <el-input v-model="schProgramForm.name"></el-input>
+                    <el-input v-model="schMajorForm.name"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['khName']" prop="khName">
-                    <el-input v-model="schProgramForm.khName"></el-input>
+                    <el-input v-model="schMajorForm.khName"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['code']" prop="code">
-                    <el-input v-model="schProgramForm.code"></el-input>
-                </el-form-item>
-
                 <el-form-item :label="langConfig['level']" prop="levelId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schProgramForm.levelId"
+                               v-model="schMajorForm.levelId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in levelList"
@@ -139,13 +126,13 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="langConfig['major']" prop="majorId">
+                <el-form-item :label="langConfig['faculty']" prop="facultyId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schProgramForm.majorId"
+                               v-model="schMajorForm.facultyId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
-                                v-for="item in majorList"
+                                v-for="item in facultyList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -153,32 +140,20 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schProgramForm.price"></el-input>
+                <el-form-item :label="langConfig['code']" prop="code">
+                    <el-input v-model="schMajorForm.code"></el-input>
                 </el-form-item>
-                <el-form-item :label="langConfig['term']" prop="term">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.term"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in termList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
+                <el-form-item :label="langConfig['degree']" prop="degree">
+                    <el-input v-model="schMajorForm.degree"></el-input>
                 </el-form-item>
-
                 <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schProgramForm.desc"></el-input>
+                    <el-input type="textarea" v-model="schMajorForm.desc"></el-input>
                 </el-form-item>
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchProgram = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchProgram">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchMajor = false, cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="saveSchMajor">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -188,26 +163,23 @@
         <!--Form Modal-->
         <el-dialog
                 :title="langConfig['update']"
-                :visible.sync="dialogUpdateSchProgram"
+                :visible.sync="dialogUpdateSchMajor"
                 width="30%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="schProgramForm" :rules="rules" ref="schProgramFormUpdate" label-width="120px"
-                     class="schProgramForm">
+            <el-form :model="schMajorForm" :rules="rules" ref="schMajorFormUpdate" label-width="120px"
+                     class="schMajorForm">
 
                 <el-form-item :label="langConfig['name']" prop="name">
-                    <el-input v-model="schProgramForm.name"></el-input>
+                    <el-input v-model="schMajorForm.name"></el-input>
                 </el-form-item>
 
                 <el-form-item :label="langConfig['khName']" prop="khName">
-                    <el-input v-model="schProgramForm.khName"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['code']" prop="code">
-                    <el-input v-model="schProgramForm.code"></el-input>
+                    <el-input v-model="schMajorForm.khName"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['level']" prop="levelId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schProgramForm.levelId"
+                               v-model="schMajorForm.levelId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in levelList"
@@ -218,13 +190,13 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="langConfig['major']" prop="majorId">
+                <el-form-item :label="langConfig['faculty']" prop="facultyId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schProgramForm.majorId"
+                               v-model="schMajorForm.facultyId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
-                                v-for="item in majorList"
+                                v-for="item in facultyList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -232,34 +204,21 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schProgramForm.price"></el-input>
+                <el-form-item :label="langConfig['code']" prop="code">
+                    <el-input v-model="schMajorForm.code"></el-input>
                 </el-form-item>
-
-                <el-form-item :label="langConfig['term']" prop="term">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schProgramForm.term"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in termList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
+                <el-form-item :label="langConfig['degree']" prop="degree">
+                    <el-input v-model="schMajorForm.degree"></el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schProgramForm.desc"></el-input>
+                    <el-input type="textarea" v-model="schMajorForm.desc"></el-input>
                 </el-form-item>
 
-                <input type="hidden" v-model="schProgramForm._id"/>
+                <input type="hidden" v-model="schMajorForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchProgram = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateSchProgram">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateSchMajor = false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="updateSchMajor">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -283,53 +242,29 @@
         },
         data() {
             return {
-                schProgramData: [],
+                schMajorData: [],
                 loading: false,
                 searchData: '',
                 isSearching: false,
                 currentPage: 1,
                 currentSize: 10,
                 count: 0,
-                dialogAddSchProgram: false,
-                dialogUpdateSchProgram: false,
-                termList: [
-                    {label: "1 month", value: 1},
-                    {label: "2 months", value: 2},
-                    {label: "3 months", value: 3},
-                    {label: "4 months", value: 4},
-                    {label: "5 months", value: 5},
-                    {label: "6 months", value: 6},
-                    {label: "7 months", value: 7},
-                    {label: "8 months", value: 8},
-                    {label: "9 months", value: 9},
-                    {label: "10 months", value: 10},
-                    {label: "11 months", value: 11},
-                    {label: "12 months", value: 12},
-                ],
-                majorList: [],
+                dialogAddSchMajor: false,
+                dialogUpdateSchMajor: false,
                 levelList: [],
-                schProgramForm: {
+                facultyList: [],
+                schMajorForm: {
                     name: "",
                     khName: "",
                     code: "",
                     desc: "",
                     _id: "",
-                    price: "",
-                    term: "",
-                    majorId: "",
-                    levelId: ""
+                    levelId: "",
+                    facultyId: "",
+                    degree: ""
                 },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
-                    code: [{required: true, message: 'Please input code', trigger: 'blur'}],
-                    price: [{required: true, message: 'Please input Price', trigger: 'blur'}],
-                    term:
-                        [{
-                            required: true,
-                            type: "number",
-                            message: 'Please choose Term',
-                            trigger: 'change'
-                        }],
                     levelId:
                         [{
                             required: true,
@@ -337,13 +272,14 @@
                             message: 'Please choose Level',
                             trigger: 'change'
                         }],
-                    majorId:
+                    facultyId:
                         [{
                             required: true,
                             type: "string",
-                            message: 'Please choose Major',
+                            message: 'Please choose Level',
                             trigger: 'change'
                         }],
+                    //code: [{required: true, message: 'Please input code', trigger: 'blur'}]
                 },
             }
         },
@@ -362,10 +298,6 @@
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
-            },
-            "schProgramForm.levelId"(val) {
-                this.majorOpt(val);
-                this.schProgramForm.majorId = ""
             }
         },
         methods: {
@@ -376,14 +308,14 @@
                 this.currentPage = val;
             },
             queryData: _.debounce(function (val, skip, limit) {
-                Meteor.call('querySchProgram', {
+                Meteor.call('querySchMajor', {
                     q: val,
                     filter: this.filter,
                     options: {skip: skip || 0, limit: limit || 10}
                 }, (err, result) => {
                     if (!err) {
-                        this.schProgramData = result.content;
-                        this.count = result.countSchProgram;
+                        this.schMajorData = result.content;
+                        this.count = result.countSchMajor;
                     }
                     this.isSearching = false;
                 });
@@ -400,44 +332,38 @@
                     this.levelList = result;
                 })
             },
-            majorOpt(levelId) {
+            facultyOpt() {
                 let selector = {};
-                if (levelId === "") {
-                    this.majorList = result;
-                } else {
-                    selector.levelId = levelId;
-                    Meteor.call("queryMajorOption", selector, (err, result) => {
-                        this.majorList = result;
-                    })
-                }
+                Meteor.call("queryFacultyOption", selector, (err, result) => {
+                    this.facultyList = result;
+                })
             },
-            saveSchProgram() {
+            saveSchMajor() {
                 let vm = this;
-                this.$refs["schProgramFormAdd"].validate((valid) => {
+                this.$refs["schMajorFormAdd"].validate((valid) => {
                     if (valid) {
-                        let schProgramDoc = {
-                            code: vm.schProgramForm.code,
-                            name: vm.schProgramForm.name,
-                            khName: vm.schProgramForm.khName,
-                            desc: vm.schProgramForm.desc,
-                            price: vm.schProgramForm.price,
-                            term: vm.schProgramForm.term,
-                            levelId: vm.schProgramForm.levelId,
-                            majorId: vm.schProgramForm.majorId,
+                        let schMajorDoc = {
+                            code: vm.schMajorForm.code,
+                            name: vm.schMajorForm.name,
+                            khName: vm.schMajorForm.khName,
+                            desc: vm.schMajorForm.desc,
+                            levelId: vm.schMajorForm.levelId,
+                            facultyId: vm.schMajorForm.facultyId,
+                            degree: vm.schMajorForm.degree,
                             rolesArea: Session.get('area')
                         };
 
-                        Meteor.call("insertSchProgram", schProgramDoc, (err, result) => {
+                        Meteor.call("insertSchMajor", schMajorDoc, (err, result) => {
                             if (!err) {
                                 vm.$message({
                                     duration: 1000,
                                     message: `Save Successfully!`,
                                     type: 'success'
                                 });
-                                vm.dialogAddSchProgram = false;
+                                vm.dialogAddSchMajor = false;
                                 vm.queryData();
 
-                                vm.$refs["schProgramFormAdd"].resetFields();
+                                vm.$refs["schMajorFormAdd"].resetFields();
                             } else {
                                 vm.$message({
                                     duration: 1000,
@@ -450,24 +376,23 @@
                 })
 
             },
-            updateSchProgram() {
+            updateSchMajor() {
                 let vm = this;
-                this.$refs["schProgramFormUpdate"].validate((valid) => {
+                this.$refs["schMajorFormUpdate"].validate((valid) => {
                     if (valid) {
-                        let schProgramDoc = {
-                            _id: vm.schProgramForm._id,
-                            code: vm.schProgramForm.code,
-                            name: vm.schProgramForm.name,
-                            khName: vm.schProgramForm.khName,
-                            desc: vm.schProgramForm.desc,
-                            price: vm.schProgramForm.price,
-                            term: vm.schProgramForm.term,
-                            levelId: vm.schProgramForm.levelId,
-                            majorId: vm.schProgramForm.majorId,
+                        let schMajorDoc = {
+                            _id: vm.schMajorForm._id,
+                            code: vm.schMajorForm.code,
+                            name: vm.schMajorForm.name,
+                            khName: vm.schMajorForm.khName,
+                            desc: vm.schMajorForm.desc,
+                            levelId: vm.schMajorForm.levelId,
+                            facultyId: vm.schMajorForm.facultyId,
+                            degree: vm.schMajorForm.degree,
                             rolesArea: Session.get('area')
                         };
 
-                        Meteor.call("updateSchProgram", schProgramDoc, (err, result) => {
+                        Meteor.call("updateSchMajor", schMajorDoc, (err, result) => {
                             if (!err) {
                                 vm.$message({
                                     duration: 1000,
@@ -477,10 +402,10 @@
                         !`,
                                     type: 'success'
                                 });
-                                vm.dialogUpdateSchProgram = false;
+                                vm.dialogUpdateSchMajor = false;
                                 vm.queryData();
 
-                                vm.$refs["schProgramFormUpdate"].resetFields();
+                                vm.$refs["schMajorFormUpdate"].resetFields();
                             } else {
                                 vm.$message({
                                     duration: 1000,
@@ -496,14 +421,14 @@
                 })
 
             },
-            removeSchProgram(index, row, rows) {
+            removeSchMajor(index, row, rows) {
                 let vm = this;
                 this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    Meteor.call("removeSchProgram", row._id, (err, result) => {
+                    Meteor.call("removeSchMajor", row._id, (err, result) => {
                         if (!err) {
                             rows.splice(index, 1);
 
@@ -532,13 +457,13 @@
 
 
             },
-            findSchProgramById(doc) {
+            findSchMajorById(doc) {
                 let vm = this;
-                vm.schProgramForm = {};
-                Meteor.call("querySchProgramById", doc.row._id, (err, result) => {
+                vm.schMajorForm = {};
+                Meteor.call("querySchMajorById", doc.row._id, (err, result) => {
                     if (result) {
-                        vm.schProgramForm._id = result._id;
-                        vm.schProgramForm = result;
+                        vm.schMajorForm._id = result._id;
+                        vm.schMajorForm = result;
                     }
                 })
             },
@@ -549,13 +474,13 @@
                 });
             },
             resetForm() {
-                this.schProgramForm._id = "";
-                if (this.$refs["schProgramFormAdd"]) {
-                    this.$refs["schProgramFormAdd"].resetFields();
+                this.schMajorForm._id = "";
+                if (this.$refs["schMajorFormAdd"]) {
+                    this.$refs["schMajorFormAdd"].resetFields();
                 }
 
-                if (this.$refs["schProgramFormUpdate"]) {
-                    this.$refs["schProgramFormUpdate"].resetFields();
+                if (this.$refs["schMajorFormUpdate"]) {
+                    this.$refs["schMajorFormUpdate"].resetFields();
                 }
 
             }
@@ -564,11 +489,12 @@
             this.isSearching = true;
             this.fetchUser();
             this.levelOpt();
+            this.facultyOpt();
             this.queryData();
         },
         computed: {
             langConfig() {
-                let data = compoLang.filter(config => config.lang === this.langSession)[0]['program'];
+                let data = compoLang.filter(config => config.lang === this.langSession)[0]['major'];
                 return data;
             }
         }

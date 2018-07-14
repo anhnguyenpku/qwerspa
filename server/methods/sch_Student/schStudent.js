@@ -110,10 +110,8 @@ Meteor.methods({
         ]);
         let newData = [];
         data.map((obj, index) => {
-            console.log(index);
             newData.push({initial: obj._id, label: obj.studentDoc.personal.name, key: index});
         });
-        console.log(newData);
         return newData;
     }
 });

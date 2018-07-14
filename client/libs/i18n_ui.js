@@ -6,7 +6,7 @@ import {i18n} from 'meteor/anti:i18n';
 import VueI18n from 'vue-i18n'
 import Element from 'element-ui'
 import enLocale from 'element-ui/lib/locale/lang/en'
-import kmLocale from '../../both/i18n/lang/km'
+import kmLocale from 'element-ui/lib/locale/lang/km'
 import locale from 'element-ui/lib/locale'
 
 Vue.use(VueI18n)

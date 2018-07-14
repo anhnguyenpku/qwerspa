@@ -69,7 +69,7 @@
                                 <div style="padding: 14px;">
                                     <span>{{langConfig['teacher']}} : {{d.teacherDoc && d.teacherDoc.personal.name || ""}}</span>
                                     <div class="bottom clearfix">
-                                        <time class="time">{{ d.createdAt | momentFormat }}</time>
+                                        <time class="time">{{ d.classDate | momentFormat}}</time>
                                         <el-button type="text" class="button">
                                             <el-button type="success" icon="el-icon-circle-close-outline"
                                                        @click="closeSchClass(index,d,schClassData)"
@@ -93,7 +93,7 @@
 
         <el-dialog
                 @close="handleCloseModal"
-                :title="langConfig['addStudentToClass']"
+                :title="langConfig['studentClass']"
                 :visible.sync="dialogAddSchStudentToClass"
                 :fullscreen="fullScreen"
                 class="dialogSchStudentToClass"
@@ -103,7 +103,47 @@
             <el-form :model="schAddStudentToClass" :rules="rules" ref="schAddStudentToClass" label-width="120px"
                      :label-schition="labelPosition"
                      class="schAddStudentToClass">
-                <el-row :gutter="20">
+                <el-tabs :tab-position="tabPosition" style="height: 200px;">
+                    <el-tab-pane :label="langConfig['student']">
+                        <template>
+                            <el-table
+                                    ref="multipleTable"
+                                    :data="studentDetail"
+                                    style="width: 100%"
+                                    @selection-change="handleSelectionChange">
+                                <el-table-column
+                                        type="selection"
+                                        width="55">
+                                </el-table-column>
+                                <el-table-column
+                                        label="Date"
+                                >
+                                    <template slot-scope="scope">{{ scope.row.date }}</template>
+                                </el-table-column>
+                                <el-table-column
+                                        property="name"
+                                        label="Name"
+                                >
+                                </el-table-column>
+                                <el-table-column
+                                        property="address"
+                                        label="Address"
+                                        show-overflow-tooltip>
+                                </el-table-column>
+                            </el-table>
+                            <div style="margin-top: 20px">
+                                <el-button @click="toggleSelection([tableData3[1], tableData3[2]])">Toggle selection
+                                    status of second and third rows
+                                </el-button>
+                                <el-button @click="toggleSelection()">Clear selection</el-button>
+                            </div>
+                        </template>
+                    </el-tab-pane>
+                    <el-tab-pane label="Config">Config</el-tab-pane>
+                    <el-tab-pane label="Role">Role</el-tab-pane>
+                    <el-tab-pane label="Task">Task</el-tab-pane>
+                </el-tabs>
+                <!--<el-row :gutter="20">
                     <el-transfer
                             filterable
                             :filter-method="filterMethod"
@@ -112,8 +152,8 @@
                             v-model="schAddStudentToClass.value"
                             :data="studentList">
                     </el-transfer>
-                    <!--</el-card>-->
-                </el-row>
+                    &lt;!&ndash;</el-card>&ndash;&gt;
+                </el-row>-->
             </el-form>
             <span slot="footer" class="dialog-footer fix-dialog-footer"
             >
@@ -165,6 +205,7 @@
                 return data;
             };*/
             return {
+                tabPosition: 'left',
                 fullScreen: true,
                 labelPosition: top,
                 schClassData: [],
@@ -192,38 +233,76 @@
                 teacherList: [],
                 programList: [],
                 rules: {},
-                studentList: []
+                studentList: [],
+                studentDetail: [{
+                    date: '2016-05-03',
+                    name: 'Tom',
+                    address: 'No. 189, Grove St, Los Angeles'
+                }, {
+                    date: '2016-05-02',
+                    name: 'Tom',
+                    address: 'No. 189, Grove St, Los Angeles'
+                }, {
+                    date: '2016-05-04',
+                    name: 'Tom',
+                    address: 'No. 189, Grove St, Los Angeles'
+                }, {
+                    date: '2016-05-01',
+                    name: 'Tom',
+                    address: 'No. 189, Grove St, Los Angeles'
+                }, {
+                    date: '2016-05-08',
+                    name: 'Tom',
+                    address: 'No. 189, Grove St, Los Angeles'
+                }, {
+                    date: '2016-05-06',
+                    name: 'Tom',
+                    address: 'No. 189, Grove St, Los Angeles'
+                }, {
+                    date: '2016-05-07',
+                    name: 'Tom',
+                    address: 'No. 189, Grove St, Los Angeles'
+                }],
+                multipleSelection: []
             }
-        },
+
+        }
+        ,
         watch: {
             currentSize(val) {
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * val;
                 this.queryData(this.searchData, skip, val + skip);
-            },
+            }
+            ,
             currentPage(val) {
                 this.isSearching = true;
                 let skip = (val - 1) * this.currentSize;
                 this.queryData(this.searchData, skip, this.currentSize + skip);
-            },
+            }
+            ,
             searchData(val) {
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
             }
-        },
+        }
+        ,
         methods: {
             handleSizeChange(val) {
                 this.currentSize = val;
-            },
+            }
+            ,
             handleCurrentChange(val) {
                 this.currentPage = val;
-            },
+            }
+            ,
             handleCloseModal() {
 
                 this.resetForm();
                 this.refForm = "";
-            },
+            }
+            ,
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('querySchClassBoard', {
                     q: val,
@@ -248,13 +327,15 @@
                         vm.schClassForm = result;
                     }
                 })
-            },
+            }
+            ,
             cancel() {
                 this.$message({
                     type: 'info',
                     message: 'Canceled'
                 });
-            },
+            }
+            ,
             closeSchClass(index, row, rows) {
                 let vm = this;
                 this.$confirm('This will end your class. Continue?', 'Warning', {
@@ -290,38 +371,57 @@
                 });
 
 
-            },
+            }
+            ,
             popUpSchAddStudentToClass(doc) {
                 this.dialogAddSchStudentToClass = true;
                 this.generateStudentList(doc);
-            },
+            }
+            ,
             generateStudentList(data) {
                 Meteor.call("queryStudentByProgram", data.programId, (err, result) => {
                     if (!err) {
                         this.studentList = result;
                     }
                 })
-            },
+            }
+            ,
             filterMethod(query, item) {
                 return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
-            },
+            }
+            ,
             resetForm() {
                 this.schAddStudentToClass = {
                     value: []
                 }
-            },
+            }
+            ,
             saveSchStudentToClass(isCloseDialog, event, isPrint) {
                 event.preventDefault();
                 console.log(this.schAddStudentToClass.value)
 
+            },
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
             }
 
-        },
+        }
+        ,
 
         created() {
             this.isSearching = true;
             this.queryData();
-        },
+        }
+        ,
         computed: {
             langConfig() {
                 let data = compoLang.filter(config => config.lang === this.langSession)[0]['classBoard'];

@@ -17,6 +17,8 @@ import {Sch_Teacher} from "../../imports/collection/schTeacher";
 import {Sch_Student} from "../../imports/collection/schStudent";
 import {Sch_Promotion} from "../../imports/collection/schPromotion";
 import {Sch_Class} from "../../imports/collection/schClass";
+import {Sch_Major} from "../../imports/collection/schMajor";
+import {Sch_Faculty} from "../../imports/collection/schFaculty";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -47,6 +49,21 @@ Meteor.methods({
         let list = [];
 
         Sch_Level.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
+            list.push({label: obj.code + " : " + obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryFacultyOption(selector) {
+        let list = [];
+
+        Sch_Faculty.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryMajorOption(selector) {
+        let list = [];
+        Sch_Major.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });
         return list;

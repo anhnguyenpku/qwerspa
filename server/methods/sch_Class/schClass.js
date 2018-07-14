@@ -72,6 +72,11 @@ Meteor.methods({
                             $options: 'mi'
                         }
                     }, {
+                        classDateName: {
+                            $regex: reg,
+                            $options: 'mi'
+                        }
+                    }, {
                         khName: {
                             $regex: reg,
                             $options: 'mi'

@@ -1,3 +1,4 @@
+/*
 'use strict';
 
 exports.__esModule = true;
@@ -104,4 +105,4 @@ exports.default = {
             hasCheckedFormat: '{checked}/{total} ត្រួតពិនិត្យ' // to be translated
         }
     }
-};
+};*/

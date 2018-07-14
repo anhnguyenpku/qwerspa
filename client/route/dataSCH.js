@@ -162,3 +162,23 @@ schData.route('/schClassBoard', {
         _Main('sch_classBoard');
     }
 });
+import "../../imports/ui/sch_major/sch_major";
+//Student
+schData.route('/schMajor', {
+    name: 'sch.major',
+    title: "Major",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_major');
+    }
+});
+import "../../imports/ui/sch_faculty/sch_faculty";
+//Student
+schData.route('/schFaculty', {
+    name: 'sch.faculty',
+    title: "Faculty",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_faculty');
+    }
+});

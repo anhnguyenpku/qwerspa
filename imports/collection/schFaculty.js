@@ -1,6 +1,6 @@
-export const Sch_Program = new Mongo.Collection('sch_program');
+export const Sch_Faculty = new Mongo.Collection('sch_faculty');
 
-Sch_Program.schema = new SimpleSchema({
+Sch_Faculty.schema = new SimpleSchema({
     name: {
         type: String,
         label: "Name"
@@ -10,26 +10,9 @@ Sch_Program.schema = new SimpleSchema({
         label: "Khmer",
         optional: true
     },
-    code: {
-        type: String,
-        optional: true
-    },
     desc: {
         type: String,
         optional: true
-    },
-    price: {
-        type: Number,
-        decimal: true
-    },
-    term: {
-        type: Number
-    },
-    levelId: {
-        type: String
-    },
-    majorId: {
-        type: String
     },
     rolesArea: {
         type: String,
@@ -77,4 +60,4 @@ Sch_Program.schema = new SimpleSchema({
     }
 });
 
-Sch_Program.attachSchema(Sch_Program.schema);
+Sch_Faculty.attachSchema(Sch_Faculty.schema);
