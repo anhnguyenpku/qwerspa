@@ -74,7 +74,7 @@
                                   Degree
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{programDoc && programDoc.degree || ""}}
+                                  : {{majorDoc && majorDoc.degree || ""}}
 
                               </div>
                           </div>
@@ -83,7 +83,7 @@
                                   Faculty
                               </div>
                               <div style="width: 80% !important;float: right">
-                                  : {{programDoc && programDoc.faculty || ""}}
+                                  : {{facultyDoc && facultyDoc.name || ""}}
 
                               </div>
                           </div>
@@ -181,7 +181,8 @@
                     phoneNumber: ""
                 },
                 transcriptDoc: {},
-                programDoc: {},
+                majorDoc: {},
+                facultyDoc: {},
 
                 loading: false,
                 onLoad: false,
@@ -206,16 +207,17 @@
                     this.waterBillingSetup = result;
                 }
             })
-            this.handleRun(FlowRouter.query.get('studentId'), FlowRouter.query.get('programId'));
+            this.handleRun(FlowRouter.query.get('studentId'), FlowRouter.query.get('majorId'));
         },
         methods: {
-            handleRun(studentId, programId) {
+            handleRun(studentId, majorId) {
                 this.loading = true;
-                Meteor.call('schTranscriptReport', studentId, programId, this.langConfig, (err, result) => {
+                Meteor.call('schTranscriptReport', studentId, majorId, this.langConfig, (err, result) => {
                     if (result) {
                         this.printTranscriptHtml = result.printTranscriptHtml;
                         this.transcriptDoc = result.transcriptDoc;
-                        this.programDoc = result.programDoc;
+                        this.majorDoc = result.majorDoc;
+                        this.facultyDoc = result.facultyDoc;
                         this.loading = false;
                     } else {
                         this.loading = false;

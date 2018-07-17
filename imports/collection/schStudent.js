@@ -165,27 +165,11 @@ Sch_Student.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    level: {
-        type: String
-    },
-    programId: {
-        type: String
-    },
     fromSchool: {
         type: String,
         optional: true
     },
     provinceSchool: {
-        type: String,
-        optional: true
-    },
-    yearFrom: {
-        type: Date
-    },
-    yearTo: {
-        type: Date
-    },
-    transcriptId: {
         type: String,
         optional: true
     },

@@ -104,13 +104,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['program']" prop="programId">
+                        <el-form-item :label="langConfig['major']" prop="majorId">
                             <el-select style="display: block !important;"
                                        filterable
-                                       v-model="schCiriculumnForm.programId"
+                                       v-model="schCiriculumnForm.majorId"
                                        :placeholder="langConfig['chooseItem']">
                                 <el-option
-                                        v-for="item in programList"
+                                        v-for="item in majorList"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
@@ -312,13 +312,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['program']" prop="programId">
+                        <el-form-item :label="langConfig['major']" prop="majorId">
                             <el-select style="display: block !important;"
                                        filterable
-                                       v-model="schCiriculumnForm.programId"
+                                       v-model="schCiriculumnForm.majorId"
                                        :placeholder="langConfig['chooseItem']">
                                 <el-option
-                                        v-for="item in programList"
+                                        v-for="item in majorList"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
@@ -537,7 +537,7 @@
                 culumnData2: [
                     {year: "", subjectId: "", credit: 0}
                 ],
-                programList: [],
+                majorList: [],
                 subjectList: [],
                 yearList: [
                     {label: "1", value: 1},
@@ -548,7 +548,7 @@
                 fullscreen: true,
                 schCiriculumnForm: {
                     name: "",
-                    programId: "",
+                    majorId: "",
                     desc: "",
                     _id: "",
                     requiredCredit: "",
@@ -556,10 +556,10 @@
                 },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
-                    program: [{
+                    major: [{
                         required: true,
                         type: 'string',
-                        message: 'Please choose Program',
+                        message: 'Please choose Major',
                         trigger: 'change'
                     }],
                 },
@@ -602,10 +602,10 @@
                     this.isSearching = false;
                 });
             }, 300),
-            programOpt() {
+            majorOpt() {
                 let selector = {};
-                Meteor.call('queryProgramOption', selector, (err, result) => {
-                    this.programList = result;
+                Meteor.call('queryMajorOption', selector, (err, result) => {
+                    this.majorList = result;
                 })
             },
             subjectOpt() {
@@ -690,7 +690,7 @@
                             requiredCredit: vm.schCiriculumnForm.requiredCredit,
                             culumnSemester1: culumnData1Temp,
                             culumnSemester2: culumnData2Temp,
-                            programId: vm.schCiriculumnForm.programId,
+                            majorId: vm.schCiriculumnForm.majorId,
                             rolesArea: Session.get('area')
                         };
 
@@ -727,14 +727,14 @@
                             if (obj.year) {
                                 culumnData1Temp.push(obj);
                             }
-                        })
+                        });
 
                         vm.culumnData2.map((obj) => {
                             if (obj.year) {
                                 culumnData2Temp.push(obj);
 
                             }
-                        })
+                        });
 
                         let schCiriculumnDoc = {
                             _id: vm.schCiriculumnForm._id,
@@ -743,7 +743,7 @@
                             requiredCredit: vm.schCiriculumnForm.requiredCredit,
                             culumnSemester1: culumnData1Temp,
                             culumnSemester2: culumnData2Temp,
-                            programId: vm.schCiriculumnForm.programId,
+                            majorId: vm.schCiriculumnForm.majorId,
                             rolesArea: Session.get('area')
                         };
 
@@ -853,7 +853,7 @@
             this.isSearching = true;
             this.queryData();
             this.subjectOpt();
-            this.programOpt();
+            this.majorOpt();
         },
         computed: {
             langConfig() {

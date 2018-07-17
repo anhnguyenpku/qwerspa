@@ -26,6 +26,13 @@ Sch_Register.schema = new SimpleSchema({
     term: {
         type: Number
     },
+    registerDate: {
+        type: Date
+    },
+    registerDateName: {
+        type: String,
+        optional: true
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

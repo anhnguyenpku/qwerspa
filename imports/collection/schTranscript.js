@@ -7,7 +7,10 @@ Sch_Transcript.schema = new SimpleSchema({
     curiculumnId: {
         type: String
     },
-    programId: {
+    majorId: {
+        type: String
+    },
+    registerId: {
         type: String
     },
     requiredCredit: {

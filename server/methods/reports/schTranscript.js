@@ -11,16 +11,18 @@ import {roundCurrency} from "../../../imports/api/methods/roundCurrency"
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
 import {Sch_Level} from "../../../imports/collection/schLevel";
 import {Sch_Subject} from "../../../imports/collection/schSubject";
+import {Sch_Major} from "../../../imports/collection/schMajor";
+import {Sch_Faculty} from "../../../imports/collection/schFaculty";
 
 Meteor.methods({
-    schTranscriptReport(studentId, programId, translate) {
+    schTranscriptReport(studentId, majorId, translate) {
         let data = {};
 
         let companyDoc = WB_waterBillingSetup.findOne({});
 
         //Range Date
         let transcriptList = Sch_Transcript.aggregate([
-            {$match: {studentId: studentId, programId: programId}},
+            {$match: {studentId: studentId, majorId: majorId}},
             {
                 $lookup: {
                     from: 'sch_student',
@@ -35,7 +37,24 @@ Meteor.methods({
                 }
             },
             {
-                $project: {newArr: {$concatArrays: ["$culumnSemester1", "$culumnSemester2"]}, studentDoc: 1}
+                $lookup: {
+                    from: 'sch_register',
+                    localField: 'registerId',
+                    foreignField: '_id',
+                    as: 'registerDoc'
+                }
+            }, {
+                $unwind: {
+                    path: "$registerDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    newArr: {$concatArrays: ["$culumnSemester1", "$culumnSemester2"]},
+                    studentDoc: 1,
+                    registerDoc: 1
+                }
             },
             {
                 $unwind: {
@@ -51,7 +70,8 @@ Meteor.methods({
                         ind: "$newArr.ind"
                     },
                     data: {$push: "$newArr"},
-                    studentDoc: {$last: "$studentDoc"}
+                    studentDoc: {$last: "$studentDoc"},
+                    registerDoc: {$last: "$registerDoc"}
                 }
             },
             {
@@ -65,7 +85,8 @@ Meteor.methods({
                         year: "$_id.year"
                     },
                     data: {$addToSet: "$$ROOT"},
-                    studentDoc: {$last: "$studentDoc"}
+                    studentDoc: {$last: "$studentDoc"},
+                    registerDoc: {$last: "$registerDoc"}
                 }
             },
             {
@@ -80,11 +101,11 @@ Meteor.methods({
         let finalGPA = 0;
         let countFinalGPA = 0;
         let credit = 0;
-        let stateEx = Sch_Transcript.findOne({studentId: studentId, programId: programId});
+        let stateEx = Sch_Transcript.findOne({studentId: studentId, majorId: majorId});
         let printTranscriptHtml = "";
         let subjectList = Sch_Subject.find().fetch();
         let yearTo = 0;
-        yearTo = parseInt(moment(transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.yearFrom || "").add(1, "month").format("YYYY"));
+        yearTo = parseInt(moment(transcriptDoc && transcriptDoc.registerDoc && transcriptDoc.registerDoc.registerDate || "").format("YYYY"));
         if (transcriptList.length > 0) {
             /*let newArr = transcriptList[0].culumnSemester1.concat(transcriptList[0].culumnSemester2 || []);
             newArr.sort(orderByProperty("ind", "sem"));*/
@@ -308,11 +329,13 @@ Meteor.methods({
             }
 
 
-            let programDoc = Sch_Level.findOne({_id: programId});
-            transcriptDoc.yearFrom = moment(transcriptDoc && transcriptDoc.studentDoc && transcriptDoc.studentDoc.yearFrom || "").add(1, "month").format("YYYY");
+            let majorDoc = Sch_Major.findOne({_id: majorId});
+            let facultyDoc = Sch_Faculty.findOne({_id: majorDoc.facultyId});
+            transcriptDoc.yearFrom = moment(transcriptDoc && transcriptDoc.registerDoc && transcriptDoc.registerDoc.registerDate || "").format("YYYY");
             transcriptDoc.yearTo = yearTo + "";
             data.transcriptDoc = transcriptDoc;
-            data.programDoc = programDoc;
+            data.majorDoc = majorDoc;
+            data.facultyDoc = facultyDoc;
 
         }
 

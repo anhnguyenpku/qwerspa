@@ -226,7 +226,20 @@
       "term": "Term",
       "addToClass": "Add To Class",
       "class": "Class",
-      "major": "Major"
+      "major": "Major",
+      "registerDate": "Register Date",
+      "year": "Year",
+      "semester": "Semester",
+      "subject": "Subject",
+      "credit": "Credit",
+      "score": "Score",
+      "grades": "Grade",
+      "curiculumn": "Curiculumn",
+      "inputTranscript": "Input Transcript",
+      "finalGrade": "Grade",
+      "gradePoint": "GPA",
+      "requiredCredit": "Required Credit",
+      "isCompleted": "Completed"
     },
     "class": {
       "searchHere": "Search Here ...",
@@ -400,7 +413,7 @@
       "semester": "Semester",
       "subject": "Subject",
       "credit": "Credit",
-      "program": "Program",
+      "major": "Major",
       "requiredCredit": "Required Credit"
     },
     "subject": {
@@ -652,7 +665,20 @@
       "term": "រយៈពេលក្នុងការបង់",
       "addToClass": "បញ្ចូលទៅថ្នាក់",
       "class": "ថ្នាក់",
-      "major": "ជំនាញ"
+      "major": "ជំនាញ",
+      "registerDate": "ថ្ងៃចុះឈ្មោះ",
+      "year": "ឆ្នាំ",
+      "semester": "ឆមាស",
+      "subject": "មុខវិជ្ជា",
+      "credit": "ក្រេឌីត",
+      "score": "ពិន្ទុ",
+      "grades": "និទ្ទេស",
+      "curiculumn": "កម្មវិធីសិក្សា",
+      "inputTranscript": "បញ្ចូលព្រឹត្តបត្រពិន្ទុ",
+      "finalGrade": "និទ្ទេស",
+      "gradePoint": "មធ្យមភាគ",
+      "requiredCredit": "ទាមទារចំនួនក្រេឌីត",
+      "isCompleted": "បំពេញរួចរាល់"
     },
     "class": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -833,7 +859,7 @@
       "semester": "ឆមាស",
       "subject": "មុខវិជ្ជា",
       "credit": "Credit",
-      "program": "កម្មវិធី",
+      "major": "ជំនាញ",
       "requiredCredit": "ទាមទារចំនួនក្រេឌីត"
     },
     "subject": {

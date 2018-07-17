@@ -77,17 +77,17 @@ Meteor.methods({
             }
         });
         data.state = stateList;
-        let tranDoc = Sch_Transcript.findOne({studentId: data.studentId, programId: data.programId});
+        let tranDoc = Sch_Transcript.findOne({studentId: data.studentId, majorId: data.majorId});
         let isReturn;
         if (tranDoc) {
-            isReturn = Sch_Transcript.update({studentId: data.studentId, programId: data.programId}, {$set: data});
+            isReturn = Sch_Transcript.update({studentId: data.studentId, majorId: data.majorId}, {$set: data});
         } else {
             isReturn = Sch_Transcript.insert(data);
         }
         return isReturn;
     },
-    queryTranscriptByStudentIdProgramId(studentId, programId) {
-        return Sch_Transcript.findOne({studentId: studentId, programId: programId});
+    queryTranscriptByStudentIdMajorId(studentId, majorId) {
+        return Sch_Transcript.findOne({studentId: studentId, majorId: majorId});
     },
     queryStudentByProgram(programId) {
         let data = Sch_Register.aggregate([

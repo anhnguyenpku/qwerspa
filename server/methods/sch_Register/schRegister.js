@@ -168,7 +168,7 @@ Meteor.methods({
         return doc;
     },
     updateSchRegister(data) {
-        if (data.classId !== "") {
+        if (data.classId && data.classId !== "") {
             let registerDoc = Sch_Register.findOne({_id: data._id});
             let classDoc = Sch_ClassTable.findOne({classId: data.classId});
             let takeOutClassDoc = Sch_ClassTable.findOne({classId: registerDoc.classId});
@@ -180,6 +180,7 @@ Meteor.methods({
             classTBDoc.classId = data.classId;
             classTBDoc.rolesArea = data.rolesArea;
             if (classDoc) {
+
                 //Take In
                 if (classDoc.studentList && classDoc.studentList.length > 0) {
                     classDoc.studentList.forEach((obj) => {
@@ -191,7 +192,6 @@ Meteor.methods({
                 studentList.push(data);
                 classTBDoc.studentList = studentList;
                 Sch_ClassTable.update({_id: classDoc._id}, {$set: classTBDoc});
-
                 //Take out
                 if (takeOutClassDoc && (classDoc.classId !== takeOutClassDoc.classId)) {
                     if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {

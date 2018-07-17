@@ -51,6 +51,7 @@ Meteor.methods({
         return doc;
     },
     updateSchCiriculumn(data) {
+        console.log(data);
         let doc = Sch_Ciriculumn.update({_id: data._id},
             {
                 $set: data

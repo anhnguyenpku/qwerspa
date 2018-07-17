@@ -17,12 +17,16 @@ Sch_ClassTable.schema = new SimpleSchema({
         type: String,
         label: "Student"
     },
+    "studentList.$.programId": {
+        type: String
+    },
+    "studentList.$.majorId": {
+        type: String,
+        label: "Major",
+    },
     "studentList.$.levelId": {
         type: String,
         label: "Level",
-    },
-    "studentList.$.programId": {
-        type: String
     },
     "studentList.$.promotionId": {
         type: String
@@ -33,6 +37,9 @@ Sch_ClassTable.schema = new SimpleSchema({
     },
     "studentList.$.term": {
         type: Number
+    },
+    "studentList.$.registerDate": {
+        type: Date
     },
     rolesArea: {
         type: String,
