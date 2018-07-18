@@ -180,10 +180,12 @@ Meteor.methods({
             classTBDoc.classId = data.classId;
             classTBDoc.rolesArea = data.rolesArea;
             if (classDoc) {
-
                 //Take In
                 if (classDoc.studentList && classDoc.studentList.length > 0) {
                     classDoc.studentList.forEach((obj) => {
+                        if (obj.isPromote === undefined) {
+                            obj.isPromote = false;
+                        }
                         if (obj._id !== registerDoc._id) {
                             studentList.push(obj);
                         }
@@ -196,6 +198,9 @@ Meteor.methods({
                 if (takeOutClassDoc && (classDoc.classId !== takeOutClassDoc.classId)) {
                     if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {
                         takeOutClassDoc.studentList.forEach((obj) => {
+                            if (obj.isPromote === undefined) {
+                                obj.isPromote = false;
+                            }
                             if (obj._id !== registerDoc._id) {
                                 studentListTakeOut.push(obj);
                             }
@@ -214,6 +219,9 @@ Meteor.methods({
                 if (takeOutClassDoc && (classTBDoc.classId !== takeOutClassDoc.classId)) {
                     if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {
                         takeOutClassDoc.studentList.forEach((obj) => {
+                            if (obj.isPromote === undefined) {
+                                obj.isPromote = false;
+                            }
                             if (obj._id !== registerDoc._id) {
                                 studentListTakeOut.push(obj);
                             }

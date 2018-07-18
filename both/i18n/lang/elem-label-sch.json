@@ -293,7 +293,16 @@
       "status": "Status",
       "numberStudent": "Number Student",
       "studentClass": "Student in Class",
-      "student": "Student"
+      "student": "Student",
+      "gender": "Gender",
+      "dob": "Date Of Birth",
+      "phoneNumber": "Phone Number",
+      "promote": "Promote",
+      "alreadyPromote": "Already Promote",
+      "class": "Class",
+      "level": "Level",
+      "major": "Major",
+      "promoteToClass": "Promote To Class"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -734,7 +743,16 @@
       "status": "ស្ថានភាព",
       "numberStudent": "ចំនួនសិស្ស",
       "studentClass": "ឈ្មោះសិស្សទៅតាមថ្នាក់",
-      "student": "សិស្ស"
+      "student": "សិស្ស",
+      "gender": "ភេទ",
+      "dob": "ថ្ងៃខែឆ្នាំកំណើត",
+      "phoneNumber": "លេខទូរស័ព្ទ",
+      "promote": "ឡើងថ្នាក់",
+      "alreadyPromote": "ឡើងថ្នាក់រួចរាល់",
+      "class": "ថ្នាក់",
+      "level": "កម្រិត",
+      "major": "ជំនាញ",
+      "promoteToClass": "ឡើងទៅកាន់ថ្នាក់"
     },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

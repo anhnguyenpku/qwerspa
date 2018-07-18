@@ -847,9 +847,9 @@
                 studentList: [],
                 levelList: [],
                 programList: [],
-                promotionList: [],
                 classList: [],
                 majorList: [],
+                promotionList: [],
                 subjectList: [],
                 yearList: [
                     {label: "1", value: 1},

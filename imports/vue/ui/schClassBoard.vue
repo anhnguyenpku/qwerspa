@@ -67,7 +67,7 @@
                                     </div>
                                 </transition>
                                 <div style="padding: 14px;">
-                                    <span>{{langConfig['teacher']}} : {{d.teacherDoc && d.teacherDoc.personal.name || ""}}</span>
+                                    <span>{{langConfig['teacher']}} : {{d.teacherDoc && d.teacherDoc.personal.name || ""}} ({{d.teacherDoc && d.teacherDoc.personal.phoneNumber || ""}})</span>
                                     <div class="bottom clearfix">
                                         <time class="time">{{ d.classDate | momentFormat}}</time>
                                         <el-button type="text" class="button">
@@ -103,45 +103,154 @@
             <el-form :model="schAddStudentToClass" :rules="rules" ref="schAddStudentToClass" label-width="120px"
                      :label-schition="labelPosition"
                      class="schAddStudentToClass">
-                <el-tabs :tab-position="tabPosition" style="height: 200px;">
+                <el-tabs :tab-position="tabPosition" style="min-height: 200px;">
                     <el-tab-pane :label="langConfig['student']">
                         <template>
-                            <el-table
-                                    ref="multipleTable"
-                                    :data="studentDetail"
-                                    style="width: 100%"
-                                    @selection-change="handleSelectionChange">
-                                <el-table-column
-                                        type="selection"
-                                        width="55">
-                                </el-table-column>
-                                <el-table-column
-                                        label="Date"
-                                >
-                                    <template slot-scope="scope">{{ scope.row.date }}</template>
-                                </el-table-column>
-                                <el-table-column
-                                        property="name"
-                                        label="Name"
-                                >
-                                </el-table-column>
-                                <el-table-column
-                                        property="address"
-                                        label="Address"
-                                        show-overflow-tooltip>
-                                </el-table-column>
-                            </el-table>
-                            <div style="margin-top: 20px">
-                                <el-button @click="toggleSelection([tableData3[1], tableData3[2]])">Toggle selection
-                                    status of second and third rows
-                                </el-button>
-                                <el-button @click="toggleSelection()">Clear selection</el-button>
-                            </div>
+
+                            <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+                                    <span><b>{{langConfig['class']}} : {{className}}</b>({{classDate}})</span><br><br>
+                                    <span><b>{{langConfig['teacher']}} : {{teacher}}</b>({{teacherPhoneNumber}})</span><br><br>
+                                    <span><b>{{langConfig['code']}} : {{code}}</b></span>
+                                </div>
+                                <el-table
+                                        ref="multipleTable"
+                                        :data="studentList"
+                                        style="width: 100%">
+                                    <el-table-column
+                                            type="index"
+                                            width="50">
+                                    </el-table-column>
+                                    <el-table-column
+                                            property="studentDoc.personal.name"
+                                            :label="langConfig['name']"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            property="studentDoc.personal.gender"
+                                            :label="langConfig['gender']"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            property="studentDoc.personal.dobName"
+                                            :label="langConfig['dob']"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                            property="studentDoc.personal.phoneNumber"
+                                            :label="langConfig['phoneNumber']"
+                                            show-overflow-tooltip>
+                                    </el-table-column>
+                                </el-table>
+
+                            </el-card>
+
                         </template>
                     </el-tab-pane>
-                    <el-tab-pane label="Config">Config</el-tab-pane>
-                    <el-tab-pane label="Role">Role</el-tab-pane>
-                    <el-tab-pane label="Task">Task</el-tab-pane>
+                    <el-tab-pane :label="langConfig['promote']">
+                        <template>
+
+                            <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+
+                                    <div style="margin-top: 20px">
+                                        <el-button type="success" round style="float: right !important;"
+                                                   @click="popUpPromoteToClass()">
+                                            {{langConfig['promote']}}
+                                        </el-button>
+                                        <span><b>{{langConfig['class']}} : {{className}}</b>({{classDate}})</span><br><br>
+                                        <span><b>{{langConfig['teacher']}} : {{teacher}}</b>({{teacherPhoneNumber}})</span><br><br>
+                                        <span><b>{{langConfig['code']}} : {{code}}</b></span>
+                                    </div>
+                                </div>
+                                <el-table
+                                        ref="multipleTableNotPromote"
+                                        :data="studentListNotPromote"
+                                        style="width: 100%"
+                                        @selection-change="handleSelectionChangeNotPromote">
+                                    <el-table-column
+                                            type="index"
+                                            width="50">
+                                    </el-table-column>
+
+                                    <el-table-column
+                                            property="studentDoc.personal.name"
+                                            :label="langConfig['name']"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            property="studentDoc.personal.gender"
+                                            :label="langConfig['gender']"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            property="studentDoc.personal.dobName"
+                                            :label="langConfig['dob']"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                            property="studentDoc.personal.phoneNumber"
+                                            :label="langConfig['phoneNumber']"
+                                            show-overflow-tooltip>
+                                    </el-table-column>
+                                    <el-table-column
+                                            type="selection"
+                                            width="55">
+                                    </el-table-column>
+                                </el-table>
+                            </el-card>
+                        </template>
+                    </el-tab-pane>
+                    <el-tab-pane :label="langConfig['alreadyPromote']">
+                        <template>
+                            <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+
+                                    <div style="margin-top: 20px">
+                                        <span><b>{{langConfig['class']}} : {{className}}</b>({{classDate}})</span><br><br>
+                                        <span><b>{{langConfig['teacher']}} : {{teacher}}</b>({{teacherPhoneNumber}})</span><br><br>
+                                        <span><b>{{langConfig['code']}} : {{code}}</b></span>
+                                    </div>
+                                </div>
+                                <el-table
+                                        ref="multipleTableAlreadyPromote"
+                                        :data="studentListPromote"
+                                        style="width: 100%"
+                                        @selection-change="handleSelectionChangeAlreadyPromote">
+                                    <el-table-column
+                                            type="index"
+                                            width="50">
+                                    </el-table-column>
+
+                                    <el-table-column
+                                            property="studentDoc.personal.name"
+                                            :label="langConfig['name']"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            property="studentDoc.personal.gender"
+                                            :label="langConfig['gender']"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                            property="studentDoc.personal.dobName"
+                                            :label="langConfig['dob']"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                            property="studentDoc.personal.phoneNumber"
+                                            :label="langConfig['phoneNumber']"
+                                            show-overflow-tooltip>
+                                    </el-table-column>
+                                </el-table>
+
+                            </el-card>
+
+                        </template>
+                    </el-tab-pane>
                 </el-tabs>
                 <!--<el-row :gutter="20">
                     <el-transfer
@@ -155,7 +264,7 @@
                     &lt;!&ndash;</el-card>&ndash;&gt;
                 </el-row>-->
             </el-form>
-            <span slot="footer" class="dialog-footer fix-dialog-footer"
+            <!--<span slot="footer" class="dialog-footer fix-dialog-footer"
             >
                 <hr style="margin-top: 0px !important;">
                 <el-row>
@@ -170,8 +279,80 @@
 
                     </el-col>
                 </el-row>
-            </span>
+            </span>-->
         </el-dialog>
+        <el-dialog
+                :title="langConfig['promoteToClass']"
+                :visible.sync="dialogPromoteToClass"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="schPromoteToClassForm" :rules="rules" :ref="ref" label-width="120px"
+                     class="schPromoteToClassForm">
+                <el-form-item :label="langConfig['class']" prop="classId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schPromoteToClassForm.classId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in classList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['program']" prop="programId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schPromoteToClassForm.programId" disabled
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in programList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['major']" prop="majorId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schPromoteToClassForm.majorId" disabled
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in majorList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['level']" prop="levelId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schPromoteToClassForm.levelId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in levelList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogPromoteToClass= false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="savePromoteToClass">{{langConfig['save']}}</el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
+
     </div>
 </template>
 <script>
@@ -205,6 +386,7 @@
                 return data;
             };*/
             return {
+                ref: "promoteToClass",
                 tabPosition: 'left',
                 fullScreen: true,
                 labelPosition: top,
@@ -216,7 +398,7 @@
                 currentSize: 12,
                 count: 0,
                 dialogAddSchStudentToClass: false,
-
+                dialogPromoteToClass: false,
                 schClassForm: {
                     name: "",
                     khName: "",
@@ -227,43 +409,31 @@
                     programId: "",
                     status: false
                 },
+                schPromoteToClassForm: {
+                    levelId: "",
+                    majorId: "",
+                    programId: "",
+                    classId: ""
+                },
                 schAddStudentToClass: {
                     value: [1]
                 },
                 teacherList: [],
+                levelList: [],
                 programList: [],
+                classList: [],
+                majorList: [],
                 rules: {},
                 studentList: [],
-                studentDetail: [{
-                    date: '2016-05-03',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles'
-                }, {
-                    date: '2016-05-02',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles'
-                }, {
-                    date: '2016-05-04',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles'
-                }, {
-                    date: '2016-05-01',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles'
-                }, {
-                    date: '2016-05-08',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles'
-                }, {
-                    date: '2016-05-06',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles'
-                }, {
-                    date: '2016-05-07',
-                    name: 'Tom',
-                    address: 'No. 189, Grove St, Los Angeles'
-                }],
-                multipleSelection: []
+                studentListNotPromote: [],
+                studentListPromote: [],
+                multipleSelectionAlreadyPromote: [],
+                multipleSelectionNotPromote: [],
+                className: "",
+                code: "",
+                teacher: "",
+                teacherPhoneNumber: "",
+                classDate: ""
             }
 
         }
@@ -336,6 +506,34 @@
                 });
             }
             ,
+            programOpt() {
+                let selector = {};
+                Meteor.call("queryProgramOption", selector, (err, result) => {
+                    this.programList = result;
+                })
+            },
+            majorOpt(val) {
+                let selector = {};
+                if (val) {
+                    selector.programId = val;
+                }
+                Meteor.call("queryMajorOption", selector, (err, result) => {
+                    this.majorList = result;
+                })
+            },
+            classOpt() {
+                let selector = {};
+                Meteor.call("queryClassOption", selector, (err, result) => {
+                    this.classList = result;
+                })
+            },
+            levelOpt(val) {
+                let selector = {};
+                selector.majorId = val;
+                Meteor.call("queryLevelOption", selector, (err, result) => {
+                    this.levelList = result;
+                })
+            },
             closeSchClass(index, row, rows) {
                 let vm = this;
                 this.$confirm('This will end your class. Continue?', 'Warning', {
@@ -375,13 +573,21 @@
             ,
             popUpSchAddStudentToClass(doc) {
                 this.dialogAddSchStudentToClass = true;
+                this.className = doc.name || "";
+                this.code = doc.code || "";
+                this.teacher = doc.teacherDoc && doc.teacherDoc.personal.name || "";
+                this.teacherPhoneNumber = doc.teacherDoc && doc.teacherDoc.personal.phoneNumber;
+                this.classDate = moment(doc.classDate).format("DD/MM/YYYY");
                 this.generateStudentList(doc);
             }
             ,
             generateStudentList(data) {
-                Meteor.call("queryStudentByProgram", data.programId, (err, result) => {
+                Meteor.call("queryStudentByClassId", data._id, (err, result) => {
+                    this.studentList = [];
                     if (!err) {
-                        this.studentList = result;
+                        this.studentList = result.data;
+                        this.studentListNotPromote = result.dataNotPromote;
+                        this.studentListPromote = result.dataPromote;
                     }
                 })
             }
@@ -410,8 +616,21 @@
                     this.$refs.multipleTable.clearSelection();
                 }
             },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
+            handleSelectionChangeAlreadyPromote(val) {
+                console.log(val);
+                this.multipleSelectionAlreadyPromote = val;
+            },
+            handleSelectionChangeNotPromote(val) {
+                console.log(val);
+                this.multipleSelectionNotPromote = val;
+            },
+            savePromoteToClass() {
+
+            },
+            popUpPromoteToClass() {
+                this.dialogPromoteToClass = true;
+                this.programOpt();
+                this.classOpt();
             }
 
         }
@@ -444,4 +663,17 @@
         margin-right: 20px;
     }
 
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 100%;
+    }
 </style>

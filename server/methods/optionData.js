@@ -86,7 +86,7 @@ Meteor.methods({
         let list = [];
         selector.status = true;
         Sch_Class.find(selector).fetch().forEach(function (obj) {
-            list.push({label: obj.name, value: obj._id});
+            list.push({label: obj.name + " - " + obj.classDateName, value: obj._id});
         });
         return list;
     },

@@ -38,8 +38,22 @@ Sch_ClassTable.schema = new SimpleSchema({
     "studentList.$.term": {
         type: Number
     },
+    "studentList.$.isPromote": {
+        type: Boolean,
+        optional: true,
+        defaultValue: false
+    },
     "studentList.$.registerDate": {
         type: Date
+    },
+    "studentList.$.newClassId": {
+        type: String,
+        optional: true
+    },
+    "studentList.$.isChangeClass": {
+        type: Boolean,
+        defaultValue: false,
+        optional: true
     },
     rolesArea: {
         type: String,
