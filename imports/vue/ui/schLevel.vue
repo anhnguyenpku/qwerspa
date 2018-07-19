@@ -365,7 +365,11 @@
             },
             "schLevelForm.programId"(val) {
                 this.majorOpt(val);
-                this.schLevelForm.majorId = ""
+                this.$refs["schLevelFormAdd"].validate((valid) => {
+                    if (valid) {
+                        this.schLevelForm.majorId = ""
+                    }
+                })
             }
         },
         methods: {

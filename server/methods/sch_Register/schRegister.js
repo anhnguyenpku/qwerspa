@@ -3,6 +3,7 @@ import {Sch_ClassTable} from '../../../imports/collection/schClassTable';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Class} from "../../../imports/collection/schClass";
+import {Sch_Transcript} from "../../../imports/collection/schTranscript";
 
 Meteor.methods({
     querySchRegister({q, filter, options = {limit: 10, skip: 0}}) {
@@ -231,6 +232,8 @@ Meteor.methods({
                     Sch_ClassTable.update({_id: takeOutClassDoc._id}, {$set: classTBDocTakeOut});
                 }
             }
+
+            
         }
         let doc = Sch_Register.update({_id: data._id},
             {
@@ -255,6 +258,7 @@ Meteor.methods({
             }
 
         }
+        Sch_Transcript.remove({registerId: id});
         return Sch_Register.remove({_id: id});
     }
 });

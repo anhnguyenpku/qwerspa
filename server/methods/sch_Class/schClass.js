@@ -122,6 +122,48 @@ Meteor.methods({
                     }
                 },
                 {
+                    $lookup: {
+                        from: "sch_level",
+                        localField: "levelId",
+                        foreignField: "_id",
+                        as: "levelDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$levelDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "sch_major",
+                        localField: "levelDoc.majorId",
+                        foreignField: "_id",
+                        as: "majorDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$majorDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "sch_program",
+                        localField: "majorDoc.programId",
+                        foreignField: "_id",
+                        as: "programDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$programDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
                     $limit: options.limit
                 },
                 {
@@ -152,6 +194,7 @@ Meteor.methods({
         return doc;
     },
     removeSchClass(id) {
+        Sch_ClassTable.remove({classId: id});
         return Sch_Class.remove({_id: id});
     },
     updateSchClassById(id) {

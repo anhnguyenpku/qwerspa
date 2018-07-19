@@ -48,7 +48,7 @@ Meteor.methods({
     queryLevelOption(selector) {
         let list = [];
 
-        Sch_Program.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
+        Sch_Level.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });
         return list;
@@ -75,9 +75,9 @@ Meteor.methods({
         });
         return list;
     },
-    queryProgramOption(selector) {
+    queryProgramOption() {
         let list = [];
-        Sch_Level.find(selector).fetch().forEach(function (obj) {
+        Sch_Program.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
         });
         return list;

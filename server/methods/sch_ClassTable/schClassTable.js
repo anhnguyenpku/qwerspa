@@ -2,6 +2,7 @@ import {Sch_ClassTable} from '../../../imports/collection/schClassTable';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Register} from "../../../imports/collection/schRegister";
+import {Sch_Class} from "../../../imports/collection/schClass";
 
 Meteor.methods({
     querySchClassTable({q, filter, options = {limit: 10, skip: 0}}) {
@@ -96,6 +97,19 @@ Meteor.methods({
                 }
             },
             {
+                $lookup: {
+                    from: "sch_class",
+                    localField: "studentList.newClassId",
+                    foreignField: "_id",
+                    as: "newClassDoc"
+                }
+            }, {
+                $unwind: {
+                    path: "$newClassDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
                 $sort: {
                     "studentDoc.personal.name": 1
                 }
@@ -121,5 +135,46 @@ Meteor.methods({
         newData.dataNotPromote = dataNotPromote;
         newData.dataPromote = dataPromote;
         return newData;
+    },
+    addPromoteToClass(data) {
+        if (data) {
+            let classTableDoc = Sch_ClassTable.findOne({classId: data.classFormDoc.classId});
+            let classDoc = Sch_Class.findOne({_id: data.classFormDoc.classId});
+            let classTable = {};
+            classTable.classId = data.classFormDoc.classId;
+            classTable.rolesArea = data.classFormDoc.rolesArea;
+            let studentList = [];
+            if (classTableDoc) {
+                studentList = classTableDoc.studentList;
+            }
+            data.studentList.forEach((obj) => {
+                if (obj) {
+                    data.classFormDoc.studentId = obj.studentList.studentId;
+                    data.classFormDoc._id = obj.studentList._id;
+                    data.classFormDoc.promotionId = obj.studentList.promotionId;
+                    data.classFormDoc.term = obj.studentList.term;
+                    data.classFormDoc.registerDate = classDoc.classDate;
+                    data.classFormDoc.isPromote = false;
+                    data.classFormDoc.isChangeClass = false;
+
+                    studentList.push(data.classFormDoc);
+                    Sch_ClassTable.direct.update({
+                        "studentList.studentId": obj.studentList.studentId,
+                        "studentList.programId": obj.studentList.programId,
+                        "studentList.classId": obj.studentList.classId,
+                        "studentList.levelId": obj.studentList.levelId,
+                        "studentList.majorId": obj.studentList.majorId
+                    }, {$set: {"studentList.$.isPromote": true, "studentList.$.newClassId": data.classFormDoc.classId}})
+                }
+            });
+
+            classTable.studentList = studentList;
+            if (classTableDoc) {
+                return Sch_ClassTable.update({_id: classTableDoc._id}, {$set: classTable});
+            } else {
+                return Sch_ClassTable.insert(classTable);
+            }
+
+        }
     }
 });

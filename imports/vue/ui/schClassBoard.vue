@@ -245,6 +245,11 @@
                                             :label="langConfig['phoneNumber']"
                                             show-overflow-tooltip>
                                     </el-table-column>
+                                    <el-table-column
+                                            property="newClassDoc.name"
+                                            :label="langConfig['class']"
+                                            show-overflow-tooltip>
+                                    </el-table-column>
                                 </el-table>
 
                             </el-card>
@@ -288,24 +293,11 @@
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schPromoteToClassForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schPromoteToClassForm">
-                <el-form-item :label="langConfig['class']" prop="classId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schPromoteToClassForm.classId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in classList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+
                 <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schPromoteToClassForm.programId" disabled
+                               v-model="schPromoteToClassForm.programId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in programList"
@@ -319,7 +311,7 @@
                 <el-form-item :label="langConfig['major']" prop="majorId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schPromoteToClassForm.majorId" disabled
+                               v-model="schPromoteToClassForm.majorId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in majorList"
@@ -337,6 +329,20 @@
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in levelList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['class']" prop="classId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schPromoteToClassForm.classId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in classList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -416,7 +422,7 @@
                     classId: ""
                 },
                 schAddStudentToClass: {
-                    value: [1]
+                    value: []
                 },
                 teacherList: [],
                 levelList: [],
@@ -429,11 +435,18 @@
                 studentListPromote: [],
                 multipleSelectionAlreadyPromote: [],
                 multipleSelectionNotPromote: [],
+
                 className: "",
                 code: "",
                 teacher: "",
                 teacherPhoneNumber: "",
-                classDate: ""
+                classDate: "",
+                programId: "",
+                programName: "",
+                majorId: "",
+                majorName: "",
+                levelName: "",
+                oldClassId: ""
             }
 
         }
@@ -455,7 +468,25 @@
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
-            }
+            },
+            "schPromoteToClassForm.programId"(val) {
+                this.majorOpt(val);
+                if (this.ref !== "promoteToClass") {
+                    this.schRegisterForm.majorId = "";
+                }
+            },
+            "schPromoteToClassForm.majorId"(val) {
+                this.levelOpt(val);
+                if (this.ref !== "promoteToClass") {
+                    this.schPromoteToClassForm.levelId = "";
+                }
+            },
+            "schPromoteToClassForm.levelId"(val) {
+                this.classOpt(val);
+                if (this.ref !== "promoteToClass") {
+                    this.schPromoteToClassForm.classId = "";
+                }
+            },
         }
         ,
         methods: {
@@ -521,8 +552,11 @@
                     this.majorList = result;
                 })
             },
-            classOpt() {
+            classOpt(val) {
                 let selector = {};
+                if (val) {
+                    selector.levelId = val;
+                }
                 Meteor.call("queryClassOption", selector, (err, result) => {
                     this.classList = result;
                 })
@@ -574,10 +608,23 @@
             popUpSchAddStudentToClass(doc) {
                 this.dialogAddSchStudentToClass = true;
                 this.className = doc.name || "";
+                this.oldClassId = doc._id || "";
                 this.code = doc.code || "";
+                this.programName = doc.programDoc && doc.programDoc.name || "";
+                this.programId = doc.programDoc && doc.programDoc._id || "";
+
+                this.majorName = doc.majorDoc && doc.majorDoc.name || "";
+                this.majorId = doc.majorDoc && doc.majorDoc._id || "";
+
+                this.levelName = doc.levelDoc && doc.levelDoc.name || "";
+
                 this.teacher = doc.teacherDoc && doc.teacherDoc.personal.name || "";
                 this.teacherPhoneNumber = doc.teacherDoc && doc.teacherDoc.personal.phoneNumber;
                 this.classDate = moment(doc.classDate).format("DD/MM/YYYY");
+
+                this.schPromoteToClassForm.programId = doc.programDoc && doc.programDoc._id || "";
+                this.schPromoteToClassForm.majorId = doc.majorDoc && doc.majorDoc._id || "";
+
                 this.generateStudentList(doc);
             }
             ,
@@ -604,8 +651,6 @@
             ,
             saveSchStudentToClass(isCloseDialog, event, isPrint) {
                 event.preventDefault();
-                console.log(this.schAddStudentToClass.value)
-
             },
             toggleSelection(rows) {
                 if (rows) {
@@ -617,17 +662,47 @@
                 }
             },
             handleSelectionChangeAlreadyPromote(val) {
-                console.log(val);
                 this.multipleSelectionAlreadyPromote = val;
             },
             handleSelectionChangeNotPromote(val) {
-                console.log(val);
                 this.multipleSelectionNotPromote = val;
             },
             savePromoteToClass() {
+                let vm = this;
+                let data = {};
+                data.studentList = this.multipleSelectionNotPromote;
+                let promoteToClassDoc = {
+                    levelId: vm.schPromoteToClassForm.levelId,
+                    majorId: vm.schPromoteToClassForm.majorId,
+                    programId: vm.schPromoteToClassForm.programId,
+                    classId: vm.schPromoteToClassForm.classId,
+                    rolesArea: Session.get('area')
+                };
+                data.classFormDoc = promoteToClassDoc;
+                let oldClassDoc = {};
+                oldClassDoc._id = this.oldClassId;
+                Meteor.call("addPromoteToClass", data, (err, result) => {
+                    if (result) {
+                        vm.$message({
+                            message: `សិស្សឡើងថ្នាក់បានជោគជ័យ`,
+                            type: 'success'
+                        });
+                        vm.generateStudentList(oldClassDoc);
+                        vm.dialogPromoteToClass = false;
+                        vm.queryData();
+                    } else {
+                        vm.$message({
+                            type: 'error',
+                            message: err.message
+                        });
+                        vm.generateStudentList(oldClassDoc);
+
+                    }
+                })
 
             },
             popUpPromoteToClass() {
+                this.ref = "promoteToClass";
                 this.dialogPromoteToClass = true;
                 this.programOpt();
                 this.classOpt();

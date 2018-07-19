@@ -25,7 +25,7 @@ Sch_Level.schema = new SimpleSchema({
     term: {
         type: Number
     },
-    levelId: {
+    programId: {
         type: String
     },
     majorId: {

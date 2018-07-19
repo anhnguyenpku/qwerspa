@@ -327,15 +327,18 @@
                 })
             },
             programOpt() {
-                let selector = {};
-                Meteor.call("queryProgramOption", selector, (err, result) => {
-                    this.programList = result;
+                Meteor.call("queryProgramOption", (err, result) => {
+                    if (result) {
+                        this.programList = result;
+                    }
                 })
             },
             facultyOpt() {
                 let selector = {};
                 Meteor.call("queryFacultyOption", selector, (err, result) => {
-                    this.facultyList = result;
+                    if (result) {
+                        this.facultyList = result;
+                    }
                 })
             },
             saveSchMajor() {

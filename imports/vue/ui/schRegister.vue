@@ -76,7 +76,7 @@
                                            @click="popupSchRegisterUpdate(),findSchRegisterById(scope),dialogUpdateSchRegister= true"
                                            :disabled="disabledUpdate"></el-button>
                                 <el-button type="success" icon="el-icon-caret-right" size="small" class="cursor-pointer"
-                                           @click="popupSchRegisterUpdateToClass(),findSchRegisterById(scope),dialogUpdateSchRegisterToClass= true"
+                                           @click="popupSchRegisterUpdateToClass(scope.row),findSchRegisterById(scope),dialogUpdateSchRegisterToClass= true"
                                            :disabled="disabledUpdate"></el-button>
                                 <el-button type="success" size="small" class="cursor-pointer"
                                            @click="dialoginputTranscript= true,popUpInputTranscript(scope.row)"
@@ -509,7 +509,7 @@
                 </el-row>
 
                 <el-row>
-                    <el-col :span="11">
+                    <el-col :span="12">
                         <span><b>ឆមាស ១(Semester 1)</b></span>
                         <el-table
                                 :data="culumnData1"
@@ -609,10 +609,7 @@
                         </el-table>
 
                     </el-col>
-                    <el-col :span="2">
-                        <div>&nbsp;</div>
-                    </el-col>
-                    <el-col :span="11">
+                    <el-col :span="12">
                         <span><b>ឆមាស ២(Semester 2)</b></span>
                         <el-table
                                 :data="culumnData2"
@@ -703,7 +700,7 @@
                 </el-row>
                 <hr style="margin-top: 0px !important;">
                 <el-row>
-                    <el-col :span="11">
+                    <el-col :span="12">
                         <span><b>ប្រលងបញ្ចប់(State Exam)</b></span>
                         <el-table
                                 :data="stateExam"
@@ -780,7 +777,7 @@
                     <el-col :span="2">
                         <div>&nbsp;</div>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="5">
                         <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit">
                             <el-input v-model="inputTranscriptForm.requiredCredit" disabled></el-input>
                         </el-form-item>
@@ -1050,8 +1047,11 @@
                     this.promotionList = result;
                 })
             },
-            classOpt() {
+            classOpt(val) {
                 let selector = {};
+                if (val) {
+                    selector.levelId = val;
+                }
                 Meteor.call("queryClassOption", selector, (err, result) => {
                     this.classList = result;
                 })
@@ -1283,7 +1283,7 @@
                 this.promotionOpt();
 
             },
-            popupSchRegisterUpdateToClass() {
+            popupSchRegisterUpdateToClass(doc) {
                 this.ref = "schRegisterFormUpdate";
                 this.resetForm();
                 this.studentOpt();
@@ -1291,7 +1291,7 @@
                 this.majorOpt();
                 this.levelOpt();
                 this.promotionOpt();
-                this.classOpt();
+                this.classOpt(doc.levelId);
             },
             findCuriculumnById(id) {
                 let vm = this;
