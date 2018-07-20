@@ -18,9 +18,6 @@ import './layout.html';
 import {CheckRoles} from "../imports/api/methods/checkRoles";
 import {WB_waterBillingSetup} from "../imports/collection/waterBillingSetup";
 //collection
-import {WB_MobileSync} from '../imports/collection/mobileSync';
-import {WB_RequestUpdateJournalDetail} from '../imports/collection/requestUpdateJournalDetail';
-import {Wb_meterReadingJournal} from '../imports/collection/meterReadingJournal';
 import {Pos_Invoice} from '../imports/collection/posInvoice';
 import {LoginSetup} from '../imports/collection/loginSetup';
 import {Pos_AverageInventory} from "../imports/collection/posAverageInventory";

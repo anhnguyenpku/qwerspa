@@ -1,1 +1,0 @@
-export const WB_VILLAGES = new Mongo.Collection('wb_village');

@@ -1,4 +1,3 @@
-import {CounterCollection} from '../../collection/counter';
 import {Acc_Exchange} from '../../collection/accExchange';
 
 import {roundCurrency} from "./roundCurrency"

@@ -7,7 +7,6 @@ import '../../client/layout';
 import '../../imports/ui/user/userSetting';
 
 import '../../imports/ui/notFound/notFound';
-import '../../imports/ui/meterType/meterType';
 
 
 //import layout render

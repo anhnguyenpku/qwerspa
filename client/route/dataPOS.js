@@ -124,16 +124,6 @@ posPurchase.route('/posPayBill', {
     }
 });
 
-import "../../imports/ui/pos_Agent/posAgent";
-// Invoice
-posData.route('/posAgent', {
-    name: 'pos.agent',
-    parent: 'wb.homeData',
-    title: "Agent",
-    action: function (query, params) {
-        _Main('pos_agent');
-    }
-});
 
 
 import '../../imports/ui/report/posInvoicePrintA4/posInvoicePrintA4';
