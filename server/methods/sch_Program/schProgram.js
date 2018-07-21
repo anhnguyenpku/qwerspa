@@ -1,5 +1,6 @@
 import {Sch_Program} from '../../../imports/collection/schProgram';
-
+import {Meteor} from 'meteor/meteor';
+import {Promis} from 'meteor/promise';
 import {SpaceChar} from "../../../both/config.js/space"
 
 Meteor.methods({
@@ -48,8 +49,10 @@ Meteor.methods({
                 data.content = schPrograms;
                 let schProgramTotal = Sch_Program.find(selector).count();
                 data.countSchProgram = schProgramTotal;
+
             }
             return data;
+
         }
     },
     querySchProgramById(id) {

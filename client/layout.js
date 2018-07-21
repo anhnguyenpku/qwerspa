@@ -91,17 +91,8 @@ Template.MainLayout.helpers({
     isShowReportRole() {
         return CheckRoles({roles: ['admin', 'super', 'report', 'reportVendor', 'reportCustomer']});
     },
-    mobileSyncNotify() {
-        return WB_MobileSync.find({}, {limit: 10, sort: {createdAt: -1}});
-    },
     syncedBy() {
         return Meteor.users.findOne({_id: this.userId});
-    },
-    countMobileSynced() {
-        return WB_MobileSync.find({readBy: {$nin: [Meteor.userId()]}}).count();
-    },
-    countRequestJournalUpdate() {
-        return WB_RequestUpdateJournalDetail.find({}).count();
     },
     isRead() {
         let isRead = this.readBy && this.readBy.find(x => x === Meteor.userId());
@@ -110,17 +101,11 @@ Template.MainLayout.helpers({
     createdAt() {
         return moment(this.createdAt).format('DD/MM/YYYY HH:mm');
     },
-    journalBook() {
-        return Wb_meterReadingJournal.findOne({_id: this.journalBookId});
-    },
     posLayout() {
         return Session.get("module") == "POS";
     },
     accountLayout() {
         return Session.get("module") == "Accounting";
-    },
-    wbLayout() {
-        return Session.get("module") == "Water Billing";
     },
     schLayout() {
         return Session.get("module") == "School";
@@ -187,12 +172,6 @@ Template.navbar.helpers({
 Template.MainLayout.events({
     'click .full-screen'(event, instance) {
         go_full_screen();
-    },
-    'click .ready'(event, instance) {
-        let selector = {
-            $addToSet: {readBy: Meteor.userId()}
-        };
-        Meteor.call('mobileSync_readBy', this._id, selector);
     }
 });
 

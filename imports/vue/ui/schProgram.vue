@@ -233,7 +233,9 @@
                     filter: this.filter,
                     options: {skip: skip || 0, limit: limit || 10}
                 }, (err, result) => {
+                    console.log(err);
                     if (!err) {
+                        console.log(result.content);
                         this.schProgramData = result.content;
                         this.count = result.countSchProgram;
                     }

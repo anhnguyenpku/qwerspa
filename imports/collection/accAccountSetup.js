@@ -1,3 +1,4 @@
+
 export const Acc_AccountSetup = new Mongo.Collection('acc_accountSetup');
 
 Acc_AccountSetup.schema = new SimpleSchema({
@@ -15,7 +16,7 @@ Acc_AccountSetup.schema = new SimpleSchema({
     },
     createdAt: {
         type: Date,
-        optional:true,
+        optional: true,
         autoValue() {
             if (this.isInsert) {
                 return moment().toDate();
@@ -24,7 +25,7 @@ Acc_AccountSetup.schema = new SimpleSchema({
     },
     updatedAt: {
         type: Date,
-        optional:true,
+        optional: true,
         autoValue() {
             if (this.isUpdate) {
                 return moment().toDate();
