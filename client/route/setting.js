@@ -100,12 +100,14 @@ wbSetting.route('/accChartAccount', {
         _Main('acc_chartAccount');
     }
 });
-//using for modify description on mobile
-wbSetting.route('/description', {
-    name: 'wb.description',
-    title: "Description",
+
+import '../../imports/ui/waterBillingSetup/waterBillingSetup';
+//waterBillingSetup
+FlowRouter.route('/waterBillingSetup', {
+    name: 'wb.waterBillingSetup',
+    title: "Setup",
     parent: "wb.home",
     action: function (query, params) {
-        _Main('wb_description');
+        _Main('wb_waterBillingSetup');
     }
 });

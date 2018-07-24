@@ -27,32 +27,27 @@
                             border
                             style="width: 100%">
                         <el-table-column
-                                label="_id"
-                                fit
-                                prop="_id">
-                        </el-table-column>
-                        <el-table-column
                                 label="Khmer Name"
                                 fit
                                 prop="khName">
                         </el-table-column>
                         <el-table-column
                                 label="English Name"
-                                width="180" prop="enName">
+                                 prop="enName">
                         </el-table-column>
                         <el-table-column
                                 label="Khmer Short Name"
-                                width="180" prop="khShortName">
+                                prop="khShortName">
                         </el-table-column>
                         <el-table-column
                                 label="English Short Name"
-                                width="180" prop="enShortName">
+                                prop="enShortName">
                         </el-table-column>
                         <el-table-column
-                                label="Operations">
+                                label="Operations" width="70">
                             <template slot-scope="scope">
                                 <el-button
-                                        size="small"
+                                        size="small" type="success"
                                         @click="handleEdit(scope.$index, scope.row)">Edit
                                 </el-button>
                             </template>
@@ -167,7 +162,7 @@
             </span>
                     </el-dialog>
                 </el-tab-pane>
-                <slot v-if="!isEmptyCompany">
+                <!--<slot v-if="!isEmptyCompany">
                     <el-tab-pane label="General">
                         <el-row :gutter="10">
                             <el-col :span="4">
@@ -201,7 +196,7 @@
                             </el-col>
                         </el-row>
                     </el-tab-pane>
-                </slot>
+                </slot>-->
                 <!--<el-tab-pane label="Role">Role</el-tab-pane>-->
                 <!--<el-tab-pane label="Task">Task</el-tab-pane>-->
             </el-tabs>

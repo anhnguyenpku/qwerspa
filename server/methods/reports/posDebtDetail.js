@@ -127,20 +127,20 @@ Meteor.methods({
                             <td>${formatCurrency((obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid), companyDoc.baseCurrency)}</td>
                     </tr>
             
-                 `
+                 `;
                 ind++;
                 obj.data.forEach((ob) => {
                     if (ob.netTotal - ob.paid > 0) {
                         ob.invoiceNo = ob && ob.invoiceNo.length > 9 ? parseInt((ob && ob.invoiceNo || "0000000000000").substr(9, 13)) : parseInt(ob && ob.invoiceNo || "0");
                         ob.invoiceNo = pad(ob.invoiceNo, 6);
-                        if (ob.dueDate.getTime() <= params.date.getTime()) {
+                        if (ob.dueDate.getTime() >= params.date.getTime()) {
                             debtHTML += `
                         <tr>
                             <td colspan="3" style="text-align: center !important;">${moment(ob.invoiceDate).format("DD/MM/YYYY")}-(#${ob.invoiceNo})</td>
                             <td style="text-align: left !important;">${formatCurrency(ob.netTotal - ob.paid, companyDoc.baseCurrency)}</td>
                         </tr>
                     
-                    `
+                    `;
                         } else {
                             debtHTML += `
                         <tr>
@@ -148,15 +148,15 @@ Meteor.methods({
                             <td style="text-align: left !important;color: red !important;">${formatCurrency(ob.netTotal - ob.paid, companyDoc.baseCurrency)}</td>
                         </tr>
                     
-                    `
+                    `;
                         }
                     }
-                })
+                });
 
 
                 grandTotal += obj.invoiceTotal;
                 grandUnpaid += obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid;
-            })
+            });
 
             debtHTML += `
             <tr>

@@ -5,6 +5,7 @@ import {CheckRoles} from '../../imports/api/methods/checkRoles';
 //import layout render
 require("materialize-css-meteor");
 import {_Main} from '../libs/_renderLayout';
+
 var wbData = FlowRouter.group({
     prefix: '/wb-data',
     name: 'wbData',
@@ -19,8 +20,8 @@ let userProfile = FlowRouter.group({
     prefix: '/wb-user',
     name: 'wbUser',
     triggersEnter: [
-        function(context,redirect){
-            if(!Meteor.userId()) {
+        function (context, redirect) {
+            if (!Meteor.userId()) {
                 redirect('wb.home');
             }
         }
@@ -36,11 +37,14 @@ wbData.route('/', {
 });
 // home2
 //edit password
+import "../../imports/ui/user/changePassword";
+
 userProfile.route('/change-password', {
     name: 'wb.changePassword',
     parent: 'wb.homeData',
     title: 'Change Password',
-    action: function(query,params) {
+    action: function (query, params) {
         _Main('wb_changePassword')
     }
 });
+

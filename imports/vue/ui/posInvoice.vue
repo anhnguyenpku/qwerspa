@@ -880,15 +880,20 @@
                     ||
                     ""}}
                 </div>
-
                 <div class="col-md-6">
-                    <label for="" style="width: 150px">{{langConfig['address']}} : </label>{{posInvoiceShowData.address
-                    || ""}}
+                    <label for="" style="width: 150px">{{langConfig['dueDate']}} : </label>{{posInvoiceShowData.dueDate
+                    | momentFormat
+                    }}
                 </div>
                 <div class="col-md-6">
                     <label for="" style="width: 150px">{{langConfig['total']}}: </label>{{posInvoiceShowData.total ||
                     ""}}
                 </div>
+                <div class="col-md-6">
+                    <label for="" style="width: 150px">{{langConfig['address']}} : </label>{{posInvoiceShowData.address
+                    || ""}}
+                </div>
+
 
             </div>
             <br>

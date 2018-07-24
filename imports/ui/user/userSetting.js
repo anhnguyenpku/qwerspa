@@ -3,23 +3,34 @@ import {FlowRouter} from 'meteor/kadira:flow-router'
 import {Template} from 'meteor/templating'
 // import collection
 import {UserSchema} from '../../collection/userSchema'
-// import tabular
-import {UserSettingTabular} from '../../../both/tabular/userSetting'
 
 let index = Template.wb_userSetting,
-    userSettingOptions = Template.wb_userSettingOptions,
+    // userSettingOptions = Template.wb_userSettingOptions,
     addTmpl = Template.wb_userAdd,
     editTmpl = Template.wb_userSettingEdit;
-index.helpers({
+
+/*index.helpers({
     selector() {
         return {username: {$ne: 'super'}}
     },
     dataTable() {
         return UserSettingTabular
     }
+});*/
+import wbUserSetting from '/imports/vue/ui/userSetting';
+
+index.onRendered(function () {
+    new Vue({
+        render: h => h(wbUserSetting)
+    }).$mount('wb_userSetting');
 });
 
-index.events({
+index.onDestroyed(function () {
+    $('.wb_userSetting').remove();
+});
+
+
+/*index.events({
     'dblclick tbody > tr'(event, instance) {
         let dataTalbe = $(event.currentTarget).closest('table').DataTable();
         let rowData = dataTalbe.row(event.currentTarget).data();
@@ -52,11 +63,11 @@ index.events({
             null
         );
     }
-});
+});*/
 
-userSettingOptions.onRendered(function () {
+/*userSettingOptions.onRendered(function () {
     $('.dropdown-button').dropdown()
-});
+});*/
 addTmpl.onCreated(function () {
     this.geoProvinces = new ReactiveVar([]);
     this.geoArea = new ReactiveVar([]);
@@ -76,7 +87,7 @@ addTmpl.onCreated(function () {
             })
             this.moduleOpt.set(moduleList);
         }
-    })
+    });
 
 
     Meteor.call('fetchProvinces', (err, result) => {
@@ -85,7 +96,7 @@ addTmpl.onCreated(function () {
         }
     });
     this.autorun(() => {
-        let provinceId = this.provinceId.get()
+        let provinceId = this.provinceId.get();
         if (provinceId) {
             Meteor.call('fetchDistricts', provinceId, (err, result) => {
                 if (result) {
@@ -123,7 +134,7 @@ addTmpl.helpers({
 addTmpl.events({
     'change [name="rolesBranch"]'(event, instance) {
         let currentValue = event.currentTarget.value;
-        if (currentValue != '') {
+        if (currentValue !== '') {
             instance.provinceId.set(currentValue);
         }
     }
@@ -148,10 +159,10 @@ editTmpl.onCreated(function () {
                 if (result.module.indexOf(obj.value) > -1) {
                     moduleList.push(obj);
                 }
-            })
+            });
             this.moduleOpt.set(moduleList);
         }
-    })
+    });
 
 
     Meteor.call('fetchProvinces', (err, result) => {
@@ -230,7 +241,7 @@ editTmpl.helpers({
 editTmpl.events({
     'change [name="rolesBranch"]'(event, instance) {
         let currentValue = event.currentTarget.value;
-        if (currentValue != '') {
+        if (currentValue !== '') {
             instance.provinceId.set(currentValue);
         }
     }

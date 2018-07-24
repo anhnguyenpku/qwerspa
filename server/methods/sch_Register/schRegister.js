@@ -51,21 +51,6 @@ Meteor.methods({
                 }, {
                     $lookup: {
                         from: "sch_program",
-                        localField: "levelId",
-                        foreignField: "_id",
-                        as: "levelDoc"
-
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$levelDoc",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "sch_level",
                         localField: "programId",
                         foreignField: "_id",
                         as: "programDoc"
@@ -75,6 +60,21 @@ Meteor.methods({
                 {
                     $unwind: {
                         path: "$programDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "sch_level",
+                        localField: "levelId",
+                        foreignField: "_id",
+                        as: "levelDoc"
+
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$levelDoc",
                         preserveNullAndEmptyArrays: true
                     }
                 },
@@ -233,7 +233,7 @@ Meteor.methods({
                 }
             }
 
-            
+
         }
         let doc = Sch_Register.update({_id: data._id},
             {

@@ -77,13 +77,13 @@ export const UserSchema = new SimpleSchema({
             options() {
                 return [
                     {label: 'Setting', value: 'setting'},
-                    {label: 'Payment', value: 'payment'},
+                    /*{label: 'Payment', value: 'payment'},
                     {label: 'Creditor', value: 'creditor'},
-                    {label: 'Agent', value: 'agent'},
+                    {label: 'Agent', value: 'agent'},*/
                     {label: 'Admin', value: 'admin'},
-                    {label: 'Director', value: 'director'},
+                    /*{label: 'Director', value: 'director'},
                     {label: 'Main Zone', value: 'mainZone'},
-                    {label: 'Meter Reader', value: 'meterReader'},
+                    {label: 'Meter Reader', value: 'meterReader'},*/
                     {label: 'Control User', value: 'controlUser'},
                     {label: 'Report', value: 'report'},
                     {label: 'Report Customer', value: 'reportCustomer'},

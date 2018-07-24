@@ -446,6 +446,28 @@
       "desc": "desc",
       "add": "Add Subject",
       "update": "Update Subject"
+    },
+    "userSetting": {
+      "searchHere": "Search Here ...",
+      "title": "User Setting",
+      "action": "Action",
+      "save": "Save",
+      "cancel": "Cancel",
+      "warning": "Warning",
+      "messageWarning": "This will permanently delete the file. Continue?",
+      "saveSuccess": "Save Successfully!",
+      "saveFail": "Save Fail!",
+      "updateSuccess": "Update Successfully!",
+      "updateFail": "Update Fail!",
+      "removeSuccess": "Remove Successfully!",
+      "removeFail": "Remove Fail!",
+      "removeCancel": "Remove Cancel",
+      "userName": "User Name",
+      "email": "Email",
+      "approved": "Approved",
+      "status": "Status",
+      "add": "Add User Setting",
+      "update": "Update User Setting"
     }
   },
   {
@@ -902,6 +924,29 @@
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានមុខវិជ្ជា",
       "update": "កែប្រែព័តមានមុខវិជ្ជា"
+    },
+    "userSetting": {
+      "searchHere": "ស្វែងរក​នៅទីនេះ ...",
+      "title": "ការកំណត់អ្នកប្រើប្រាស់",
+      "show": "បង្ហាញការកំណត់អ្នកប្រើប្រាស់",
+      "action": "សកម្មភាព",
+      "save": "រក្សាទុក",
+      "cancel": "បោះបង់",
+      "warning": "ប្រយ័ត្ន",
+      "messageWarning": "នេះគឺលុបបាត់មិនអាចយកមកវិញបានទេ. ចង់បន្ត?",
+      "saveSuccess": "រក្សាទុកបានជោគជ័យ!",
+      "saveFail": "រក្សាទុកមិនបានជោគជ័យទេ!",
+      "updateSuccess": "កែប្រែបានជោគជ័យ!",
+      "updateFail": "កែប្រែមិនបានជោគជ័យទេ!",
+      "removeSuccess": "លុបបានជោជ័យ!",
+      "removeFail": "លុបមិនបានជោគជ័យទេ!",
+      "message": "អ្នកផ្គត់ផ្គង់នេះមិនអាចលុបបានទេ!",
+      "userName": "ឈ្មោះអ្នកប្រើប្រាស់",
+      "email": "អ៊ីម៉ែល",
+      "approved": "យល់ព្រម",
+      "status": "ស្ថានភាព",
+      "add": "បញ្ចូលព័តមានការកំណត់អ្នកប្រើប្រាស់",
+      "update": "កែប្រែព័តមានការកំណត់អ្នកប្រើប្រាស់"
     }
   }
 ]

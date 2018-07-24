@@ -1,0 +1,53 @@
+import {UserSchema} from '../../../imports/collection/userSchema';
+
+import {SpaceChar} from "../../../both/config.js/space"
+
+Meteor.methods({
+    queryWbUserSetting({q, filter, options = {limit: 10, skip: 0}}) {
+        if (Meteor.userId()) {
+            let data = {
+                content: [],
+                countSchUserSetting: 0,
+            };
+            let selector = {};
+            selector.username = {$ne: "super"};
+            if (!!q) {
+                let reg = new RegExp(q);
+                if (!!filter) {
+                    selector[filter] = {$regex: reg, $options: 'mi'}
+                } else {
+                    selector.$or = [{name: {$regex: reg, $options: 'mi'}}];
+                }
+            }
+            let wbUserSettings = Meteor.users.aggregate([
+                {
+                    $match: selector
+                },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                }
+            ]);
+            if (wbUserSettings.length > 0) {
+                data.content = wbUserSettings;
+                let wbUserSettingTotal = Meteor.users.find(selector).count();
+                data.countWbUserSetting = wbUserSettingTotal;
+            }
+            return data;
+        }
+    },
+    queryWbUserSettingById(id) {
+        let data = Meteor.users.findOne({_id: id});
+        return data;
+    },
+    removeWbUserSetting(id) {
+        return Meteor.users.remove({_id: id});
+    }
+});
