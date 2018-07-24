@@ -6,7 +6,11 @@ import {Sch_Class} from "../../../imports/collection/schClass";
 import {Sch_Transcript} from "../../../imports/collection/schTranscript";
 
 Meteor.methods({
-    schGeneratePaymentSchedule(studentId, classId, levelId) {
-
+    schGeneratePaymentSchedule(classDoc, levelDoc, classTableDoc) {
+        studentList.studentList.forEach((obj) => {
+            if (obj) {
+                
+            }
+        });
     }
 });

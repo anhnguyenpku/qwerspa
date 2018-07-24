@@ -359,6 +359,7 @@
                     <el-date-picker
                             v-model="schRegisterForm.registerDate"
                             type="date"
+                            disabled="disabled"
                             style="width: 100%;"
                             placeholder="Pick a day"
                     >
@@ -368,6 +369,7 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.studentId"
+                               disabled="disabled"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in studentList"
@@ -382,6 +384,7 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.programId"
+                               disabled="disabled"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in programList"
@@ -395,6 +398,7 @@
                 <el-form-item :label="langConfig['major']" prop="majorId">
                     <el-select style="display: block !important;"
                                filterable
+                               disabled="disabled"
                                v-model="schRegisterForm.majorId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
@@ -409,6 +413,7 @@
                 <el-form-item :label="langConfig['level']" prop="levelId">
                     <el-select style="display: block !important;"
                                filterable
+                               disabled="disabled"
                                v-model="schRegisterForm.levelId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
@@ -424,6 +429,7 @@
                 <el-form-item :label="langConfig['promotion']" prop="promotionId">
                     <el-select style="display: block !important;"
                                filterable
+                               disabled="disabled"
                                v-model="schRegisterForm.promotionId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
@@ -438,6 +444,7 @@
                 <el-form-item :label="langConfig['term']" prop="term">
                     <el-select style="display: block !important;"
                                filterable
+                               disabled="disabled"
                                v-model="schRegisterForm.term"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
@@ -878,20 +885,7 @@
                     transcriptId: "",
                     isCompleted: false
                 },
-                termList: [
-                    {label: "1 month", value: 1},
-                    {label: "2 months", value: 2},
-                    {label: "3 months", value: 3},
-                    {label: "4 months", value: 4},
-                    {label: "5 months", value: 5},
-                    {label: "6 months", value: 6},
-                    {label: "7 months", value: 7},
-                    {label: "8 months", value: 8},
-                    {label: "9 months", value: 9},
-                    {label: "10 months", value: 10},
-                    {label: "11 months", value: 11},
-                    {label: "12 months", value: 12},
-                ],
+                termList: [],
                 rules: {
                     curiculumnId:
                         [{
@@ -995,6 +989,24 @@
 
                 if (this.inputTranscriptForm.transcriptId === "") {
                     this.findCuriculumnById(val);
+                }
+            },
+            "schRegisterForm.levelId"(val) {
+                let vm = this;
+                if (val) {
+                    Meteor.call("querySchLevelById", val, (err, result) => {
+                        if (result) {
+                            vm.termList = [];
+                            console.log(result);
+                            for (let i = 1; i <= result.term; i++) {
+                                if (result.term % i === 0) {
+                                    vm.termList.push({label: i + " months", value: i});
+                                }
+                            }
+                        }
+                    })
+                } else {
+                    vm.termList = [];
                 }
             }
         },

@@ -55,6 +55,11 @@ Sch_ClassTable.schema = new SimpleSchema({
         defaultValue: false,
         optional: true
     },
+    "studentList.$.isGenerated": {
+        type: Boolean,
+        defaultValue: false,
+        optional: true
+    },
     rolesArea: {
         type: String,
         label: "Role Area"
