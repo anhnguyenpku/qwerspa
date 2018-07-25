@@ -1768,7 +1768,6 @@
                         posInvoiceDoc.item = vm.posInvoiceData;
                         Meteor.call("insertPosInvoice", posInvoiceDoc, (err, result) => {
                             if (!err) {
-
                                 if (isPrint) {
                                     FlowRouter.go('/pos-data/posInvoice/print?inv=' + result);
                                 } else {
@@ -1788,8 +1787,19 @@
 
                                 vm.queryData();
                                 vm.resetForm();
+                            } else {
+                                vm.$notify.error({
+                                    duration: 5000,
+                                    title: 'Error',
+                                    message: err.error
+                                });
+                                /*vm.$message({
+                                    type: 'error',
+                                    message: err.error
+                                });*/
                             }
                         })
+
                     }
                 })
 
@@ -1855,11 +1865,16 @@
                                 vm.queryData();
                                 vm.resetForm();
                             } else {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: err.message,
-                                    type: 'success'
+                                vm.$notify.error({
+                                    duration: 5000,
+                                    title: 'Error',
+                                    message: err.error
                                 });
+                                /*vm.$message({
+                                    duration: 1000,
+                                    message: err.error,
+                                    type: 'error'
+                                });*/
                             }
                         })
                     }
@@ -1913,6 +1928,7 @@
                             }
                         });
                         posInvoiceDoc.item = newPosInvoiceData;
+
                         Meteor.call("insertPosInvoice", posInvoiceDoc, true, (err, result) => {
                             if (!err) {
                                 if (isPrint) {
@@ -1934,8 +1950,16 @@
 
                                 vm.queryData();
                                 vm.resetForm();
+                            } else {
+                                vm.$notify.error({
+                                    duration: 5000,
+                                    title: 'Error',
+                                    message: err.error
+                                });
                             }
                         })
+
+
                     }
                 })
             },
@@ -2175,7 +2199,6 @@
             }
             ,
             updatePosInvoiceDetail(row, index) {
-                console.log(row);
                 if (row.qty > row.rawQty) {
                     this.$message({
                         type: 'error',
@@ -2196,7 +2219,7 @@
             ,
             updatePosInvoiceDetailReceiveItem(row, index) {
 
-                if (row.isReceive == true) {
+                if (row.isReceive === true) {
                     row.qty = row.rawQty;
                 } else {
                     row.qty = 0;
@@ -2228,7 +2251,7 @@
                 let vm = this;
                 Meteor.call("queryPosProductById", row.itemId, (err, data) => {
                     if (data) {
-                        if (row.isRetail == true) {
+                        if (row.isRetail === true) {
                             row.price = data.rePrice;
                             row.amount = vm.$_numeral(formatCurrency(data.rePrice * row.totalUnit)).value();
                         } else {
@@ -2302,7 +2325,7 @@
                 this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
                 vm.posInvoiceForm.total = formatCurrency(total, companyDoc.baseCurrency);
 
-                if (vm.posInvoiceForm.discountType == "Amount") {
+                if (vm.posInvoiceForm.discountType === "Amount") {
                     vm.posInvoiceForm.netTotal = formatCurrency(total - vm.posInvoiceForm.discount, companyDoc.baseCurrency);
                     vm.posInvoiceForm.balanceUnpaid = formatCurrency(total - vm.posInvoiceForm.discount - vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posInvoiceForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posInvoiceForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posInvoiceForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 

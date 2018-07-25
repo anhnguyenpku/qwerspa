@@ -16,7 +16,7 @@ import numeral from "numeral";
 Meteor.methods({
     addPosAverageInventory(data) {
 
-        if (data.transactionType == "Bill") {
+        if (data.transactionType === "Bill") {
             data.item.forEach((doc) => {
                 let obj = {};
                 let onHandInventory = Pos_AverageInventory.findOne({
@@ -46,7 +46,7 @@ Meteor.methods({
                 Pos_AverageInventory.insert(obj);
 
             })
-        } else if (data.transactionType == "Invoice") {
+        } else if (data.transactionType === "Invoice") {
 
             data.item.forEach((doc) => {
                 let obj = {};
@@ -91,7 +91,7 @@ Meteor.methods({
                     });
                 }
             })
-        } else if (data.transactionType == "Transfer Inventory") {
+        } else if (data.transactionType === "Transfer Inventory") {
             data.item.forEach((doc) => {
                 //Reduce From Location
                 let obj = {};
@@ -161,7 +161,7 @@ Meteor.methods({
 
     },
     reducePosAverageInventory(data) {
-        if (data.transactionType == "Remove Bill") {
+        if (data.transactionType === "Remove Bill") {
             data.item.forEach((doc) => {
                 let obj = {};
                 let onHandInventory = Pos_AverageInventory.findOne({
@@ -191,7 +191,7 @@ Meteor.methods({
 
                 Pos_AverageInventory.insert(obj);
             })
-        } else if (data.transactionType == "Remove Invoice") {
+        } else if (data.transactionType === "Remove Invoice") {
             data.item.forEach((doc) => {
                 let obj = {};
                 let onHandInventory = Pos_AverageInventory.findOne({
@@ -221,7 +221,7 @@ Meteor.methods({
 
                 Pos_AverageInventory.insert(obj);
             })
-        } else if (data.transactionType == "Remove Transfer Inventory") {
+        } else if (data.transactionType === "Remove Transfer Inventory") {
             data.item.forEach((doc) => {
                 //Reduce From Location
                 let objTo = {};
@@ -342,13 +342,27 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
-        })
+        });
         console.log("Finish Invoice");
 
 
+    },
+    checkStockBalance(data) {
+        if (data.item.length > 0) {
+            let i = 0;
+            data.item.forEach((doc) => {
+                let onHandInventory = Pos_AverageInventory.findOne({
+                    itemId: doc.itemId,
+                    locationId: data.locationId,
+                    rolesArea: data.rolesArea
+                }, {sort: {createdAt: -1}});
+                if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty) {
+                    i++;
+                }
+            });
+            return i;
+        }
     }
-
-
 });
 
 

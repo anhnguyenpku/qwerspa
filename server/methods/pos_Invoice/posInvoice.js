@@ -115,12 +115,17 @@ Meteor.methods({
             obj.price = formatCurrency(obj.price, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
             obj.amount = formatCurrency(obj.amount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
             return obj;
-        })
+        });
         return data;
     },
     insertPosInvoice(data, isReceiveItem) {
+        let checkBalance = Meteor.call("checkStockBalance", data);
+        if (checkBalance > 0) {
+            throw new Meteor.Error(checkBalance + " items is not enough stock");
+        }
+
         data.transactionType = (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt";
-        data.transactionType = isReceiveItem == true ? "Invoice Sale Order" : data.transactionType;
+        data.transactionType = isReceiveItem === true ? "Invoice Sale Order" : data.transactionType;
         data.invoiceNo = data.rolesArea + "-" + moment(data.invoiceDate).format("YYYY") + pad(data.invoiceNo, 6);
 
         data.item.forEach((obj) => {
@@ -129,7 +134,7 @@ Meteor.methods({
             obj.cost = numeral(obj.cost).value();
             obj.totalCost = numeral(obj.totalCost).value();
             return obj;
-        })
+        });
 
         let id = Pos_Invoice.insert(data);
         Pos_Customer.direct.update({_id: data.customerId}, {$inc: {invoiceNumber: 1}});
@@ -164,7 +169,7 @@ Meteor.methods({
                     if (obj._id != id) {
                         posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
                     }
-                })
+                });
                 Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
             })
 
@@ -180,10 +185,10 @@ Meteor.methods({
             })
         }
 
-        if (isReceiveItem == true) {
+        if (isReceiveItem === true) {
             let balanceNotCut = data.balanceNotCut;
             data.item.forEach((obj) => {
-                if (obj.isReceive == true) {
+                if (obj.isReceive === true) {
                     Pos_SaleOrder.direct.update({
                             _id: obj.saleOrderId,
                             "item.itemId": obj.itemId
@@ -204,7 +209,7 @@ Meteor.methods({
                     balanceNotCut -= balanceNotCut >= obj.amount ? obj.amount : balanceNotCut;
                     balanceNotCut = balanceNotCut >= 0 ? balanceNotCut : 0;
                     let countNotReceive = Pos_SaleOrder.find({"item.isReceive": false, _id: obj.saleOrderId}).count();
-                    if (countNotReceive == 0) {
+                    if (countNotReceive === 0) {
                         Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Complete"}});
                     } else {
                         Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Partial"}});
@@ -217,6 +222,11 @@ Meteor.methods({
         return id;
     },
     updatePosInvoice(data, _id) {
+        let checkBalance = Meteor.call("checkStockBalance", data);
+        if (checkBalance > 0) {
+            throw new Meteor.Error(checkBalance + " items is not enough stock");
+        }
+
         data.transactionType = (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt";
 
         data.invoiceNo = data.rolesArea + "-" + moment(data.invoiceDate).format("YYYY") + pad(data.invoiceNo, 6);
@@ -228,7 +238,7 @@ Meteor.methods({
             obj.cost = numeral(obj.cost).value();
             obj.totalCost = numeral(obj.totalCost).value();
             return obj;
-        })
+        });
 
         let isUpdated = Pos_Invoice.update({_id: _id},
             {
@@ -255,7 +265,7 @@ Meteor.methods({
                     invoiceNo: data.invoiceNo,
                     canRemove: false,
                     locationId: data.locationId,
-                    closeDate: data.netTotal - data.paid == 0 ? moment(data.invoiceDate).toDate() : "",
+                    closeDate: data.netTotal - data.paid === 0 ? moment(data.invoiceDate).toDate() : "",
                     transactionType: (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
 
                 }
@@ -281,7 +291,7 @@ Meteor.methods({
                     if (obj._id != _id) {
                         posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
                     }
-                })
+                });
                 Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
             })
         }
