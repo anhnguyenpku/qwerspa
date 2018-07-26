@@ -153,11 +153,11 @@ Meteor.methods({
                             <td>${formatCurrency(ob.amountEnding, companyDoc.baseCurrency)}</td>
                     </tr>
             
-                 `
+                 `;
                         grandTotal += ob.amountEnding;
                         subTotal += ob.amountEnding;
                         ind++;
-                    })
+                    });
 
                     inventoryEndingHTML += `
             <tr>
@@ -168,7 +168,7 @@ Meteor.methods({
                 }
 
 
-            })
+            });
 
             inventoryEndingHTML += `
             <tr>

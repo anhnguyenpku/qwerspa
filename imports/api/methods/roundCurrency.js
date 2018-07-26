@@ -8,7 +8,7 @@ export const roundCurrency = (amount, currencyId) => {
     settingDoc.usdDigit = settingDoc.usdDigit || 2;
     settingDoc.khrDigit = settingDoc.khrDigit || -2;
     settingDoc.thbDigit = settingDoc.thbDigit || 0;
-    if (settingDoc.roundType == "Normal") {
+    if (settingDoc.roundType === "Normal") {
         switch (currencyId) {
             case "USD":
                 newAmount = math.round(amount, settingDoc.usdDigit);
@@ -19,7 +19,7 @@ export const roundCurrency = (amount, currencyId) => {
             case "THB":
                 newAmount = math.round(amount, settingDoc.thbDigit);
         }
-    } else if (settingDoc.roundType == "Up") {
+    } else if (settingDoc.roundType === "Up") {
         switch (currencyId) {
             case "USD":
                 newAmount = Math.ceil(amount * digitToInt(settingDoc.usdDigit)) / digitToInt(settingDoc.usdDigit);
@@ -29,7 +29,7 @@ export const roundCurrency = (amount, currencyId) => {
                 newAmount = Math.ceil(amount * digitToInt(settingDoc.thbDigit)) / digitToInt(settingDoc.thbDigit);
         }
 
-    } else if (settingDoc.roundType == "Down") {
+    } else if (settingDoc.roundType === "Down") {
         switch (currencyId) {
             case "USD":
                 newAmount = Math.floor(amount * digitToInt(settingDoc.usdDigit)) / digitToInt(settingDoc.usdDigit);
@@ -45,9 +45,10 @@ export const roundCurrency = (amount, currencyId) => {
 
 export const formatCurrency = (amount, currencyId) => {
     let settingDoc = WB_waterBillingSetup.findOne();
-    if (currencyId == undefined) {
+    if (currencyId === undefined) {
         currencyId = settingDoc.baseCurrency;
     }
+    let newAmount = math.round(amount, 5);
     let newForm = "";
     switch (currencyId) {
         case "USD":
@@ -60,9 +61,9 @@ export const formatCurrency = (amount, currencyId) => {
             newForm = newFormFormat(settingDoc.thbDigit);
             break;
     }
-    return numeral(amount).format(newForm);
+    return numeral(newAmount).format(newForm);
 
-}
+};
 
 
 let roundKhr = (amount, digit) => {
@@ -71,14 +72,14 @@ let roundKhr = (amount, digit) => {
     } else {
         return math.round(amount, math.abs(digit));
     }
-}
+};
 let roundKhrUp = (amount, digit) => {
     if (digit <= 0) {
         return Math.ceil(amount / digitToInt(digit), math.abs(digit)) * digitToInt(digit);
     } else {
         return Math.ceil(amount * digitToInt(digit)) / digitToInt(digit);
     }
-}
+};
 
 let roundKhrDown = (amount, digit) => {
     if (digit <= 0) {
@@ -86,7 +87,7 @@ let roundKhrDown = (amount, digit) => {
     } else {
         return Math.floor(amount * digitToInt(digit)) / digitToInt(digit);
     }
-}
+};
 
 let digitToInt = (digit) => {
     let val = 1;
@@ -94,13 +95,13 @@ let digitToInt = (digit) => {
         val *= 10;
     }
     return val;
-}
+};
 
 let newFormFormat = (digit) => {
     let form = "(0,00";
     let k = 0;
     for (let i = 1; i <= digit; i++) {
-        if (k == 0) {
+        if (k === 0) {
             form += ".0";
         } else {
             form += "0";
@@ -109,7 +110,7 @@ let newFormFormat = (digit) => {
     }
     form += ")";
     return form;
-}
+};
 
 
 export const exchangeCoefficient = function ({exchange, fieldToCalculate, baseCurrency}) {
@@ -118,11 +119,11 @@ export const exchangeCoefficient = function ({exchange, fieldToCalculate, baseCu
         THB: {},
         USD: {}
     };
-    if (baseCurrency == 'USD') {
+    if (baseCurrency === 'USD') {
         coefficient.KHR.$divide = [fieldToCalculate, exchange.rates.KHR];
         coefficient.THB.$divide = [fieldToCalculate, exchange.rates.THB];
         coefficient.USD.$multiply = [fieldToCalculate, 1];
-    } else if (baseCurrency == 'THB') {
+    } else if (baseCurrency === 'THB') {
         coefficient.KHR.$divide = [fieldToCalculate, exchange.rates.KHR];
         coefficient.USD.$divide = [fieldToCalculate, exchange.rates.USD];
         coefficient.THB.$multiply = [fieldToCalculate, 1];
@@ -136,11 +137,11 @@ export const exchangeCoefficient = function ({exchange, fieldToCalculate, baseCu
 
 
 export const getCurrencySymbolById = function (id) {
-    if (id == "USD") {
+    if (id === "USD") {
         return "$";
-    } else if (id == "KHR") {
+    } else if (id === "KHR") {
         return "៛";
     } else {
         return "B";
     }
-}
+};

@@ -16,11 +16,11 @@ Meteor.methods({
     posInventoryTransactionReport(params, translate) {
         let parameter = {};
 
-        if (params.area != "") {
+        if (params.area !== "") {
             parameter.rolesArea = params.area;
         }
 
-        if (params.locationId != "") {
+        if (params.locationId !== "") {
             parameter.locationId = params.locationId;
         }
         let data = {};
@@ -60,7 +60,7 @@ Meteor.methods({
             {
                 $lookup: {
                     from: 'pos_unit',
-                    localField: 'productDoc._id',
+                    localField: 'productDoc.unitId',
                     foreignField: '_id',
                     as: 'unitDoc'
                 }
