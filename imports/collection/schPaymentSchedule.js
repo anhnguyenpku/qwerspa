@@ -9,10 +9,6 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
         type: String,
         label: "Class"
     },
-    levelId: {
-        type: String,
-        label: "Class"
-    },
     order: {
         type: Number
     },
@@ -52,6 +48,11 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
         type: Number,
         label: "Balance",
         decimal: true
+    },
+    paymentNumber: {
+        type: Number,
+        optional: true,
+        defaultValue: 0
     },
     rolesArea: {
         type: String,
@@ -101,6 +102,23 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
                 return Meteor.userId();
             }
         }
+    },
+    balanceNotCut: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        defaultValue: 0
+    },
+    status: {
+        type: String,
+        defaultValue: "Active"
+        //    Active
+        //    Partial
+        //    Complete
+    },
+    closeDate: {
+        type: Date,
+        optional: true
     }
 
 });

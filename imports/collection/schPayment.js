@@ -14,10 +14,10 @@ Sch_Payment.schema = new SimpleSchema({
         optional: true,
         blackbox: true
     },
-    'schedule.$.paymentScheduleId': {
+    'schedule.$._id': {
         type: String
     },
-    'schedule.$.paidDate': {
+    'schedule.$.receivePaymentScheduleDate': {
         type: Date
     },
 
@@ -53,11 +53,11 @@ Sch_Payment.schema = new SimpleSchema({
         type: Number,
         decimal: true
     },
-    receivePaymentDate: {
+    paymentDate: {
         type: Date,
         label: 'Receive Payment Date'
     },
-    receivePaymentDateName: {
+    paymentDateName: {
         type: String,
         optional: true
     },
@@ -107,15 +107,7 @@ Sch_Payment.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    scheduleId: {
-        type: String,
-        optional: true
-    },
-    saleOrderId: {
-        type: String,
-        optional: true
-    },
-    scheduleNo: {
+    paymentNo: {
         type: String,
         optional: true
     },

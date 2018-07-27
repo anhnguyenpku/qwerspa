@@ -4,6 +4,7 @@ import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 
 import numeral from "numeral";
+import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
 
 Meteor.methods({
     querySchPayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -21,26 +22,21 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
-                    selector.$or = [{paymentNo: {$regex: reg, $options: 'mi'}}, {
-                        code: {
-                            $regex: reg,
-                            $options: 'mi'
-                        }
-                    }, {"customerDoc.name": {$regex: reg, $options: 'mi'}}];
+                    selector.$or = [{"studentDoc.personal.name": {$regex: reg, $options: 'mi'}}];
                 }
             }
             let schPayments = Sch_Payment.aggregate([
                 {
                     $lookup: {
-                        from: "sch_customer",
-                        localField: "customerId",
+                        from: "sch_student",
+                        localField: "studentId",
                         foreignField: "_id",
-                        as: "customerDoc"
+                        as: "studentDoc"
                     }
                 },
                 {
                     $unwind: {
-                        path: "$customerDoc",
+                        path: "$studentDoc",
                         preserveNullAndEmptyArrays: true
                     }
                 },
@@ -66,8 +62,27 @@ Meteor.methods({
             });
             if (schPayments.length > 0) {
                 data.content = schPayments;
-                let schPaymentTotal = Sch_Payment.find(selector).count();
-                data.countSchPayment = schPaymentTotal;
+                let schPaymentTotal = Sch_Payment.aggregate([
+                    {
+                        $lookup: {
+                            from: "sch_student",
+                            localField: "studentId",
+                            foreignField: "_id",
+                            as: "studentDoc"
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$studentDoc",
+                            preserveNullAndEmptyArrays: true
+                        }
+                    },
+                    {
+                        $match: selector
+                    },
+                    {$group: {_id: null, total: {$sum: 1}}},
+                ]);
+                data.countSchPayment = schPaymentTotal[0].total;
             }
             return data;
         }
@@ -77,19 +92,19 @@ Meteor.methods({
         return data;
     },
     insertSchPayment(data) {
-        data.payment.forEach((obj) => {
+        data.schedule.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             obj.rawAmount = numeral(obj.rawAmount).value();
             obj.discount = numeral(obj.discount).value();
             obj.netAmount = numeral(obj.netAmount).value();
             obj.paid = numeral(obj.paid).value();
             return obj;
-        })
+        });
 
         return Sch_Payment.insert(data);
     },
     updateSchPayment(data, _id) {
-        data.payment.forEach((obj) => {
+        data.schedule.map((obj) => {
             obj.amount = numeral(obj.amount).value();
             obj.rawAmount = numeral(obj.rawAmount).value();
             obj.discount = numeral(obj.discount).value();
@@ -106,7 +121,7 @@ Meteor.methods({
     removeSchPayment(id) {
         let paymentDoc = Sch_Payment.findOne({_id: id});
         if (paymentDoc) {
-            paymentDoc.payment.forEach((data) => {
+            paymentDoc.schedule.forEach((data) => {
                 let paymentDoc = Sch_Payment.findOne({_id: data._id});
                 let newStatus = paymentDoc.status;
 
@@ -144,55 +159,8 @@ Meteor.methods({
 
 
     },
-    querySchPaymentByStudentId(studentId, receiveDate, locationId) {
-        return Sch_Payment.find({
-            customerId: customerId,
-            locationId: locationId,
-            status: {$in: ["Active", "Partial"]}
-        }).fetch().map((obj) => {
-            if (obj) {
-                return {
-                    _id: obj._id,
-                    paymentNo: obj.paymentNo,
-                    termId: obj.termId,
-                    amount: formatCurrency(obj.netTotal - obj.paid - (obj.balanceNotCut || 0)),
-                    rawAmount: obj.total,
-                    isApplyTerm: false,
-                    discount: 0,
-                    paymentDate: obj.paymentDate,
-                    dueDate: obj.dueDate,
-                    netAmount: formatCurrency(obj.netTotal - obj.paid - (obj.balanceNotCut || 0)),
-                    paid: 0,
-                    isShow: true,
-                    isPaid: false,
-                    dayOverDue: moment(receiveDate).startOf("days").diff(moment(obj.dueDate).startOf("days").toDate(), "days") < 0 ? 0 : moment(receiveDate).startOf("day").diff(moment(obj.dueDate).startOf("days").toDate(), "days")
-                }
-            }
-            return [];
-        });
-    },
-    /*querySchPaymentByCustomerIdSubmit(customerId, receiveDate) {
-        return Sch_Payment.find({customerId: customerId, status: {$in: ["Active", "Partial"]}}).fetch().map((obj) => {
-            return {
-                _id: obj._id,
-                paymentNo: obj.paymentNo,
-                termId: obj.termId,
-                amount: obj.netTotal,
-                rawAmount: obj.total,
-                isApplyTerm: false,
-                discount: obj.discount,
-                paymentDate: obj.paymentDate,
-                dueDate: obj.dueDate,
-                netAmount: obj.netTotal,
-                paid: obj.paid,
-                isShow: obj.isShow,
-                isPaid: obj.isPaid,
-                dayOverDue: moment(receiveDate).startOf("days").diff(moment(obj.dueDate).startOf("days").toDate(), "days") < 0 ? 0 : moment(receiveDate).startOf("day").diff(moment(obj.dueDate).startOf("days").toDate(), "days")
-            }
-        });
-    },*/
-    updatePaymentByPayment(data, date) {
-        let paymentDoc = Sch_Payment.findOne({_id: data._id});
+    updatePaymentScheduleByPayment(data, date) {
+        let paymentDoc = Sch_PaymentSchedule.findOne({_id: data._id});
         let newStatus = paymentDoc.status;
         let upd = {};
         if (paymentDoc.paid + (paymentDoc.balanceNotCut || 0) + numeral(data.paid).value() + numeral(data.discount).value() >= paymentDoc.netTotal) {
@@ -203,7 +171,7 @@ Meteor.methods({
         }
 
         upd.status = newStatus;
-        return Sch_Payment.direct.update({_id: data._id}, {
+        return Sch_PaymentSchedule.direct.update({_id: data._id}, {
             $set: upd,
             $inc: {
                 paid: numeral(data.paid).value() + numeral(data.discount).value(),

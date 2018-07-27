@@ -48,7 +48,7 @@ export const formatCurrency = (amount, currencyId) => {
     if (currencyId === undefined) {
         currencyId = settingDoc.baseCurrency;
     }
-    let newAmount = math.round(amount, 5);
+    let newAmount = math.round(numeral(amount).value(), 5);
     let newForm = "";
     switch (currencyId) {
         case "USD":

@@ -679,13 +679,12 @@
                             paymentDate: moment(vm.schPaymentForm.paymentDate).toDate(),
                             paymentDateName: moment(vm.schPaymentForm.paymentDate).format("DD/MM/YYYY"),
                             note: vm.schPaymentForm.note,
-                            address: vm.schPaymentForm.address,
 
                             rolesArea: Session.get('area'),
                             studentId: vm.schPaymentForm.studentId,
-                            locationId: vm.schPaymentForm.locationId,
+                            classId: vm.schPaymentForm.classId,
                         };
-                        schPaymentDoc.payment = vm.schPaymentData;
+                        schPaymentDoc.schedule = vm.schPaymentData;
                         Meteor.call("insertSchPayment", schPaymentDoc, (err, result) => {
                             if (!err) {
                                 vm.$message({
@@ -700,7 +699,7 @@
 
                                 vm.schPaymentData.forEach((obj) => {
                                     if (obj.isPaid === true) {
-                                        Meteor.call("updatePaymentByPayment", obj, schPaymentDoc.paymentDate, (err, re) => {
+                                        Meteor.call("updatePaymentScheduleByPayment", obj, schPaymentDoc.paymentDate, (err, re) => {
                                             if (err) {
                                                 console.log(err.message);
                                             }
@@ -770,27 +769,25 @@
                     row.isApplyTerm = false;
                 }
                 if (row.isApplyTerm) {
-                    Meteor.call("querySchPromotionById", row.promotionId, (err, data) => {
-                        if (row.paid === row.netAmount) {
+                    if (row.promotionDoc) {
+                        if (row.paid === vm.$_numeral(row.netAmount).value()) {
                             if (row.isPaid) {
                                 row.discount = 0;
-                                if (data.promotionType === "Amount") {
-                                    row.discount = data.value;
-
+                                if (row.promotionDoc.promotionType === "Amount") {
+                                    row.discount = row.promotionDoc.value;
                                 } else {
-                                    row.discount = vm.$_numeral(row.amount).value() * data.value / 100;
+                                    row.discount = formatCurrency(vm.$_numeral(row.amount).value() * row.promotionDoc.value / 100);
                                 }
                                 row.paid = vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value();
                                 row.netAmount = formatCurrency(vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value());
 
-
                             } else {
                                 row.discount = 0;
-                                if (data.promotionType === "Amount") {
-                                    row.discount = data.value;
+                                if (row.promotionDoc.promotionType === "Amount") {
+                                    row.discount = row.promotionDoc.value;
 
                                 } else {
-                                    row.discount = formatCurrency(vm.$_numeral(row.amount).value() * data.value / 100);
+                                    row.discount = formatCurrency(vm.$_numeral(row.amount).value() * row.promotionDoc.value / 100);
                                 }
                                 row.netAmount = formatCurrency(vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value());
                                 row.paid = 0;
@@ -808,14 +805,15 @@
                         }
                         this.schPaymentData[index] = row;
                         vm.getTotal();
-                    })
-
+                    }
                 } else {
-                    if (row.isPaid) {
+                    if (row.isPaid
+                    ) {
                         row.discount = 0;
                         row.paid = vm.$_numeral(row.amount).value();
                         row.netAmount = formatCurrency(row.amount);
-                    } else {
+                    }
+                    else {
                         row.discount = 0;
                         row.netAmount = formatCurrency(row.amount);
                         row.paid = 0;
@@ -844,14 +842,16 @@
                     this.updateSchPaymentDetail(row, index);
                 }
                 this.getTotal();
-            },
+            }
+            ,
             cancel() {
                 this.resetForm();
                 this.$message({
                     type: 'info',
                     message: 'Canceled'
                 });
-            },
+            }
+            ,
             resetForm() {
                 this.schPaymentData = [];
                 this.schPaymentForm.isPaidAll = false;
@@ -863,7 +863,8 @@
                     this.refForm = "";
 
                 }
-            },
+            }
+            ,
             getTotal() {
                 let vm = this;
                 let totalNetAmount = 0;
@@ -882,14 +883,20 @@
                 vm.schPaymentForm.totalDiscount = formatCurrency(totalDiscount, companyDoc.baseCurrency);
                 vm.schPaymentForm.totalPaid = formatCurrency(totalPaid, companyDoc.baseCurrency);
                 vm.schPaymentForm.balanceUnPaid = formatCurrency(totalNetAmount - totalPaid, companyDoc.baseCurrency);
-            },
+            }
+            ,
             overDueStatus(val) {
                 let vm = this;
                 if (val) {
                     vm.schPaymentData.map((obj) => {
-                        if (obj.isShow === true && obj.dayOverDue <= 0) {
+                        if (obj.isShow === true && (obj.receivePaymentScheduleDate.getTime() > vm.schPaymentForm.paymentDate.getTime())) {
                             obj.isShow = false;
                         }
+                        return obj;
+                    })
+                } else {
+                    vm.schPaymentData.map((obj) => {
+                        obj.isShow = true;
                         return obj;
                     })
                 }
@@ -900,7 +907,8 @@
             this.queryData();
             this.getTotal();
             this.classOpt();
-        },
+        }
+        ,
         computed: {
             langConfig() {
                 let data = compoLang.filter(config => config.lang === this.langSession)[0]['payment'];

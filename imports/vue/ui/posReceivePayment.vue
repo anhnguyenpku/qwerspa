@@ -577,7 +577,7 @@
                 }*/
 
                 let vm = this;
-                if (this.dialogAddPosReceivePayment == true) {
+                if (this.dialogAddPosReceivePayment === true) {
 
                     let ind = 0;
                     vm.posReceivePaymentForm.receivePaymentDate = val;
@@ -607,7 +607,7 @@
                             vm.posReceivePaymentForm.address = result.address;
                             vm.posReceivePaymentForm.termId = result.termId;
                         }
-                    })
+                    });
 
                     Meteor.call("queryPosInvoiceByCustomerId", val, vm.posReceivePaymentForm.receivePaymentDate, vm.posReceivePaymentForm.locationId, (err, result) => {
                         if (result) {
@@ -634,7 +634,7 @@
                 vm.posReceivePaymentData.map((obj) => {
                     if (obj.isShow) {
                         obj.isApplyTerm = val;
-                        if (obj.isPaid == false) {
+                        if (obj.isPaid === false) {
                             obj.isApplyTerm = false;
                         }
                         vm.updatePosReceivePaymentDetail(obj, ind);
@@ -645,13 +645,13 @@
             "posReceivePaymentForm.isPaidAll"(val) {
                 let vm = this;
                 let ind = 0;
-                if (val == false) {
+                if (val === false) {
                     vm.posReceivePaymentForm.isAllTerm = false;
                 }
                 this.posReceivePaymentData.map((obj) => {
                     if (obj.isShow) {
                         obj.isPaid = val;
-                        if (obj.isPaid == false) {
+                        if (obj.isPaid === false) {
                             obj.isApplyTerm = false;
                         }
                         vm.updatePosReceivePaymentDetail(obj, ind);
@@ -801,7 +801,7 @@
                                 }
 
                                 vm.posReceivePaymentData.forEach((obj) => {
-                                    if (obj.isPaid == true) {
+                                    if (obj.isPaid === true) {
                                         Meteor.call("updateInvoiceByReceivePayment", obj, posReceivePaymentDoc.receivePaymentDate, (err, re) => {
                                             if (err) {
                                                 console.log(err.message);
@@ -822,7 +822,7 @@
 
             removePosReceivePayment(index, row, rows) {
                 let vm = this;
-                if (row.canRemove == true) {
+                if (row.canRemove === true) {
                     vm.$confirm(this.langConfig['messageWarning'], this.langConfig['warning'], {
                         confirmButtonText: 'OK',
                         cancelButtonText: 'Cancel',
@@ -868,13 +868,13 @@
             },
             updatePosReceivePaymentDetail(row, index) {
                 let vm = this;
-                if (row.isPaid == false) {
+                if (row.isPaid === false) {
                     row.paid = 0;
                     row.isApplyTerm = false;
                 }
                 if (row.isApplyTerm) {
                     Meteor.call("queryPosTermById", row.termId, (err, data) => {
-                        if (data && data.isDiscount && row.paid == row.netAmount) {
+                        if (data && data.isDiscount && row.paid === vm.$_numeral(row.netAmount).value()) {
                             if (row.isPaid) {
                                 row.discount = 0;
                                 if (moment(vm.posReceivePaymentForm.receivePaymentDate).diff(row.invoiceDate, "days") <= data.daysForDiscount) {
@@ -921,7 +921,7 @@
                 }
             },
             updatePosReceivePaymentDetailPaid(row, index) {
-                if (row.netAmount != row.paid) {
+                if (row.netAmount !== row.paid) {
                     if (row.paid > 0) {
                         row.isPaid = true;
                     } else {
@@ -984,7 +984,7 @@
                 let canFind = 0;
                 let ind = 0;
                 vm.posReceivePaymentData.forEach((obj) => {
-                    if ((obj.invoiceNo == vm.searchByInvoice || vm.searchByInvoice == "") && ((moment(obj.invoiceDate).toDate().getTime() > moment(vm.searchByDate[0]).toDate().getTime() && moment(obj.invoiceDate).toDate().getTime() < moment(vm.searchByDate[1]).toDate().getTime()) || vm.searchByDate[0] == null)) {
+                    if ((obj.invoiceNo === vm.searchByInvoice || vm.searchByInvoice === "") && ((moment(obj.invoiceDate).toDate().getTime() > moment(vm.searchByDate[0]).toDate().getTime() && moment(obj.invoiceDate).toDate().getTime() < moment(vm.searchByDate[1]).toDate().getTime()) || vm.searchByDate[0] == null)) {
                         obj.isShow = true;
                         canFind++;
                     } else {
@@ -995,7 +995,7 @@
                     vm.updatePosReceivePaymentDetail(obj, ind);
                     ind++;
                 });
-                if (canFind == 0) {
+                if (canFind === 0) {
                     this.$message({
                         type: 'error',
                         message: 'Not Found'
@@ -1018,7 +1018,7 @@
                 let canFind = 0;
                 let ind = 0;
                 vm.posReceivePaymentData.forEach((obj) => {
-                    if ((obj.invoiceNo == vm.searchByInvoice || vm.searchByInvoice == "") && (moment(obj.invoiceDate).toDate().getTime() > moment(val[0]).toDate().getTime() && moment(obj.invoiceDate).toDate().getTime() < moment(val[1]).toDate().getTime()) || val[0] == null) {
+                    if ((obj.invoiceNo === vm.searchByInvoice || vm.searchByInvoice === "") && (moment(obj.invoiceDate).toDate().getTime() > moment(val[0]).toDate().getTime() && moment(obj.invoiceDate).toDate().getTime() < moment(val[1]).toDate().getTime()) || val[0] == null) {
                         obj.isShow = true;
                         canFind++;
                     } else {
@@ -1050,7 +1050,7 @@
                 let vm = this;
                 if (val) {
                     vm.posReceivePaymentData.map((obj) => {
-                        if (obj.isShow == true && obj.dayOverDue <= 0) {
+                        if (obj.isShow === true && obj.dayOverDue <= 0) {
                             obj.isShow = false;
                         }
                         return obj;

@@ -58,20 +58,45 @@ Meteor.methods({
             },
             {
                 $match: {"studentList.studentId": studentId}
+            },
+            {
+                $lookup:
+                    {
+                        from: "sch_promotion",
+                        localField: "studentList.promotionId",
+                        foreignField: "_id",
+                        as: "promotionDoc"
+                    }
+            },
+            {
+                $unwind: {
+                    path: "$promotionDoc",
+                    preserveNullAndEmptyArrays: true
+                }
             }
         ]);
         let d = Sch_PaymentSchedule.find({
             studentId: studentId,
             classId: classId,
             isPaid: false,
-        }, {$sort: {order: 1}}).fetch();
+        }, {sort: {order: 1}}).fetch();
+
         d.map((obj) => {
+            console.log(obj);
             obj.isShow = true;
             obj.isApplyTerm = false;
-            obj.promotionId = studentDoc && studentDoc[0].studentList.promotionId || "";
+            obj.promotionDoc = studentDoc && studentDoc[0].promotionDoc || "";
+
+            obj.amount = formatCurrency(obj.netAmount - obj.paid - (obj.balanceNotCut || 0));
+            obj.discount = 0;
+            obj.netAmount = formatCurrency(obj.netAmount - obj.paid - (obj.balanceNotCut || 0));
+            obj.paid = 0;
+            obj.isPaid = false;
+            console.log(obj);
 
             return obj;
         });
+        // console.log(d);
         return d;
     },
     removePaymentScheduleByClassAndStudent(classId, studentId) {
