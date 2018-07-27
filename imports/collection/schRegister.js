@@ -29,6 +29,10 @@ Sch_Register.schema = new SimpleSchema({
     registerDate: {
         type: Date
     },
+    startClassDate: {
+        type: Date,
+        optional: true
+    },
     registerDateName: {
         type: String,
         optional: true

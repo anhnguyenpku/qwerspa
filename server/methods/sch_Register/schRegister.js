@@ -4,6 +4,7 @@ import {Sch_ClassTable} from '../../../imports/collection/schClassTable';
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Class} from "../../../imports/collection/schClass";
 import {Sch_Transcript} from "../../../imports/collection/schTranscript";
+import {Sch_Level} from "../../../imports/collection/schLevel";
 
 Meteor.methods({
     querySchRegister({q, filter, options = {limit: 10, skip: 0}}) {
@@ -162,6 +163,9 @@ Meteor.methods({
     },
     querySchRegisterById(id) {
         let data = Sch_Register.findOne({_id: id});
+        if (data.startClassDate === undefined) {
+            data.startClassDate = "";
+        }
         return data;
     },
     insertSchRegister(data) {
@@ -169,9 +173,13 @@ Meteor.methods({
         return doc;
     },
     updateSchRegister(data) {
+        let startClassDate = data.startClassDate;
+        let rolesArea = data.rolesArea;
+        let registerDateName = data.registerDateName;
+
         if (data.classId && data.classId !== "") {
             let registerDoc = Sch_Register.findOne({_id: data._id});
-            let classDoc = Sch_ClassTable.findOne({classId: data.classId});
+            let classTableDoc = Sch_ClassTable.findOne({classId: data.classId});
             let takeOutClassDoc = Sch_ClassTable.findOne({classId: registerDoc.classId});
 
             let classTBDoc = {};
@@ -180,23 +188,27 @@ Meteor.methods({
             let studentListTakeOut = [];
             classTBDoc.classId = data.classId;
             classTBDoc.rolesArea = data.rolesArea;
-            if (classDoc) {
+            let isGenerated = false;
+            if (classTableDoc) {
                 //Take In
-                if (classDoc.studentList && classDoc.studentList.length > 0) {
-                    classDoc.studentList.forEach((obj) => {
+                if (classTableDoc.studentList && classTableDoc.studentList.length > 0) {
+                    classTableDoc.studentList.forEach((obj) => {
                         if (obj.isPromote === undefined) {
                             obj.isPromote = false;
                         }
                         if (obj._id !== registerDoc._id) {
                             studentList.push(obj);
+                        } else {
+                            isGenerated = true;
                         }
                     });
                 }
+                data.isGenerated = isGenerated;
                 studentList.push(data);
                 classTBDoc.studentList = studentList;
-                Sch_ClassTable.update({_id: classDoc._id}, {$set: classTBDoc});
+                Sch_ClassTable.update({_id: classTableDoc._id}, {$set: classTBDoc});
                 //Take out
-                if (takeOutClassDoc && (classDoc.classId !== takeOutClassDoc.classId)) {
+                if (takeOutClassDoc && (classTableDoc.classId !== takeOutClassDoc.classId)) {
                     if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {
                         takeOutClassDoc.studentList.forEach((obj) => {
                             if (obj.isPromote === undefined) {
@@ -233,8 +245,14 @@ Meteor.methods({
                 }
             }
 
-
+            let levelDoc = Sch_Level.findOne({_id: registerDoc.levelId});
+            let classDoc = Sch_Class.findOne({_id: data.classId});
+            let newClassTableDoc = Sch_ClassTable.findOne({classId: data.classId});
+            Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, newClassTableDoc);
         }
+        data.startClassDate = startClassDate;
+        data.rolesArea = rolesArea;
+        data.registerDateName = registerDateName;
         let doc = Sch_Register.update({_id: data._id},
             {
                 $set: data
@@ -258,6 +276,7 @@ Meteor.methods({
             }
 
         }
+        Meteor.call("removePaymentScheduleByClassAndStudent", registerDoc.classId, registerDoc.studentId);
         Sch_Transcript.remove({registerId: id});
         return Sch_Register.remove({_id: id});
     }

@@ -182,3 +182,13 @@ schData.route('/schFaculty', {
         _Main('sch_faculty');
     }
 });
+import "../../imports/ui/sch_payment/schPayment";
+//Student
+schData.route('/schPayment', {
+    name: 'sch.payment',
+    title: "Payment",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_payment');
+    }
+});

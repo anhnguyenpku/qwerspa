@@ -19,6 +19,7 @@ import {Sch_Promotion} from "../../imports/collection/schPromotion";
 import {Sch_Class} from "../../imports/collection/schClass";
 import {Sch_Major} from "../../imports/collection/schMajor";
 import {Sch_Faculty} from "../../imports/collection/schFaculty";
+import {Sch_ClassTable} from "../../imports/collection/schClassTable";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -36,6 +37,42 @@ Meteor.methods({
             value: obj._id
         }));
     },
+    queryStudentOptionByClass(classId) {
+        let list = [];
+
+        let studentList = Sch_ClassTable.aggregate([
+            {$match: {classId: classId}},
+            {
+                $unwind: {
+                    path: "$studentList",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: 'sch_student',
+                    localField: 'studentList.studentId',
+                    foreignField: '_id',
+                    as: 'studentDoc'
+                }
+            },
+            {
+                $unwind: {
+                    path: "$studentDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+        ]);
+        studentList.forEach((obj) => {
+            if (obj) {
+                list.push({
+                    label: obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.name || "" + " ( " + obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.dobName || "" + ")",
+                    value: obj.studentDoc._id
+                });
+            }
+        });
+        return list;
+    },
     queryItemOption(selector) {
         let list = [];
 
@@ -43,7 +80,8 @@ Meteor.methods({
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
 
     queryLevelOption(selector) {
         let list = [];
@@ -52,7 +90,8 @@ Meteor.methods({
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryFacultyOption(selector) {
         let list = [];
 
@@ -60,28 +99,32 @@ Meteor.methods({
             list.push({label: obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryMajorOption(selector) {
         let list = [];
         Sch_Major.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryTeacherOption(selector) {
         let list = [];
         Sch_Teacher.find(selector, {sort: {"personal.name": 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.personal.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryProgramOption() {
         let list = [];
         Sch_Program.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryClassOption(selector) {
         let list = [];
         //selector.status = true;
@@ -89,7 +132,17 @@ Meteor.methods({
             list.push({label: obj.name + " - " + obj.classDateName, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
+    queryClassOptionActive(selector) {
+        let list = [];
+        selector.status = true;
+        Sch_Class.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name + " - " + obj.classDateName, value: obj._id});
+        });
+        return list;
+    }
+    ,
     queryPromotionOption(selector) {
         let list = [];
         selector.status = true;
@@ -97,7 +150,8 @@ Meteor.methods({
             list.push({label: obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryCiriculumnOption(selector) {
         let list = [];
 
@@ -105,7 +159,8 @@ Meteor.methods({
             list.push({label: obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     querySubjectOption(selector) {
         let list = [];
 
@@ -113,28 +168,32 @@ Meteor.methods({
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryPosTermOption() {
         let list = [];
         Pos_Term.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryPosUnitOption() {
         let list = [];
         Pos_Unit.find().fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryPosVendorOption() {
         let list = [];
         Pos_Vendor.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
         });
         return list;
-    },
+    }
+    ,
     queryPosCustomerOption(q) {
         let selector = {};
         if (q != "") {
@@ -344,4 +403,5 @@ Meteor.methods({
         });
         return data;
     }
-});
+})
+;

@@ -350,6 +350,15 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['startClassDate']" prop="startClassDate">
+                    <el-date-picker
+                            v-model="schPromoteToClassForm.startClassDate"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Pick a day"
+                    >
+                    </el-date-picker>
+                </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogPromoteToClass= false ,cancel()">{{langConfig['cancel']}}</el-button>
@@ -419,7 +428,8 @@
                     levelId: "",
                     majorId: "",
                     programId: "",
-                    classId: ""
+                    classId: "",
+                    startClassDate: ""
                 },
                 schAddStudentToClass: {
                     value: []
@@ -482,11 +492,22 @@
                 }
             },
             "schPromoteToClassForm.levelId"(val) {
-                this.classOpt(val);
-                if (this.ref !== "promoteToClass") {
-                    this.schPromoteToClassForm.classId = "";
+                let vm = this;
+                vm.classOpt(val);
+                if (vm.ref === "promoteToClass") {
+                    vm.schPromoteToClassForm.classId = "";
                 }
             },
+            "schPromoteToClassForm.classId"(val) {
+                let vm = this;
+                Meteor.call("querySchClassById", val, (err, result) => {
+                    if (result) {
+                        if (vm.schPromoteToClassForm.startClassDate === "" || vm.schPromoteToClassForm.startClassDate === undefined) {
+                            vm.schPromoteToClassForm.startClassDate = result.classDate;
+                        }
+                    }
+                })
+            }
         }
         ,
         methods: {
@@ -676,6 +697,7 @@
                     majorId: vm.schPromoteToClassForm.majorId,
                     programId: vm.schPromoteToClassForm.programId,
                     classId: vm.schPromoteToClassForm.classId,
+                    startClassDate: vm.schPromoteToClassForm.startClassDate,
                     rolesArea: Session.get('area')
                 };
                 data.classFormDoc = promoteToClassDoc;

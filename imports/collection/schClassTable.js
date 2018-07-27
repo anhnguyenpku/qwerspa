@@ -46,6 +46,10 @@ Sch_ClassTable.schema = new SimpleSchema({
     "studentList.$.registerDate": {
         type: Date
     },
+    "studentList.$.startClassDate": {
+        type: Date,
+        optional: true
+    },
     "studentList.$.newClassId": {
         type: String,
         optional: true

@@ -118,7 +118,7 @@ Pos_ReceivePayment.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    invoiceNo: {
+    paymentNo: {
         type: String,
         optional: true
     },

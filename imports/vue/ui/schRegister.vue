@@ -233,6 +233,7 @@
                     <el-date-picker
                             v-model="schRegisterForm.registerDate"
                             type="date"
+                            :disabled="disableUpdateField"
                             style="width: 100%;"
                             placeholder="Pick a day"
                     >
@@ -242,6 +243,7 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.studentId"
+                               :disabled="disableUpdateField"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in studentList"
@@ -256,6 +258,8 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.programId"
+                               :disabled="disableUpdateField"
+
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in programList"
@@ -270,6 +274,9 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.majorId"
+                               :disabled="disableUpdateField"
+
+
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in majorList"
@@ -284,6 +291,8 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.levelId"
+                               :disabled="disableUpdateField"
+
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in levelList"
@@ -298,6 +307,7 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.promotionId"
+                               :disabled="disableUpdateField"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in promotionList"
@@ -312,6 +322,7 @@
                     <el-select style="display: block !important;"
                                filterable
                                v-model="schRegisterForm.term"
+                               :disabled="disableUpdateField"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in termList"
@@ -354,7 +365,17 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['startClassDate']" prop="startClassDate">
+                    <el-date-picker
+                            v-model="schRegisterForm.startClassDate"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Pick a day"
+                    >
+                    </el-date-picker>
+                </el-form-item>
                 <hr>
+
                 <el-form-item :label="langConfig['registerDate']" prop="registerDate">
                     <el-date-picker
                             v-model="schRegisterForm.registerDate"
@@ -838,6 +859,7 @@
                 ref: "",
                 fullscreen: true,
                 dialoginputTranscript: false,
+                disableUpdateField: false,
                 schRegisterData: [],
                 loading: false,
                 searchData: '',
@@ -870,6 +892,7 @@
                     term: "",
                     classId: "",
                     registerDate: "",
+                    startClassDate: "",
                     _id: "",
 
                 },
@@ -997,7 +1020,6 @@
                     Meteor.call("querySchLevelById", val, (err, result) => {
                         if (result) {
                             vm.termList = [];
-                            console.log(result);
                             for (let i = 1; i <= result.term; i++) {
                                 if (result.term % i === 0) {
                                     vm.termList.push({label: i + " months", value: i});
@@ -1008,6 +1030,16 @@
                 } else {
                     vm.termList = [];
                 }
+            },
+            "schRegisterForm.classId"(val) {
+                let vm = this;
+                Meteor.call("querySchClassById", val, (err, result) => {
+                    if (result) {
+                        if (vm.schRegisterForm.startClassDate === "" || vm.schRegisterForm.startClassDate === undefined) {
+                            vm.schRegisterForm.startClassDate = result.classDate;
+                        }
+                    }
+                })
             }
         },
         methods: {
@@ -1159,6 +1191,7 @@
                             registerDate: vm.schRegisterForm.registerDate,
                             registerDateName: moment(vm.schRegisterForm.registerDate).format("DD/MM/YYYY"),
                             classId: vm.schRegisterForm.classId,
+                            startClassDate: vm.schRegisterForm.startClassDate,
                             rolesArea: Session.get('area')
                         };
                         Meteor.call("updateSchRegister", schRegisterDoc, (err, result) => {
@@ -1234,6 +1267,8 @@
                     if (result) {
                         vm.schRegisterForm._id = result._id;
                         vm.schRegisterForm = result;
+
+                        vm.disableUpdateField = result.classId !== undefined ? true : false;
                     }
                 })
             },

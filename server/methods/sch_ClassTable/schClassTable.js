@@ -3,6 +3,7 @@ import {Sch_ClassTable} from '../../../imports/collection/schClassTable';
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Register} from "../../../imports/collection/schRegister";
 import {Sch_Class} from "../../../imports/collection/schClass";
+import {Sch_Level} from "../../../imports/collection/schLevel";
 
 Meteor.methods({
     querySchClassTable({q, filter, options = {limit: 10, skip: 0}}) {
@@ -123,7 +124,7 @@ Meteor.methods({
         let dataPromote = [];
         if (data) {
             data.forEach((obj) => {
-                if (obj.studentList.isPromote === false || obj.studentList.isPromote === undefined) {
+                if (obj.studentList && obj.studentList.isPromote === false || obj.studentList && obj.studentList.isPromote === undefined) {
                     dataNotPromote.push(obj);
                 } else {
                     dataPromote.push(obj);
@@ -170,9 +171,17 @@ Meteor.methods({
 
             classTable.studentList = studentList;
             if (classTableDoc) {
-                return Sch_ClassTable.update({_id: classTableDoc._id}, {$set: classTable});
+                let d = Sch_ClassTable.update({_id: classTableDoc._id}, {$set: classTable});
+                let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: classTableDoc._id});
+                let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
+                Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+                return d;
             } else {
-                return Sch_ClassTable.insert(classTable);
+                let d = Sch_ClassTable.insert(classTable);
+                let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: d});
+                let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
+                Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+                return d;
             }
 
         }

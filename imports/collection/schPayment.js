@@ -3,14 +3,18 @@ export const Sch_Payment = new Mongo.Collection('sch_payment');
 Sch_Payment.schema = new SimpleSchema({
     studentId: {
         type: String,
-        label: "Customer"
+        label: "Student"
+    },
+    classId: {
+        type: String,
+        label: "Class"
     },
     schedule: {
         type: [Object],
         optional: true,
         blackbox: true
     },
-    'schedule.$.scheduleId': {
+    'schedule.$.paymentScheduleId': {
         type: String
     },
     'schedule.$.paidDate': {

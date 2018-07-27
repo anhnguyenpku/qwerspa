@@ -113,5 +113,9 @@ Meteor.methods({
             newData.push({initial: obj._id, label: obj.studentDoc.personal.name, key: index});
         });
         return newData;
+    },
+    querySchStudentOptionUnPaid() {
+        return [];
     }
+
 });

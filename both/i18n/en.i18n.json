@@ -317,7 +317,8 @@
       "promotion": "Promotion",
       "register": "Register",
       "major": "Major",
-      "faculty": "Faculty"
+      "faculty": "Faculty",
+      "payment": "Payment"
     }
   },
   "global": {

@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="dialogAddSchLevel = true,resetForm()">
+                        <a class="cursor-pointer" @click="dialogAddSchLevel = true,resetForm(),popUpAdd()">
                             <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>
@@ -81,7 +81,7 @@
                                            @click="removeSchLevel(scope.$index,scope.row,schLevelData)"
                                            :disabled="disabledRemove"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
-                                           @click="findSchLevelById(scope),dialogUpdateSchLevel= true"
+                                           @click="findSchLevelById(scope),dialogUpdateSchLevel= true,popUpUpdate()"
                                            :disabled="disabledUpdate"></el-button>
                             </el-button-group>
 
@@ -113,7 +113,7 @@
                 :visible.sync="dialogAddSchLevel"
                 width="30%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="schLevelForm" :rules="rules" ref="schLevelFormAdd" label-width="120px"
+            <el-form :model="schLevelForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schLevelForm">
                 <el-form-item :label="langConfig['name']" prop="name">
                     <el-input v-model="schLevelForm.name"></el-input>
@@ -191,7 +191,7 @@
                 :visible.sync="dialogUpdateSchLevel"
                 width="30%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="schLevelForm" :rules="rules" ref="schLevelFormUpdate" label-width="120px"
+            <el-form :model="schLevelForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schLevelForm">
 
                 <el-form-item :label="langConfig['name']" prop="name">
@@ -283,6 +283,7 @@
         },
         data() {
             return {
+                ref: "",
                 schLevelData: [],
                 loading: false,
                 searchData: '',
@@ -365,11 +366,9 @@
             },
             "schLevelForm.programId"(val) {
                 this.majorOpt(val);
-                this.$refs["schLevelFormAdd"].validate((valid) => {
-                    if (valid) {
-                        this.schLevelForm.majorId = ""
-                    }
-                })
+                if (this.ref === "schLevelFormAdd") {
+                    this.schLevelForm.majorId = "";
+                }
             }
         },
         methods: {
@@ -562,6 +561,12 @@
                     this.$refs["schLevelFormUpdate"].resetFields();
                 }
 
+            },
+            popUpAdd() {
+                this.ref = "schLevelFormAdd";
+            },
+            popUpUpdate() {
+                this.ref = "schLevelFormUpdate";
             }
         },
         created() {

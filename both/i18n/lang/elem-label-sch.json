@@ -239,7 +239,8 @@
       "finalGrade": "Grade",
       "gradePoint": "GPA",
       "requiredCredit": "Required Credit",
-      "isCompleted": "Completed"
+      "isCompleted": "Completed",
+      "startClassDate": "Study On"
     },
     "class": {
       "searchHere": "Search Here ...",
@@ -302,7 +303,8 @@
       "class": "Class",
       "level": "Level",
       "major": "Major",
-      "promoteToClass": "Promote To Class"
+      "promoteToClass": "Promote To Class",
+      "startClassDate": "Study On"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -468,6 +470,53 @@
       "status": "Status",
       "add": "Add User Setting",
       "update": "Update User Setting"
+    },
+    "payment": {
+      "searchHere": "Search Here ...",
+      "title": "Receive Payment",
+      "action": "Action",
+      "save": "Save",
+      "saveAndNew": "Save and New",
+      "cancel": "Cancel",
+      "warning": "Warning",
+      "messageWarning": "This will permanently delete the file. Continue?",
+      "saveSuccess": "Save Successfully!",
+      "saveFail": "Save Fail!",
+      "updateSuccess": "Update Successfully!",
+      "updateFail": "Update Fail!",
+      "removeSuccess": "Remove Successfully!",
+      "removeFail": "Remove Fail!",
+      "removeCancel": "Remove Cancel",
+      "message": "This Receive Payment not paid by manual",
+      "receivePayment": "Receive Payment",
+      "searchByPayment": "Search By Invoice",
+      "overdueStatusOnly": "Overdue Status Only",
+      "address": "Address",
+      "no": "No",
+      "paymentNo": "Payment No",
+      "payment": "Payment",
+      "dueDate": "Due Date",
+      "applyTerm": "Apply Term",
+      "amount": "Amount",
+      "discount": "Discount",
+      "netAmount": "Net Amount",
+      "paid": "Paid",
+      "totalPaid": "Total Paid",
+      "status": "Status",
+      "totalNetAmount": "Total Net Amount",
+      "totalDiscount": "Total Discount",
+      "balanceUnpaid": "Balance Unpaid",
+      "student": "Student",
+      "receiveDate": "Receive Date",
+      "add": "Add Receive Payment",
+      "update": "Update Receive Payment",
+      "note": "Note",
+      "amountReceive": "Amount Receive",
+      "location": "Location",
+      "chooseClass": "Choose Class",
+      "chooseLevel": "Choose Level",
+      "class": "Class",
+      "level": "Level"
     }
   },
   {
@@ -709,7 +758,8 @@
       "finalGrade": "និទ្ទេស",
       "gradePoint": "មធ្យមភាគ",
       "requiredCredit": "ទាមទារចំនួនក្រេឌីត",
-      "isCompleted": "បំពេញរួចរាល់"
+      "isCompleted": "បំពេញរួចរាល់",
+      "startClassDate": "ចូលរៀននៅថ្ងៃ"
     },
     "class": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -774,7 +824,8 @@
       "class": "ថ្នាក់",
       "level": "កម្រិត",
       "major": "ជំនាញ",
-      "promoteToClass": "ឡើងទៅកាន់ថ្នាក់"
+      "promoteToClass": "ឡើងទៅកាន់ថ្នាក់",
+      "startClassDate": "ចូលរៀននៅថ្ងៃ"
     },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -947,6 +998,52 @@
       "status": "ស្ថានភាព",
       "add": "បញ្ចូលព័តមានការកំណត់អ្នកប្រើប្រាស់",
       "update": "កែប្រែព័តមានការកំណត់អ្នកប្រើប្រាស់"
+    },
+    "payment": {
+      "searchHere": "ស្វែងរក​នៅទីនេះ ...",
+      "title": "ទទួលប្រាក់",
+      "show": "បង្ហាញការទទួលប្រាក់",
+      "action": "សកម្មភាព",
+      "save": "រក្សាទុក",
+      "saveAndNew": "រក្សាទុក ហើយទទួលលុយម្តងទៀត",
+      "cancel": "បោះបង់",
+      "warning": "ប្រយ័ត្ន",
+      "messageWarning": "នេះគឺលុបបាត់មិនអាចយកមកវិញបានទេ. ចង់បន្ត?",
+      "saveSuccess": "រក្សាទុកបានជោគជ័យ!",
+      "saveFail": "រក្សាទុកមិនបានជោគជ័យទេ!",
+      "updateSuccess": "កែប្រែបានជោគជ័យ!",
+      "updateFail": "កែប្រែមិនបានជោគជ័យទេ!",
+      "removeSuccess": "លុបបានជោជ័យ!",
+      "removeFail": "លុបមិនបានជោគជ័យទេ!",
+      "message": "ការទទួលប្រាក់នេះមិនអាចលុបបានទេ!",
+      "receivePayment": "ការទទួលប្រាក់",
+      "searchByPayment": "ស្វែងរកតាមរយះ លេខវិក័យបត្រ",
+      "overdueStatusOnly": "វិក័យបត្រផុតកំណត់ប៉ុន្នោះ",
+      "address": "អាស័ដ្ឋាន",
+      "no": "ល.រ",
+      "paymentNo": "លេខវិក័យបត្រ",
+      "payment": "វិក័យបត្រ",
+      "dueDate": "ថ្ងៃត្រូវសង",
+      "applyTerm": "លក្ខខ័ណ្ឌ",
+      "amount": "តម្លៃសរុប",
+      "discount": "បញ្ចុះតម្លៃ",
+      "netAmount": "សរុបសុទ្ធ",
+      "paid": "បង់",
+      "totalPaid": "បង់សរុប",
+      "status": "ស្ថានភាព",
+      "totalNetAmount": "សរុបតម្លៃសរុបសុទ្ធ",
+      "totalDiscount": "សរុបតម្លៃបញ្ចុះតម្លៃ",
+      "balanceUnpaid": "សមតុល្យមិនទាន់បានបង់",
+      "student": "សិស្ស",
+      "receiveDate": "ថ្ងៃទទួល",
+      "add": "បញ្ចូលការទទួលប្រាក់",
+      "note": "កំណត់សម្គាល់",
+      "amountReceive": "ទឹកប្រាក់ទទួល",
+      "location": "ទីតាំង",
+      "chooseClass": "ជ្រើសរើសថ្នាក់",
+      "chooseLevel": "ជ្រើសរើសកម្រិត",
+      "class": "ថ្នាក់",
+      "level": "កម្រិត"
     }
   }
 ]
