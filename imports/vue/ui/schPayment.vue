@@ -52,10 +52,14 @@
                     </el-table-column>
 
                     <el-table-column
-                            prop="studentDoc.name"
+                            prop="studentDoc.personal.name"
                             :label="langConfig['student']">
                     </el-table-column>
 
+                    <el-table-column
+                            prop="paymentNo"
+                            :label="langConfig['paymentNo']">
+                    </el-table-column>
                     <el-table-column
                             prop="totalAmount"
                             :label="langConfig['amount']">
@@ -321,6 +325,9 @@
                             </el-form-item>
 
 
+                            <el-form-item :label="langConfig['paymentNo']" prop="paymentNo">
+                                <el-input v-model="schPaymentForm.paymentNo" prefix-icon="el-icon-edit"></el-input>
+                            </el-form-item>
                             <el-form-item :label="langConfig['note']" prop="note">
                                 <el-input type="textarea" v-model="schPaymentForm.note" :rows="4"></el-input>
                             </el-form-item>
@@ -416,6 +423,7 @@
                     isAllTerm: false,
                     studentId: "",
                     classId: "",
+                    paymentNo: ""
 
                 },
                 rules: {
@@ -425,6 +433,8 @@
                         message: 'Please input SchPaymentDate',
                         trigger: 'blur'
                     }],
+                    paymentNo: [{required: true, type: 'string', message: 'Please input Payment No', trigger: 'blur'}],
+
                     studentId: [{
                         required: true,
                         type: 'string',
@@ -603,6 +613,11 @@
                     this.disabledStudent = true;
 
                 }
+            },
+            "schPaymentForm.paymentDate"(val) {
+                if (val) {
+                    this.getPaymentNoByRoleAndDate(val);
+                }
             }
         },
         methods: {
@@ -679,6 +694,7 @@
                             paymentDate: moment(vm.schPaymentForm.paymentDate).toDate(),
                             paymentDateName: moment(vm.schPaymentForm.paymentDate).format("DD/MM/YYYY"),
                             note: vm.schPaymentForm.note,
+                            paymentNo: vm.schPaymentForm.paymentNo,
 
                             rolesArea: Session.get('area'),
                             studentId: vm.schPaymentForm.studentId,
@@ -761,6 +777,7 @@
                 $(".el-dialog__title").text(this.langConfig['add']);
 
                 this.studentOpt();
+                this.getPaymentNoByRoleAndDate(this.schPaymentForm.paymentDate);
             },
             updateSchPaymentDetail(row, index) {
                 let vm = this;
@@ -900,7 +917,15 @@
                         return obj;
                     })
                 }
-            }
+            },
+            getPaymentNoByRoleAndDate(date) {
+                let vm = this;
+                Meteor.call("sch_getPaymentNoByRoleAndDate", Session.get("area"), date, (err, result) => {
+                    if (!err) {
+                        vm.schPaymentForm.paymentNo = result;
+                    }
+                })
+            },
         },
         created() {
             this.isSearching = true;

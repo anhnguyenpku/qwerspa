@@ -44,11 +44,6 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    balanceUnPaid: {
-        type: Number,
-        label: "Balance",
-        decimal: true
-    },
     paymentNumber: {
         type: Number,
         optional: true,

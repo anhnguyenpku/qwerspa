@@ -78,11 +78,10 @@ Meteor.methods({
         let d = Sch_PaymentSchedule.find({
             studentId: studentId,
             classId: classId,
-            isPaid: false,
+            status: {$in: ["Active", "Partial"]}
         }, {sort: {order: 1}}).fetch();
 
         d.map((obj) => {
-            console.log(obj);
             obj.isShow = true;
             obj.isApplyTerm = false;
             obj.promotionDoc = studentDoc && studentDoc[0].promotionDoc || "";
@@ -92,7 +91,6 @@ Meteor.methods({
             obj.netAmount = formatCurrency(obj.netAmount - obj.paid - (obj.balanceNotCut || 0));
             obj.paid = 0;
             obj.isPaid = false;
-            console.log(obj);
 
             return obj;
         });

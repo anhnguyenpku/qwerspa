@@ -5,6 +5,7 @@ import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 
 import numeral from "numeral";
 import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
+import {Pos_Invoice} from "../../../imports/collection/posInvoice";
 
 Meteor.methods({
     querySchPayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -122,7 +123,7 @@ Meteor.methods({
         let paymentDoc = Sch_Payment.findOne({_id: id});
         if (paymentDoc) {
             paymentDoc.schedule.forEach((data) => {
-                let paymentDoc = Sch_Payment.findOne({_id: data._id});
+                let paymentDoc = Sch_PaymentSchedule.findOne({_id: data._id});
                 let newStatus = paymentDoc.status;
 
                 if (paymentDoc.paid - (data.paid + data.discount) > 0) {
@@ -131,7 +132,7 @@ Meteor.methods({
                     newStatus = "Active";
                 }
 
-                Sch_Payment.direct.update({_id: data._id}, {
+                Sch_PaymentSchedule.direct.update({_id: data._id}, {
                     $set: {status: newStatus, closeDate: ""},
                     $inc: {
                         paid: -(data.paid + data.discount),
@@ -140,14 +141,14 @@ Meteor.methods({
                 }, true);
 
                 Sch_Payment.direct.update({
-                        "payment._id": data._id,
+                        "schedule._id": data._id,
                         createdAt: {$gt: paymentDoc.createdAt}
                     },
                     {
 
                         $inc: {
-                            "payment.$.amount": (data.paid + data.discount),
-                            "payment.$.netAmount": (data.paid + data.discount),
+                            "schedule.$.amount": (data.paid + data.discount),
+                            "schedule.$.netAmount": (data.paid + data.discount),
                             totalAmount: (data.paid + data.discount),
                             totalNetAmount: (data.paid + data.discount),
                             balanceUnPaid: (data.paid + data.discount)
@@ -163,7 +164,7 @@ Meteor.methods({
         let paymentDoc = Sch_PaymentSchedule.findOne({_id: data._id});
         let newStatus = paymentDoc.status;
         let upd = {};
-        if (paymentDoc.paid + (paymentDoc.balanceNotCut || 0) + numeral(data.paid).value() + numeral(data.discount).value() >= paymentDoc.netTotal) {
+        if (paymentDoc.paid + (paymentDoc.balanceNotCut || 0) + numeral(data.paid).value() + numeral(data.discount).value() >= paymentDoc.netAmount) {
             newStatus = "Complete";
             upd.closeDate = date;
         } else {
@@ -178,6 +179,18 @@ Meteor.methods({
                 paymentNumber: 1
             }
         }, true);
-    }
+    },
+
+    sch_getPaymentNoByRoleAndDate(rolesAreas, date) {
+        let startDate = moment(date).startOf("year").toDate();
+        let endDate = moment(date).endOf("year").toDate();
+        let data = Sch_Payment.findOne({
+            rolesArea: rolesAreas,
+            paymentDate: {$gte: startDate, $lte: endDate}
+        }, {sort: {paymentNo: -1}});
+
+        let paymentNo = data && data.paymentNo.length > 9 ? parseInt((data && data.paymentNo || "0000000000000").substr(9, 13)) + 1 : parseInt(data && data.paymentNo || "0") + 1;
+        return paymentNo + "";
+    },
 
 });

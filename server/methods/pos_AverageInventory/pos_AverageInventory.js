@@ -315,7 +315,7 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
-        })
+        });
         console.log("Finish Bill");
 
 
@@ -329,7 +329,7 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
-        })
+        });
         console.log("Finish Transfer");
 
 
@@ -347,7 +347,7 @@ Meteor.methods({
 
 
     },
-    checkStockBalance(data) {
+    checkStockBalance(data, isUpdate, dataBeforeUpdate) {
         if (data.item.length > 0) {
             let i = 0;
             data.item.forEach((doc) => {
@@ -356,8 +356,17 @@ Meteor.methods({
                     locationId: data.locationId,
                     rolesArea: data.rolesArea
                 }, {sort: {createdAt: -1}});
-                if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty) {
-                    i++;
+                if (isUpdate === true) {
+                    let oldDoc = dataBeforeUpdate.item.find(function (element) {
+                        return element.itemId === doc.itemId;
+                    });
+                    if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty - oldDoc.qty) {
+                        i++;
+                    }
+                } else {
+                    if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty) {
+                        i++;
+                    }
                 }
             });
             return i;

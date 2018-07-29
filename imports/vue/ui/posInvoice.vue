@@ -1557,7 +1557,7 @@
                     })
 
                 }
-                if (vm.refForm == "posReceiveItem") {
+                if (vm.refForm === "posReceiveItem") {
                     vm.findPosSaleOrderIdByCustomerId(val);
                 }
 

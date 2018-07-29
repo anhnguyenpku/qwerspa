@@ -22,7 +22,6 @@ Meteor.methods({
         if (params.locationId != "") {
             parameter.locationId = params.locationId;
         }
-        console.log(parameter);
         let data = {};
 
         let companyDoc = WB_waterBillingSetup.findOne({});

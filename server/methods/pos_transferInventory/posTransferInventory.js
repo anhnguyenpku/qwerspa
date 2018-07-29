@@ -93,7 +93,7 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.cost = formatCurrency(obj.cost);
             obj.amount = formatCurrency(obj.amount);
-        })
+        });
         return data;
     },
     queryTransferInventoryByIdShow(id) {
@@ -112,12 +112,13 @@ Meteor.methods({
         return data;
     },
     insertTransferInventory(data) {
+
         data.transactionType = "Transfer Inventory";
         data.item.forEach(function (obj) {
             obj.amount = numeral(obj.amount).value();
             obj.cost = numeral(obj.cost).value();
             return obj;
-        })
+        });
         let id = Pos_TransferInventory.insert(data);
 
         if (id) {
@@ -138,7 +139,7 @@ Meteor.methods({
             obj.amount = numeral(obj.amount).value();
             obj.cost = numeral(obj.cost).value();
             return obj;
-        })
+        });
 
         let isUpdated = Pos_TransferInventory.update({_id: _id},
             {

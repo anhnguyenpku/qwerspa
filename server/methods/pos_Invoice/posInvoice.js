@@ -222,7 +222,8 @@ Meteor.methods({
         return id;
     },
     updatePosInvoice(data, _id) {
-        let checkBalance = Meteor.call("checkStockBalance", data);
+        let dataBeforeUpdate = Pos_Invoice.findOne({_id: _id});
+        let checkBalance = Meteor.call("checkStockBalance", data, true, dataBeforeUpdate);
         if (checkBalance > 0) {
             throw new Meteor.Error(checkBalance + " items is not enough stock");
         }
@@ -230,7 +231,6 @@ Meteor.methods({
         data.transactionType = (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt";
 
         data.invoiceNo = data.rolesArea + "-" + moment(data.invoiceDate).format("YYYY") + pad(data.invoiceNo, 6);
-        let dataBeforeUpdate = Pos_Invoice.findOne({_id: _id});
 
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();

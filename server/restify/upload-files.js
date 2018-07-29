@@ -12,7 +12,6 @@ server.use(restify.bodyParser({
     multipartHandler: function (part) {
         part.on('data', function (data) {
             /* do something with the multipart data */
-            console.log(data)
 
         });
     },
