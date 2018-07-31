@@ -58,50 +58,6 @@
                                     </ol>
                                 </div>
                                 <div class="pull-right">
-
-
-                                    {{#if wbLayout}}
-                                        <ul class="nav navbar-nav">
-                                            <li><a href="{{pathFor 'wb.requestUpdateJournalDetail'}}"><span
-                                                    class="badge" style="background: purple"><i
-                                                    class="fa fa-envelope-o"></i> {{countRequestJournalUpdate}}
-                                        </span></a></li>
-                                        </ul>
-                                        <ul class="nav navbar-nav">
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                <span class="badge" style="background: red"><i
-                                                        class="fa fa-cloud-download"></i> {{countMobileSynced}}
-                                                </span>
-                                                    <!--<img src="/images/no-user.png" class="user-image" alt="User Image">-->
-                                                    <!--<i class="fa fa-bell"></i>-->
-                                                    <!--<span class="badge" style="background: red;">{{countMobileSynced}}</span>-->
-                                                </a>
-                                                <ul class="dropdown-menu" role="menu"
-                                                    style="font-family: 'Kh Battambang'">
-                                                    {{#each mobileSyncNotify}}
-                                                        <li>
-                                                            <a class="readBy {{#if
-                                                                    isRead}}isRead{{else}}isNotRead{{/if}}"
-                                                               href="/wb-data/meterWritingJournal/{{journalBookId}}?date={{journalDate}}"
-                                                            >
-                                                                <i class="fa fa-mobile"></i>ភ្ជាប់ដោយ
-                                                                <b>{{syncedBy.username}}({{journalBook.name}})</b>
-                                                                <br>
-                                                                <small style="color: #3A6BA3;font-size: 11px">&emsp;&emsp;&emsp;<i
-                                                                        class="fa fa-clock-o"></i>{{createdAt}}</small>
-                                                            </a>
-                                                        </li>
-                                                    {{/each}}
-                                                    <li class="divider"></li>
-                                                    <li>
-                                                        <a href="{{pathFor 'wb.mobileSyncedNotification'}}"
-                                                           align="center">បង្ហាញទាំងអស់</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    {{/if}}
                                     {{#if posLayout}}
                                         <ul class="nav navbar-nav">
                                             <li>
@@ -135,11 +91,19 @@
                                                         {{#if isShowReportRole}}
                                                             Report
                                                         {{/if}}
-                                                    {{else}}
+                                                    {{/if}}
+                                                    {{#if accountLayout}}
                                                         {{#if isShowSettingRole}}
                                                             Setting
                                                         {{/if}}
-                                                    {{/if}}</i>
+                                                    {{/if}}
+                                                    {{#if schLayout}}
+                                                        {{#if isShowSettingRole}}
+                                                            Report
+                                                        {{/if}}
+                                                    {{/if}}
+
+                                                </i>
                                             </a>
                                             <ul class="dropdown-menu mega-dropdown-menu row">
                                                 <!--style="width:inherit !important"-->
@@ -173,8 +137,32 @@
 
                                                     {{/if}}
                                                     {{#if schLayout}}
-                                                        {{#if isShowSettingRole}}
+                                                        {{#if isShowReportRole}}
+                                                            <li class="col-sm-4">
+                                                                <ul>
 
+                                                                    <a href="#" class="title-head">
+                                                                        <i class="fa fa-file"></i> <span>{{_
+                                                                            "sch.sidebarMenu.student"}}</span>
+                                                                    </a>
+                                                                    <li><a href="{{pathFor
+                                                                            'sch.schRegisterReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "sch.sidebarMenu.register"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <li><a href="{{pathFor
+                                                                            'sch.schPaymentReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "sch.sidebarMenu.payment"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <hr>
+
+                                                                </ul>
+                                                            </li>
                                                         {{/if}}
 
                                                     {{/if}}

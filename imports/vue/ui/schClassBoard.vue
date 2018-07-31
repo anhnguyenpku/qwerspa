@@ -69,8 +69,10 @@
                                 <div style="padding: 14px;">
                                     <span>{{langConfig['teacher']}} : {{d.teacherDoc && d.teacherDoc.personal.name || ""}} ({{d.teacherDoc && d.teacherDoc.personal.phoneNumber || ""}})</span>
                                     <div class="bottom clearfix">
-                                        <time class="time">{{ d.classDate | momentFormat}}</time>
-                                        <el-button type="text" class="button">
+                                        <time class="time" style="float: left !important;">{{ d.classDate |
+                                            momentFormat}}
+                                        </time>
+                                        <el-button type="text" class="button" style="float: right !important;">
                                             <el-button type="success" icon="el-icon-circle-close-outline"
                                                        @click="closeSchClass(index,d,schClassData)"
                                                        circle></el-button>
@@ -749,7 +751,7 @@
 <style>
     .transition-box {
         margin-bottom: 10px;
-        width: 400px;
+        width: 100%;
         height: 100px;
         border-radius: 4px;
         background-color: #409EFF;

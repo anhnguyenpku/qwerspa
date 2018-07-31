@@ -516,7 +516,8 @@
       "chooseClass": "Choose Class",
       "chooseLevel": "Choose Level",
       "class": "Class",
-      "level": "Level"
+      "level": "Level",
+      "saveAndPrint": "Save and Print"
     }
   },
   {
@@ -1043,7 +1044,8 @@
       "chooseClass": "ជ្រើសរើសថ្នាក់",
       "chooseLevel": "ជ្រើសរើសកម្រិត",
       "class": "ថ្នាក់",
-      "level": "កម្រិត"
+      "level": "កម្រិត",
+      "saveAndPrint": "រក្សាទុក ហើយ បោះពុម្ភ"
     }
   }
 ]

@@ -192,3 +192,13 @@ schData.route('/schPayment', {
         _Main('sch_payment');
     }
 });
+
+import '../../imports/ui/report/schPaymentPrintA4/schPaymentPrintA4';
+
+schData.route('/schPayment/print', {
+    name: 'sch.schPayment-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'sch_paymentPrintA4Report'});
+    }
+
+});

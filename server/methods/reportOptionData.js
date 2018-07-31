@@ -13,7 +13,7 @@ Meteor.methods({
         let accountType = Acc_AccountType.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
             listWithId.push(obj._id);
-        })
+        });
 
         data.list = list;
         data.listWithId = listWithId;

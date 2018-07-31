@@ -346,6 +346,8 @@
                                 class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
+                        <el-button type="info" @click="saveSchPayment(true,$event,true)"><i
+                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
                         <el-button type="success" @click="saveSchPayment(false,$event)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}}</el-button>
 
@@ -678,7 +680,7 @@
                     }
                 })
             },
-            saveSchPayment(isCloseDialog, event) {
+            saveSchPayment(isCloseDialog, event, isPrint) {
                 event.preventDefault();
                 let vm = this;
                 this.$refs["schPaymentFormAdd"].validate((valid) => {
@@ -703,11 +705,7 @@
                         schPaymentDoc.schedule = vm.schPaymentData;
                         Meteor.call("insertSchPayment", schPaymentDoc, (err, result) => {
                             if (!err) {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `Save Successfully!`,
-                                    type: 'success'
-                                });
+
 
                                 if (isCloseDialog) {
                                     this.dialogAddSchPayment = false;
@@ -722,6 +720,16 @@
                                         })
                                     }
                                 });
+
+                                if (isPrint) {
+                                    FlowRouter.go('/sch-data/schPayment/print?pmt=' + result);
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: `Save Successfully!`,
+                                        type: 'success'
+                                    });
+                                }
 
                                 vm.queryData();
                                 vm.resetForm();

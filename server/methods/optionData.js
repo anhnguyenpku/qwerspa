@@ -33,7 +33,7 @@ Meteor.methods({
             ];
         }
         return Sch_Student.find(selector, {limit: 100}).fetch().map(obj => ({
-            label: obj.personal.name,
+            label: (obj.personal && obj.personal.name || "") + " ( " + (obj.personal && obj.personal.dobName || "") + ")",
             value: obj._id
         }));
     },
@@ -66,7 +66,7 @@ Meteor.methods({
         studentList.forEach((obj) => {
             if (obj) {
                 list.push({
-                    label: obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.name || "" + " ( " + obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.dobName || "" + ")",
+                    label: (obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.name || "") + " ( " + (obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.dobName || "") + ")",
                     value: obj.studentDoc._id
                 });
             }
@@ -146,6 +146,14 @@ Meteor.methods({
     queryPromotionOption(selector) {
         let list = [];
         selector.status = true;
+        Sch_Promotion.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
+        });
+        return list;
+    }
+    ,
+    queryPromotionOptionNoStatus(selector) {
+        let list = [];
         Sch_Promotion.find(selector).fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
         });
