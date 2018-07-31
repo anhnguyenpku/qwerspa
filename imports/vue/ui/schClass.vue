@@ -168,6 +168,12 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['charge']" prop="charge">
+                    <el-input v-model="schClassForm.charge">
+                        <template slot="append">%</template>
+                    </el-input>
+
+                </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schClassForm.desc"></el-input>
                 </el-form-item>
@@ -245,6 +251,12 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['charge']" prop="charge">
+                    <el-input v-model="schClassForm.charge">
+                        <template slot="append">%</template>
+                    </el-input>
+
+                </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schClassForm.desc"></el-input>
                 </el-form-item>
@@ -305,10 +317,12 @@
                     teacherId: "",
                     levelId: "",
                     status: false,
-                    classDate: moment().toDate()
+                    classDate: moment().toDate(),
+                    charge: 0,
                 },
                 teacherList: [],
                 levelList: [],
+
                 rules: {
                     classDate: [{
                         type: 'date',
@@ -403,6 +417,7 @@
                             levelId: vm.schClassForm.levelId,
                             status: vm.schClassForm.status,
                             classDate: vm.schClassForm.classDate,
+                            charge: vm.schClassForm.charge,
                             classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };
@@ -444,6 +459,7 @@
                             levelId: vm.schClassForm.levelId,
                             status: vm.schClassForm.status,
                             classDate: vm.schClassForm.classDate,
+                            charge: vm.schClassForm.charge,
                             classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };

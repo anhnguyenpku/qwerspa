@@ -318,7 +318,8 @@
       "register": "Register",
       "major": "Major",
       "faculty": "Faculty",
-      "payment": "Payment"
+      "payment": "Payment",
+      "debtSummary": "Debt Summary"
     }
   },
   "global": {

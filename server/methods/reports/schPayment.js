@@ -34,79 +34,192 @@ Meteor.methods({
 
         let paymentHTML = "";
 
-        let paymentList = Sch_Payment.aggregate([
-            {$match: parameter},
-            {
-                $lookup: {
-                    from: 'sch_class',
-                    localField: 'classId',
-                    foreignField: '_id',
-                    as: 'classDoc'
+        if (params.groupBy === "None") {
+            let paymentList = Sch_Payment.aggregate([
+                {$match: parameter},
+                {
+                    $lookup: {
+                        from: 'sch_class',
+                        localField: 'classId',
+                        foreignField: '_id',
+                        as: 'classDoc'
+                    }
                 }
-            }
-            ,
-            {
-                $unwind: {
-                    path: "$classDoc",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
+                ,
+                {
+                    $unwind: {
+                        path: "$classDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
 
-            {
-                $lookup: {
-                    from: 'sch_student',
-                    localField: 'studentId',
-                    foreignField: '_id',
-                    as: 'studentDoc'
+                {
+                    $lookup: {
+                        from: 'sch_student',
+                        localField: 'studentId',
+                        foreignField: '_id',
+                        as: 'studentDoc'
+                    }
                 }
-            }
-            ,
-            {
-                $unwind: {
-                    path: "$studentDoc",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $group: {
-                    _id: null,
-                    data: {$push: "$$ROOT"},
-                    totalPaid: {$sum: "$totalPaid"},
-                    balanceUnPaid: {$sum: "$balanceUnPaid"}
-                }
-            },
-        ]);
+                ,
+                {
+                    $unwind: {
+                        path: "$studentDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        data: {$push: "$$ROOT"},
+                        totalPaid: {$sum: "$totalPaid"},
+                        balanceUnPaid: {$sum: "$balanceUnPaid"}
+                    }
+                },
+            ]);
 
 
-        let i = 1;
-        if (paymentList[0] && paymentList[0].data.length > 0) {
-            paymentList[0].data.forEach((obj) => {
-                if (obj) {
-                    paymentHTML += `
+            let i = 1;
+            if (paymentList[0] && paymentList[0].data.length > 0) {
+                paymentList[0].data.forEach((obj) => {
+                    if (obj) {
+                        paymentHTML += `
                         <tr>
                             <td style="text-align: center !important;">${i}</td>
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
                             <td style="text-align: center !important;">${obj.paymentDateName}</td>
                             <td style="text-align: center !important;">${obj.classDoc.name}</td>
-                            <td >${formatCurrency(obj.totalNetAmount + obj.totalDiscount)}</td>
-                            <td >${formatCurrency(obj.totalDiscount)}</td>
-                            <td >${formatCurrency(obj.totalNetAmount)}</td>
-                            <td >${formatCurrency(obj.totalPaid)}</td>
-                            <td >${formatCurrency(obj.balanceUnPaid)}</td>
+                            <td >${formatCurrency(obj.totalNetAmount + obj.totalDiscount, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.totalDiscount, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.totalNetAmount, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.totalPaid, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.balanceUnPaid, companyDoc.baseCurrency)}</td>
                         </tr>
                     `;
-                    i++;
-                }
-            });
-            paymentHTML += `
+                        i++;
+                    }
+                });
+                paymentHTML += `
                     <tr>
                         <th colspan="7">${translate['grandTotal']}</th>
-                        <td>${formatCurrency(paymentList[0].totalPaid)}</td>
-                        <td>${formatCurrency(paymentList[0].balanceUnPaid)}</td>
+                        <td>${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].balanceUnPaid, companyDoc.baseCurrency)}</td>
                     </tr>
             `;
-        }
+            }
+        } else {
+            let paymentList = Sch_Payment.aggregate([
+                {$match: parameter},
+                {
+                    $lookup: {
+                        from: 'sch_class',
+                        localField: 'classId',
+                        foreignField: '_id',
+                        as: 'classDoc'
+                    }
+                }
+                ,
+                {
+                    $unwind: {
+                        path: "$classDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
 
+                {
+                    $lookup: {
+                        from: 'sch_student',
+                        localField: 'studentId',
+                        foreignField: '_id',
+                        as: 'studentDoc'
+                    }
+                }
+                ,
+                {
+                    $unwind: {
+                        path: "$studentDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            teacherId: "$classDoc.teacherId",
+                            classId: "$classDoc._id",
+                            chargeType: "$classDoc.chargeType",
+                            charge: "$classDoc.charge",
+                        },
+                        data: {$push: "$$ROOT"},
+                        totalPaid: {$sum: "$totalPaid"},
+                        balanceUnPaid: {$sum: "$balanceUnPaid"}
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'sch_teacher',
+                        localField: '_id.teacherId',
+                        foreignField: '_id',
+                        as: 'teacherDoc'
+                    }
+                }
+                ,
+                {
+                    $unwind: {
+                        path: "$teacherDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                }
+            ]);
+
+
+            let i = 1;
+            let grandTotalCharge = 0;
+            if (paymentList && paymentList.length > 0) {
+                paymentList.forEach((rawObj) => {
+                    let bodyTeacherPaymentHTML = "";
+                    let totalCharge = 0;
+                    if (paymentList) {
+                        rawObj.data.forEach((obj) => {
+                            let rateCharge = (rawObj._id.charge * obj.totalPaid) / 100;
+
+                            bodyTeacherPaymentHTML += `
+                        <tr>
+                            <td style="text-align: center !important;">${i}</td>
+                            <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
+                            <td style="text-align: center !important;">${obj.paymentDateName}</td>
+                            <td style="text-align: center !important;">${obj.classDoc.name}</td>
+                            <td >${formatCurrency(obj.totalNetAmount + obj.totalDiscount, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.totalDiscount, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.totalNetAmount, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.totalPaid, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.balanceUnPaid, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(rateCharge, companyDoc.baseCurrency)}</td>
+                        </tr>
+                    `;
+                            totalCharge += rateCharge;
+                            i++;
+                        });
+                        paymentHTML += `
+                            <tr>
+                                <td colspan="9" style="text-align: left !important;">${rawObj.teacherDoc.personal.name} (${rawObj.teacherDoc.personal.phoneNumber})</td>
+                                <td >${formatCurrency(totalCharge, companyDoc.baseCurrency)}</td>
+                            </tr>
+                        `;
+                        paymentHTML += bodyTeacherPaymentHTML;
+                        grandTotalCharge += totalCharge;
+
+                    }
+                });
+                paymentHTML += `
+                    <tr>
+                        <th colspan="7">${translate['grandTotal']}</th>
+                        <td>${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].balanceUnPaid, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(grandTotalCharge, companyDoc.baseCurrency)}</td>
+                    </tr>
+            `;
+            }
+        }
         data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");
         data.currencyHeader = companyDoc.baseCurrency;
 

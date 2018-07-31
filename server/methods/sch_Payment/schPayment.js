@@ -135,7 +135,8 @@ Meteor.methods({
                 Sch_PaymentSchedule.direct.update({_id: data._id}, {
                     $set: {status: newStatus, closeDate: ""},
                     $inc: {
-                        paid: -(data.paid + data.discount),
+                        paid: -(data.paid),
+                        discount: -(data.discount),
                         paymentNumber: -1
                     }
                 }, true);
@@ -175,7 +176,8 @@ Meteor.methods({
         return Sch_PaymentSchedule.direct.update({_id: data._id}, {
             $set: upd,
             $inc: {
-                paid: numeral(data.paid).value() + numeral(data.discount).value(),
+                paid: numeral(data.paid).value(),
+                discount: numeral(data.discount).value(),
                 paymentNumber: 1
             }
         }, true);

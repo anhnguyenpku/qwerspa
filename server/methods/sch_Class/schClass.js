@@ -2,6 +2,7 @@ import {Sch_Class} from '../../../imports/collection/schClass';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_ClassTable} from "../../../imports/collection/schClassTable";
+import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
 
 Meteor.methods({
     querySchClass({q, filter, options = {limit: 10, skip: 0}}) {
@@ -194,6 +195,7 @@ Meteor.methods({
         return doc;
     },
     removeSchClass(id) {
+        Sch_PaymentSchedule.remove({classId: classId});
         Sch_ClassTable.remove({classId: id});
         return Sch_Class.remove({_id: id});
     },

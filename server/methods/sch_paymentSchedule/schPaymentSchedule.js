@@ -86,9 +86,9 @@ Meteor.methods({
             obj.isApplyTerm = false;
             obj.promotionDoc = studentDoc && studentDoc[0].promotionDoc || "";
 
-            obj.amount = formatCurrency(obj.netAmount - obj.paid - (obj.balanceNotCut || 0));
+            obj.amount = formatCurrency(obj.netAmount - obj.paid - obj.discount - (obj.balanceNotCut || 0));
             obj.discount = 0;
-            obj.netAmount = formatCurrency(obj.netAmount - obj.paid - (obj.balanceNotCut || 0));
+            obj.netAmount = formatCurrency(obj.netAmount - obj.paid - obj.discount - (obj.balanceNotCut || 0));
             obj.paid = 0;
             obj.isPaid = false;
 

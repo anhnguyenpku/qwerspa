@@ -89,3 +89,14 @@ schReportStudent.route('/schPaymentReport', {
     }
 
 });
+import '../../imports/ui/report/schDebtSummary/schDebtSummary';
+
+schReportStudent.route('/schDebtSummaryReport', {
+    name: 'sch.schDebtSummaryReport',
+    title: "Debt Summary Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_debtSummaryReport');
+    }
+
+});

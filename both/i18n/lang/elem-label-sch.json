@@ -266,7 +266,9 @@
       "teacher": "Teacher",
       "level": "Level",
       "status": "Status",
-      "classDate": "Class Date"
+      "classDate": "Class Date",
+      "charge": "Value Charge",
+      "chargeType": "Charge Type"
     },
     "classBoard": {
       "searchHere": "Search Here ...",
@@ -787,7 +789,9 @@
       "teacher": "គ្រូ/សាស្ត្រាចារ្យ",
       "level": "កម្រិត",
       "status": "ស្ថានភាព",
-      "classDate": "ថ្ងៃបង្កើតថ្នាក់"
+      "classDate": "ថ្ងៃបង្កើតថ្នាក់",
+      "charge": "តម្លៃទូទាត់",
+      "chargeType": "ប្រភេទទូទាត់"
     },
     "classBoard": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
