@@ -1,6 +1,6 @@
 <!--suppress ALL -->
 <template>
-    <div class="schPayment-report">
+    <div class="schStudentList-report">
         <a4>
             <div slot="header" class="no-print">
                 <el-row type="flex" class="row-bg" justify="center">
@@ -45,9 +45,8 @@
                                     <el-col>
                                         <el-form-item :label="langConfig['class']">
                                             <el-select filterable v-model="params.classId" clearable
-                                                       :remote-method="fetchClass"
-
                                                        :placeholder="langConfig['all']"
+                                                       :remote-method="fetchClass"
                                                        style="width: 95%">
                                                 <el-option
                                                         v-for="item in classOptions"
@@ -58,30 +57,49 @@
                                         </el-form-item>
 
                                     </el-col>
+                                </el-row>
+                                <el-row type="flex" class="row-bg" justify="center">
                                     <el-col>
-                                        <el-form-item :label="langConfig['dateRange']">
-                                            <el-date-picker
-                                                    align="right" style="width: 95%"
-                                                    v-model="params.date"
-                                                    type="daterange"
-                                                    :picker-options="pickerDateOptions"
-                                                    :placeholder="langConfig['pickDateRange']"
-                                            >
-                                            </el-date-picker>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col>
-                                        <el-form-item :label="langConfig['groupBy']">
-                                            <el-select filterable v-model="params.groupBy"
-                                                       :placeholder="langConfig['all']" clearable
+                                        <el-form-item :label="langConfig['program']">
+                                            <el-select filterable v-model="params.programId" clearable
+                                                       :placeholder="langConfig['all']"
                                                        style="width: 95%">
                                                 <el-option
-                                                        v-for="item in groupByOptions"
+                                                        v-for="item in programOptions"
                                                         :label="item.label"
                                                         :value="item.value" :key="item._id">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
+
+                                    </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['major']">
+                                            <el-select filterable v-model="params.majorId" clearable
+                                                       :placeholder="langConfig['all']"
+                                                       style="width: 95%">
+                                                <el-option
+                                                        v-for="item in majorOptions"
+                                                        :label="item.label"
+                                                        :value="item.value" :key="item._id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+
+                                    </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['level']">
+                                            <el-select filterable v-model="params.levelId" clearable
+                                                       :placeholder="langConfig['all']"
+                                                       style="width: 95%">
+                                                <el-option
+                                                        v-for="item in levelOptions"
+                                                        :label="item.label"
+                                                        :value="item.value" :key="item._id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+
                                     </el-col>
 
                                 </el-row>
@@ -92,80 +110,8 @@
                     </el-col>
                 </el-row>
             </div>
-            <span slot="content" style="margin: 0px !important;">
+            <span slot="content" style="margin: 0px !important;" v-html="studentListHtml">
 
-                          <div class="row">
-                              <div class="col-lg-3">
-<img style="width: 70px;height: 70px;float: left !important;"
-     src="/mih.png"
-     alt="">
-                              </div>
-                                <div class="col-md-6" style="text-align: center !important;">
-
-                                        <span style="font-family:Khmer os muol; font-size: 15px;">
-                                            <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p>
-                                         <p style="font-size: 9px !important; font-family: khmer os Battambang; margin-bottom: 0px !important;">
-                                        {{waterBillingSetup.address}}({{waterBillingSetup.phoneNumber}})
-                                            </p>
-                                        </span>
-                                 </div>
-                              <div class="col-md-3"></div>
-                          </div>
-                <table class="table table-report-block-summary table-bordered">
-                      <caption>
-
-                          <div class="row">
-                              <div class="col-lg-3">
-                                  <span style="float: left !important;">{{langConfig['no']}}:.........</span>
-                              </div>
-                              <div class="col-md-6"
-                                   style="text-align: center; border: 0px !important;">
-                                  <p style="font-family: 'Khmer OS Muol'; font-size: 15px;">{{langConfig['title']}}</p>
-                              </div>
-                              <div class="col-lg-3"></div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6;" style="float:right">
-                                  {{langConfig['currency']}}: {{currencyHeader}}
-                              </div>
-                              <div class="col-md-6">
-                                  {{langConfig['date']}}: {{dateHeader}}
-                              </div>
-
-                          </div>
-                      </caption>
-
-                <thead style="margin-top: 5px">
-                    <tr>
-                        <th>{{langConfig['no']}}</th>
-                        <th>{{langConfig['student']}}</th>
-                        <th>{{langConfig['paymentDate']}}</th>
-                        <th>{{langConfig['class']}}</th>
-                        <th>{{langConfig['price']}}</th>
-                        <th>{{langConfig['discount']}}</th>
-                        <th>{{langConfig['netAmount']}}</th>
-                        <th>{{langConfig['paid']}}</th>
-                        <th>{{langConfig['balanceUnpaid']}}</th>
-                        <th v-show="isCharge">{{langConfig['charge']}}</th>
-                    </tr>
-                </thead>
-                <tbody style="margin-bottom: 5px;" v-html="paymentHtml">
-
-                </tbody>
-
-
-            </table>
-                 <div class="row" style="width: 100% !important;">
-                    <div style="width: 50%;float: left !important;text-align: center !important;">
-                        បានឃើញ និង ពិនិត្យត្រឹមត្រូវ<br>.......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br><span
-                            style="font-family: 'Khmer OS Muol'">ប្រធាន</span>
-                    </div>
-
-                    <div style="width: 50%;float: right !important;text-align: center !important;">
-                        .......................... ថ្ងៃទី  ............ ខែ   ....................  ឆ្នាំ  ...................<br><br><b>រៀបចំដោយ</b><br><br>
-                    </div>
-
-                </div>
            </span>
         </a4>
     </div>
@@ -183,19 +129,22 @@
                 params: {
                     branch: '',
                     area: '',
-                    date: null,
-                    classId: "",
-                    groupBy: "None"
+                    programId: "",
+                    majorId: "",
+                    levelId: "",
+                    classId: ""
 
                 },
                 rolesArea: '',
                 activeName: '1',
-                paymentHtml: "",
+                studentListHtml: "",
                 labelPosition: 'top',
                 branchOptions: [],
                 areaOptions: [],
+                programOptions: [],
+                majorOptions: [],
+                levelOptions: [],
                 classOptions: [],
-                isCharge: false,
                 waterBillingSetup: {
                     khName: '',
                     enNamer: ''
@@ -208,48 +157,16 @@
                 isIndeterminate: true,
                 dateHeader: "",
                 currencyHeader: "",
-                pickerDateOptions: {
-                    shortcuts: [{
-                        text: 'Last week',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: 'Last month',
-                        onClick(picker) {
-                            const end = moment().add(-1, "month").endOf("month").toDate();
-                            const start = moment().add(-1, "month").startOf("month").toDate();
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: 'Last 3 months',
-                        onClick(picker) {
-                            const end = moment().add(-1, "month").endOf("month").toDate();
-                            const start = moment().add(-4, "month").startOf("month").toDate();
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: 'This month',
-                        onClick(picker) {
-                            const end = moment().endOf("month").toDate();
-                            const start = moment().startOf("month").toDate();
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: 'Today',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
                 groupByOptions: [
                     {label: "None", value: "None"},
-                    {label: "Teacher", value: "Teacher"}
+                    {label: "Transaction Type", value: "Transaction Type"},
+                    {label: "Customer", value: "Customer"},
+                    {label: "Item", value: "Item"},
+                    {label: "Day", value: "Day"},
+                    {label: "Week", value: "Week"},
+                    {label: "Month", value: "Month"},
+                    {label: "Quarter", value: "Quarter"},
+                    {label: "Year", value: "Year"},
                 ]
             };
         },
@@ -265,6 +182,20 @@
 
             "params.branch"(val) {
                 this.fetchArea(val);
+            },
+            "params.programId"(val) {
+                if (val !== "") {
+                    this.fetchMajor(val);
+                } else {
+                    this.params.majorId = "";
+                }
+            },
+            "params.majorId"(val) {
+                if (val !== "") {
+                    this.fetchLevel(val);
+                } else {
+                    this.params.levelId = "";
+                }
             }
         },
         created() {
@@ -274,8 +205,8 @@
                 }
             })
             this.fetchBranch();
+            this.fetchProgram();
             this.fetchClass();
-
         },
         methods: {
 
@@ -293,7 +224,44 @@
                     }
                 })
             },
-            fetchClass(query) {
+            fetchProgram() {
+                let selector = {};
+                Meteor.call("queryProgramOption", selector, (err, result) => {
+                    if (result) {
+                        this.programOptions = result;
+                    }
+                })
+            },
+            fetchMajor(programId) {
+                let selector = {};
+                selector.programId = programId;
+                Meteor.call("queryMajorOption", selector, (err, result) => {
+                    if (result) {
+                        this.majorOptions = result;
+                    }
+                })
+            },
+            fetchLevel(majorId) {
+                let selector = {};
+                selector.majorId = majorId;
+                Meteor.call("queryLevelOption", selector, (err, result) => {
+                    if (result) {
+                        this.levelOptions = result;
+                    }
+                })
+            },
+
+            handleRun() {
+                this.loading = true;
+                Meteor.call('schStudentListReport', this.params, this.langConfig, (err, result) => {
+                    if (result) {
+                        this.studentListHtml = result.studentListHTML;
+                        this.dateHeader = result.dateHeader;
+                        this.currencyHeader = result.currencyHeader;
+                    }
+                    this.loading = false;
+                });
+            }, fetchClass(query) {
                 let vm = this;
                 if (!!query) {
                     //vm.loading = true;
@@ -316,37 +284,14 @@
                         }
                     })
                 }
-            },
-            handleRun() {
-                this.loading = true;
-                if (this.params.groupBy === "None") {
-                    this.isCharge = false;
-                } else {
-                    this.isCharge = true;
-                }
-                if (this.params.date == "" || this.params.date == undefined) {
-                    alertify.error("Date can't not empty!!");
-                    this.loading = false;
-                    return false;
-                }
-                Meteor.call('schPaymentReport', this.params, this.langConfig, (err, result) => {
-                    if (result) {
-                        this.paymentHtml = result.paymentHTML;
-                        this.dateHeader = result.dateHeader;
-                        this.currencyHeader = result.currencyHeader;
-                    }
-                    this.loading = false;
-                });
             }
-
-
         },
         computed: {
             dataExist() {
                 // return this.posSaleData.length > 0;
             },
             langConfig() {
-                let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['payment'];
+                let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['studentList'];
                 return data;
             }
         },

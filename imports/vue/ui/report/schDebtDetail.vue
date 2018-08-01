@@ -1,6 +1,6 @@
 <!--suppress ALL -->
 <template>
-    <div class="schPayment-report">
+    <div class="schDebtDetail-report">
         <a4>
             <div slot="header" class="no-print">
                 <el-row type="flex" class="row-bg" justify="center">
@@ -46,7 +46,6 @@
                                         <el-form-item :label="langConfig['class']">
                                             <el-select filterable v-model="params.classId" clearable
                                                        :remote-method="fetchClass"
-
                                                        :placeholder="langConfig['all']"
                                                        style="width: 95%">
                                                 <el-option
@@ -59,28 +58,14 @@
 
                                     </el-col>
                                     <el-col>
-                                        <el-form-item :label="langConfig['dateRange']">
+                                        <el-form-item :label="langConfig['date']">
                                             <el-date-picker
                                                     align="right" style="width: 95%"
                                                     v-model="params.date"
-                                                    type="daterange"
-                                                    :picker-options="pickerDateOptions"
-                                                    :placeholder="langConfig['pickDateRange']"
+                                                    type="date"
+                                                    :placeholder="langConfig['pickDate']"
                                             >
                                             </el-date-picker>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col>
-                                        <el-form-item :label="langConfig['groupBy']">
-                                            <el-select filterable v-model="params.groupBy"
-                                                       :placeholder="langConfig['all']" clearable
-                                                       style="width: 95%">
-                                                <el-option
-                                                        v-for="item in groupByOptions"
-                                                        :label="item.label"
-                                                        :value="item.value" :key="item._id">
-                                                </el-option>
-                                            </el-select>
                                         </el-form-item>
                                     </el-col>
 
@@ -139,17 +124,12 @@
                     <tr>
                         <th>{{langConfig['no']}}</th>
                         <th>{{langConfig['student']}}</th>
-                        <th>{{langConfig['paymentDate']}}</th>
+                        <th>{{langConfig['phoneNumber']}}</th>
                         <th>{{langConfig['class']}}</th>
-                        <th>{{langConfig['price']}}</th>
-                        <th>{{langConfig['discount']}}</th>
-                        <th>{{langConfig['netAmount']}}</th>
-                        <th>{{langConfig['paid']}}</th>
                         <th>{{langConfig['balanceUnpaid']}}</th>
-                        <th v-show="isCharge">{{langConfig['charge']}}</th>
                     </tr>
                 </thead>
-                <tbody style="margin-bottom: 5px;" v-html="paymentHtml">
+                <tbody style="margin-bottom: 5px;" v-html="debtDetailHtml">
 
                 </tbody>
 
@@ -184,18 +164,17 @@
                     branch: '',
                     area: '',
                     date: null,
-                    classId: "",
-                    groupBy: "None"
+                    classId: ""
 
                 },
                 rolesArea: '',
                 activeName: '1',
-                paymentHtml: "",
+                debtDetailHtml: "",
                 labelPosition: 'top',
                 branchOptions: [],
                 areaOptions: [],
                 classOptions: [],
-                isCharge: false,
+
                 waterBillingSetup: {
                     khName: '',
                     enNamer: ''
@@ -247,10 +226,6 @@
                         }
                     }]
                 },
-                groupByOptions: [
-                    {label: "None", value: "None"},
-                    {label: "Teacher", value: "Teacher"}
-                ]
             };
         },
         meteor: {
@@ -319,19 +294,14 @@
             },
             handleRun() {
                 this.loading = true;
-                if (this.params.groupBy === "None") {
-                    this.isCharge = false;
-                } else {
-                    this.isCharge = true;
-                }
                 if (this.params.date == "" || this.params.date == undefined) {
                     alertify.error("Date can't not empty!!");
                     this.loading = false;
                     return false;
                 }
-                Meteor.call('schPaymentReport', this.params, this.langConfig, (err, result) => {
+                Meteor.call('schDebtDetailReport', this.params, this.langConfig, (err, result) => {
                     if (result) {
-                        this.paymentHtml = result.paymentHTML;
+                        this.debtDetailHtml = result.debtDetailHTML;
                         this.dateHeader = result.dateHeader;
                         this.currencyHeader = result.currencyHeader;
                     }
@@ -346,7 +316,7 @@
                 // return this.posSaleData.length > 0;
             },
             langConfig() {
-                let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['payment'];
+                let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['debtDetail'];
                 return data;
             }
         },

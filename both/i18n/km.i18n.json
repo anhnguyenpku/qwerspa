@@ -131,7 +131,9 @@
       "major": "ជំនាញ",
       "faculty": "មហាវិទ្យាល័យ",
       "payment": "បង់ប្រាក់",
-      "debtSummary": "បំណុលសង្ខេប"
+      "debtSummary": "បំណុលសង្ខេប",
+      "debtDetail": "បំណុលលម្អិត",
+      "studentList": "បញ្ចីឈ្មោះសិស្ស"
     }
   }
 }

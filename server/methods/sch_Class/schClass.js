@@ -195,7 +195,7 @@ Meteor.methods({
         return doc;
     },
     removeSchClass(id) {
-        Sch_PaymentSchedule.remove({classId: classId});
+        Sch_PaymentSchedule.remove({classId: id});
         Sch_ClassTable.remove({classId: id});
         return Sch_Class.remove({_id: id});
     },

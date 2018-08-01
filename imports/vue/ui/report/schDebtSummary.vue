@@ -45,6 +45,7 @@
                                     <el-col>
                                         <el-form-item :label="langConfig['class']">
                                             <el-select filterable v-model="params.classId" clearable
+                                                       :remote-method="fetchClass"
                                                        :placeholder="langConfig['all']"
                                                        style="width: 95%">
                                                 <el-option
@@ -267,13 +268,29 @@
                     }
                 })
             },
-            fetchClass() {
-                let selector = {};
-                Meteor.call("queryClassOption", selector, (err, result) => {
-                    if (result) {
-                        this.classOptions = result;
-                    }
-                })
+            fetchClass(query) {
+                let vm = this;
+                if (!!query) {
+                    //vm.loading = true;
+                    setTimeout(() => {
+                        //vm.loading = false;
+                        Meteor.call('queryClassOptionSearch', query, (err, result) => {
+                            if (!err) {
+                                vm.classOptions = result;
+                            } else {
+                                console.log(err.message);
+                            }
+                        })
+                    }, 200);
+                } else {
+                    Meteor.call('queryClassOptionSearch', "", (err, result) => {
+                        if (!err) {
+                            vm.classOptions = result;
+                        } else {
+                            console.log(err.message);
+                        }
+                    })
+                }
             },
             handleRun() {
                 this.loading = true;

@@ -73,7 +73,7 @@
                                            @click="removeSchRegister(scope.$index,scope.row,schRegisterData)"
                                            :disabled="disabledRemove"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
-                                           @click="popupSchRegisterUpdate(),findSchRegisterById(scope),dialogUpdateSchRegister= true"
+                                           @click="popupSchRegisterUpdate(scope.row),findSchRegisterById(scope),dialogUpdateSchRegister= true"
                                            :disabled="disabledUpdate"></el-button>
                                 <el-button type="success" icon="el-icon-caret-right" size="small" class="cursor-pointer"
                                            @click="popupSchRegisterUpdateToClass(scope.row),findSchRegisterById(scope),dialogUpdateSchRegisterToClass= true"
@@ -242,7 +242,7 @@
                 <el-form-item :label="langConfig['student']" prop="studentId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schRegisterForm.studentId"
+                               v-model="schRegisterForm.studentId" :remote-method="studentOpt"
                                :disabled="disableUpdateField"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
@@ -1320,10 +1320,10 @@
                 this.promotionOpt();
 
             },
-            popupSchRegisterUpdate() {
+            popupSchRegisterUpdate(row) {
                 this.ref = "schRegisterFormUpdate";
                 this.resetForm();
-                this.studentOpt();
+                this.studentOpt(row.studentDoc._id);
                 this.levelOpt();
                 this.majorOpt();
                 this.programOpt();

@@ -134,6 +134,22 @@ Meteor.methods({
         return list;
     }
     ,
+
+    queryClassOptionSearch(q) {
+        let selector = {};
+        if (q !== "") {
+            q = q.replace(/[/\\]/g, '');
+            let reg = new RegExp(q, 'mi');
+            selector.$or = [
+                {name: {$regex: reg}},
+                {classDateName: {$regex: reg}},
+                {_id: q}
+            ];
+        }
+        return Sch_Class.find(selector, {limit: 100}).fetch().map(obj => ({
+            label: obj.name + " - " + obj.classDateName, value: obj._id
+        }));
+    },
     queryClassOptionActive(selector) {
         let list = [];
         selector.status = true;

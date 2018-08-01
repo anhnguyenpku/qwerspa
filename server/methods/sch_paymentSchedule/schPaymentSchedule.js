@@ -40,6 +40,8 @@ Meteor.methods({
             scheduleDoc.netAmount = formatCurrency(pricePerUnit);
             scheduleDoc.balanceUnPaid = formatCurrency(pricePerUnit);
             scheduleDoc.rolesArea = classDoc.rolesArea;
+            scheduleDoc.term = doc.term;
+            scheduleDoc.promotionId = doc.promotionId;
             scheduleDoc.receivePaymentScheduleDate = doc.startClassDate;
             scheduleDoc.receivePaymentScheduleDateName = moment(doc.startClassDate).format("DD/MM/YYYY");
             let reDoc = Sch_PaymentSchedule.insert(scheduleDoc);

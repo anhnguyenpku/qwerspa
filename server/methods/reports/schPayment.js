@@ -181,7 +181,6 @@ Meteor.methods({
                     if (paymentList) {
                         rawObj.data.forEach((obj) => {
                             let rateCharge = (rawObj._id.charge * obj.totalPaid) / 100;
-
                             bodyTeacherPaymentHTML += `
                         <tr>
                             <td style="text-align: center !important;">${i}</td>

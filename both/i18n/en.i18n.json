@@ -319,7 +319,9 @@
       "major": "Major",
       "faculty": "Faculty",
       "payment": "Payment",
-      "debtSummary": "Debt Summary"
+      "debtSummary": "Debt Summary",
+      "debtDetail": "Debt Detail",
+      "studentList": "Student List"
     }
   },
   "global": {

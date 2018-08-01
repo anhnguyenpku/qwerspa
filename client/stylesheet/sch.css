@@ -69,3 +69,15 @@
 
 }
 
+@media print {
+    .paymentNo {
+        background-color: darkblue !important;
+        color: white !important;
+        width: 100px !important;
+    }
+
+    .printPayment {
+        margin-right: 8px !important;
+        margin-left: 8px !important;
+    }
+}

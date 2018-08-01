@@ -38,9 +38,6 @@ Sch_Class.schema = new SimpleSchema({
         type: Number,
         decimal: true
     },
-    chargeType: {
-        type: String
-    },
     rolesArea: {
         type: String,
         label: "Role Area"

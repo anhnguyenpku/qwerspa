@@ -49,6 +49,12 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
         optional: true,
         defaultValue: 0
     },
+    term: {
+        type: Number
+    },
+    promotionId: {
+        type: String
+    },
     rolesArea: {
         type: String,
         optional: true

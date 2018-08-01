@@ -100,3 +100,25 @@ schReportStudent.route('/schDebtSummaryReport', {
     }
 
 });
+import '../../imports/ui/report/schDebtDetail/schDebtDetail';
+
+schReportStudent.route('/schDebtDetailReport', {
+    name: 'sch.schDebtDetailReport',
+    title: "Debt Detail Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_debtDetailReport');
+    }
+
+});
+import '../../imports/ui/report/schStudentList/schStudentList';
+
+schReportStudent.route('/schStudentListReport', {
+    name: 'sch.schStudentListReport',
+    title: "Student List Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_studentListReport');
+    }
+
+});

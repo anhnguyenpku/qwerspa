@@ -13,7 +13,7 @@ import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
 import {Sch_ClassTable} from "../../../imports/collection/schClassTable";
 
 Meteor.methods({
-    schDebtSummaryReport(params, translate) {
+    schDebtDetailReport(params, translate) {
         let parameter = {};
 
         if (params.area != "") {
@@ -32,9 +32,9 @@ Meteor.methods({
             $lte: moment(params.date).endOf("day").toDate()
         };
 
-        let debtSummaryHTML = "";
+        let debtDetailHTML = "";
 
-        let debtSummaryList = Sch_PaymentSchedule.aggregate([
+        let debtDetailList = Sch_PaymentSchedule.aggregate([
             {$match: parameter},
             {
                 $group: {
@@ -43,6 +43,9 @@ Meteor.methods({
                         classId: "$classId",
                         promotionId: "$promotionId"
 
+                    },
+                    data: {
+                        $push: "$$ROOT"
                     },
                     totalAmount: {$sum: "$amount"},
                     totalPaid: {$sum: "$paid"},
@@ -77,8 +80,7 @@ Meteor.methods({
                     path: "$studentDoc",
                     preserveNullAndEmptyArrays: true
                 }
-            },
-            {
+            }, {
                 $lookup: {
                     from: 'sch_promotion',
                     localField: '_id.promotionId',
@@ -106,16 +108,16 @@ Meteor.methods({
 
 
         let i = 1;
-        if (debtSummaryList[0] && debtSummaryList[0].data.length > 0) {
-            debtSummaryList[0].data.forEach((obj) => {
-                if (obj) {
-                    if (obj.promotionDoc.promotionType === "Percent" && obj.promotionDoc.value === 100) {
+        if (debtDetailList[0] && debtDetailList[0].data.length > 0) {
+            debtDetailList[0].data.forEach((obj) => {
+                    if (obj) {
+                        if (obj.promotionDoc.promotionType === "Percent" && obj.promotionDoc.value === 100) {
 
-                        debtSummaryList[0].totalAmount -= obj.totalAmount;
-                        debtSummaryList[0].totalPaid -= obj.totalPaid;
-                        debtSummaryList[0].totalDiscount -= obj.totalDiscount;
-                    } else {
-                        debtSummaryHTML += `
+                            debtDetailList[0].totalAmount -= obj.totalAmount;
+                            debtDetailList[0].totalPaid -= obj.totalPaid;
+                            debtDetailList[0].totalDiscount -= obj.totalDiscount;
+                        } else {
+                            debtDetailHTML += `
                         <tr>
                             <td style="text-align: center !important;">${i}</td>
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
@@ -124,14 +126,24 @@ Meteor.methods({
                             <td >${formatCurrency(obj.totalAmount - obj.totalPaid - obj.totalDiscount)}</td>
                         </tr>
                     `;
-                        i++;
+                            i++;
+                            obj.data.forEach((ob) => {
+                                debtDetailHTML += `
+                            <tr>
+                                <td colspan="4" style="text-align: center !important;">${ob.receivePaymentScheduleDateName} - ${moment(moment(ob.receivePaymentScheduleDate).add(ob.term || 0, "months").toDate()).format("DD/MM/YYYY")}</td>                                    
+                                <td style="text-align: left !important;">${formatCurrency(ob.amount - ob.paid - ob.discount)}</td>                                    
+                            </tr>
+                        `;
+                            })
+                        }
+
                     }
                 }
-            });
-            debtSummaryHTML += `
+            );
+            debtDetailHTML += `
                     <tr>
                         <th colspan="4">${translate['grandTotal']}</th>
-                        <td>${formatCurrency(debtSummaryList[0].totalAmount - debtSummaryList[0].totalPaid - debtSummaryList[0].totalDiscount)}</td>
+                        <td>${formatCurrency(debtDetailList[0].totalAmount - debtDetailList[0].totalPaid - debtDetailList[0].totalDiscount)}</td>
                     </tr>
             `;
         }
@@ -139,7 +151,7 @@ Meteor.methods({
         data.dateHeader = moment(params.date).format("DD/MM/YYYY");
         data.currencyHeader = companyDoc.baseCurrency;
 
-        data.debtSummaryHTML = debtSummaryHTML;
+        data.debtDetailHTML = debtDetailHTML;
         return data;
     }
 });
