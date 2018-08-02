@@ -36,6 +36,10 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
         type: Number,
         decimal: true
     },
+    waived: {
+        type: Number,
+        decimal: true
+    },
     receivePaymentScheduleDate: {
         type: Date,
         label: 'Receive PaymentSchedule Date'

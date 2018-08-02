@@ -49,9 +49,13 @@ Sch_Payment.schema = new SimpleSchema({
         type: Number,
         decimal: true
     },
-    'schedule.$.dayOverDue': {
+    'schedule.$.waived': {
         type: Number,
         decimal: true
+    },
+    'schedule.$.desc': {
+        type: String,
+        optional: true
     },
     paymentDate: {
         type: Date,
@@ -89,6 +93,13 @@ Sch_Payment.schema = new SimpleSchema({
         optional: true,
         defaultValue: 0
     },
+    totalWaived: {
+        type: Number,
+        label: "Discount",
+        decimal: true,
+        optional: true,
+        defaultValue: 0
+    },
     balanceUnPaid: {
         type: Number,
         label: "Balance",
@@ -110,6 +121,10 @@ Sch_Payment.schema = new SimpleSchema({
     paymentNo: {
         type: String,
         optional: true
+    },
+    penalty: {
+        type: Number,
+        decimal: true
     },
     createdAt: {
         type: Date,

@@ -31,6 +31,7 @@ Meteor.methods({
         scheduleDoc.isPaid = false;
         scheduleDoc.discount = 0;
         scheduleDoc.paid = 0;
+        scheduleDoc.waived = 0;
 
 
         for (let i = 1; i <= levelDoc.term; i = i + doc.term) {
@@ -88,11 +89,14 @@ Meteor.methods({
             obj.isApplyTerm = false;
             obj.promotionDoc = studentDoc && studentDoc[0].promotionDoc || "";
 
-            obj.amount = formatCurrency(obj.netAmount - obj.paid - obj.discount - (obj.balanceNotCut || 0));
+            obj.amount = formatCurrency(obj.amount - obj.paid - (obj.waived || 0) - obj.discount - (obj.balanceNotCut || 0));
             obj.discount = 0;
-            obj.netAmount = formatCurrency(obj.netAmount - obj.paid - obj.discount - (obj.balanceNotCut || 0));
+            obj.netAmount = formatCurrency(obj.amount - obj.paid - (obj.waived || 0) - obj.discount - (obj.balanceNotCut || 0));
             obj.paid = 0;
             obj.isPaid = false;
+            obj.desc = "";
+            obj.waived = 0;
+            obj.dayOverDue = moment().startOf("days").diff(moment(obj.receivePaymentScheduleDate).startOf("days").toDate(), "days") < 0 ? 0 : moment().startOf("days").diff(moment(obj.receivePaymentScheduleDate).startOf("days").toDate(), "days");
 
             return obj;
         });

@@ -1,45 +1,9 @@
-export const Sch_Class = new Mongo.Collection('sch_class');
+export const Sch_Time = new Mongo.Collection('sch_time');
 
-Sch_Class.schema = new SimpleSchema({
+Sch_Time.schema = new SimpleSchema({
     name: {
         type: String,
         label: "Name"
-    },
-    khName: {
-        type: String,
-        label: "Khmer",
-        optional: true
-    },
-    code: {
-        type: String,
-        optional: true
-    },
-    desc: {
-        type: String,
-        optional: true
-    },
-    teacherId: {
-        type: String,
-        optional: true
-    },
-    levelId: {
-        type: String
-    },
-    timeId: {
-        type: String
-    },
-    classDate: {
-        type: Date
-    },
-    classDateName: {
-        type: String
-    },
-    status: {
-        type: Boolean
-    },
-    charge: {
-        type: Number,
-        decimal: true
     },
     rolesArea: {
         type: String,
@@ -87,4 +51,4 @@ Sch_Class.schema = new SimpleSchema({
     }
 });
 
-Sch_Class.attachSchema(Sch_Class.schema);
+Sch_Time.attachSchema(Sch_Time.schema);

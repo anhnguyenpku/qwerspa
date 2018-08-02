@@ -20,6 +20,7 @@ import {Sch_Class} from "../../imports/collection/schClass";
 import {Sch_Major} from "../../imports/collection/schMajor";
 import {Sch_Faculty} from "../../imports/collection/schFaculty";
 import {Sch_ClassTable} from "../../imports/collection/schClassTable";
+import {Sch_Time} from "../../imports/collection/schTime";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -64,7 +65,7 @@ Meteor.methods({
             },
         ]);
         studentList.forEach((obj) => {
-            if (obj) {
+            if (obj && obj.studentDoc) {
                 list.push({
                     label: (obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.name || "") + " ( " + (obj.studentDoc && obj.studentDoc.personal && obj.studentDoc.personal.dobName || "") + ")",
                     value: obj.studentDoc._id
@@ -88,6 +89,15 @@ Meteor.methods({
 
         Sch_Level.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
+        });
+        return list;
+    }
+    ,
+    queryTimeOption(selector) {
+        let list = [];
+
+        Sch_Time.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
         });
         return list;
     }
@@ -146,6 +156,7 @@ Meteor.methods({
                 {_id: q}
             ];
         }
+        selector.status = true;
         return Sch_Class.find(selector, {limit: 100}).fetch().map(obj => ({
             label: obj.name + " - " + obj.classDateName, value: obj._id
         }));

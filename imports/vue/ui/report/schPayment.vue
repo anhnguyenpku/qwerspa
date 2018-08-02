@@ -145,6 +145,8 @@
                         <th>{{langConfig['discount']}}</th>
                         <th>{{langConfig['netAmount']}}</th>
                         <th>{{langConfig['paid']}}</th>
+                        <th>{{langConfig['waived']}}</th>
+                        <th>{{langConfig['penalty']}}</th>
                         <th>{{langConfig['balanceUnpaid']}}</th>
                         <th v-show="isCharge">{{langConfig['charge']}}</th>
                     </tr>

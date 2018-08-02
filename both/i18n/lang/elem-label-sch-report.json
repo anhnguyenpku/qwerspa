@@ -131,7 +131,9 @@
       "balanceUnpaid": "Balance UnPaid",
       "netAmount": "Net Amount",
       "discount": "Discount",
-      "charge": "Charge"
+      "charge": "Charge",
+      "waived": "Waived",
+      "penalty": "Penalty"
     },
     "debtSummary": {
       "run": "RUN REPORT",
@@ -402,7 +404,9 @@
       "balanceUnpaid": "ទឹកប្រាក់មិនទាន់បានបង់",
       "netAmount": "ទឹកប្រាក់សុទ្ធ",
       "discount": "បញ្ចុះតម្លៃ",
-      "charge": "ទូទាត់"
+      "charge": "ទូទាត់",
+      "waived": "កាត់ចោល",
+      "penalty": "ពិន័យ"
     },
     "debtSummary": {
       "run": "ដំណើរការរបាយការណ៍",

@@ -154,6 +154,20 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['time']" prop="timeId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schClassForm.timeId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in timeList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item :label="langConfig['teacher']" prop="teacherId">
                     <el-select style="display: block !important;"
                                filterable
@@ -230,6 +244,20 @@
                                :placeholder="langConfig['chooseItem']">
                         <el-option
                                 v-for="item in levelList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['time']" prop="timeId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schClassForm.timeId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in timeList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -319,9 +347,11 @@
                     status: false,
                     classDate: moment().toDate(),
                     charge: 0,
+                    timeId: ""
                 },
                 teacherList: [],
                 levelList: [],
+                timeList: [],
 
                 rules: {
                     classDate: [{
@@ -404,6 +434,12 @@
                     this.levelList = result;
                 })
             },
+            timeOpt() {
+                let selector = {};
+                Meteor.call("queryTimeOption", selector, (err, result) => {
+                    this.timeList = result;
+                })
+            },
             saveSchClass() {
                 let vm = this;
                 this.$refs["schClassFormAdd"].validate((valid) => {
@@ -418,6 +454,7 @@
                             status: vm.schClassForm.status,
                             classDate: vm.schClassForm.classDate,
                             charge: vm.schClassForm.charge,
+                            timeId: vm.schClassForm.timeId,
                             classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };
@@ -460,10 +497,10 @@
                             status: vm.schClassForm.status,
                             classDate: vm.schClassForm.classDate,
                             charge: vm.schClassForm.charge,
+                            timeId: vm.schClassForm.timeId,
                             classDateName: moment(vm.schClassForm.classDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };
-                        console.log(schClassDoc);
 
                         Meteor.call("updateSchClass", schClassDoc, (err, result) => {
                             if (!err) {
@@ -563,6 +600,7 @@
             this.fetchUser();
             this.teacherOpt();
             this.levelOpt();
+            this.timeOpt();
             this.queryData();
         },
         computed: {

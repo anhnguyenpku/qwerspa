@@ -73,6 +73,8 @@ Meteor.methods({
                         _id: null,
                         data: {$push: "$$ROOT"},
                         totalPaid: {$sum: "$totalPaid"},
+                        totalWaived: {$sum: "$totalWaived"},
+                        totalPenalty: {$sum: "$penalty"},
                         balanceUnPaid: {$sum: "$balanceUnPaid"}
                     }
                 },
@@ -93,6 +95,8 @@ Meteor.methods({
                             <td >${formatCurrency(obj.totalDiscount, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.totalNetAmount, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.totalPaid, companyDoc.baseCurrency)}</td>
+                             <td >${formatCurrency(obj.totalWaived, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.penalty, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.balanceUnPaid, companyDoc.baseCurrency)}</td>
                         </tr>
                     `;
@@ -103,6 +107,8 @@ Meteor.methods({
                     <tr>
                         <th colspan="7">${translate['grandTotal']}</th>
                         <td>${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].totalWaived, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].totalPenalty, companyDoc.baseCurrency)}</td>
                         <td>${formatCurrency(paymentList[0].balanceUnPaid, companyDoc.baseCurrency)}</td>
                     </tr>
             `;
@@ -151,6 +157,8 @@ Meteor.methods({
                         },
                         data: {$push: "$$ROOT"},
                         totalPaid: {$sum: "$totalPaid"},
+                        totalWaived: {$sum: "$totalWaived"},
+                        totalPenalty: {$sum: "$penalty"},
                         balanceUnPaid: {$sum: "$balanceUnPaid"}
                     }
                 },
@@ -191,6 +199,8 @@ Meteor.methods({
                             <td >${formatCurrency(obj.totalDiscount, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.totalNetAmount, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.totalPaid, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.totalWaived, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.penalty, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.balanceUnPaid, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(rateCharge, companyDoc.baseCurrency)}</td>
                         </tr>
@@ -200,7 +210,7 @@ Meteor.methods({
                         });
                         paymentHTML += `
                             <tr>
-                                <td colspan="9" style="text-align: left !important;">${rawObj.teacherDoc.personal.name} (${rawObj.teacherDoc.personal.phoneNumber})</td>
+                                <td colspan="11" style="text-align: left !important;">${rawObj.teacherDoc.personal.name} (${rawObj.teacherDoc.personal.phoneNumber})</td>
                                 <td >${formatCurrency(totalCharge, companyDoc.baseCurrency)}</td>
                             </tr>
                         `;
@@ -213,6 +223,8 @@ Meteor.methods({
                     <tr>
                         <th colspan="7">${translate['grandTotal']}</th>
                         <td>${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].totalWaived, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].totalPenalty, companyDoc.baseCurrency)}</td>
                         <td>${formatCurrency(paymentList[0].balanceUnPaid, companyDoc.baseCurrency)}</td>
                         <td>${formatCurrency(grandTotalCharge, companyDoc.baseCurrency)}</td>
                     </tr>

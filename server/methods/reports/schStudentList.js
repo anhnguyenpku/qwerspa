@@ -68,6 +68,11 @@ Meteor.methods({
                     foreignField: '_id',
                     as: 'classDoc'
                 }
+            },
+            {
+                $match: {
+                    "classDoc.status": true
+                }
             }
             ,
             {
@@ -142,7 +147,7 @@ Meteor.methods({
 
         if (studentListList && studentListList.length > 0) {
             studentListList.forEach((obj) => {
-                if (obj && obj.data.length > 0) {
+                if (obj && obj.data.length > 0 && obj._id.classDoc !== undefined) {
                     studentListHTML += ` 
  <div class="row">
                               <div class="col-lg-3">
@@ -154,8 +159,10 @@ Meteor.methods({
 
                                         <span style="font-family:Khmer os muol; font-size: 15px;">
                                             <p>${companyDoc.khName}</p> <p>${companyDoc.enName}</p>
-                                         <p style="font-size: 9px !important; font-family: khmer os Battambang; margin-bottom: 0px !important;">
-                                        ${companyDoc.address}(${companyDoc.phoneNumber})
+                                         <p style="font-size: 15px !important; font-family: khmer os Battambang; margin-bottom: 0px !important;">
+                                        ${obj._id.programDoc.name}  ${obj._id.majorDoc.name} 
+                                            </p> 
+                                            <p style="font-size: 15px !important; font-family: khmer os Battambang; margin-bottom: 0px !important;">${obj._id.classDoc.name}
                                             </p>
                                         </span>
                                  </div>

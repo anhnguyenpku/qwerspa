@@ -129,3 +129,13 @@ schSetting.route('/schMention', {
         _Main('sch_mention');
     }
 });
+import "../../imports/ui/sch_time/sch_time";
+//Student
+schSetting.route('/schTime', {
+    name: 'sch.time',
+    title: "Time",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_time');
+    }
+});

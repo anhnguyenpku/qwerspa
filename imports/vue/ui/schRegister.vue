@@ -492,7 +492,7 @@
                 :visible.sync="dialoginputTranscript"
                 :fullscreen="fullscreen">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="inputTranscriptForm" :rules="rules" ref="inputTranscriptForm" label-width="120px"
+            <el-form :model="inputTranscriptForm" :rules="rules" :ref="ref" label-width="120px"
                      class="inputTranscriptForm">
 
                 <el-row>
@@ -1006,8 +1006,11 @@
                 this.levelOpt(val);
                 if (this.ref !== "schRegisterFormUpdate") {
                     this.schRegisterForm.levelId = "";
+                    this.ciriculumnOpt(val);
+
                 }
             },
+
             "inputTranscriptForm.curiculumnId"(val) {
 
                 if (this.inputTranscriptForm.transcriptId === "") {
@@ -1511,6 +1514,7 @@
             },
             popUpInputTranscript(data) {
                 let vm = this;
+                vm.ref = "inputTranscriptForm";
                 this.majorOpt();
                 vm.resetForm();
                 Meteor.call("querySchStudentById", data.studentId, (err, res) => {
@@ -1520,6 +1524,7 @@
                         this.inputTranscriptForm.majorId = data.majorId;
                         this.inputTranscriptForm.registerId = data._id;
                         this.inputTranscriptForm.requiredCredit = res.requiredCredit;
+                        this.ciriculumnOpt(data.majorId);
 
                         this.inputTranscriptForm.isCompleted = false;
                         this.ciriculumnOpt(data.majorId);

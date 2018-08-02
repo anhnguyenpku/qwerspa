@@ -172,6 +172,10 @@
                                         style="width: 100%"
                                         @selection-change="handleSelectionChangeNotPromote">
                                     <el-table-column
+                                            type="selection"
+                                            width="55">
+                                    </el-table-column>
+                                    <el-table-column
                                             type="index"
                                             width="50">
                                     </el-table-column>
@@ -197,10 +201,7 @@
                                             :label="langConfig['phoneNumber']"
                                             show-overflow-tooltip>
                                     </el-table-column>
-                                    <el-table-column
-                                            type="selection"
-                                            width="55">
-                                    </el-table-column>
+
                                 </el-table>
                             </el-card>
                         </template>
@@ -299,6 +300,7 @@
                 <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
+                               disabled
                                v-model="schPromoteToClassForm.programId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
@@ -313,6 +315,7 @@
                 <el-form-item :label="langConfig['major']" prop="majorId">
                     <el-select style="display: block !important;"
                                filterable
+                               disabled
                                v-model="schPromoteToClassForm.majorId"
                                :placeholder="langConfig['chooseItem']">
                         <el-option

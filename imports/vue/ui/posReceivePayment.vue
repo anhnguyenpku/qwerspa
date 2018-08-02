@@ -585,7 +585,7 @@
                         obj.dayOverDue = moment(val).startOf("days").diff(moment(obj.dueDate).startOf("days").toDate(), "days") < 0 ? 0 : moment(val).startOf("days").diff(moment(obj.dueDate).startOf("days").toDate(), "days");
                         vm.updatePosReceivePaymentDetail(obj, ind);
                         ind++;
-                    })
+                    });
                     vm.searchInvoice();
                 }
             },

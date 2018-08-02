@@ -162,6 +162,7 @@
                                 <th>{{langConfig['amount']}}</th>
                                 <th>{{langConfig['discount']}}</th>
                                 <th>{{langConfig['netAmount']}}</th>
+                                <th>{{langConfig['waived']}}</th>
                                 <th style="color: #e91e63 !important;">{{langConfig['paid']}}</th>
                                 <th style="vertical-align: middle;">
                                     <el-checkbox v-model="schPaymentForm.isPaidAll"></el-checkbox>
@@ -210,12 +211,42 @@
                                         </el-input>
                                     </td>
                                     <td>
+                                        <el-input placeholder="Waived" type='number'
+                                                  v-model.number=schPaymentDoc.waived
+                                                  @keyup.native="updateSchPaymentDetail(schPaymentDoc, index)"
+                                                  @change="updateSchPaymentDetail(schPaymentDoc, index)"
+                                        >
+                                            <template slot="append">
+                                                <el-dropdown trigger="click" :hide-on-click="false">
+                                                    <span class="el-dropdown-link">
+                                                        {{langConfig['desc']}} <span v-if="schPaymentDoc.desc===''">
+                                                                <i class="el-icon-caret-bottom el-icon--right"></i>
+                                                            </span>
+                                                            <span v-else>
+                                                                <i class="el-icon-circle-check el-icon--right"
+                                                                   style="color: blue"></i>
+
+                                                            </span>
+                                                    </span>
+                                                    <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item class="clearfix">
+                                                            <el-input :placeholder="langConfig['desc']" type="textarea"
+                                                                      v-model.number=schPaymentDoc.desc
+                                                                      @keyup.native="updateSchPaymentDetailPaid(schPaymentDoc, index)"></el-input>
+                                                        </el-dropdown-item>
+                                                    </el-dropdown-menu>
+                                                </el-dropdown>
+                                            </template>
+                                        </el-input>
+                                    </td>
+                                    <td>
                                         <el-input placeholder="Paid" v-model.number="schPaymentDoc.paid"
                                                   type='number'
                                                   @keyup.native="updateSchPaymentDetailPaid(schPaymentDoc, index)"
                                                   @change="updateSchPaymentDetailPaid(schPaymentDoc, index)"
                                         >
                                             <template slot="append">{{currencySymbol}}</template>
+
                                         </el-input>
                                     </td>
                                     <td style="vertical-align: middle">
@@ -323,7 +354,15 @@
                                 >
                                 </el-date-picker>
                             </el-form-item>
+                            <el-form-item :label="langConfig['penalty']" prop="penalty">
 
+                                <el-input :placeholder="langConfig['penalty']"
+                                          v-model.number="schPaymentForm.penalty"
+                                          type='number'
+                                >
+                                    <template slot="append">{{currencySymbol}}</template>
+                                </el-input>
+                            </el-form-item>
 
                             <el-form-item :label="langConfig['paymentNo']" prop="paymentNo">
                                 <el-input v-model="schPaymentForm.paymentNo" prefix-icon="el-icon-edit"></el-input>
@@ -425,6 +464,7 @@
                     isAllTerm: false,
                     studentId: "",
                     classId: "",
+                    penalty: 0,
                     paymentNo: ""
 
                 },
@@ -619,7 +659,22 @@
             "schPaymentForm.paymentDate"(val) {
                 if (val) {
                     this.getPaymentNoByRoleAndDate(val);
+                    let vm = this;
+                    if (this.dialogAddSchPayment === true) {
+                        let ind = 0;
+                        vm.schPaymentForm.paymentDate = val;
+                        vm.schPaymentData.map((obj) => {
+                            obj.dayOverDue = moment(val).startOf("days").diff(moment(obj.receivePaymentScheduleDate).startOf("days").toDate(), "days") < 0 ? 0 : moment(val).startOf("days").diff(moment(obj.receivePaymentScheduleDate).startOf("days").toDate(), "days");
+                            vm.updateSchPaymentDetailPaid(obj, ind);
+                            ind++;
+                        });
+                    }
                 }
+            },
+            "schPaymentForm.penalty"(val) {
+                this.schPaymentForm.penalty = val || 0;
+                this.getTotal();
+
             }
         },
         methods: {
@@ -689,14 +744,16 @@
                             totalPaid: vm.$_numeral(vm.schPaymentForm.totalPaid).value(),
                             totalNetAmount: vm.$_numeral(vm.schPaymentForm.totalNetAmount).value(),
                             totalDiscount: vm.$_numeral(vm.schPaymentForm.totalDiscount).value(),
+                            totalWaived: vm.$_numeral(vm.schPaymentForm.totalWaived).value(),
 
-                            balanceUnPaid: vm.$_numeral(vm.schPaymentForm.totalNetAmount).value() - vm.$_numeral(vm.schPaymentForm.totalPaid).value(),
+                            balanceUnPaid: vm.$_numeral(vm.schPaymentForm.totalNetAmount).value() - vm.$_numeral(vm.schPaymentForm.totalPaid).value() - vm.$_numeral(vm.schPaymentForm.totalWaived).value(),
                             totalAmount: vm.$_numeral(vm.schPaymentForm.totalNetAmount).value() + vm.$_numeral(vm.schPaymentForm.totalDiscount).value(),
 
                             paymentDate: moment(vm.schPaymentForm.paymentDate).toDate(),
                             paymentDateName: moment(vm.schPaymentForm.paymentDate).format("DD/MM/YYYY"),
                             note: vm.schPaymentForm.note,
                             paymentNo: vm.schPaymentForm.paymentNo,
+                            penalty: vm.schPaymentForm.penalty,
 
                             rolesArea: Session.get('area'),
                             studentId: vm.schPaymentForm.studentId,
@@ -795,7 +852,7 @@
                 }
                 if (row.isApplyTerm) {
                     if (row.promotionDoc) {
-                        if (row.paid === vm.$_numeral(row.netAmount).value()) {
+                        if (row.paid + (row.waived || 0) >= vm.$_numeral(row.netAmount).value()) {
                             if (row.isPaid) {
                                 row.discount = 0;
                                 if (row.promotionDoc.promotionType === "Amount") {
@@ -803,8 +860,8 @@
                                 } else {
                                     row.discount = formatCurrency(vm.$_numeral(row.amount).value() * row.promotionDoc.value / 100);
                                 }
-                                row.paid = vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value();
-                                row.netAmount = formatCurrency(vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value());
+                                row.paid = vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value() - (row.waived || 0);
+                                row.netAmount = formatCurrency(vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value() - (row.waived || 0));
 
                             } else {
                                 row.discount = 0;
@@ -814,13 +871,13 @@
                                 } else {
                                     row.discount = formatCurrency(vm.$_numeral(row.amount).value() * row.promotionDoc.value / 100);
                                 }
-                                row.netAmount = formatCurrency(vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value());
+                                row.netAmount = formatCurrency(vm.$_numeral(row.amount).value() - vm.$_numeral(row.discount).value() - (row.waived || 0));
                                 row.paid = 0;
                             }
                         } else {
                             if (row.isPaid) {
                                 row.discount = 0;
-                                row.paid = vm.$_numeral(row.amount).value();
+                                row.paid = vm.$_numeral(row.amount).value() - (row.waived || 0);
                                 row.netAmount = formatCurrency(row.amount);
                             } else {
                                 row.discount = 0;
@@ -835,7 +892,7 @@
                     if (row.isPaid
                     ) {
                         row.discount = 0;
-                        row.paid = vm.$_numeral(row.amount).value();
+                        row.paid = vm.$_numeral(row.amount).value() - (row.waived || 0);
                         row.netAmount = formatCurrency(row.amount);
                     }
                     else {
@@ -895,19 +952,22 @@
                 let totalNetAmount = 0;
                 let totalDiscount = 0;
                 let totalPaid = 0;
+                let totalWaived = 0;
                 vm.schPaymentData.forEach(function (obj) {
                     if (obj.isShow) {
                         totalNetAmount += parseFloat(vm.$_numeral(obj.netAmount).value() || 0);
                         totalDiscount += parseFloat(vm.$_numeral(obj.discount).value() || 0);
                         totalPaid += parseFloat(vm.$_numeral(obj.paid).value() || 0);
+                        totalWaived += parseFloat(vm.$_numeral(obj.waived).value() || 0);
                     }
                 });
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
                 this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
                 vm.schPaymentForm.totalNetAmount = formatCurrency(totalNetAmount, companyDoc.baseCurrency);
                 vm.schPaymentForm.totalDiscount = formatCurrency(totalDiscount, companyDoc.baseCurrency);
-                vm.schPaymentForm.totalPaid = formatCurrency(totalPaid, companyDoc.baseCurrency);
-                vm.schPaymentForm.balanceUnPaid = formatCurrency(totalNetAmount - totalPaid, companyDoc.baseCurrency);
+                vm.schPaymentForm.totalWaived = formatCurrency(totalWaived, companyDoc.baseCurrency);
+                vm.schPaymentForm.totalPaid = formatCurrency(totalPaid + vm.schPaymentForm.penalty, companyDoc.baseCurrency);
+                vm.schPaymentForm.balanceUnPaid = formatCurrency(totalNetAmount - totalPaid - totalWaived, companyDoc.baseCurrency);
             }
             ,
             overDueStatus(val) {
@@ -963,5 +1023,7 @@
         margin-right: -5px;
     }
 </style>
+
+
 
 

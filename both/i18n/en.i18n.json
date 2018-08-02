@@ -321,7 +321,8 @@
       "payment": "Payment",
       "debtSummary": "Debt Summary",
       "debtDetail": "Debt Detail",
-      "studentList": "Student List"
+      "studentList": "Student List",
+      "time": "Time"
     }
   },
   "global": {

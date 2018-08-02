@@ -268,7 +268,8 @@
       "status": "Status",
       "classDate": "Class Date",
       "charge": "Value Charge",
-      "chargeType": "Charge Type"
+      "chargeType": "Charge Type",
+      "time": "Time"
     },
     "classBoard": {
       "searchHere": "Search Here ...",
@@ -375,6 +376,25 @@
       "update": "Update Major",
       "faculty": "Faculty",
       "degree": "Degree"
+    },
+    "time": {
+      "searchHere": "Search Here ...",
+      "title": "Time",
+      "action": "Action",
+      "save": "Save",
+      "cancel": "Cancel",
+      "warning": "Warning",
+      "messageWarning": "This will permanently delete the file. Continue?",
+      "saveSuccess": "Save Successfully!",
+      "saveFail": "Save Fail!",
+      "updateSuccess": "Update Successfully!",
+      "updateFail": "Update Fail!",
+      "removeSuccess": "Remove Successfully!",
+      "removeFail": "Remove Fail!",
+      "removeCancel": "Remove Cancel",
+      "name": "Name",
+      "add": "Add Time",
+      "update": "Update Time"
     },
     "mention": {
       "searchHere": "Search Here ...",
@@ -519,7 +539,10 @@
       "chooseLevel": "Choose Level",
       "class": "Class",
       "level": "Level",
-      "saveAndPrint": "Save and Print"
+      "saveAndPrint": "Save and Print",
+      "desc": "Note",
+      "waived": "Waived",
+      "penalty": "Penalty"
     }
   },
   {
@@ -544,7 +567,7 @@
       "name": "ឈ្មោះ",
       "latinName": "ឈ្មោះឡាតាំង",
       "gender": "ភេទ",
-      "nationality": "សញជាតិ",
+      "nationality": "សញ្ជាតិ",
       "nation": "ជនជាតិ",
       "status": "ស្ថានភាព",
       "dob": "ថ្ងៃខែឆ្នាំកំណើត",
@@ -619,7 +642,7 @@
       "name": "ឈ្មោះ",
       "latinName": "ឈ្មោះឡាតាំង",
       "gender": "ភេទ",
-      "nationality": "សញជាតិ",
+      "nationality": "សញ្ជាតិ",
       "nation": "ជនជាតិ",
       "status": "ស្ថានភាព",
       "dob": "ថ្ងៃខែឆ្នាំកំណើត",
@@ -791,7 +814,8 @@
       "status": "ស្ថានភាព",
       "classDate": "ថ្ងៃបង្កើតថ្នាក់",
       "charge": "តម្លៃទូទាត់",
-      "chargeType": "ប្រភេទទូទាត់"
+      "chargeType": "ប្រភេទទូទាត់",
+      "time": "ពេលសិក្សា"
     },
     "classBoard": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -902,6 +926,26 @@
       "update": "កែប្រែព័តមានជំនាញ",
       "faculty": "មហាវិទ្យាល័យ",
       "degree": "សញ្ញាបត្រដែលទទួលបាន"
+    },
+    "time": {
+      "searchHere": "ស្វែងរក​នៅទីនេះ ...",
+      "title": "ពេលសិក្សា",
+      "show": "បង្ហាញជំនាញ",
+      "action": "សកម្មភាព",
+      "save": "រក្សាទុក",
+      "cancel": "បោះបង់",
+      "warning": "ប្រយ័ត្ន",
+      "messageWarning": "នេះគឺលុបបាត់មិនអាចយកមកវិញបានទេ. ចង់បន្ត?",
+      "saveSuccess": "រក្សាទុកបានជោគជ័យ!",
+      "saveFail": "រក្សាទុកមិនបានជោគជ័យទេ!",
+      "updateSuccess": "កែប្រែបានជោគជ័យ!",
+      "updateFail": "កែប្រែមិនបានជោគជ័យទេ!",
+      "removeSuccess": "លុបបានជោជ័យ!",
+      "removeFail": "លុបមិនបានជោគជ័យទេ!",
+      "message": "អ្នកផ្គត់ផ្គង់នេះមិនអាចលុបបានទេ!",
+      "name": "ឈ្មោះ",
+      "add": "បញ្ចូលព័តមានពេលសិក្សា",
+      "update": "កែប្រែព័តមានពេលសិក្សា"
     },
     "mention": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1049,7 +1093,10 @@
       "chooseLevel": "ជ្រើសរើសកម្រិត",
       "class": "ថ្នាក់",
       "level": "កម្រិត",
-      "saveAndPrint": "រក្សាទុក ហើយ បោះពុម្ភ"
+      "saveAndPrint": "រក្សាទុក ហើយ បោះពុម្ភ",
+      "desc": "បរិយាយ",
+      "waived": "កាត់ចេញ",
+      "penalty": "ពិន័យ"
     }
   }
 ]
