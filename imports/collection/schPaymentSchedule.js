@@ -121,6 +121,10 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
         //    Partial
         //    Complete
     },
+    oldStatus: {
+        type: String,
+        optional: true
+    },
     closeDate: {
         type: Date,
         optional: true

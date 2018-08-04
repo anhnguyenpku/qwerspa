@@ -100,7 +100,6 @@ Meteor.methods({
 
             return obj;
         });
-        // console.log(d);
         return d;
     },
     removePaymentScheduleByClassAndStudent(classId, studentId) {

@@ -37,6 +37,17 @@ Sch_Register.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    status: {
+        type: String,
+        label: "Status",
+        optional: true,
+        defaultValue: "Active"
+        //graduated
+        //dropout
+        //suspend
+        //pass
+        //fail
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

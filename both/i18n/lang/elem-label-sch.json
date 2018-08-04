@@ -307,7 +307,10 @@
       "level": "Level",
       "major": "Major",
       "promoteToClass": "Promote To Class",
-      "startClassDate": "Study On"
+      "startClassDate": "Study On",
+      "promoteToGraduated": "Promoted To Graduated",
+      "unPromoteToClass": "Un Promote",
+      "updateStatusStudent": "Update Status Student"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -854,7 +857,10 @@
       "level": "កម្រិត",
       "major": "ជំនាញ",
       "promoteToClass": "ឡើងទៅកាន់ថ្នាក់",
-      "startClassDate": "ចូលរៀននៅថ្ងៃ"
+      "unPromoteToClass": "ធ្លាក់ទៅកាន់ថ្នាក់",
+      "startClassDate": "ចូលរៀននៅថ្ងៃ",
+      "promoteToGraduated": "បញ្ចប់ការសិក្សា",
+      "updateStatusStudent": "កែប្រែស្ថានភាពសិស្ស"
     },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

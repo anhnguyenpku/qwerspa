@@ -144,6 +144,32 @@
                                             :label="langConfig['phoneNumber']"
                                             show-overflow-tooltip>
                                     </el-table-column>
+                                    <el-table-column
+                                            prop="status"
+                                            :label="langConfig['status']"
+                                            width="150"
+                                            filter-placement="bottom-end">
+                                        <template slot-scope="scope">
+                                            <el-tag
+                                                    :type="scope.row.studentList.status === 'Active' ? 'warning'  : scope.row.studentList.status === 'Graduated'? 'success': scope.row.studentList.status === 'Suspend' ? 'info':  scope.row.studentList.status === 'Pass'? 'primary':'danger'"
+                                                    close-transition>{{scope.row.studentList.status}}
+                                            </el-tag>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                            :label="langConfig['action']"
+                                            width="120"
+                                    >
+                                        <template slot-scope="scope">
+                                            <el-button-group>
+                                                <el-button type="primary" icon="el-icon-edit" size="small"
+                                                           class="cursor-pointer"
+                                                           @click="dialogUpdateStatusStudent=true,popUpUpdateStaus(scope.row.studentList)"
+                                                ></el-button>
+                                            </el-button-group>
+
+                                        </template>
+                                    </el-table-column>
                                 </el-table>
 
                             </el-card>
@@ -157,9 +183,17 @@
                                 <div slot="header" class="clearfix">
 
                                     <div style="margin-top: 20px">
-                                        <el-button type="success" round style="float: right !important;"
+                                        <el-button type="danger" round style="float: right !important;"
+                                                   @click="popUpUnPromoteToClass()">
+                                            {{langConfig['unPromoteToClass']}}
+                                        </el-button>
+                                        <el-button type="primary" round style="float: right !important;"
                                                    @click="popUpPromoteToClass()">
                                             {{langConfig['promote']}}
+                                        </el-button>
+                                        <el-button type="success" round style="float: right !important;"
+                                                   @click="popUpPromoteToGraduated()">
+                                            {{langConfig['promoteToGraduated']}}
                                         </el-button>
                                         <span><b>{{langConfig['class']}} : {{className}}</b>({{classDate}})</span><br><br>
                                         <span><b>{{langConfig['teacher']}} : {{teacher}}</b>({{teacherPhoneNumber}})</span><br><br>
@@ -200,6 +234,18 @@
                                             property="studentDoc.personal.phoneNumber"
                                             :label="langConfig['phoneNumber']"
                                             show-overflow-tooltip>
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="status"
+                                            :label="langConfig['status']"
+                                            width="150"
+                                            filter-placement="bottom-end">
+                                        <template slot-scope="scope">
+                                            <el-tag
+                                                    :type="scope.row.studentList.status === 'Active' ? 'warning'  : scope.row.studentList.status === 'Graduated'? 'success': scope.row.studentList.status === 'Suspend' ? 'info':  scope.row.studentList.status === 'Pass'? 'primary':'danger'"
+                                                    close-transition>{{scope.row.studentList.status}}
+                                            </el-tag>
+                                        </template>
                                     </el-table-column>
 
                                 </el-table>
@@ -253,6 +299,18 @@
                                             :label="langConfig['class']"
                                             show-overflow-tooltip>
                                     </el-table-column>
+                                    <el-table-column
+                                            prop="status"
+                                            :label="langConfig['status']"
+                                            width="150"
+                                            filter-placement="bottom-end">
+                                        <template slot-scope="scope">
+                                            <el-tag
+                                                    :type="scope.row.studentList.status === 'Active' ? 'warning'  : scope.row.studentList.status === 'Graduated'? 'success': scope.row.studentList.status === 'Suspend' ? 'info':  scope.row.studentList.status === 'Pass'? 'primary':'danger'"
+                                                    close-transition>{{scope.row.studentList.status}}
+                                            </el-tag>
+                                        </template>
+                                    </el-table-column>
                                 </el-table>
 
                             </el-card>
@@ -296,7 +354,10 @@
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schPromoteToClassForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schPromoteToClassForm">
-
+                <h4 style="color: green; text-align: center;"> សិស្ស <b style="color: black !important;">{{numSelectStudentPromoted}}</b>
+                    នាក់ បានឡើងថ្នាក់
+                    ដោយជោគជ័យ!</h4>
+                <hr style="margin-top: 0px !important;">
                 <el-form-item :label="langConfig['program']" prop="programId">
                     <el-select style="display: block !important;"
                                filterable
@@ -372,6 +433,142 @@
                 <br>
             </el-form>
         </el-dialog>
+        <el-dialog
+                :title="langConfig['unPromoteToClass']"
+                :visible.sync="dialogUnPromoteToClass"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="schUnPromoteToClassForm" :rules="rules" :ref="ref" label-width="120px"
+                     class="schUnPromoteToClassForm">
+                <h4 style="color: green; text-align: center;"> សិស្ស <b style="color: black !important;">{{numSelectStudentPromoted}}</b>
+                    នាក់ ធ្លាក់ ត្រូវត្រួតថ្នាក់!</h4>
+                <hr style="margin-top: 0px !important;">
+                <el-form-item :label="langConfig['program']" prop="programId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               disabled
+                               v-model="schUnPromoteToClassForm.programId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in programList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['major']" prop="majorId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               disabled
+                               v-model="schUnPromoteToClassForm.majorId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in majorList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['level']" prop="levelId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               disabled
+                               v-model="schUnPromoteToClassForm.levelId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in levelList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['class']" prop="classId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schUnPromoteToClassForm.classId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in classList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['startClassDate']" prop="startClassDate">
+                    <el-date-picker
+                            v-model="schUnPromoteToClassForm.startClassDate"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Pick a day"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogUnPromoteToClass= false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="saveUnPromoteToClass">{{langConfig['save']}}</el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
+
+        <el-dialog
+                :title="langConfig['promoteToGraduated']"
+                :visible.sync="dialogPromoteToGraduated"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="schPromoteToGraduatedForm" :rules="rules" :ref="ref" label-width="120px"
+                     class="schPromoteToClassForm">
+
+                <h3 style="color: green">សិស្ស <b style="color: black !important;">{{numSelectStudentPromoted}}</b> នាក់
+                    បញ្ចប់ការសិក្សាបាន ដោយជោគជ័យ!
+                </h3>
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogPromoteToGraduated= false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="savePromoteToGraduated">{{langConfig['save']}}</el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
+
+        <el-dialog
+                :title="langConfig['updateStatusStudent']"
+                :visible.sync="dialogUpdateStatusStudent"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="updateStatusStudentForm" :rules="rulesUpdateStatus" :ref="ref" label-width="120px"
+                     class="schPromoteToClassForm">
+                <el-form-item :label="langConfig['status']" prop="statusId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="updateStatusStudentForm.statusId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in statusList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogUpdateStatusStudent= false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="saveUpdateStatusStudent">{{langConfig['save']}}</el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
 
     </div>
 </template>
@@ -406,9 +603,12 @@
                 return data;
             };*/
             return {
-                ref: "promoteToClass",
+                dialogPromoteToGraduated: false,
+                dialogUnPromoteToClass: false,
+                dialogUpdateStatusStudent: false,
                 tabPosition: 'left',
                 fullScreen: true,
+                ref: "",
                 labelPosition: top,
                 schClassData: [],
                 loading: false,
@@ -436,9 +636,31 @@
                     classId: "",
                     startClassDate: ""
                 },
+                schUnPromoteToClassForm: {
+                    levelId: "",
+                    majorId: "",
+                    programId: "",
+                    classId: "",
+                    startClassDate: ""
+
+                },
+                updateStatusStudentForm: {
+                    statusId: "",
+                    classId: "",
+                    studentId: "",
+                    programId: "",
+                    levelId: "",
+                    majorId: ""
+                },
+                schPromoteToGraduatedForm: {},
                 schAddStudentToClass: {
                     value: []
                 },
+                statusList: [
+                    {label: "Active", value: "Active"},
+                    {label: "Suspend", value: "Suspend"},
+                    {label: "Dropout", value: "Dropout"}
+                ],
                 teacherList: [],
                 levelList: [],
                 programList: [],
@@ -461,7 +683,16 @@
                 majorId: "",
                 majorName: "",
                 levelName: "",
-                oldClassId: ""
+                oldClassId: "",
+                numSelectStudentPromoted: 0,
+                rulesUpdateStatus: {
+                    statusId: [{
+                        required: true,
+                        type: 'string',
+                        message: 'Please choose status',
+                        trigger: 'change'
+                    }],
+                },
             }
 
         }
@@ -487,7 +718,7 @@
             "schPromoteToClassForm.programId"(val) {
                 this.majorOpt(val);
                 if (this.ref !== "promoteToClass") {
-                    this.schRegisterForm.majorId = "";
+                    this.schPromoteToClassForm.majorId = "";
                 }
             },
             "schPromoteToClassForm.majorId"(val) {
@@ -509,6 +740,16 @@
                     if (result) {
                         if (vm.schPromoteToClassForm.startClassDate === "" || vm.schPromoteToClassForm.startClassDate === undefined) {
                             vm.schPromoteToClassForm.startClassDate = result.classDate;
+                        }
+                    }
+                })
+            },
+            "schUnPromoteToClassForm.classId"(val) {
+                let vm = this;
+                Meteor.call("querySchClassById", val, (err, result) => {
+                    if (result) {
+                        if (vm.schUnPromoteToClassForm.startClassDate === "" || vm.schUnPromoteToClassForm.startClassDate === undefined) {
+                            vm.schUnPromoteToClassForm.startClassDate = result.classDate;
                         }
                     }
                 })
@@ -651,6 +892,10 @@
                 this.schPromoteToClassForm.programId = doc.programDoc && doc.programDoc._id || "";
                 this.schPromoteToClassForm.majorId = doc.majorDoc && doc.majorDoc._id || "";
 
+                this.schUnPromoteToClassForm.programId = doc.programDoc && doc.programDoc._id || "";
+                this.schUnPromoteToClassForm.majorId = doc.majorDoc && doc.majorDoc._id || "";
+                this.schUnPromoteToClassForm.levelId = doc.levelDoc && doc.levelDoc._id || "";
+
                 this.generateStudentList(doc);
             }
             ,
@@ -728,12 +973,133 @@
                 })
 
             },
+            saveUnPromoteToClass() {
+                let vm = this;
+                let data = {};
+                data.studentList = this.multipleSelectionNotPromote;
+                let unPromoteToClassDoc = {
+                    levelId: vm.schUnPromoteToClassForm.levelId,
+                    majorId: vm.schUnPromoteToClassForm.majorId,
+                    programId: vm.schUnPromoteToClassForm.programId,
+                    classId: vm.schUnPromoteToClassForm.classId,
+                    startClassDate: vm.schUnPromoteToClassForm.startClassDate,
+                    rolesArea: Session.get('area')
+                };
+                data.classFormDoc = unPromoteToClassDoc;
+                let oldClassDoc = {};
+                oldClassDoc._id = this.oldClassId;
+                Meteor.call("addUnPromoteToClass", data, (err, result) => {
+                    if (result) {
+                        vm.$message({
+                            message: `សិស្សត្រួតថ្នាក់`,
+                            type: 'success'
+                        });
+                        vm.generateStudentList(oldClassDoc);
+                        vm.dialogUnPromoteToClass = false;
+                        vm.queryData();
+                    } else {
+                        vm.$message({
+                            type: 'error',
+                            message: err.message
+                        });
+                        vm.generateStudentList(oldClassDoc);
+
+                    }
+                })
+
+            },
+            savePromoteToGraduated() {
+                let vm = this;
+                let data = {};
+                data.studentList = this.multipleSelectionNotPromote;
+                let oldClassDoc = {};
+                oldClassDoc._id = this.oldClassId;
+                Meteor.call("addPromoteToGraduated", data, (err, result) => {
+                    if (!err) {
+                        vm.$message({
+                            message: `សិស្សបញ្ចប់ការសិក្សាបានជោគជ័យ`,
+                            type: 'success'
+                        });
+                        vm.generateStudentList(oldClassDoc);
+
+                        vm.dialogPromoteToGraduated = false;
+                        vm.queryData();
+                    } else {
+                        vm.generateStudentList(oldClassDoc);
+                        vm.$message({
+                            type: 'error',
+                            message: err.message
+                        });
+                    }
+                })
+
+            },
+            saveUpdateStatusStudent() {
+                let vm = this;
+                let data = {};
+                data.classId = this.updateStatusStudentForm.classId;
+                data.studentId = this.updateStatusStudentForm.studentId;
+                data.programId = this.updateStatusStudentForm.programId;
+                data.levelId = this.updateStatusStudentForm.levelId;
+                data.majorId = this.updateStatusStudentForm.majorId;
+                data.majorId = this.updateStatusStudentForm.majorId;
+                let oldClassDoc = {};
+                oldClassDoc._id = data.classId;
+                this.$refs["updateStatusStudent"].validate((valid) => {
+                    Meteor.call("updateStudentStatus", data, this.updateStatusStudentForm.statusId, (err, result) => {
+                        if (!err) {
+                            vm.$message({
+                                message: `សិស្សកែប្រែស្ថានភាពបានជោគជ័យ`,
+                                type: 'success'
+                            });
+                            vm.generateStudentList(oldClassDoc);
+
+                            vm.dialogUpdateStatusStudent = false;
+                            vm.queryData();
+                        } else {
+                            vm.generateStudentList(oldClassDoc);
+                            vm.$message({
+                                type: 'error',
+                                message: err.message
+                            });
+                        }
+                    })
+                })
+
+            },
             popUpPromoteToClass() {
                 this.ref = "promoteToClass";
                 this.dialogPromoteToClass = true;
                 this.programOpt();
                 this.classOpt();
+                this.numSelectStudentPromoted = this.multipleSelectionNotPromote.length;
+            },
+            popUpUnPromoteToClass() {
+                this.ref = "unPromoteToClass";
+                this.dialogUnPromoteToClass = true;
+                this.programOpt();
+                this.classOpt(this.schUnPromoteToClassForm.levelId);
+                this.numSelectStudentPromoted = this.multipleSelectionNotPromote.length;
+            },
+            popUpPromoteToGraduated() {
+                this.ref = "promoteToGraduated";
+                this.dialogPromoteToGraduated = true;
+                this.programOpt();
+                this.classOpt();
+                this.levelOpt();
+                this.majorOpt();
+                this.numSelectStudentPromoted = this.multipleSelectionNotPromote.length;
+            },
+            popUpUpdateStaus(data) {
+                this.ref = "updateStatusStudent";
+                this.updateStatusStudentForm.classId = data.classId;
+                this.updateStatusStudentForm.studentId = data.studentId;
+                this.updateStatusStudentForm.programId = data.programId;
+                this.updateStatusStudentForm.levelId = data.levelId;
+                this.updateStatusStudentForm.majorId = data.majorId;
+
             }
+
 
         }
         ,

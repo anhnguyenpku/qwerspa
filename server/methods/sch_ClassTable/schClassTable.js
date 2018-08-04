@@ -4,6 +4,7 @@ import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Register} from "../../../imports/collection/schRegister";
 import {Sch_Class} from "../../../imports/collection/schClass";
 import {Sch_Level} from "../../../imports/collection/schLevel";
+import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
 
 Meteor.methods({
     querySchClassTable({q, filter, options = {limit: 10, skip: 0}}) {
@@ -148,6 +149,7 @@ Meteor.methods({
             if (classTableDoc) {
                 studentList = classTableDoc.studentList;
             }
+            console.log(data.classFormDoc);
             data.studentList.forEach((obj) => {
                 if (obj) {
                     data.classFormDoc.studentId = obj.studentList.studentId;
@@ -157,6 +159,7 @@ Meteor.methods({
                     data.classFormDoc.registerDate = classDoc.classDate;
                     data.classFormDoc.isPromote = false;
                     data.classFormDoc.isChangeClass = false;
+                    data.classFormDoc.status = "Active";
 
                     studentList.push(data.classFormDoc);
                     Sch_ClassTable.direct.update({
@@ -165,7 +168,14 @@ Meteor.methods({
                         "studentList.classId": obj.studentList.classId,
                         "studentList.levelId": obj.studentList.levelId,
                         "studentList.majorId": obj.studentList.majorId
-                    }, {$set: {"studentList.$.isPromote": true, "studentList.$.newClassId": data.classFormDoc.classId}})
+                    }, {
+                        $set: {
+                            "studentList.$.isPromote": true,
+                            "studentList.$.newClassId": data.classFormDoc.classId,
+                            "studentList.$.status": "Pass",
+
+                        }
+                    })
                 }
             });
 
@@ -185,5 +195,119 @@ Meteor.methods({
             }
 
         }
+    },
+    addUnPromoteToClass(data) {
+        if (data) {
+            let classTableDoc = Sch_ClassTable.findOne({classId: data.classFormDoc.classId});
+            let classDoc = Sch_Class.findOne({_id: data.classFormDoc.classId});
+            let classTable = {};
+            classTable.classId = data.classFormDoc.classId;
+            classTable.rolesArea = data.classFormDoc.rolesArea;
+            let studentList = [];
+            if (classTableDoc) {
+                studentList = classTableDoc.studentList;
+            }
+            console.log(data.classFormDoc);
+            data.studentList.forEach((obj) => {
+                if (obj) {
+                    data.classFormDoc.studentId = obj.studentList.studentId;
+                    data.classFormDoc._id = obj.studentList._id;
+                    data.classFormDoc.promotionId = obj.studentList.promotionId;
+                    data.classFormDoc.term = obj.studentList.term;
+                    data.classFormDoc.registerDate = classDoc.classDate;
+                    data.classFormDoc.isPromote = false;
+                    data.classFormDoc.isChangeClass = false;
+                    data.classFormDoc.status = "Active";
+
+                    studentList.push(data.classFormDoc);
+                    Sch_ClassTable.direct.update({
+                        "studentList.studentId": obj.studentList.studentId,
+                        "studentList.programId": obj.studentList.programId,
+                        "studentList.classId": obj.studentList.classId,
+                        "studentList.levelId": obj.studentList.levelId,
+                        "studentList.majorId": obj.studentList.majorId
+                    }, {
+                        $set: {
+                            "studentList.$.isPromote": true,
+                            "studentList.$.newClassId": data.classFormDoc.classId,
+                            "studentList.$.status": "Fail",
+
+                        }
+                    })
+                }
+            });
+
+            classTable.studentList = studentList;
+            if (classTableDoc) {
+                let d = Sch_ClassTable.update({_id: classTableDoc._id}, {$set: classTable});
+                let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: classTableDoc._id});
+                let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
+                Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+                return d;
+            } else {
+                let d = Sch_ClassTable.insert(classTable);
+                let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: d});
+                let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
+                Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+                return d;
+            }
+
+        }
+    },
+    addPromoteToGraduated(data) {
+        if (data) {
+            data.studentList.forEach((obj) => {
+                if (obj) {
+                    let re = Sch_ClassTable.direct.update({
+                        "studentList.studentId": obj.studentList.studentId,
+                        "studentList.programId": obj.studentList.programId,
+                        "studentList.classId": obj.studentList.classId,
+                        "studentList.levelId": obj.studentList.levelId,
+                        "studentList.majorId": obj.studentList.majorId
+                    }, {
+                        $set: {
+                            "studentList.$.isPromote": true,
+                            "studentList.$.newClassId": obj.studentList.classId,
+                            "studentList.$.status": "Graduated"
+                        }
+                    });
+                }
+            });
+        }
+    },
+    updateStudentStatus(data, status) {
+        if (data) {
+            if (status === "Suspend" || status === "Dropout") {
+                let payDoc = Sch_PaymentSchedule.findOne({
+                    studentId: data.studentId,
+                    classId: data.classId
+                });
+                Sch_PaymentSchedule.direct.update({
+                    studentId: data.studentId,
+                    classId: data.classId
+                }, {$set: {status: "Complete", oldStatus: payDoc.status}}, {multi: true});
+            } else {
+                let payDoc = Sch_PaymentSchedule.findOne({
+                    studentId: data.studentId,
+                    classId: data.classId
+                });
+                Sch_PaymentSchedule.direct.update({
+                    studentId: data.studentId,
+                    classId: data.classId
+                }, {$set: {status: payDoc.oldStatus,}}, {multi: true});
+            }
+            return Sch_ClassTable.direct.update({
+                "studentList.studentId": data.studentId,
+                "studentList.programId": data.programId,
+                "studentList.classId": data.classId,
+                "studentList.levelId": data.levelId,
+                "studentList.majorId": data.majorId
+            }, {
+                $set: {
+                    "studentList.$.status": status
+                }
+            });
+        }
+
     }
 });

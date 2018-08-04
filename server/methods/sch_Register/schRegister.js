@@ -204,6 +204,7 @@ Meteor.methods({
                     });
                 }
                 data.isGenerated = isGenerated;
+                data.status = "Active";
                 studentList.push(data);
                 classTBDoc.studentList = studentList;
                 Sch_ClassTable.update({_id: classTableDoc._id}, {$set: classTBDoc});

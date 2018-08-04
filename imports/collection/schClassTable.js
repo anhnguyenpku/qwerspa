@@ -64,6 +64,11 @@ Sch_ClassTable.schema = new SimpleSchema({
         defaultValue: false,
         optional: true
     },
+    "studentList.$.status": {
+        type: String,
+        defaultValue: "Active",
+        optional: true
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

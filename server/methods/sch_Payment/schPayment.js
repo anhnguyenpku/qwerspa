@@ -139,7 +139,7 @@ Meteor.methods({
                     $inc: {
                         paid: -(data.paid),
                         discount: -(data.discount),
-                        waived: -(data.waived),
+                        waived: -(data.waived || 0),
                         paymentNumber: -1
                     }
                 }, true);
@@ -151,11 +151,11 @@ Meteor.methods({
                     {
 
                         $inc: {
-                            "schedule.$.amount": (data.paid + data.discount + data.waived),
-                            "schedule.$.netAmount": (data.paid + data.discount + data.waived),
-                            totalAmount: (data.paid + data.discount + data.waived),
-                            totalNetAmount: (data.paid + data.discount + data.waived),
-                            balanceUnPaid: (data.paid + data.discount + data.waived)
+                            "schedule.$.amount": (data.paid + data.discount + (data.waived || 0)),
+                            "schedule.$.netAmount": (data.paid + data.discount + (data.waived || 0)),
+                            totalAmount: (data.paid + data.discount + (data.waived || 0)),
+                            totalNetAmount: (data.paid + data.discount + (data.waived || 0)),
+                            balanceUnPaid: (data.paid + data.discount + (data.waived || 0))
                         }
                     }, {multi: true}, true);
             })
@@ -181,7 +181,7 @@ Meteor.methods({
             $inc: {
                 paid: numeral(data.paid).value(),
                 discount: numeral(data.discount).value(),
-                waived: numeral(data.waived).value(),
+                waived: numeral(data.waived || 0).value(),
                 paymentNumber: 1
             }
         }, true);

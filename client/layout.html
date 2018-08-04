@@ -142,7 +142,7 @@
                                                                 <ul>
 
                                                                     <a href="#" class="title-head">
-                                                                        <i class="fa fa-file"></i> <span>{{_
+                                                                        <i class="fa fa-graduation-cap"></i> <span>{{_
                                                                             "sch.sidebarMenu.student"}}</span>
                                                                     </a>
                                                                     <li><a href="{{pathFor
@@ -861,24 +861,27 @@
             {{#if schLayout}}
                 <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
                     <a href="#" class="title-head">
-                        <i style="color: white !important;" class="fa fa-user"></i> <span style="color: white;">{{_
+                        <i style="color: white !important;" class="fa fa-graduation-cap"></i> <span
+                            style="color: white;">{{_
                             "sch.sidebarMenu.student"}}</span>
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
 
-                    <li><a href="{{pathFor 'sch.student'}}" class="title-body"><i class="fa fa-user"
+                    <li><a href="{{pathFor 'sch.student'}}" class="title-body"><i class="fa fa-graduation-cap"
                                                                                   aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.student"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.register'}}" class="title-body"><i class="fa fa-user"
+                    <li><a href="{{pathFor 'sch.register'}}" class="title-body"><i class="fa fa-registered"
                                                                                    aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.register"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.classBoard'}}" class="title-body"><i class="fa fa-user"
-                                                                                     aria-hidden="true"></i> {{_
+                    <li><a href="{{pathFor 'sch.classBoard'}}" class="title-body">
+
+                        <i class="el-icon-menu"
+                           aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.classBoard"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.payment'}}" class="title-body"><i class="fa fa-user"
+                    <li><a href="{{pathFor 'sch.payment'}}" class="title-body"><i class="fa fa-shopping-cart"
                                                                                   aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.payment"}}</a>
                     </li>
@@ -892,7 +895,7 @@
 
                     <hr>
                     <a href="#" class="title-head">
-                        <i style="color: white !important;" class="fa fa-user"></i> <span style="color: white;">{{_
+                        <i style="color: white !important;" class="fa fa-database"></i> <span style="color: white;">{{_
                             "sch.sidebarMenu.data"}}</span>
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
@@ -900,7 +903,7 @@
                                                                                   aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.teacher"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.class'}}" class="title-body"><i class="fa fa-user"
+                    <li><a href="{{pathFor 'sch.class'}}" class="title-body"><i class="fa fa-cube"
                                                                                 aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.class"}}</a>
                     </li>
@@ -911,35 +914,35 @@
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
 
-                    <li><a href="{{pathFor 'sch.time'}}" class="title-body"><i class="el-icon-info"></i> {{_
+                    <li><a href="{{pathFor 'sch.time'}}" class="title-body"><i class="fa fa-calendar"></i> {{_
                             "sch.sidebarMenu.time"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.program'}}" class="title-body"><i class="el-icon-info"></i> {{_
+                    <li><a href="{{pathFor 'sch.program'}}" class="title-body"><i class="fa fa-tasks"></i> {{_
                             "sch.sidebarMenu.program"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.faculty'}}" class="title-body"><i class="el-icon-info"></i> {{_
+                    <li><a href="{{pathFor 'sch.faculty'}}" class="title-body"><i class="fa fa-industry"></i> {{_
                             "sch.sidebarMenu.faculty"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.major'}}" class="title-body"><i class="el-icon-info"></i> {{_
+                    <li><a href="{{pathFor 'sch.major'}}" class="title-body"><i class="fa fa-ravelry"></i> {{_
                             "sch.sidebarMenu.major"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.level'}}" class="title-body"><i class="el-icon-info"></i> {{_
+                    <li><a href="{{pathFor 'sch.level'}}" class="title-body"><i class="fa fa-level-up"></i> {{_
                             "sch.sidebarMenu.level"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.promotion'}}" class="title-body"><i class="el-icon-info"></i> {{_
+                    <li><a href="{{pathFor 'sch.promotion'}}" class="title-body"><i class="fa fa-gift"></i> {{_
                             "sch.sidebarMenu.promotion"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.subject'}}" class="title-body"><i class="el-icon-star-on"></i> {{_
+                    <li><a href="{{pathFor 'sch.subject'}}" class="title-body"><i class="fa fa-book"></i> {{_
                             "sch.sidebarMenu.subject"}}</a>
                     </li>
                     <li><a href="{{pathFor 'sch.ciriculumn'}}" class="title-body"><i class="el-icon-time"></i> {{_
                             "sch.sidebarMenu.ciriculumn"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.mention'}}" class="title-body"><i class="el-icon-time"></i> {{_
+                    <li><a href="{{pathFor 'sch.mention'}}" class="title-body"><i class="fa fa-star"></i> {{_
                             "sch.sidebarMenu.mention"}}</a>
                     </li>
                     <li><a href="{{pathFor 'wb.waterBillingSetup'}}">
-                        Setup</a></li>
+                        <i class="fa fa-cog"></i> Setup</a></li>
 
                 </ul>
             {{/if}}
