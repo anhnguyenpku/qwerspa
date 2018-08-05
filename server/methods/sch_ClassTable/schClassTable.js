@@ -125,10 +125,12 @@ Meteor.methods({
         let dataPromote = [];
         if (data) {
             data.forEach((obj) => {
-                if (obj.studentList && obj.studentList.isPromote === false || obj.studentList && obj.studentList.isPromote === undefined) {
-                    dataNotPromote.push(obj);
-                } else {
-                    dataPromote.push(obj);
+                if (obj && obj.studentList) {
+                    if (obj.studentList && obj.studentList.isPromote === false || obj.studentList && obj.studentList.isPromote === undefined) {
+                        dataNotPromote.push(obj);
+                    } else {
+                        dataPromote.push(obj);
+                    }
                 }
             })
         }
@@ -149,7 +151,6 @@ Meteor.methods({
             if (classTableDoc) {
                 studentList = classTableDoc.studentList;
             }
-            console.log(data.classFormDoc);
             data.studentList.forEach((obj) => {
                 if (obj) {
                     data.classFormDoc.studentId = obj.studentList.studentId;
@@ -207,7 +208,6 @@ Meteor.methods({
             if (classTableDoc) {
                 studentList = classTableDoc.studentList;
             }
-            console.log(data.classFormDoc);
             data.studentList.forEach((obj) => {
                 if (obj) {
                     data.classFormDoc.studentId = obj.studentList.studentId;
@@ -309,5 +309,21 @@ Meteor.methods({
             });
         }
 
+    },
+    removeSchStudentFromClass(classId, studentId) {
+        let classTableDoc = Sch_ClassTable.findOne({classId: classId});
+        let studentList = [];
+        if (classTableDoc) {
+            classTableDoc.studentList.forEach((obj) => {
+                if (obj.studentId !== studentId) {
+                    studentList.push(obj);
+                }
+            });
+
+            return Sch_ClassTable.direct.update({classId: classId}, {$set: {studentList: studentList}});
+        }
+        return false;
+
     }
+
 });

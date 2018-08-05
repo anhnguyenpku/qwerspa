@@ -161,7 +161,14 @@
                                             width="120"
                                     >
                                         <template slot-scope="scope">
+
+
                                             <el-button-group>
+
+                                                <el-button type="danger" class="cursor-pointer" icon="el-icon-delete"
+                                                           size="small"
+                                                           @click="removeSchStudentFromClass(scope.row.studentList.classId,scope.row.studentList.studentId)"
+                                                ></el-button>
                                                 <el-button type="primary" icon="el-icon-edit" size="small"
                                                            class="cursor-pointer"
                                                            @click="dialogUpdateStatusStudent=true,popUpUpdateStaus(scope.row.studentList)"
@@ -899,9 +906,11 @@
                 this.generateStudentList(doc);
             }
             ,
-            generateStudentList(data) {
-                Meteor.call("queryStudentByClassId", data._id, (err, result) => {
+            generateStudentList(classDoc) {
+                Meteor.call("queryStudentByClassId", classDoc._id, (err, result) => {
                     this.studentList = [];
+                    this.studentListNotPromote = [];
+                    this.studentListPromote = [];
                     if (!err) {
                         this.studentList = result.data;
                         this.studentListNotPromote = result.dataNotPromote;
@@ -1042,7 +1051,6 @@
                 data.programId = this.updateStatusStudentForm.programId;
                 data.levelId = this.updateStatusStudentForm.levelId;
                 data.majorId = this.updateStatusStudentForm.majorId;
-                data.majorId = this.updateStatusStudentForm.majorId;
                 let oldClassDoc = {};
                 oldClassDoc._id = data.classId;
                 this.$refs["updateStatusStudent"].validate((valid) => {
@@ -1097,6 +1105,43 @@
                 this.updateStatusStudentForm.programId = data.programId;
                 this.updateStatusStudentForm.levelId = data.levelId;
                 this.updateStatusStudentForm.majorId = data.majorId;
+
+            },
+            removeSchStudentFromClass(classId, studentId) {
+                let vm = this;
+                let oldClassDoc = {};
+                oldClassDoc._id = classId;
+                this.$confirm('This will permanently delete Student from class. Continue?', 'Warning', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+                    Meteor.call("removeSchStudentFromClass", classId, studentId, (err, result) => {
+                        if (!err) {
+                            vm.$message({
+                                message: `
+                        លុប សិស្សពីថ្នាក់ បានជោគជ័យ`,
+                                type: 'success'
+                            });
+                            vm.generateStudentList(oldClassDoc);
+                            vm.queryData();
+
+                        } else {
+                            vm.$message({
+                                type: 'error',
+                                message: err.message
+                            });
+                        }
+
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: 'Delete canceled'
+                    });
+                });
+
 
             }
 
