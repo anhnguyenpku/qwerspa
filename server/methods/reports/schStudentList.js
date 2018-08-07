@@ -149,37 +149,45 @@ Meteor.methods({
             studentListList.forEach((obj) => {
                 if (obj && obj.data.length > 0 && obj._id.classDoc !== undefined) {
                     studentListHTML += ` 
- <div class="row">
-                              <div class="col-lg-3">
-<img style="width: 70px;height: 70px;float: left !important;"
-     src="/mih.png"
-     alt="">
-                              </div>
-                                <div class="col-md-6" style="text-align: center !important;">
-
-                                        <span style="font-family:Khmer os muol; font-size: 15px;">
-                                            <p>${companyDoc.khName}</p> <p>${companyDoc.enName}</p>
-                                         <p style="font-size: 15px !important; font-family: khmer os Battambang; margin-bottom: 0px !important;">
-                                        ${obj._id.programDoc.name}  ${obj._id.majorDoc.name} 
-                                            </p> 
-                                            <p style="font-size: 15px !important; font-family: khmer os Battambang; margin-bottom: 0px !important;">${obj._id.classDoc.name}
-                                            </p>
-                                        </span>
-                                 </div>
-                              <div class="col-md-3"></div>
-                          </div>
                 <table class="table table-report-block-summary table-bordered">
                       <caption>
 
                           <div class="row">
-                              <div class="col-lg-3">
-                                  <span style="float: left !important;">${translate['no']}:.........</span>
+                                <div class="col-md-12" style="text-align: center !important;">
+                                    <img style="width: auto;height: 100px; float: left;padding-top: 20px !important;"
+                                         src="/mih.png"
+                                         alt=""
+                                         ">
+                                        <span class="blueOnPrint"
+                                              style="font-family:Khmer os muol; font-size: 15px  !important;padding-top: 15px !important;float: left;text-align: left !important;">
+
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ក្រសួងការងារ និង បណ្តុបណ្តាលវិជ្ជាជីវៈ</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Ministry of Labor and Vocational Training</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">${companyDoc.khName}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">   ${companyDoc.enName}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    លេខ៖ .............................${companyDoc.khShortName}</p>
+
+                                            </span>
+
+                              <span style="text-align: center;font-size: 15px; border: 0px !important; float: right;"
+                              >
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ព្រះរាជាណាចក្រកម្ពុជា</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Kingdom Of Cambodia</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ជាតិ សាសនា ព្រះមហាក្សត្រ</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important; margin-bottom: 0px !important;"
+                                     class="blueOnPrint">Nation Religion King</p>
+                                  <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
+
+                              </span>
                               </div>
-                              <div class="col-md-6"
-                                   style="text-align: center; border: 0px !important;">
-                                  <p style="font-family: 'Khmer OS Muol'; font-size: 15px;">${translate['title']}</p>
+                          </div>
+                          <br>
+                          <div class="row">
+                              <div class="col-md-12  balckOnPrint" style="text-align: center;">
+                                 ${translate['title']}
+                                  <br>
+                                  <p style="font-family:tacteing ">rs</p>
                               </div>
-                              <div class="col-lg-3"></div>
                           </div>
                        
                       </caption>
@@ -219,7 +227,7 @@ Meteor.methods({
                  <div class="row" style="width: 100% !important;page-break-after: always !important;">
                     <div style="width: 50%;float: left !important;text-align: center !important;">
                         បានឃើញ និង ពិនិត្យត្រឹមត្រូវ<br>.......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br><span
-                            style="font-family: 'Khmer OS Muol'">ប្រធាន</span>
+                            style="font-family: 'Khmer OS Muol'">នាយក</span>
                     </div>
 
                     <div style="width: 50%;float: right !important;text-align: center !important;">

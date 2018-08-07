@@ -78,36 +78,45 @@
                 </el-row>
             </div>
             <span slot="content" style="margin: 0px !important;">
-
-                          <div class="row">
-                              <div class="col-lg-3">
-<img style="width: 70px;height: 70px;float: left !important;"
-     src="/mih.png"
-     alt="">
-                              </div>
-                                <div class="col-md-6" style="text-align: center !important;">
-
-                                        <span style="font-family:Khmer os muol; font-size: 15px;">
-                                            <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p>
-                                         <p style="font-size: 9px !important; font-family: khmer os Battambang; margin-bottom: 0px !important;">
-                                        {{waterBillingSetup.address}}({{waterBillingSetup.phoneNumber}})
-                                            </p>
-                                        </span>
-                                 </div>
-                              <div class="col-md-3"></div>
-                          </div>
                 <table class="table table-report-block-summary table-bordered">
                       <caption>
 
+                         <div class="row">
+                                <div class="col-md-12" style="text-align: center !important;">
+                                    <img style="width: auto;height: 100px; float: left;padding-top: 20px !important;"
+                                         src="/mih.png"
+                                         alt=""
+                                         :onLoad="onLoadHandler()">
+                                        <span class="blueOnPrint"
+                                              style="font-family:Khmer os muol; font-size: 15px  !important;padding-top: 15px !important;float: left;text-align: left !important;">
+
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ក្រសួងការងារ និង បណ្តុបណ្តាលវិជ្ជាជីវៈ</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Ministry of Labor and Vocational Training</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">{{waterBillingSetup.khName}}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    {{waterBillingSetup.enName}}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    លេខ៖ .............................{{waterBillingSetup.khShortName}}</p>
+
+                                            </span>
+
+                              <span style="text-align: center;font-size: 15px; border: 0px !important; float: right;"
+                              >
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ព្រះរាជាណាចក្រកម្ពុជា</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Kingdom Of Cambodia</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ជាតិ សាសនា ព្រះមហាក្សត្រ</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important; margin-bottom: 0px !important;"
+                                     class="blueOnPrint">Nation Religion King</p>
+                                  <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
+
+                              </span>
+                              </div>
+                          </div>
+                          <br>
                           <div class="row">
-                              <div class="col-lg-3">
-                                  <span style="float: left !important;">{{langConfig['no']}}:.........</span>
+                              <div class="col-md-12  balckOnPrint" style="text-align: center;">
+                                 {{langConfig['title']}}
+                                  <br>
+                                  <p style="font-family:tacteing ">rs</p>
                               </div>
-                              <div class="col-md-6"
-                                   style="text-align: center; border: 0px !important;">
-                                  <p style="font-family: 'Khmer OS Muol'; font-size: 15px;">{{langConfig['title']}}</p>
-                              </div>
-                              <div class="col-lg-3"></div>
                           </div>
                           <div class="row">
                               <div class="col-md-6;" style="float:right">
@@ -138,7 +147,7 @@
                  <div class="row" style="width: 100% !important;">
                     <div style="width: 50%;float: left !important;text-align: center !important;">
                         បានឃើញ និង ពិនិត្យត្រឹមត្រូវ<br>.......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br><span
-                            style="font-family: 'Khmer OS Muol'">ប្រធាន</span>
+                            style="font-family: 'Khmer OS Muol'">នាយក</span>
                     </div>
 
                     <div style="width: 50%;float: right !important;text-align: center !important;">
@@ -307,6 +316,9 @@
                     }
                     this.loading = false;
                 });
+            },
+            onLoadHandler: function () {
+                this.onLoad = true;
             }
 
 

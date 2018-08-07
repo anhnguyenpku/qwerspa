@@ -198,7 +198,7 @@ Meteor.methods({
                     amount: onHandInventory.amount,
                     amountEnding: (onHandInventory && onHandInventory.amountEnding || 0) - doc.amount,
                     qtyEnding: (onHandInventory && onHandInventory.qtyEnding || 0) - doc.qty,
-                    averageCost: (onHandInventory && onHandInventory.qtyEnding || 0) - doc.qty == 0 ? 0 : ((onHandInventory && onHandInventory.amountEnding || 0) - doc.amount) / ((onHandInventory && onHandInventory.qtyEnding || 0) - doc.qty),
+                    averageCost: (onHandInventory && onHandInventory.qtyEnding || 0) - doc.qty === 0 ? 0 : ((onHandInventory && onHandInventory.amountEnding || 0) - doc.amount) / ((onHandInventory && onHandInventory.qtyEnding || 0) - doc.qty),
                     transactionType: "Remove Bill",
                     rolesArea: data.rolesArea
                 };
@@ -228,7 +228,7 @@ Meteor.methods({
                     amount: onHandInventory.amount,
                     amountEnding: (onHandInventory && onHandInventory.amountEnding || 0) + doc.totalCost,
                     qtyEnding: (onHandInventory && onHandInventory.qtyEnding || 0) + doc.qty,
-                    averageCost: (onHandInventory && onHandInventory.qtyEnding || 0) + doc.qty == 0 ? 0 : ((onHandInventory && onHandInventory.amountEnding || 0) + doc.totalCost) / ((onHandInventory && onHandInventory.qtyEnding || 0) + doc.qty),
+                    averageCost: (onHandInventory && onHandInventory.qtyEnding || 0) + doc.qty === 0 ? 0 : ((onHandInventory && onHandInventory.amountEnding || 0) + doc.totalCost) / ((onHandInventory && onHandInventory.qtyEnding || 0) + doc.qty),
                     transactionType: "Remove Invoice",
                     rolesArea: data.rolesArea
                 };
@@ -262,7 +262,7 @@ Meteor.methods({
                     amount: doc.amount,
                     amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - (doc.cost * doc.qty),
                     qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty,
-                    averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty == 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - doc.amount) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty),
+                    averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - doc.amount) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty),
                     transactionType: "Remove Transfer To",
                     rolesArea: data.rolesArea
                 };
