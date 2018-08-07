@@ -305,48 +305,6 @@ Meteor.methods({
         return data && data.qtyEnding > 0 ? data : false;
     },
 
-    fixStock() {
-        let billList = Pos_Bill.find().fetch();
-        billList.forEach((data) => {
-            data.id = data._id;
-            data.transactionType = "Bill";
-            Meteor.call("addPosAverageInventory", data, (err, result) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            })
-        });
-        console.log("Finish Bill");
-
-
-        let transferList = Pos_TransferInventory.find().fetch();
-
-        transferList.forEach((data) => {
-            data.id = data._id;
-            data.transactionType = "Transfer Inventory";
-            Meteor.call("addPosAverageInventory", data, (err, result) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            })
-        });
-        console.log("Finish Transfer");
-
-
-        let invoiceList = Pos_Invoice.find().fetch();
-        invoiceList.forEach((data) => {
-            data.id = data._id;
-            data.transactionType = "Invoice";
-            Meteor.call("addPosAverageInventory", data, (err, result) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            })
-        });
-        console.log("Finish Invoice");
-
-
-    },
     checkStockBalance(data, isUpdate, dataBeforeUpdate) {
         if (data.item.length > 0) {
             let i = 0;
@@ -371,6 +329,52 @@ Meteor.methods({
             });
             return i;
         }
+    },
+    fixStock() {
+        let billList = Pos_Bill.find().fetch();
+        billList.forEach((data) => {
+            data.id = data._id;
+            data.transactionType = "Bill";
+            Meteor.call("addPosAverageInventory", data, (err, result) => {
+                if (err) {
+                    console.log(err.message);
+                    console.log(data);
+                }
+            })
+        });
+        console.log("Finish Bill");
+
+
+        let transferList = Pos_TransferInventory.find().fetch();
+
+        transferList.forEach((data) => {
+            data.id = data._id;
+            data.transactionType = "Transfer Inventory";
+            Meteor.call("addPosAverageInventory", data, (err, result) => {
+                if (err) {
+                    console.log(err.message);
+                    console.log(data);
+                }
+            })
+        });
+        console.log("Finish Transfer");
+
+
+        let invoiceList = Pos_Invoice.find().fetch();
+        invoiceList.forEach((data) => {
+            data.id = data._id;
+            data.transactionType = "Invoice";
+
+
+            Meteor.call("addPosAverageInventory", data, (err, result) => {
+                if (err) {
+                    console.log(err.message);
+                    console.log(data);
+
+                }
+            })
+        });
+        console.log("Finish Invoice");
     }
 });
 

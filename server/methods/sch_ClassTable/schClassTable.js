@@ -125,7 +125,7 @@ Meteor.methods({
         let dataPromote = [];
         if (data) {
             data.forEach((obj) => {
-                if (obj && obj.studentList) {
+                if (obj && obj.studentList && obj.studentList.studentId) {
                     if (obj.studentList && obj.studentList.isPromote === false || obj.studentList && obj.studentList.isPromote === undefined) {
                         dataNotPromote.push(obj);
                     } else {
@@ -138,6 +138,7 @@ Meteor.methods({
         newData.data = data;
         newData.dataNotPromote = dataNotPromote;
         newData.dataPromote = dataPromote;
+        console.log(newData);
         return newData;
     },
     addPromoteToClass(data) {
@@ -319,7 +320,7 @@ Meteor.methods({
                     studentList.push(obj);
                 }
             });
-
+            Sch_PaymentSchedule.direct.remove({classId: classId, studentId: studentId});
             return Sch_ClassTable.direct.update({classId: classId}, {$set: {studentList: studentList}});
         }
         return false;

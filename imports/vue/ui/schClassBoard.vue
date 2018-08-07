@@ -911,7 +911,7 @@
                     this.studentList = [];
                     this.studentListNotPromote = [];
                     this.studentListPromote = [];
-                    if (!err) {
+                    if (!err && result.data && result.data.length > 0 && result.data[0].studentDoc) {
                         this.studentList = result.data;
                         this.studentListNotPromote = result.dataNotPromote;
                         this.studentListPromote = result.dataPromote;
