@@ -113,17 +113,30 @@ Meteor.methods({
                     averageInventoryDateName: data.transferInventoryDateName,
                     itemId: doc.itemId,
                     qty: doc.qty,
-                    price: doc.cost,
-                    amount: doc.amount,
+                    price: onHandInventory.averageCost || 0,
+                    amount: (onHandInventory.averageCost || 0) * doc.qty,
                     amountEnding: (onHandInventory && onHandInventory.amountEnding || 0) - ((onHandInventory && onHandInventory.averageCost || 0) * doc.qty),
                     qtyEnding: (onHandInventory && onHandInventory.qtyEnding || 0) - doc.qty,
                     averageCost: onHandInventory && onHandInventory.averageCost || 0,
                     transactionType: "Transfer From",
                     rolesArea: data.rolesArea,
-                    profit: doc.amount - ((onHandInventory && onHandInventory.averageCost || 0) * doc.qty)
+                    profit: 0
                 };
 
                 let isInsrt = Pos_AverageInventory.insert(obj);
+                if (isInsrt) {
+                    Pos_TransferInventory.direct.update({
+                        _id: data.id,
+                        "item.itemId": doc.itemId,
+                        locationFromId: data.locationFromId,
+                        locationToIdId: data.locationToIdId,
+                    }, {
+                        $set: {
+                            "item.$.cost": onHandInventory && onHandInventory.averageCost || 0,
+                            "item.$.amount": (onHandInventory && onHandInventory.averageCost || 0) * doc.qty
+                        }
+                    });
+                }
 
                 //Add To Location
                 let objTo = {};
@@ -145,16 +158,17 @@ Meteor.methods({
                     averageInventoryDateName: data.transferInventoryDateName,
                     itemId: doc.itemId,
                     qty: doc.qty,
-                    price: doc.cost,
-                    amount: doc.amount,
-                    amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + (doc.cost * doc.qty),
+                    price: onHandInventory.averageCost || 0,
+                    amount: (onHandInventory.averageCost || 0) * doc.qty,
+                    amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventory.averageCost || 0) * doc.qty),
                     qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty,
-                    averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty == 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + doc.amount) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty),
+                    averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventory.averageCost || 0) * doc.qty)) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty),
                     transactionType: "Transfer To",
                     rolesArea: data.rolesArea
                 };
 
                 let isInsrtTo = Pos_AverageInventory.insert(objTo);
+
             })
         }
 
