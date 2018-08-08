@@ -42,11 +42,12 @@ Sch_Register.schema = new SimpleSchema({
         label: "Status",
         optional: true,
         defaultValue: "Active"
-        //graduated
-        //dropout
-        //suspend
-        //pass
-        //fail
+        //Active
+        //Graduated
+        //Dropout
+        //Suspend
+        //Pass
+        //Fail
     },
     rolesArea: {
         type: String,

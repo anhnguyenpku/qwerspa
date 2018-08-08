@@ -43,6 +43,18 @@
 
                                     </el-col>
                                     <el-col>
+                                        <el-form-item :label="langConfig['dateRange']">
+                                            <el-date-picker
+                                                    align="right" style="width: 95%"
+                                                    v-model="params.date"
+                                                    type="daterange"
+                                                    :picker-options="pickerDateOptions"
+                                                    :placeholder="langConfig['pickDateRange']"
+                                            >
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col>
                                         <el-form-item :label="langConfig['class']">
                                             <el-select filterable v-model="params.classId" clearable
                                                        :placeholder="langConfig['all']"
@@ -57,6 +69,7 @@
                                         </el-form-item>
 
                                     </el-col>
+
                                 </el-row>
                                 <el-row type="flex" class="row-bg" justify="center">
                                     <el-col>
@@ -101,6 +114,20 @@
                                         </el-form-item>
 
                                     </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['status']">
+                                            <el-select filterable v-model="params.status" clearable
+                                                       :placeholder="langConfig['all']"
+                                                       style="width: 95%">
+                                                <el-option
+                                                        v-for="item in statusOptions"
+                                                        :label="item.label"
+                                                        :value="item.value" :key="item._id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+
+                                    </el-col>
 
                                 </el-row>
                             </el-form>
@@ -132,7 +159,9 @@
                     programId: "",
                     majorId: "",
                     levelId: "",
-                    classId: ""
+                    classId: "",
+                    date: "",
+                    status: ""
 
                 },
                 rolesArea: '',
@@ -145,6 +174,14 @@
                 majorOptions: [],
                 levelOptions: [],
                 classOptions: [],
+                statusOptions: [
+                    {label: "Active", value: "Active"},
+                    {label: "Graduated", value: "Graduated"},
+                    {label: "Dropout", value: "Dropout"},
+                    {label: "Suspend", value: "Suspend"},
+                    {label: "Pass", value: "Pass"},
+                    {label: "Fail", value: "Fail"}
+                ],
                 waterBillingSetup: {
                     khName: '',
                     enNamer: ''
@@ -157,6 +194,45 @@
                 isIndeterminate: true,
                 dateHeader: "",
                 currencyHeader: "",
+                pickerDateOptions: {
+                    shortcuts: [{
+                        text: 'Last week',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: 'Last month',
+                        onClick(picker) {
+                            const end = moment().add(-1, "month").endOf("month").toDate();
+                            const start = moment().add(-1, "month").startOf("month").toDate();
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: 'Last 3 months',
+                        onClick(picker) {
+                            const end = moment().add(-1, "month").endOf("month").toDate();
+                            const start = moment().add(-4, "month").startOf("month").toDate();
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: 'This month',
+                        onClick(picker) {
+                            const end = moment().endOf("month").toDate();
+                            const start = moment().startOf("month").toDate();
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: 'Today',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
                 groupByOptions: [
                     {label: "None", value: "None"},
                     {label: "Transaction Type", value: "Transaction Type"},
@@ -196,6 +272,11 @@
                 } else {
                     this.params.levelId = "";
                 }
+            },
+            "params.date"(val) {
+                this.params.date = val;
+                this.params.classId = "";
+                this.fetchClass("");
             }
         },
         created() {
@@ -261,13 +342,14 @@
                     }
                     this.loading = false;
                 });
-            }, fetchClass(query) {
+            },
+            fetchClass(query) {
                 let vm = this;
                 if (!!query) {
                     //vm.loading = true;
                     setTimeout(() => {
                         //vm.loading = false;
-                        Meteor.call('queryClassOptionSearch', query, (err, result) => {
+                        Meteor.call('queryClassOptionSearchStatusNull', query, vm.params.date, (err, result) => {
                             if (!err) {
                                 vm.classOptions = result;
                             } else {
@@ -276,7 +358,7 @@
                         })
                     }, 200);
                 } else {
-                    Meteor.call('queryClassOptionSearch', "", (err, result) => {
+                    Meteor.call('queryClassOptionSearchStatusNull', "", vm.params.date, (err, result) => {
                         if (!err) {
                             vm.classOptions = result;
                         } else {

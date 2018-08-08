@@ -161,6 +161,29 @@ Meteor.methods({
             label: obj.name + " - " + obj.classDateName, value: obj._id
         }));
     },
+    queryClassOptionSearchStatusNull(q, date) {
+        let selector = {};
+        if (q !== "") {
+            q = q.replace(/[/\\]/g, '');
+            let reg = new RegExp(q, 'mi');
+            selector.$or = [
+                {name: {$regex: reg}},
+                {classDateName: {$regex: reg}},
+                {_id: q}
+            ];
+        }
+        if (date !== null && date !== "") {
+            selector.classDate = {
+                $lte: moment(date[1]).endOf("day").toDate(),
+                $gte: moment(date[0]).startOf("day").toDate()
+            };
+        } else {
+            selector.status = true;
+        }
+        return Sch_Class.find(selector, {limit: 100}).fetch().map(obj => ({
+            label: obj.name + " - " + obj.classDateName, value: obj._id
+        }));
+    },
     queryClassOptionActive(selector) {
         let list = [];
         selector.status = true;

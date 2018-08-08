@@ -263,7 +263,8 @@
       "address": "Address",
       "phoneNumber": "Phone Number",
       "name": "Name",
-      "class": "Class"
+      "class": "Class",
+      "status": "Status"
     }
   },
   {
@@ -539,7 +540,8 @@
       "address": "អាស័យដ្ឋាន",
       "phoneNumber": "លេខទូរស័ព្ទ",
       "name": "ឈ្មោះ",
-      "class": "ថ្នាក់"
+      "class": "ថ្នាក់",
+      "status": "ស្ថានភាព"
     }
   }
 ]

@@ -10,11 +10,12 @@ import {exchangeCoefficient} from "../../../imports/api/methods/roundCurrency"
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 import {roundCurrency} from "../../../imports/api/methods/roundCurrency"
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
+import {Sch_Class} from "../../../imports/collection/schClass";
 
 Meteor.methods({
     schStudentListReport(params, translate) {
         let parameter = {};
-
+        let selectorStatus = {};
         if (params.area != "") {
             parameter.rolesArea = params.area;
 
@@ -31,6 +32,25 @@ Meteor.methods({
         }
         if (params.classId != "") {
             parameter["studentList.classId"] = params.classId;
+
+        } else {
+            if (params.date !== null && params.date !== "") {
+                let classList = Sch_Class.find({
+                    classDate: {
+                        $lte: moment(params.date[1]).endOf("day").toDate(),
+                        $gte: moment(params.date[0]).startOf("day").toDate()
+                    }
+                }).map((obj) => {
+                    return obj._id;
+                });
+                parameter["studentList.classId"] = {$in: classList};
+
+            } else {
+                selectorStatus["classDoc.status"] = true;
+            }
+        }
+        if (params.status) {
+            parameter["studentList.status"] = params.status;
         }
         let data = {};
 
@@ -70,9 +90,7 @@ Meteor.methods({
                 }
             },
             {
-                $match: {
-                    "classDoc.status": true
-                }
+                $match: selectorStatus
             }
             ,
             {
@@ -148,6 +166,7 @@ Meteor.methods({
         if (studentListList && studentListList.length > 0) {
             studentListList.forEach((obj) => {
                 if (obj && obj.data.length > 0 && obj._id.classDoc !== undefined) {
+                    let i = 1;
                     studentListHTML += ` 
                 <table class="table table-report-block-summary table-bordered">
                       <caption>
@@ -183,9 +202,11 @@ Meteor.methods({
                           </div>
                           <br>
                           <div class="row">
-                              <div class="col-md-12  balckOnPrint" style="text-align: center;">
+                              <div class="col-md-12  balckOnPrint" style="text-align: center;font-family:'Khmer OS Muol Light'">
                                  ${translate['title']}
                                   <br>
+                                  <p>${translate['major']} ${obj._id.majorDoc.name}</p>
+                                  <p>${obj._id.classDoc.name}</p>
                                   <p style="font-family:tacteing ">rs</p>
                               </div>
                           </div>
@@ -202,9 +223,6 @@ Meteor.methods({
                         </tr>
                     </thead>
                     <tbody style="margin-bottom: 5px;">`;
-
-
-                    let i = 1;
                     obj.data.forEach((ob) => {
                         if (ob.studentDoc) {
                             studentListHTML += `
@@ -226,11 +244,15 @@ Meteor.methods({
                  </table>
                  <div class="row" style="width: 100% !important;page-break-after: always !important;">
                     <div style="width: 50%;float: left !important;text-align: center !important;">
-                        បានឃើញ និង ពិនិត្យត្រឹមត្រូវ<br>.......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br><span
-                            style="font-family: 'Khmer OS Muol'">នាយក</span>
+                        បានឃើញ និង ពិនិត្យត្រឹមត្រូវ
+                        <br><br>ថ្ងៃ ........................    ខែ  ........................ឆ្នាំ .................................<br>
+                        <br>.......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br>
+                        <span style="font-family: 'Khmer OS Muol'">នាយក</span>
                     </div>
 
                     <div style="width: 50%;float: right !important;text-align: center !important;">
+                        ថ្ងៃ ........................    ខែ  ........................ឆ្នាំ .................................<br><br>
+
                         .......................... ថ្ងៃទី  ............ ខែ   ....................  ឆ្នាំ  ...................<br><br><b>រៀបចំដោយ</b><br><br>
                     </div>
 
