@@ -139,3 +139,23 @@ schSetting.route('/schTime', {
         _Main('sch_time');
     }
 });
+import "../../imports/ui/sch_busStop/sch_busStop";
+//Student
+schSetting.route('/schBusStop', {
+    name: 'sch.busStop',
+    title: "Bus Stop",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_busStop');
+    }
+});
+import "../../imports/ui/sch_bus/sch_bus";
+//Student
+schSetting.route('/schBus', {
+    name: 'sch.bus',
+    title: "Bus",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_bus');
+    }
+});

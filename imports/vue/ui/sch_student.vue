@@ -1197,7 +1197,7 @@
                     occupation: ""
                 })
             },
-            handleEditCousin(row, index) {
+            handleEditCousin(index, row) {
                 this.cousinData[index] = row;
             },
             removeCousinData(index, row) {
@@ -1571,7 +1571,6 @@
                         where: "",
                         graduatedYear: "",
                     }];
-
 
 
                 if (this.$refs["schStudentFormAdd"]) {

@@ -322,7 +322,10 @@
       "debtSummary": "Debt Summary",
       "debtDetail": "Debt Detail",
       "studentList": "Student List",
-      "time": "Time"
+      "time": "Time",
+      "busStop": "Bus Stop",
+      "bus": "Bus",
+      "busRegister": "Bus Registration"
     }
   },
   "global": {

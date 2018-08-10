@@ -21,6 +21,8 @@ import {Sch_Major} from "../../imports/collection/schMajor";
 import {Sch_Faculty} from "../../imports/collection/schFaculty";
 import {Sch_ClassTable} from "../../imports/collection/schClassTable";
 import {Sch_Time} from "../../imports/collection/schTime";
+import {Sch_Bus} from "../../imports/collection/schBus";
+import {Sch_BusStop} from "../../imports/collection/schBusStop";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -106,6 +108,22 @@ Meteor.methods({
         let list = [];
 
         Sch_Faculty.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryBusOption(selector) {
+        let list = [];
+
+        Sch_Bus.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryBusStopOption(selector) {
+        let list = [];
+
+        Sch_BusStop.find(selector).fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
         });
         return list;

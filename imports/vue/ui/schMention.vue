@@ -377,7 +377,7 @@
             indexMethod(index) {
                 return index + 1;
             },
-            handleEditRange(row, index) {
+            handleEditRange(index, row) {
                 this.rangeData[index] = row;
             },
             handleAddRange() {

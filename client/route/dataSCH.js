@@ -50,7 +50,6 @@ schData.route('/schStudent', {
 });
 
 
-
 import '../../imports/ui/report/schTranscript/schTranscript';
 
 schData.route('/schTranscript/print', {
@@ -60,7 +59,6 @@ schData.route('/schTranscript/print', {
     }
 
 });
-
 
 
 import "../../imports/ui/sch_class/sch_class";
@@ -125,4 +123,16 @@ schData.route('/schPayment/print', {
         BlazeLayout.render('PrintLayout', {printLayout: 'sch_paymentPrintA4Report'});
     }
 
+});
+
+
+import "../../imports/ui/sch_busRegister/sch_busRegister";
+//Student
+schData.route('/schBusRegister', {
+    name: 'sch.busRegister',
+    title: "Bus Register",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_busRegister');
+    }
 });
