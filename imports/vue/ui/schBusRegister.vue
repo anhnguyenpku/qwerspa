@@ -125,101 +125,9 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item :label="langConfig['student']" prop="studentId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.studentId" remote :remote-method="studentOpt"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in studentList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['bus']" prop="busId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['busStop']" prop="busStopId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busStopId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busStopList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-
-                <el-form-item :label="langConfig['busStopType']" prop="busStopType">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busStopType"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busStopTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schBusRegisterForm.price"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['promotion']" prop="promotionId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.promotionId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in promotionList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <hr style="margin-top: 0px !important;">
-                <el-row class="pull-right">
-                    <el-button @click="dialogAddSchBusRegister = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchBusRegister">{{langConfig['save']}}</el-button>
-                </el-row>
-                <br>
-            </el-form>
-        </el-dialog>
-        <!--End Form modal-->
-
-        <!--Form Modal-->
-        <el-dialog
-                :title="langConfig['update']"
-                :visible.sync="dialogUpdateSchBusRegister"
-                width="30%">
-            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="schBusRegisterForm" :rules="rules" :ref="ref" label-width="120px"
-                     class="schBusRegisterForm">
-                <el-form-item :label="langConfig['busRegisterDate']" prop="busRegisterDate">
+                <el-form-item :label="langConfig['startDate']" prop="startDate">
                     <el-date-picker
-                            v-model="schBusRegisterForm.busRegisterDate"
+                            v-model="schBusRegisterForm.startDate"
                             type="date"
                             style="width: 100%;"
                             placeholder="Pick a day"
@@ -283,22 +191,129 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schBusRegisterForm.price"></el-input>
+                <el-form-item :label="langConfig['discountType']" prop="discountType">
+                    <el-radio-group v-model="schBusRegisterForm.discountType">
+                        <el-radio v-for="mt in discountTypeList" :label="mt.value" :key="mt.value" border>
+                            {{mt.label}}
+                        </el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                <el-form-item :label="langConfig['discount']" prop="discount">
+                    <el-input v-model="schBusRegisterForm.discount" type="Number">
+                        <template slot="append">{{sym}}</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['price']" prop="price">
+                    <el-input v-model="schBusRegisterForm.price" disabled></el-input>
+                </el-form-item>
+
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogAddSchBusRegister = false, cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button type="primary" @click="saveSchBusRegister">{{langConfig['save']}}</el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
+        <!--End Form modal-->
+
+        <!--Form Modal-->
+        <el-dialog
+                :title="langConfig['update']"
+                :visible.sync="dialogUpdateSchBusRegister"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="schBusRegisterForm" :rules="rules" :ref="ref" label-width="120px"
+                     class="schBusRegisterForm">
+                <el-form-item :label="langConfig['busRegisterDate']" prop="busRegisterDate">
+                    <el-date-picker
+                            v-model="schBusRegisterForm.busRegisterDate"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Pick a day"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item :label="langConfig['startDate']" prop="startDate">
+                    <el-date-picker
+                            v-model="schBusRegisterForm.startDate"
+                            type="date"
+                            style="width: 100%;"
+                            placeholder="Pick a day"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item :label="langConfig['student']" prop="studentId">
                     <el-select style="display: block !important;"
                                filterable
-                               v-model="schBusRegisterForm.promotionId"
+                               v-model="schBusRegisterForm.studentId" remote :remote-method="studentOpt"
                                :placeholder="langConfig['chooseItem']">
                         <el-option
-                                v-for="item in promotionList"
+                                v-for="item in studentList"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
                                 :disabled="item.disabled">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['bus']" prop="busId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schBusRegisterForm.busId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in busList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['busStop']" prop="busStopId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schBusRegisterForm.busStopId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in busStopList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item :label="langConfig['busStopType']" prop="busStopType">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schBusRegisterForm.busStopType"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in busStopTypeList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item :label="langConfig['discountType']" prop="discountType">
+                    <el-radio-group v-model="schBusRegisterForm.discountType">
+                        <el-radio v-for="mt in discountTypeList" :label="mt.value" :key="mt.value" border>
+                            {{mt.label}}
+                        </el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :label="langConfig['discount']" prop="discount">
+                    <el-input v-model="schBusRegisterForm.discount" type="Number">
+                        <template slot="append">{{sym}}</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['price']" prop="price">
+                    <el-input v-model="schBusRegisterForm.price" disabled></el-input>
                 </el-form-item>
                 <input type="hidden" v-model="schBusRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
@@ -314,6 +329,9 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+    import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
+    import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 
     export default {
         meteor: {
@@ -345,13 +363,19 @@
                 promotionList: [],
                 busList: [],
                 busStopList: [],
+                discountTypeList: [
+                    {label: "Amount", value: "Amount"},
+                    {label: "Percent (%)", value: "Percent"},
+                ],
                 schBusRegisterForm: {
                     studentId: "",
                     busId: "",
                     busStopId: "",
                     busStopType: "",
-                    promotionId: "",
-                    busRegisterDate: "",
+                    discount: 0,
+                    discountType: "Amount",
+                    busRegisterDate: moment().toDate(),
+                    startDate: moment().toDate(),
                     price: 0,
                     _id: "",
 
@@ -389,15 +413,10 @@
                             type: "string",
                             message: 'Please choose Bus Stop',
                             trigger: 'change'
-                        }],
-                    promotionId:
-                        [{
-                            required: true,
-                            type: "string",
-                            message: 'Please choose Promotion',
-                            trigger: 'change'
-                        }],
+                        }]
                 },
+                companyDoc: {},
+                sym: ""
             }
         },
         watch: {
@@ -416,6 +435,25 @@
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
             },
+            "schBusRegisterForm.busStopId"(val) {
+                this.getPriceByBusStopAndType(val, this.schBusRegisterForm.busStopType);
+            },
+            "schBusRegisterForm.busStopType"(val) {
+                this.getPriceByBusStopAndType(this.schBusRegisterForm.busStopId, val);
+            },
+            "schBusRegisterForm.discount"(val) {
+                this.schBusRegisterForm.discount = val;
+                this.getPriceByBusStopAndType(this.schBusRegisterForm.busStopId, this.schBusRegisterForm.busStopType);
+            },
+            "schBusRegisterForm.discountType"(val) {
+                if (val === "Percent") {
+                    this.sym = "%";
+                } else {
+                    this.sym = getCurrencySymbolById(this.companyDoc.baseCurrency);
+                }
+                this.schBusRegisterForm.discountType = val;
+                this.getPriceByBusStopAndType(this.schBusRegisterForm.busStopId, this.schBusRegisterForm.busStopType);
+            }
 
         },
         methods: {
@@ -503,8 +541,11 @@
                             busStopId: vm.schBusRegisterForm.busStopId,
                             busStopType: vm.schBusRegisterForm.busStopType,
                             price: vm.schBusRegisterForm.price,
-                            promotionId: vm.schBusRegisterForm.promotionId,
+                            discount: vm.schBusRegisterForm.discount || 0,
+                            discountType: vm.schBusRegisterForm.discountType,
                             busRegisterDate: vm.schBusRegisterForm.busRegisterDate,
+                            startDate: vm.schBusRegisterForm.startDate,
+                            dueDate: vm.schBusRegisterForm.startDate,
                             busRegisterDateName: moment(vm.schBusRegisterForm.busRegisterDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };
@@ -542,8 +583,11 @@
                             busStopId: vm.schBusRegisterForm.busStopId,
                             busStopType: vm.schBusRegisterForm.busStopType,
                             price: vm.schBusRegisterForm.price,
-                            promotionId: vm.schBusRegisterForm.promotionId,
+                            discountType: vm.schBusRegisterForm.discountType,
+                            discount: vm.schBusRegisterForm.discount || 0,
                             busRegisterDate: vm.schBusRegisterForm.busRegisterDate,
+                            startDate: vm.schBusRegisterForm.startDate,
+                            dueDate: vm.schBusRegisterForm.startDate,
                             busRegisterDateName: moment(vm.schBusRegisterForm.busRegisterDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };
@@ -656,6 +700,22 @@
                 this.promotionOpt();
 
             },
+            getPriceByBusStopAndType(busStopId, type) {
+                let vm = this;
+                if (busStopId && type && busStopId !== "" && type !== "") {
+                    Meteor.call("getPriceByBusStopAndType", busStopId, type, (err, result) => {
+                        if (result) {
+                            if (vm.schBusRegisterForm.discountType === "Amount") {
+                                vm.schBusRegisterForm.price = result.priceRange.price - (vm.schBusRegisterForm.discount || 0);
+                            } else if (vm.schBusRegisterForm.discountType === "Percent") {
+                                vm.schBusRegisterForm.price = vm.$_numeral(formatCurrency(result.priceRange.price - ((vm.schBusRegisterForm.discount || 0) * result.priceRange.price / 100))).value();
+                            } else {
+                                vm.schBusRegisterForm.price = result.priceRange.price;
+                            }
+                        }
+                    })
+                }
+            }
         },
         created() {
             this.isSearching = true;
@@ -663,6 +723,9 @@
             this.queryData();
             this.busOpt();
             this.busStopOpt();
+            this.companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+            this.sym = getCurrencySymbolById(this.companyDoc.baseCurrency);
+
         },
         computed: {
             langConfig() {

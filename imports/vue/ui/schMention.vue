@@ -101,7 +101,7 @@
         <el-dialog
                 :title="langConfig['add']"
                 :visible.sync="dialogAddSchMention"
-                width="30%">
+                width="50%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schMentionForm" :rules="rules" ref="schMentionFormAdd" label-width="120px"
                      class="schMentionForm">
@@ -200,7 +200,7 @@
         <el-dialog
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdateSchMention"
-                width="30%">
+                width="50%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schMentionForm" :rules="rules" ref="schMentionFormUpdate" label-width="120px"
                      class="schMentionForm">

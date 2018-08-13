@@ -325,7 +325,8 @@
       "time": "Time",
       "busStop": "Bus Stop",
       "bus": "Bus",
-      "busRegister": "Bus Registration"
+      "busRegister": "Bus Registration",
+      "busPayment": "Bus Receive Payment"
     }
   },
   "global": {

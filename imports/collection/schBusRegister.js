@@ -13,18 +13,25 @@ Sch_BusRegister.schema = new SimpleSchema({
         type: String,
         label: "Bus Stop",
     },
-    promotionId: {
+    discountType: {
         type: String
+    },
+    discount: {
+        type: Number,
+        decimal: true
     },
     busRegisterDate: {
         type: Date
     },
-
     busRegisterDateName: {
         type: String,
         optional: true
     },
-    paidUntilDate: {
+    dueDate: {
+        type: Date,
+        optional: true
+    },
+    startDate: {
         type: Date,
         optional: true
     },

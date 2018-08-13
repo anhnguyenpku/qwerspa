@@ -59,5 +59,29 @@ Meteor.methods({
     },
     removeSchBusStop(id) {
         return Sch_BusStop.remove({_id: id});
+    },
+    getPriceByBusStopAndType(busStopId, type) {
+        let data = Sch_BusStop.aggregate([
+                {
+                    $match: {_id: busStopId}
+                },
+                {
+                    $unwind: {
+                        path: "$priceRange",
+                        preserveNullAndEmptyArrays: true
+                    }
+
+                },
+                {
+                    $match: {
+                        "priceRange.type": type
+                    }
+                }
+            ]
+        );
+        if (data && data.length > 0) {
+            return data[0];
+        }
+
     }
 });

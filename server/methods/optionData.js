@@ -23,6 +23,7 @@ import {Sch_ClassTable} from "../../imports/collection/schClassTable";
 import {Sch_Time} from "../../imports/collection/schTime";
 import {Sch_Bus} from "../../imports/collection/schBus";
 import {Sch_BusStop} from "../../imports/collection/schBusStop";
+import {Sch_BusRegister} from "../../imports/collection/schBusRegister";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -37,6 +38,42 @@ Meteor.methods({
         }
         return Sch_Student.find(selector, {limit: 100}).fetch().map(obj => ({
             label: (obj.personal && obj.personal.name || "") + " ( " + (obj.personal && obj.personal.dobName || "") + ")",
+            value: obj._id
+        }));
+    },
+    querySchBusRegisterOption(q) {
+        let selector = {};
+        if (q != "") {
+            q = q.replace(/[/\\]/g, '');
+            let reg = new RegExp(q, 'mi');
+            selector.$or = [
+                {"studentDoc.personal.name": {$regex: reg}},
+                {_id: q}
+            ];
+        }
+        return Sch_BusRegister.aggregate([
+            {
+                $match: {status: "Active"}
+            },
+            {
+                $lookup: {
+                    from: 'sch_student',
+                    localField: 'studentId',
+                    foreignField: '_id',
+                    as: 'studentDoc'
+                }
+            },
+            {
+                $unwind: {
+                    path: "$studentDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {$match: selector}
+            ,
+            {$limit: 100}
+        ]).map(obj => ({
+            label: (obj.studentDoc.personal && obj.studentDoc.personal.name || "") + " ( " + (obj.studentDoc.personal && obj.studentDoc.personal.dobName || "") + ")",
             value: obj._id
         }));
     },
@@ -64,7 +101,7 @@ Meteor.methods({
                     path: "$studentDoc",
                     preserveNullAndEmptyArrays: true
                 }
-            },
+            }
         ]);
         studentList.forEach((obj) => {
             if (obj && obj.studentDoc) {

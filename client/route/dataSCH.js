@@ -136,3 +136,14 @@ schData.route('/schBusRegister', {
         _Main('sch_busRegister');
     }
 });
+
+import "../../imports/ui/sch_busPayment/schBusPayment";
+//Student
+schData.route('/schBusPayment', {
+    name: 'sch.busPayment',
+    title: "Bus Receive Payment",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_busPayment');
+    }
+});
