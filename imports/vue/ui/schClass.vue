@@ -118,88 +118,96 @@
         <el-dialog
                 :title="langConfig['add']"
                 :visible.sync="dialogAddSchClass"
-                width="30%">
+                width="60%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schClassForm" :rules="rules" ref="schClassFormAdd" label-width="120px"
                      class="schClassForm">
-                <el-form-item :label="langConfig['classDate']" prop="classDate">
-                    <el-date-picker
-                            v-model="schClassForm.classDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['name']" prop="name">
-                    <el-input v-model="schClassForm.name"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['khName']" prop="khName">
-                    <el-input v-model="schClassForm.khName"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['code']" prop="code">
-                    <el-input v-model="schClassForm.code"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['time']" prop="timeId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.timeId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in timeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['teacher']" prop="teacherId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.teacherId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in teacherList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['charge']" prop="charge">
-                    <el-input v-model="schClassForm.charge">
-                        <template slot="append">%</template>
-                    </el-input>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item :label="langConfig['classDate']" prop="classDate">
+                            <el-date-picker
+                                    v-model="schClassForm.classDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['name']" prop="name">
+                            <el-input v-model="schClassForm.name"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['khName']" prop="khName">
+                            <el-input v-model="schClassForm.khName"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['code']" prop="code">
+                            <el-input v-model="schClassForm.code"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['level']" prop="levelId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schClassForm.levelId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in levelList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
 
-                </el-form-item>
-                <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schClassForm.desc"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['status']" prop="status">
-                    <el-switch
-                            v-model="schClassForm.status"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                    >
-                    </el-switch>
+                    </el-col>
+                    <el-col :span="12">
 
-                </el-form-item>
+                        <el-form-item :label="langConfig['time']" prop="timeId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schClassForm.timeId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in timeList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['teacher']" prop="teacherId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schClassForm.teacherId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in teacherList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['charge']" prop="charge">
+                            <el-input v-model="schClassForm.charge">
+                                <template slot="append">%</template>
+                            </el-input>
+
+                        </el-form-item>
+                        <el-form-item :label="langConfig['desc']" prop="desc">
+                            <el-input type="textarea" v-model="schClassForm.desc"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['status']" prop="status">
+                            <el-switch
+                                    v-model="schClassForm.status"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                            >
+                            </el-switch>
+
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchClass = false, cancel()">{{langConfig['cancel']}}</el-button>
@@ -214,90 +222,98 @@
         <el-dialog
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdateSchClass"
-                width="30%">
+                width="60%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schClassForm" :rules="rules" ref="schClassFormUpdate" label-width="120px"
                      class="schClassForm">
-                <el-form-item :label="langConfig['classDate']" prop="classDate">
-                    <el-date-picker
-                            v-model="schClassForm.classDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['name']" prop="name">
-                    <el-input v-model="schClassForm.name"></el-input>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
 
-                <el-form-item :label="langConfig['khName']" prop="khName">
-                    <el-input v-model="schClassForm.khName"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['code']" prop="code">
-                    <el-input v-model="schClassForm.code"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['time']" prop="timeId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.timeId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in timeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['teacher']" prop="teacherId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schClassForm.teacherId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in teacherList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['charge']" prop="charge">
-                    <el-input v-model="schClassForm.charge">
-                        <template slot="append">%</template>
-                    </el-input>
+                        <el-form-item :label="langConfig['classDate']" prop="classDate">
+                            <el-date-picker
+                                    v-model="schClassForm.classDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['name']" prop="name">
+                            <el-input v-model="schClassForm.name"></el-input>
+                        </el-form-item>
 
-                </el-form-item>
-                <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schClassForm.desc"></el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['status']" prop="status">
-                    <el-switch
-                            v-model="schClassForm.status"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                    >
-                    </el-switch>
+                        <el-form-item :label="langConfig['khName']" prop="khName">
+                            <el-input v-model="schClassForm.khName"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['code']" prop="code">
+                            <el-input v-model="schClassForm.code"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['level']" prop="levelId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schClassForm.levelId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in levelList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
 
-                </el-form-item>
+                        <el-form-item :label="langConfig['time']" prop="timeId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schClassForm.timeId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in timeList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['teacher']" prop="teacherId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schClassForm.teacherId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in teacherList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['charge']" prop="charge">
+                            <el-input v-model="schClassForm.charge">
+                                <template slot="append">%</template>
+                            </el-input>
 
+                        </el-form-item>
+                        <el-form-item :label="langConfig['desc']" prop="desc">
+                            <el-input type="textarea" v-model="schClassForm.desc"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['status']" prop="status">
+                            <el-switch
+                                    v-model="schClassForm.status"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                            >
+                            </el-switch>
+
+                        </el-form-item>
+
+                    </el-col>
+                </el-row>
                 <input type="hidden" v-model="schClassForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">

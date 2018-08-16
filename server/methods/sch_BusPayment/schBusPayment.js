@@ -102,7 +102,11 @@ Meteor.methods({
             }
         });
         data.schedule = list;
-        Sch_BusRegister.direct.update({_id: data.busRegisterId}, {$set: {dueDate: data.dueDate}});
+        if (data.status === false) {
+            Sch_BusRegister.direct.update({_id: data.busRegisterId}, {$set: {dueDate: data.dueDate}});
+        } else {
+            Sch_BusRegister.direct.update({_id: data.busRegisterId}, {$set: {dueDate: data.dueDate, status: "Close"}});
+        }
         return Sch_BusPayment.insert(data);
     },
     updateSchBusPayment(data, _id) {

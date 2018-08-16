@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="dialogAddSchStudent = true,resetForm()">
+                        <a class="cursor-pointer" @click="dialogAddSchStudent = true,resetForm(),popUpAdd()">
                             <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>
@@ -50,6 +50,10 @@
                     <el-table-column
                             prop="personal.latinName"
                             :label="langConfig['latinName']">
+                    </el-table-column>
+                    <el-table-column
+                            prop="personal.code"
+                            :label="langConfig['code']">
                     </el-table-column>
                     <el-table-column
                             prop="personal.gender"
@@ -135,9 +139,18 @@
                         <hr>
                         <el-row>
                             <el-col :span="24">
-                                <el-form-item :label="langConfig['name']" prop="name">
-                                    <el-input v-model="schStudentForm.name"></el-input>
-                                </el-form-item>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['name']" prop="name">
+                                            <el-input v-model="schStudentForm.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['code']" prop="code">
+                                            <el-input v-model="schStudentForm.code"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
                                 <el-row>
                                     <el-col :span="14">
                                         <el-form-item :label="langConfig['latinName']" prop="latinName">
@@ -552,6 +565,10 @@
                         <el-form-item :label="langConfig['personalContract']" prop="personalContract">
                             <el-input type="textarea" v-model="schStudentForm.personalContract"></el-input>
                         </el-form-item>
+
+                        <el-form-item :label="langConfig['note']" prop="note">
+                            <el-input type="textarea" v-model="schStudentForm.note"></el-input>
+                        </el-form-item>
                     </el-col>
                 </el-row>
 
@@ -602,9 +619,19 @@
                         <hr>
                         <el-row>
                             <el-col :span="24">
-                                <el-form-item :label="langConfig['name']" prop="name">
-                                    <el-input v-model="schStudentForm.name"></el-input>
-                                </el-form-item>
+
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['name']" prop="name">
+                                            <el-input v-model="schStudentForm.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['code']" prop="code">
+                                            <el-input v-model="schStudentForm.code"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
                                 <el-row>
                                     <el-col :span="14">
                                         <el-form-item :label="langConfig['latinName']" prop="latinName">
@@ -1016,6 +1043,9 @@
                         <br>
                         <el-form-item :label="langConfig['personalContract']" prop="personalContract">
                             <el-input type="textarea" v-model="schStudentForm.personalContract"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['note']" prop="note">
+                            <el-input type="textarea" v-model="schStudentForm.note"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -1097,6 +1127,7 @@
                     {
                         name: "",
                         latinName: "",
+                        code: "",
                         gender: "",
                         nationality: "",
                         nation: "",
@@ -1134,6 +1165,7 @@
                         cousin: [],
                         personalStudy: [],
                         personalContract: "",
+                        note: "",
                         fromSchool: "",
                         provinceSchool: ""
                     }
@@ -1143,6 +1175,9 @@
                         [{required: true, message: 'Please input name', trigger: 'blur'}],
                     "latinName":
                         [{required: true, message: 'Please input latin name', trigger: 'blur'}],
+
+                    "code":
+                        [{required: true, message: 'Please input code', trigger: 'blur'}],
 
 
                 }
@@ -1256,6 +1291,7 @@
 
                         let personal = {
                             name: vm.schStudentForm.name,
+                            code: vm.schStudentForm.code,
                             latinName: vm.schStudentForm.latinName,
                             gender: vm.schStudentForm.gender,
                             nationality: vm.schStudentForm.nationality,
@@ -1321,6 +1357,7 @@
                             personal: personal,
                             family: family,
                             personalStudy: personalStudy,
+                            note: note,
                             personalContract: vm.schStudentForm.personalContract,
                             fromSchool: vm.schStudentForm.fromSchool,
                             provinceSchool: vm.schStudentForm.provinceSchool,
@@ -1358,6 +1395,7 @@
                     if (valid) {
                         let personal = {
                             name: vm.schStudentForm.name,
+                            code: vm.schStudentForm.code,
                             latinName: vm.schStudentForm.latinName,
                             gender: vm.schStudentForm.gender,
                             nationality: vm.schStudentForm.nationality,
@@ -1425,6 +1463,7 @@
                             personal: personal,
                             family: family,
                             personalStudy: personalStudy,
+                            note: note,
                             personalContract: vm.schStudentForm.personalContract,
                             fromSchool: vm.schStudentForm.fromSchool,
                             provinceSchool: vm.schStudentForm.provinceSchool,
@@ -1499,6 +1538,7 @@
 
 
                         vm.schStudentForm.name = result.personal.name;
+                        vm.schStudentForm.code = result.personal.code;
                         vm.schStudentForm.latinName = result.personal.latinName;
                         vm.schStudentForm.gender = result.personal.gender;
                         vm.schStudentForm.nationality = result.personal.nationality;
@@ -1543,6 +1583,7 @@
                         vm.schStudentForm.personalContract = result.personalContract;
                         vm.schStudentForm.fromSchool = result.fromSchool;
                         vm.schStudentForm.provinceSchool = result.provinceSchool;
+                        vm.schStudentForm.note = result.note;
 
                     }
                 })
@@ -1577,6 +1618,7 @@
                     this.$refs["schStudentFormAdd"].resetFields();
                     this.schStudentForm = {
                         name: "",
+                        code: "",
                         latinName: "",
                         gender: "",
                         nationality: "",
@@ -1620,7 +1662,8 @@
                         personalStudy: [],
                         personalContract: "",
                         fromSchool: "",
-                        provinceSchool: ""
+                        provinceSchool: "",
+                        note: ""
 
                     };
                 }
@@ -1629,6 +1672,7 @@
                     this.$refs["schStudentFormUpdate"].resetFields();
                     this.schStudentForm = {
                         name: "",
+                        code: "",
                         latinName: "",
                         gender: "",
                         nationality: "",
@@ -1672,12 +1716,22 @@
                         personalStudy: [],
                         personalContract: "",
                         fromSchool: "",
-                        provinceSchool: ""
+                        provinceSchool: "",
+                        note: ""
 
                     };
 
                 }
 
+            },
+            popUpAdd() {
+                let vm = this;
+                Meteor.call("sch_getIdStudent", Session.get("area"), (err, result) => {
+                        if (result) {
+                            vm.schStudentForm.code = result;
+                        }
+                    }
+                )
             }
         },
         created() {

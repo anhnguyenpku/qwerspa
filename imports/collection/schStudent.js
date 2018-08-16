@@ -9,7 +9,11 @@ Sch_Student.schema = new SimpleSchema({
     },
     "personal.latinName": {
         type: String
-    }, "personal.gender": {
+    },
+    "personal.code": {
+        type: String
+    },
+    "personal.gender": {
         type: String
     }, "personal.nationality": {
         type: String,
@@ -162,6 +166,10 @@ Sch_Student.schema = new SimpleSchema({
 
 
     personalContract: {
+        type: String,
+        optional: true
+    },
+    note: {
         type: String,
         optional: true
     },

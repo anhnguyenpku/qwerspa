@@ -49,6 +49,10 @@ Sch_Register.schema = new SimpleSchema({
         //Pass
         //Fail
     },
+    note: {
+        type: String,
+        optional: true
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

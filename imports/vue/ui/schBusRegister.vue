@@ -72,6 +72,18 @@
                             :label="langConfig['price']">
                     </el-table-column>
                     <el-table-column
+                            prop="status"
+                            :label="langConfig['status']"
+                            width="150"
+                            filter-placement="bottom-end">
+                        <template slot-scope="scope">
+                            <el-tag
+                                    :type="scope.row.status === 'Active' ? 'primary' : 'success'"
+                                    close-transition>{{scope.row.status}}
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                             :label="langConfig['action']"
                             width="120"
                     >
@@ -112,100 +124,108 @@
         <el-dialog
                 :title="langConfig['add']"
                 :visible.sync="dialogAddSchBusRegister"
-                width="30%">
+                width="60%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schBusRegisterForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schBusRegisterForm">
-                <el-form-item :label="langConfig['busRegisterDate']" prop="busRegisterDate">
-                    <el-date-picker
-                            v-model="schBusRegisterForm.busRegisterDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['startDate']" prop="startDate">
-                    <el-date-picker
-                            v-model="schBusRegisterForm.startDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['student']" prop="studentId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.studentId" remote :remote-method="studentOpt"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in studentList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['bus']" prop="busId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['busStop']" prop="busStopId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busStopId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busStopList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
 
-                <el-form-item :label="langConfig['busStopType']" prop="busStopType">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busStopType"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busStopTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['discountType']" prop="discountType">
-                    <el-radio-group v-model="schBusRegisterForm.discountType">
-                        <el-radio v-for="mt in discountTypeList" :label="mt.value" :key="mt.value" border>
-                            {{mt.label}}
-                        </el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item :label="langConfig['discount']" prop="discount">
-                    <el-input v-model="schBusRegisterForm.discount" type="Number">
-                        <template slot="append">{{sym}}</template>
-                    </el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schBusRegisterForm.price" disabled></el-input>
-                </el-form-item>
+                        <el-form-item :label="langConfig['busRegisterDate']" prop="busRegisterDate">
+                            <el-date-picker
+                                    v-model="schBusRegisterForm.busRegisterDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['startDate']" prop="startDate">
+                            <el-date-picker
+                                    v-model="schBusRegisterForm.startDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['student']" prop="studentId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.studentId" remote :remote-method="studentOpt"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in studentList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['bus']" prop="busId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.busId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in busList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['busStop']" prop="busStopId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.busStopId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in busStopList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+
+                        <el-form-item :label="langConfig['busStopType']" prop="busStopType">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.busStopType"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in busStopTypeList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['discountType']" prop="discountType">
+                            <el-radio-group v-model="schBusRegisterForm.discountType">
+                                <el-radio v-for="mt in discountTypeList" :label="mt.value" :key="mt.value" border>
+                                    {{mt.label}}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['discount']" prop="discount">
+                            <el-input v-model="schBusRegisterForm.discount" type="Number">
+                                <template slot="append">{{sym}}</template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['price']" prop="price">
+                            <el-input v-model="schBusRegisterForm.price" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
@@ -221,100 +241,116 @@
         <el-dialog
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdateSchBusRegister"
-                width="30%">
+                width="60%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schBusRegisterForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schBusRegisterForm">
-                <el-form-item :label="langConfig['busRegisterDate']" prop="busRegisterDate">
-                    <el-date-picker
-                            v-model="schBusRegisterForm.busRegisterDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['startDate']" prop="startDate">
-                    <el-date-picker
-                            v-model="schBusRegisterForm.startDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['student']" prop="studentId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.studentId" remote :remote-method="studentOpt"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in studentList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['bus']" prop="busId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['busStop']" prop="busStopId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busStopId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busStopList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
 
-                <el-form-item :label="langConfig['busStopType']" prop="busStopType">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schBusRegisterForm.busStopType"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in busStopTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['discountType']" prop="discountType">
-                    <el-radio-group v-model="schBusRegisterForm.discountType">
-                        <el-radio v-for="mt in discountTypeList" :label="mt.value" :key="mt.value" border>
-                            {{mt.label}}
-                        </el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item :label="langConfig['discount']" prop="discount">
-                    <el-input v-model="schBusRegisterForm.discount" type="Number">
-                        <template slot="append">{{sym}}</template>
-                    </el-input>
-                </el-form-item>
-                <el-form-item :label="langConfig['price']" prop="price">
-                    <el-input v-model="schBusRegisterForm.price" disabled></el-input>
-                </el-form-item>
+                        <el-form-item :label="langConfig['busRegisterDate']" prop="busRegisterDate">
+                            <el-date-picker
+                                    v-model="schBusRegisterForm.busRegisterDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['startDate']" prop="startDate">
+                            <el-date-picker
+                                    v-model="schBusRegisterForm.startDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['student']" prop="studentId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.studentId" remote :remote-method="studentOpt"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in studentList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['bus']" prop="busId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.busId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in busList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['busStop']" prop="busStopId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.busStopId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in busStopList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+
+                        <el-form-item :label="langConfig['busStopType']" prop="busStopType">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schBusRegisterForm.busStopType"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in busStopTypeList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['discountType']" prop="discountType">
+                            <el-radio-group v-model="schBusRegisterForm.discountType">
+                                <el-radio v-for="mt in discountTypeList" :label="mt.value" :key="mt.value" border>
+                                    {{mt.label}}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['discount']" prop="discount">
+                            <el-input v-model="schBusRegisterForm.discount" type="Number">
+                                <template slot="append">{{sym}}</template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['price']" prop="price">
+                            <el-input v-model="schBusRegisterForm.price" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['status']" prop="status">
+
+                            <el-radio-group v-model="schBusRegisterForm.status">
+                                <el-radio v-for="mt in statusOption" :label="mt.value" :key="mt.value" border>
+                                    {{mt.label}}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <input type="hidden" v-model="schBusRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
@@ -363,6 +399,10 @@
                 promotionList: [],
                 busList: [],
                 busStopList: [],
+                statusOption: [
+                    {label: "Active", value: "Active"},
+                    {label: "Close", value: "Close"}
+                ],
                 discountTypeList: [
                     {label: "Amount", value: "Amount"},
                     {label: "Percent (%)", value: "Percent"},
@@ -377,6 +417,7 @@
                     busRegisterDate: moment().toDate(),
                     startDate: moment().toDate(),
                     price: 0,
+                    status: "Active",
                     _id: "",
 
                 },
@@ -588,6 +629,7 @@
                             busRegisterDate: vm.schBusRegisterForm.busRegisterDate,
                             startDate: vm.schBusRegisterForm.startDate,
                             dueDate: vm.schBusRegisterForm.startDate,
+                            status: vm.schBusRegisterForm.status,
                             busRegisterDateName: moment(vm.schBusRegisterForm.busRegisterDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
                         };

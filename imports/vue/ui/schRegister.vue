@@ -64,6 +64,10 @@
                             :label="langConfig['program']">
                     </el-table-column>
                     <el-table-column
+                            prop="note"
+                            :label="langConfig['note']">
+                    </el-table-column>
+                    <el-table-column
                             :label="langConfig['action']"
                             width="240"
                     >
@@ -114,103 +118,114 @@
         <el-dialog
                 :title="langConfig['add']"
                 :visible.sync="dialogAddSchRegister"
-                width="30%">
+                width="60%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schRegisterForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schRegisterForm">
-                <el-form-item :label="langConfig['registerDate']" prop="registerDate">
-                    <el-date-picker
-                            v-model="schRegisterForm.registerDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['student']" prop="studentId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.studentId" remote :remote-method="studentOpt"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in studentList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['program']" prop="programId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.programId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in programList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['major']" prop="majorId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.majorId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in majorList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['promotion']" prop="promotionId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.promotionId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in promotionList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['term']" prop="term">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.term"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in termList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item :label="langConfig['registerDate']" prop="registerDate">
+                            <el-date-picker
+                                    v-model="schRegisterForm.registerDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['student']" prop="studentId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.studentId" remote :remote-method="studentOpt"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in studentList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['program']" prop="programId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.programId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in programList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['major']" prop="majorId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.majorId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in majorList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item :label="langConfig['level']" prop="levelId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.levelId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in levelList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.promotionId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in promotionList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['term']" prop="term">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.term"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in termList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item :label="langConfig['note']" prop="note">
+                            <el-input type="textarea" v-model="schRegisterForm.note"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchRegister = false, cancel()">{{langConfig['cancel']}}</el-button>
@@ -225,114 +240,126 @@
         <el-dialog
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdateSchRegister"
-                width="30%">
+                width="60%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schRegisterForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schRegisterForm">
-                <el-form-item :label="langConfig['registerDate']" prop="registerDate">
-                    <el-date-picker
-                            v-model="schRegisterForm.registerDate"
-                            type="date"
-                            :disabled="disableUpdateField"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['student']" prop="studentId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.studentId" :remote-method="studentOpt"
-                               :disabled="disableUpdateField"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in studentList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['program']" prop="programId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.programId"
-                               :disabled="disableUpdateField"
+                <el-row>
+                    <el-col :span="12">
 
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in programList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['major']" prop="majorId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.majorId"
-                               :disabled="disableUpdateField"
+                        <el-form-item :label="langConfig['registerDate']" prop="registerDate">
+                            <el-date-picker
+                                    v-model="schRegisterForm.registerDate"
+                                    type="date"
+                                    :disabled="disableUpdateField"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['student']" prop="studentId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.studentId" :remote-method="studentOpt"
+                                       :disabled="disableUpdateField"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in studentList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['program']" prop="programId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.programId"
+                                       :disabled="disableUpdateField"
+
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in programList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['major']" prop="majorId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.majorId"
+                                       :disabled="disableUpdateField"
 
 
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in majorList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.levelId"
-                               :disabled="disableUpdateField"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in majorList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item :label="langConfig['level']" prop="levelId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.levelId"
+                                       :disabled="disableUpdateField"
 
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['promotion']" prop="promotionId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.promotionId"
-                               :disabled="disableUpdateField"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in promotionList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['term']" prop="term">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.term"
-                               :disabled="disableUpdateField"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in termList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in levelList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.promotionId"
+                                       :disabled="disableUpdateField"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in promotionList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['term']" prop="term">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.term"
+                                       :disabled="disableUpdateField"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in termList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item :label="langConfig['note']" prop="note">
+                            <el-input type="textarea" v-model="schRegisterForm.note"></el-input>
+                        </el-form-item>
+
+                    </el-col>
+                </el-row>
                 <input type="hidden" v-model="schRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
@@ -346,137 +373,148 @@
         <el-dialog
                 :title="langConfig['addToClass']"
                 :visible.sync="dialogUpdateSchRegisterToClass"
-                width="30%">
+                width="60%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schRegisterForm" :rules="rules" :ref="ref" label-width="120px"
                      class="schRegisterForm">
+                <el-row>
+                    <el-col :span="12">
 
-                <el-form-item :label="langConfig['class']" prop="classId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.classId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in classList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['startClassDate']" prop="startClassDate">
-                    <el-date-picker
-                            v-model="schRegisterForm.startClassDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <hr>
+                        <el-form-item :label="langConfig['class']" prop="classId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.classId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in classList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['startClassDate']" prop="startClassDate">
+                            <el-date-picker
+                                    v-model="schRegisterForm.startClassDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <hr>
 
-                <el-form-item :label="langConfig['registerDate']" prop="registerDate">
-                    <el-date-picker
-                            v-model="schRegisterForm.registerDate"
-                            type="date"
-                            disabled="disabled"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['student']" prop="studentId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.studentId"
-                               disabled="disabled"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in studentList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['program']" prop="programId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schRegisterForm.programId"
-                               disabled="disabled"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in programList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['major']" prop="majorId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               disabled="disabled"
-                               v-model="schRegisterForm.majorId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in majorList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['level']" prop="levelId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               disabled="disabled"
-                               v-model="schRegisterForm.levelId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in levelList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                        <el-form-item :label="langConfig['registerDate']" prop="registerDate">
+                            <el-date-picker
+                                    v-model="schRegisterForm.registerDate"
+                                    type="date"
+                                    disabled="disabled"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['student']" prop="studentId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.studentId"
+                                       disabled="disabled"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in studentList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['program']" prop="programId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schRegisterForm.programId"
+                                       disabled="disabled"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in programList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
 
-                <el-form-item :label="langConfig['promotion']" prop="promotionId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               disabled="disabled"
-                               v-model="schRegisterForm.promotionId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in promotionList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['term']" prop="term">
-                    <el-select style="display: block !important;"
-                               filterable
-                               disabled="disabled"
-                               v-model="schRegisterForm.term"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in termList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                        <el-form-item :label="langConfig['major']" prop="majorId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       disabled="disabled"
+                                       v-model="schRegisterForm.majorId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in majorList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['level']" prop="levelId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       disabled="disabled"
+                                       v-model="schRegisterForm.levelId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in levelList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       disabled="disabled"
+                                       v-model="schRegisterForm.promotionId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in promotionList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['term']" prop="term">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       disabled="disabled"
+                                       v-model="schRegisterForm.term"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in termList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item :label="langConfig['note']" prop="note">
+                            <el-input type="textarea" v-model="schRegisterForm.note" disabled="disabled"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <input type="hidden" v-model="schRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
@@ -643,10 +681,10 @@
                                 :data="culumnData2"
                                 stripe
                                 style="width: 100%">
-                            <el-table-column
+                            <!--<el-table-column
                                     type="index"
                                     :index="indexMethod">
-                            </el-table-column>
+                            </el-table-column>-->
                             <el-table-column width="70"
                                              :label="langConfig['year']">
                                 <template slot-scope="scope">
@@ -894,6 +932,7 @@
                     registerDate: "",
                     startClassDate: "",
                     _id: "",
+                    note: ""
 
                 },
                 inputTranscriptForm: {
@@ -1152,6 +1191,7 @@
                             majorId: vm.schRegisterForm.majorId,
                             promotionId: vm.schRegisterForm.promotionId,
                             term: vm.schRegisterForm.term,
+                            note: vm.schRegisterForm.note,
                             registerDate: vm.schRegisterForm.registerDate,
                             registerDateName: moment(vm.schRegisterForm.registerDate).format("DD/MM/YYYY"),
                             rolesArea: Session.get('area')
@@ -1194,6 +1234,8 @@
                             registerDate: vm.schRegisterForm.registerDate,
                             registerDateName: moment(vm.schRegisterForm.registerDate).format("DD/MM/YYYY"),
                             classId: vm.schRegisterForm.classId,
+                            note: vm.schRegisterForm.note,
+
                             startClassDate: vm.schRegisterForm.startClassDate,
                             rolesArea: Session.get('area')
                         };

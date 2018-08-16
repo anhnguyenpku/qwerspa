@@ -143,6 +143,7 @@
                             <thead>
                             <tr>
                                 <th colspan="5">
+
                                 </th>
                                 <th style="text-align: right; vertical-align: middle;" colspan="4">
                                     <el-checkbox v-model="isOverDue"
@@ -311,9 +312,7 @@
                                     </div>
                                 </div>
                             </div>
-
                             <el-form-item :label="langConfig['class']" prop="classId">
-
                                 <el-select style="display: block !important"
                                            filterable clearable
                                            v-model="schPaymentForm.classId"
@@ -343,6 +342,7 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
+                            
                             <el-form-item :label="langConfig['receiveDate']" prop="paymentDate">
                                 <el-date-picker
                                         v-model="schPaymentForm.paymentDate"
@@ -502,7 +502,7 @@
                 notifications: false,
                 sound: true,
                 widgets: false,
-                labelPosition: "top",
+                labelPosition: "right",
                 options: {
                     disabledDate(time) {
                         return false;

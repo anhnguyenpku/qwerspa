@@ -10,6 +10,7 @@ Meteor.methods({
                 countSchBusRegister: 0,
             };
             let selector = {};
+            //selector.status = "Active";
             if (!!q) {
                 let reg = new RegExp(q);
                 if (!!filter) {

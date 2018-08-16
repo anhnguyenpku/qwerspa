@@ -168,23 +168,31 @@
                     </el-table>
                 </el-row>
                 <br>
-                <el-form-item :label="langConfig['date']" prop="date">
-                    <el-date-picker
-                            v-model="schMentionForm.date"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['status']" prop="status">
-                    <el-switch
-                            v-model="schMentionForm.status"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                    >
-                    </el-switch>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+
+                        <el-form-item :label="langConfig['date']" prop="date">
+                            <el-date-picker
+                                    v-model="schMentionForm.date"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+
+                        <el-form-item :label="langConfig['status']" prop="status">
+                            <el-switch
+                                    v-model="schMentionForm.status"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                            >
+                            </el-switch>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
@@ -266,24 +274,32 @@
                     </el-table>
                 </el-row>
                 <br>
-                <el-form-item :label="langConfig['date']" prop="date">
-                    <el-date-picker
-                            v-model="schMentionForm.date"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['status']" prop="status">
-                    <el-switch
-                            v-model="schMentionForm.status"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                    >
-                    </el-switch>
-                </el-form-item>
 
+                <el-row>
+                    <el-col :span="12">
+
+                        <el-form-item :label="langConfig['date']" prop="date">
+                            <el-date-picker
+                                    v-model="schMentionForm.date"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+
+                        <el-form-item :label="langConfig['status']" prop="status">
+                            <el-switch
+                                    v-model="schMentionForm.status"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                            >
+                            </el-switch>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <input type="hidden" v-model="schMentionForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">

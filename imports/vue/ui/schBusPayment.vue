@@ -129,9 +129,10 @@
                         <table class="table table-responsive​​​ table-striped table-hover responstable">
                             <thead>
                             <tr>
-                                <th colspan="3">
+                                <th colspan="3" style="vertical-align: inherit !important;">
+
                                 </th>
-                                <th style="text-align: right; vertical-align: middle;" colspan="3">
+                                <th style="text-align: right; vertical-align: inherit !important;" colspan="3">
                                     <el-checkbox v-model="isOverDue"
                                                  :label="langConfig['overdueStatusOnly']"></el-checkbox>
                                 </th>
@@ -304,6 +305,15 @@
                                 <el-input v-model="schBusPaymentForm.busPaymentNo"
                                           prefix-icon="el-icon-edit"></el-input>
                             </el-form-item>
+                            <el-form-item :label="langConfig['status']" prop="status">
+                                <el-switch
+                                        v-model="schBusPaymentForm.status"
+                                        active-color="#13ce66"
+                                        inactive-color="#ff4949"
+                                >
+                                </el-switch>
+                            </el-form-item>
+
                             <el-form-item :label="langConfig['note']" prop="note">
                                 <el-input type="textarea" v-model="schBusPaymentForm.note" :rows="4"></el-input>
                             </el-form-item>
@@ -397,6 +407,7 @@
                     studentId: "",
                     busRegisterId: "",
                     penalty: 0,
+                    status: false,
                     busPaymentNo: "",
                     isPaidAll: false
 
@@ -406,6 +417,12 @@
                         type: 'date',
                         required: true,
                         message: 'Please input SchBusPaymentDate',
+                        trigger: 'blur'
+                    }],
+                    dueDate: [{
+                        type: 'date',
+                        required: true,
+                        message: 'Please input Due Date',
                         trigger: 'blur'
                     }],
                     busPaymentNo: [{
@@ -433,7 +450,7 @@
                 notifications: false,
                 sound: true,
                 widgets: false,
-                labelPosition: "top",
+                labelPosition: "right",
                 options: {
                     disabledDate(time) {
                         return false;
@@ -666,6 +683,7 @@
                             note: vm.schBusPaymentForm.note,
                             busPaymentNo: vm.schBusPaymentForm.busPaymentNo,
                             penalty: vm.schBusPaymentForm.penalty,
+                            status: vm.schBusPaymentForm.status,
 
                             rolesArea: Session.get('area'),
                             studentId: vm.schBusPaymentForm.studentId,
@@ -676,6 +694,8 @@
                             if (!err) {
                                 if (isCloseDialog) {
                                     this.dialogAddSchBusPayment = false;
+                                } else {
+                                    vm.schBusPaymentForm.status = false;
                                 }
 
                                 vm.schBusPaymentData.forEach((obj) => {
@@ -751,6 +771,7 @@
                 this.resetForm();
                 this.busRegisterOpt();
                 let vm = this;
+                vm.schBusPaymentForm.status = false;
                 $(".el-dialog__title").text(this.langConfig['add']);
                 this.getBusPaymentNoByRoleAndDate(this.schBusPaymentForm.busPaymentDate);
             }

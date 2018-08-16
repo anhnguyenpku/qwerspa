@@ -95,16 +95,16 @@
                 :fullscreen="fullscreen">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schCiriculumnForm" :rules="rules" ref="schCiriculumnFormAdd" label-width="120px"
-                     class="schCiriculumnForm">
+                     class="schCiriculumnForm" :label-position="labelPosition">
 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['name']" prop="name">
+                        <el-form-item :label="langConfig['name']" prop="name" style="width: 90%">
                             <el-input v-model="schCiriculumnForm.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['major']" prop="majorId">
+                        <el-form-item :label="langConfig['major']" prop="majorId" style="width: 90%">
                             <el-select style="display: block !important;"
                                        filterable
                                        v-model="schCiriculumnForm.majorId"
@@ -120,12 +120,12 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit">
+                        <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit" style="width: 90%">
                             <el-input v-model="schCiriculumnForm.requiredCredit"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['desc']" prop="desc">
+                        <el-form-item :label="langConfig['desc']" prop="desc" style="width: 90%">
                             <el-input v-model="schCiriculumnForm.desc"></el-input>
                         </el-form-item>
                     </el-col>
@@ -303,16 +303,16 @@
 
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schCiriculumnForm" :rules="rules" ref="schCiriculumnFormUpdate" label-width="120px"
-                     class="schCiriculumnForm">
+                     class="schCiriculumnForm" :label-position="labelPosition">
 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['name']" prop="name">
+                        <el-form-item :label="langConfig['name']" prop="name" style="width: 90%">
                             <el-input v-model="schCiriculumnForm.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['major']" prop="majorId">
+                        <el-form-item :label="langConfig['major']" prop="majorId" style="width: 90%">
                             <el-select style="display: block !important;"
                                        filterable
                                        v-model="schCiriculumnForm.majorId"
@@ -328,12 +328,12 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit">
+                        <el-form-item :label="langConfig['requiredCredit']" prop="requiredCredit" style="width: 90%">
                             <el-input v-model="schCiriculumnForm.requiredCredit"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item :label="langConfig['desc']" prop="desc">
+                        <el-form-item :label="langConfig['desc']" prop="desc" style="width: 90%">
                             <el-input v-model="schCiriculumnForm.desc"></el-input>
                         </el-form-item>
                     </el-col>
@@ -529,6 +529,7 @@
                 currentPage: 1,
                 currentSize: 10,
                 count: 0,
+                labelPosition: 'top',
                 dialogAddSchCiriculumn: false,
                 dialogUpdateSchCiriculumn: false,
                 culumnData1: [

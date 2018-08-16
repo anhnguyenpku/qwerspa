@@ -3,6 +3,7 @@ import {Sch_Transcript} from '../../../imports/collection/schTranscript';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Register} from "../../../imports/collection/schRegister";
+import {Pos_Invoice} from "../../../imports/collection/posInvoice";
 
 Meteor.methods({
     querySchStudent({q, filter, options = {limit: 10, skip: 0}}) {
@@ -57,9 +58,11 @@ Meteor.methods({
         return data;
     },
     insertSchStudent(data) {
+        data.personal.code = pad(data.personal.code + "", 6);
         return Sch_Student.insert(data);
     },
     updateSchStudent(data) {
+        data.personal.code = pad(data.personal.code + "", 6);
         return Sch_Student.update({_id: data._id},
             {
                 $set: data
@@ -114,8 +117,23 @@ Meteor.methods({
         });
         return newData;
     },
+    sch_getIdStudent(rolesAreas) {
+        let data = Sch_Student.findOne({
+            rolesArea: rolesAreas,
+        }, {sort: {code: -1}});
+
+        console.log(data);
+        let code = parseInt(data && data.personal.code || "0") + 1;
+        return pad(code + "", 6);
+
+    },
     querySchStudentOptionUnPaid() {
         return [];
     }
 
 });
+
+function pad(str, max) {
+    str = str.toString();
+    return str.length < max ? pad("0" + str, max) : str;
+}

@@ -75,7 +75,9 @@
       "finalGrade": "Grade",
       "gradePoint": "GPA",
       "requiredCredit": "Required Credit",
-      "isCompleted": "Completed"
+      "isCompleted": "Completed",
+      "code": "Id",
+      "note": "Note"
     },
     "teacher": {
       "searchHere": "Search Here ...",
@@ -240,7 +242,8 @@
       "gradePoint": "GPA",
       "requiredCredit": "Required Credit",
       "isCompleted": "Completed",
-      "startClassDate": "Study On"
+      "startClassDate": "Study On",
+      "note": "Note"
     },
     "class": {
       "searchHere": "Search Here ...",
@@ -610,6 +613,7 @@
       "code": "Code",
       "contact": "Contact",
       "desc": "desc",
+      "status": "Status",
       "add": "Add Bus Registration",
       "update": "Update Bus Registration",
       "bus": "Bus",
@@ -751,7 +755,9 @@
       "finalGrade": "និទ្ទេស",
       "gradePoint": "មធ្យមភាគ",
       "requiredCredit": "ទាមទារចំនួនក្រេឌីត",
-      "isCompleted": "បំពេញរួចរាល់"
+      "isCompleted": "បំពេញរួចរាល់",
+      "code": "អត្តលេខ",
+      "note": "កំណត់សំគាល់"
     },
     "teacher": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -946,7 +952,8 @@
       "classDate": "ថ្ងៃបង្កើតថ្នាក់",
       "charge": "តម្លៃទូទាត់",
       "chargeType": "ប្រភេទទូទាត់",
-      "time": "ពេលសិក្សា"
+      "time": "ពេលសិក្សា",
+      "note": "កំណត់សគាល់"
     },
     "classBoard": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1301,6 +1308,7 @@
       "code": "កូដ",
       "contact": "ទំនាក់ទំនង",
       "desc": "សម្គាល់",
+      "status": "ស្ថានភាព",
       "add": "បញ្ចូលព័តមានការចុះឈ្មោះជិះឡាន",
       "update": "កែប្រែព័តមានការចុះឈ្មោះជិះឡាន",
       "bus": "ឡាន",

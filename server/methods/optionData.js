@@ -28,7 +28,7 @@ import {Sch_BusRegister} from "../../imports/collection/schBusRegister";
 Meteor.methods({
     querySchStudentOption(q) {
         let selector = {};
-        if (q != "") {
+        if (q !== "") {
             q = q.replace(/[/\\]/g, '');
             let reg = new RegExp(q, 'mi');
             selector.$or = [
@@ -36,25 +36,29 @@ Meteor.methods({
                 {_id: q}
             ];
         }
-        return Sch_Student.find(selector, {limit: 100}).fetch().map(obj => ({
+        return Sch_Student.find(selector, {limit: 300}).fetch().map(obj => ({
             label: (obj.personal && obj.personal.name || "") + " ( " + (obj.personal && obj.personal.dobName || "") + ")",
             value: obj._id
         }));
     },
     querySchBusRegisterOption(q) {
         let selector = {};
-        if (q != "") {
+        selector.status = "Active";
+        if (q !== "") {
             q = q.replace(/[/\\]/g, '');
             let reg = new RegExp(q, 'mi');
+            let studentList = Sch_Student.find({"personal.name": {$regex: reg}}, {limit: 300}).fetch().map(function (obj) {
+                return obj._id;
+            });
             selector.$or = [
-                {"studentDoc.personal.name": {$regex: reg}},
+                {studentId: {$in: studentList}},
                 {_id: q}
             ];
         }
+
         return Sch_BusRegister.aggregate([
-            {
-                $match: {status: "Active"}
-            },
+            {$match: selector},
+            {$limit: 300},
             {
                 $lookup: {
                     from: 'sch_student',
@@ -68,10 +72,8 @@ Meteor.methods({
                     path: "$studentDoc",
                     preserveNullAndEmptyArrays: true
                 }
-            },
-            {$match: selector}
-            ,
-            {$limit: 100}
+            }
+
         ]).map(obj => ({
             label: (obj.studentDoc.personal && obj.studentDoc.personal.name || "") + " ( " + (obj.studentDoc.personal && obj.studentDoc.personal.dobName || "") + ")",
             value: obj._id
