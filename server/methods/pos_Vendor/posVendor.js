@@ -28,17 +28,6 @@ Meteor.methods({
                     $match: selector
                 },
                 {
-                    $lookup: {
-                        from: "pos_term",
-                        localField: "termId",
-                        foreignField: "_id",
-                        as: "termDoc"
-                    }
-                },
-                {
-                    $unwind: {path: "$termDoc", preserveNullAndEmptyArrays: true}
-                },
-                {
                     $sort: {
                         createdAt: -1
                     }
@@ -48,6 +37,17 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                },
+                {
+                    $lookup: {
+                        from: "pos_term",
+                        localField: "termId",
+                        foreignField: "_id",
+                        as: "termDoc"
+                    }
+                },
+                {
+                    $unwind: {path: "$termDoc", preserveNullAndEmptyArrays: true}
                 }
             ]);
             if (posVendors.length > 0) {

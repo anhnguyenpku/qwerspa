@@ -5,6 +5,7 @@ import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 
 import numeral from "numeral";
 import {Sch_BusRegister} from "../../../imports/collection/schBusRegister";
+import {Sch_Student} from "../../../imports/collection/schStudent";
 
 Meteor.methods({
     querySchBusPayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -22,24 +23,24 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
-                    selector.$or = [{"studentDoc.personal.name": {$regex: reg, $options: 'mi'}}];
+                    let sutdentList = Sch_Student.find({
+                            "personal.name": {
+                                $regex: reg,
+                                $options: 'mi'
+                            }
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
+                    selector.$or = [{studentId: {$in: sutdentList}}];
                 }
             }
             let schBusPayments = Sch_BusPayment.aggregate([
-                {
-                    $lookup: {
-                        from: "sch_student",
-                        localField: "studentId",
-                        foreignField: "_id",
-                        as: "studentDoc"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$studentDoc",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
                 {
                     $match: selector
                 },
@@ -53,30 +54,29 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                },
+                {
+                    $lookup: {
+                        from: "sch_student",
+                        localField: "studentId",
+                        foreignField: "_id",
+                        as: "studentDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$studentDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
                 }
             ]).map((obj) => {
-                obj.totalAmount = formatCurrency(obj.totalAmount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
-                obj.totalDiscount = formatCurrency(obj.totalDiscount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
+                obj.totalNetAmount = formatCurrency(obj.totalNetAmount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
                 obj.totalPaid = formatCurrency(obj.totalPaid, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
                 return obj;
             });
             if (schBusPayments.length > 0) {
                 data.content = schBusPayments;
                 let schBusPaymentTotal = Sch_BusPayment.aggregate([
-                    {
-                        $lookup: {
-                            from: "sch_student",
-                            localField: "studentId",
-                            foreignField: "_id",
-                            as: "studentDoc"
-                        }
-                    },
-                    {
-                        $unwind: {
-                            path: "$studentDoc",
-                            preserveNullAndEmptyArrays: true
-                        }
-                    },
                     {
                         $match: selector
                     },
@@ -92,21 +92,28 @@ Meteor.methods({
         return data;
     },
     insertSchBusPayment(data) {
+        let list = [];
         data.schedule.forEach((obj) => {
-            obj.amount = numeral(obj.amount).value();
-            obj.paid = numeral(obj.paid).value();
-            obj.waived = numeral(obj.waived).value();
-            return obj;
+            if (obj.isPaid === true) {
+                obj.amount = numeral(obj.amount).value();
+                obj.paid = numeral(obj.paid).value();
+                obj.waived = numeral(obj.waived).value();
+                list.push(obj)
+            }
         });
-
+        data.schedule = list;
+        Sch_BusRegister.direct.update({_id: data.busRegisterId}, {$set: {dueDate: data.dueDate}});
         return Sch_BusPayment.insert(data);
     },
     updateSchBusPayment(data, _id) {
-        data.schedule.map((obj) => {
-            obj.amount = numeral(obj.amount).value();
-            obj.paid = numeral(obj.paid).value();
-            obj.waived = numeral(obj.waived).value();
-            return obj;
+        let list = [];
+        data.schedule.forEach((obj) => {
+            if (obj.isPaid === true) {
+                obj.amount = numeral(obj.amount).value();
+                obj.paid = numeral(obj.paid).value();
+                obj.waived = numeral(obj.waived).value();
+                list.push(obj)
+            }
         });
 
         return Sch_BusPayment.update({_id: _id},
@@ -116,68 +123,27 @@ Meteor.methods({
     },
     removeSchBusPayment(id) {
         let busPaymentDoc = Sch_BusPayment.findOne({_id: id});
+        let busRegisterDoc = Sch_BusRegister.findOne({_id: busPaymentDoc.busRegisterId});
         if (busPaymentDoc) {
-            busPaymentDoc.schedule.forEach((data) => {
-                let busPaymentDoc = Sch_BusPaymentSchedule.findOne({_id: data._id});
-                let newStatus = busPaymentDoc.status;
-
-                if (busPaymentDoc.paid - (data.paid + data.discount) > 0) {
-                    newStatus = "Partial";
-                } else {
-                    newStatus = "Active";
+            Sch_BusRegister.direct.update({_id: busPaymentDoc.busRegisterId}, {
+                $set: {dueDate: moment(busRegisterDoc.dueDate).add(-busPaymentDoc.schedule.length || 0, "month").toDate()},
+                $inc: {
+                    busPaymentNumber: -busPaymentDoc.schedule.length || 0
                 }
-
-                Sch_BusPaymentSchedule.direct.update({_id: data._id}, {
-                    $set: {status: newStatus, closeDate: ""},
-                    $inc: {
-                        paid: -(data.paid),
-                        discount: -(data.discount),
-                        waived: -(data.waived || 0),
-                        busPaymentNumber: -1
-                    }
-                }, true);
-
-                Sch_BusPayment.direct.update({
-                        "schedule._id": data._id,
-                        createdAt: {$gt: busPaymentDoc.createdAt}
-                    },
-                    {
-
-                        $inc: {
-                            "schedule.$.amount": (data.paid + data.discount + (data.waived || 0)),
-                            "schedule.$.netAmount": (data.paid + data.discount + (data.waived || 0)),
-                            totalAmount: (data.paid + data.discount + (data.waived || 0)),
-                            totalNetAmount: (data.paid + data.discount + (data.waived || 0)),
-                            balanceUnPaid: (data.paid + data.discount + (data.waived || 0))
-                        }
-                    }, {multi: true}, true);
-            })
+            }, true);
+            return Sch_BusPayment.remove({_id: id});
         }
-        return Sch_BusPayment.remove({_id: id});
-
 
     },
-    updateBusPaymentScheduleByBusPayment(data, date) {
-        let busPaymentDoc = Sch_BusPaymentSchedule.findOne({_id: data._id});
-        let newStatus = busPaymentDoc.status;
-        let upd = {};
-        if (busPaymentDoc.paid + busPaymentDoc.discount + (busPaymentDoc.waived || 0) + (busPaymentDoc.balanceNotCut || 0) + numeral(data.paid).value() + numeral(data.discount).value() + numeral(data.waived || 0).value() >= busPaymentDoc.amount) {
-            newStatus = "Complete";
-            upd.closeDate = date;
-        } else {
-            newStatus = "Partial";
-        }
-
-        upd.status = newStatus;
-        return Sch_BusPaymentSchedule.direct.update({_id: data._id}, {
-            $set: upd,
+    updateBusRegisterByBusPayment(data, date, busRegisterId) {
+        let busRegisterDoc = Sch_BusRegister.findOne({_id: busRegisterId});
+        return Sch_BusRegister.direct.update({_id: busRegisterId}, {
+            $set: {dueDate: moment(busRegisterDoc.dueDate).add(1, "month").toDate()},
             $inc: {
-                paid: numeral(data.paid).value(),
-                discount: numeral(data.discount).value(),
-                waived: numeral(data.waived || 0).value(),
                 busPaymentNumber: 1
             }
         }, true);
+
     },
 
     sch_getBusPaymentNoByRoleAndDate(rolesAreas, date) {
@@ -191,10 +157,14 @@ Meteor.methods({
         let busPaymentNo = data && data.busPaymentNo.length > 9 ? parseInt((data && data.busPaymentNo || "0000000000000").substr(9, 13)) + 1 : parseInt(data && data.busPaymentNo || "0") + 1;
         return busPaymentNo + "";
     },
-    querySchBusPaymentScheduleByRegisterId(busRegisterId, receiveDate) {
+    querySchBusPaymentScheduleByRegisterId(busRegisterId, receiveDate, lDate) {
         let data = Sch_BusRegister.findOne({_id: busRegisterId});
         let list = [];
-        let lDate = data.dueDate;
+        if (lDate) {
+            data.dueDate = lDate;
+        } else {
+            lDate = data.dueDate;
+        }
         while (lDate.getTime() <= receiveDate.getTime()) {
             list.push({
                 amount: formatCurrency(data.price),

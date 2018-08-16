@@ -33,9 +33,21 @@ Sch_BusPayment.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    'schedule.$.dayOverDue': {
+        type: Number,
+        optional: true
+    },
+    'schedule.$.isPaid': {
+        type: Boolean,
+        optional: true
+    },
     busPaymentDate: {
         type: Date,
         label: 'Receive BusPayment Date'
+    },
+    dueDate: {
+        type: Date,
+        label: 'Due Date'
     },
     busPaymentDateName: {
         type: String,

@@ -27,20 +27,7 @@ Meteor.methods({
                 }
             }
             let schPayments = Sch_Payment.aggregate([
-                {
-                    $lookup: {
-                        from: "sch_student",
-                        localField: "studentId",
-                        foreignField: "_id",
-                        as: "studentDoc"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$studentDoc",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
+                
                 {
                     $match: selector
                 },
@@ -54,6 +41,20 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                },
+                {
+                    $lookup: {
+                        from: "sch_student",
+                        localField: "studentId",
+                        foreignField: "_id",
+                        as: "studentDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$studentDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
                 }
             ]).map((obj) => {
                 obj.totalAmount = formatCurrency(obj.totalAmount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);

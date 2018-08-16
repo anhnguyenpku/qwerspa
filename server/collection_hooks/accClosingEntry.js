@@ -251,6 +251,7 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
 
                 let selectorGetLastBalance = {};
                 let selector = {};
+                let selectorChartAccount = {};
                 //Parameter for Balance Last End Of Process
                 if (lastDate != undefined) {
                     selectorGetLastBalance.month = lastDate.month;
@@ -259,7 +260,7 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
                 selectorGetLastBalance.rolesArea = rolesArea;
                 //Parameter End Process
                 if (currMonth == "12") {
-                    selector['accountDoc.accountTypeId'] = {
+                    selectorChartAccount['accountDoc.accountTypeId'] = {
                         $gte: "01",
                         $lte: "49"
                     };
@@ -276,7 +277,7 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
                     }
                 }
                 Meteor.call('insertChartAccountBalance', selector, rolesArea,
-                    selectorGetLastBalance, lastDate, doc.closeDate, doc._id, function (err, result) {
+                    selectorGetLastBalance, lastDate, doc.closeDate, doc._id, selectorChartAccount, function (err, result) {
                         if (err) {
                             console.log(err.message);
                         }
@@ -288,6 +289,7 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
             let rolesArea = doc.rolesArea;
             let selectorGetLastBalance = {};
             let selector = {};
+            let selectorChartAccount = {};
 
             //Parameter for Balance Last End Of Process
             if (lastDate != undefined) {
@@ -298,7 +300,7 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
 
             //Parameter End Process
             if (currMonth == "12") {
-                selector['accountDoc.accountTypeId'] = {
+                selectorChartAccount['accountDoc.accountTypeId'] = {
                     $gte: "01",
                     $lte: "49"
                 };
@@ -316,7 +318,7 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
                 }
             }
             Meteor.call('insertChartAccountBalance', selector, rolesArea,
-                selectorGetLastBalance, lastDate, doc.closeDate, doc._id, function (err, result) {
+                selectorGetLastBalance, lastDate, doc.closeDate, doc._id, selectorChartAccount, function (err, result) {
                     if (err) {
                         console.log(err.message);
                     }

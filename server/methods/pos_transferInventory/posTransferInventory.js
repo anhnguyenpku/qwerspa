@@ -5,6 +5,7 @@ import {SpaceChar} from "../../../both/config.js/space"
 import {formatCurrency, getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import numeral from 'numeral';
+import {Pos_Vendor} from "../../../imports/collection/posVendor";
 
 Meteor.methods({
     queryTransferInventory({q, filter, options = {limit: 10, skip: 0}}) {
@@ -21,20 +22,47 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
+                    let locationList = Pos_Location.find({
+                            name: {
+                                $regex: reg,
+                                $options: 'mi'
+                            }
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
                     selector.$or = [{
                         transferInventoryDateName: {
                             $regex: reg,
                             $options: 'mi'
                         }
-                    }, {"locationToDoc.name": {$regex: reg, $options: 'mi'}}, {
-                        "locationFromDoc.name": {
-                            $regex: reg,
-                            $options: 'mi'
-                        }
-                    }];
+                    },
+                        {locationToId: {$in: locationList}},
+                        {locationFromId: {$in: locationList}}
+                    ]
+
                 }
             }
             let posTransferInventory = Pos_TransferInventory.aggregate([
+                {
+                    $match: selector
+                },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                },
                 {
                     $lookup: {
                         from: "pos_location",
@@ -61,20 +89,6 @@ Meteor.methods({
                         path: "$locationToDoc",
                         preserveNullAndEmptyArrays: true
                     }
-                },
-                {
-                    $match: selector
-                },
-                {
-                    $sort: {
-                        createdAt: -1
-                    }
-                },
-                {
-                    $limit: options.limit
-                },
-                {
-                    $skip: options.skip
                 }
             ]).map((obj) => {
                 obj.total = formatCurrency(obj.total, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);

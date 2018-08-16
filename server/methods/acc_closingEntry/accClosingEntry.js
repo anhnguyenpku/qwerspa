@@ -27,7 +27,7 @@ Meteor.methods({
                     }, {year: {$regex: reg, $options: 'mi'}}];
                 }
             }
-            let closingEntry = Acc_ClosingEntry.find(selector, {sort: {closeDate: -1}}).fetch();
+            let closingEntry = Acc_ClosingEntry.find(selector, {sort: {closeDate: -1}}, {skip: options.skip}, {limit: options.limit}).fetch();
             if (closingEntry.length > 0) {
                 data.content = closingEntry;
                 let closingEntryTotal = Acc_ClosingEntry.find(selector).count();
@@ -58,11 +58,12 @@ Meteor.methods({
         return Acc_ClosingEntry.remove({_id: id});
     },
 
-    insertChartAccountBalance: function (selector, rolesArea, selectorLastBalance, lastDate, dateSelect, closingEntryId) {
+    insertChartAccountBalance: function (selector, rolesArea, selectorLastBalance, lastDate, dateSelect, closingEntryId, selectorChartAccount) {
         let data = [];
         let dataRaw = [];
         let dataLast;
         let result = Acc_Journal.aggregate([
+            {$match: selector},
             {$unwind: "$transaction"},
 
             {
@@ -80,7 +81,7 @@ Meteor.methods({
                     preserveNullAndEmptyArrays: true
                 }
             },
-            {$match: selector},
+            {$match: selectorChartAccount},
             {
                 $group: {
                     _id: {

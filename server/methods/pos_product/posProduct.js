@@ -16,62 +16,85 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
-                    selector.$or = [{name: {$regex: reg, $options: 'mi'}}, {
-                        code: {
-                            $regex: reg,
-                            $options: 'mi'
-                        },
-                        productType: {
-                            $regex: reg,
-                            $options: 'mi'
-                        }
-                    }, {description: {$regex: reg, $options: 'mi'}}];
+                    selector.$or = [
+                        {name: {$regex: reg, $options: 'mi'}},
+                        {
+                            code: {
+                                $regex: reg,
+                                $options: 'mi'
+                            }
+                        }];
                 }
             }
             let posProducts = Pos_Product.aggregate([
-                {
-                    $match: selector
-                },
-                {
-                    $lookup: {
-                        from: "pos_category",
-                        localField: "categoryId",
-                        foreignField: "_id",
-                        as: "categoryDoc"
+                    {
+                        $match: selector
+                    },
+                    {
+                        $sort: {
+                            createdAt: -1
+                        }
+                    },
+                    {
+                        $limit: options.limit
                     }
-                },
-                {
-                    $unwind: {path: "$categoryDoc", preserveNullAndEmptyArrays: true}
-                },
-                {
-                    $sort: {
-                        createdAt: -1
+                    ,
+                    {
+                        $skip: options.skip
                     }
-                },
-                {
-                    $project: {
-                        _id: 1,
-                        name: 1,
-                        code: 1,
-                        level: 1,
-                        description: 1,
-                        productType: 1,
-                        rePrice: 1,
-                        whPrice: 1,
-                        qtyOnHand: 1,
-                        cost: 1,
-                        barcode: 1,
-                        isTaxable: 1,
-                        categoryName: {$concat: ["$categoryDoc.code", " : ", "$categoryDoc.name"]}
+                    ,
+                    {
+                        $lookup: {
+                            from: "pos_category",
+                            localField:
+                                "categoryId",
+                            foreignField:
+                                "_id",
+                            as:
+                                "categoryDoc"
+                        }
                     }
-                },
-                {
-                    $limit: options.limit
-                },
-                {
-                    $skip: options.skip
-                }
-            ]);
+                    ,
+                    {
+                        $unwind: {
+                            path: "$categoryDoc", preserveNullAndEmptyArrays:
+                                true
+                        }
+                    }
+                    ,
+                    {
+                        $project: {
+                            _id: 1,
+                            name:
+                                1,
+                            code:
+                                1,
+                            level:
+                                1,
+                            description:
+                                1,
+                            productType:
+                                1,
+                            rePrice:
+                                1,
+                            whPrice:
+                                1,
+                            qtyOnHand:
+                                1,
+                            cost:
+                                1,
+                            barcode:
+                                1,
+                            isTaxable:
+                                1,
+                            categoryName:
+                                {
+                                    $concat: ["$categoryDoc.code", " : ", "$categoryDoc.name"]
+                                }
+                        }
+                    }
+                ])
+            ;
             if (posProducts.length > 0) {
                 data.content = posProducts;
                 let posProductTotal = Pos_Product.find(selector).count();

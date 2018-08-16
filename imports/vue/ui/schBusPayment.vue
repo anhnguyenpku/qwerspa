@@ -78,19 +78,6 @@
                             :label="langConfig['note']">
                     </el-table-column>
                     <el-table-column
-                            prop="busPaymentId"
-                            :label="langConfig['status']"
-                            width="150"
-                            filter-placement="bottom-end">
-                        <template slot-scope="scope">
-                            <el-tag
-                                    :type="scope.row.busPaymentId != undefined ? 'success' : scope.row.saleOrderId != undefined ? 'warning' : 'primary'"
-                                    close-transition>{{scope.row.busPaymentId!=undefined ? "BusPayment" :
-                                scope.row.saleOrderId!=undefined ? "Sale Order" : "Receive BusPayment"}}
-                            </el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
                             :label="langConfig['action']"
                             width="120"
                     >
@@ -281,6 +268,17 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
+                            <el-form-item :label="langConfig['dueDate']" prop="dueDate">
+                                <el-date-picker
+                                        v-model="schBusPaymentForm.dueDate"
+                                        type="date"
+                                        style="width: 100%;"
+                                        placeholder="Pick a day"
+                                        :picker-options="options"
+                                        :disabled="disabledDate"
+                                >
+                                </el-date-picker>
+                            </el-form-item>
                             <el-form-item :label="langConfig['receiveDate']" prop="busPaymentDate">
                                 <el-date-picker
                                         v-model="schBusPaymentForm.busPaymentDate"
@@ -389,11 +387,11 @@
                     totalPaid: 0,
                     amount: 0,
                     busPaymentDate: moment().toDate(),
-                    dueDate: moment().add(1, "month").toDate(),
+                    dueDate: moment().toDate(),
 
                     note: "",
 
-                    totalNetAmount: 0,
+                    totalAmount: 0,
                     balanceUnPaid: 0,
                     address: "",
                     studentId: "",
@@ -530,7 +528,20 @@
                     Meteor.call("querySchBusPaymentScheduleByRegisterId", val, vm.schBusPaymentForm.busPaymentDate, (err, result) => {
                         vm.schBusPaymentData = [];
                         if (result) {
-                            console.log(result.list);
+                            vm.schBusPaymentData = result.list;
+                            vm.schBusPaymentForm.studentId = result.studentId;
+                            vm.schBusPaymentForm.dueDate = result.dueDate;
+                        }
+                        vm.getTotal();
+                    })
+                }
+            },
+            "schBusPaymentForm.dueDate"(val) {
+                let vm = this;
+                if (val && vm.schBusPaymentForm.busPaymentDate && vm.schBusPaymentForm.busRegisterId) {
+                    Meteor.call("querySchBusPaymentScheduleByRegisterId", vm.schBusPaymentForm.busRegisterId, vm.schBusPaymentForm.busPaymentDate, val, (err, result) => {
+                        vm.schBusPaymentData = [];
+                        if (result) {
                             vm.schBusPaymentData = result.list;
                             vm.schBusPaymentForm.studentId = result.studentId;
                         }
@@ -644,14 +655,13 @@
                     if (valid) {
                         let schBusPaymentDoc = {
                             totalPaid: vm.$_numeral(vm.schBusPaymentForm.totalPaid).value(),
-                            totalNetAmount: vm.$_numeral(vm.schBusPaymentForm.totalNetAmount).value(),
-                            totalDiscount: vm.$_numeral(vm.schBusPaymentForm.totalDiscount).value(),
+                            totalAmount: vm.$_numeral(vm.schBusPaymentForm.totalAmount).value(),
                             totalWaived: vm.$_numeral(vm.schBusPaymentForm.totalWaived).value(),
 
-                            balanceUnPaid: vm.$_numeral(vm.schBusPaymentForm.totalNetAmount).value() - vm.$_numeral(vm.schBusPaymentForm.totalPaid).value() - vm.$_numeral(vm.schBusPaymentForm.totalWaived).value(),
-                            totalAmount: vm.$_numeral(vm.schBusPaymentForm.totalNetAmount).value() + vm.$_numeral(vm.schBusPaymentForm.totalDiscount).value(),
+                            balanceUnPaid: vm.$_numeral(vm.schBusPaymentForm.totalAmount).value() - vm.$_numeral(vm.schBusPaymentForm.totalPaid).value() - vm.$_numeral(vm.schBusPaymentForm.totalWaived).value(),
 
                             busPaymentDate: moment(vm.schBusPaymentForm.busPaymentDate).toDate(),
+                            dueDate: moment(vm.schBusPaymentForm.dueDate).toDate(),
                             busPaymentDateName: moment(vm.schBusPaymentForm.busPaymentDate).format("DD/MM/YYYY"),
                             note: vm.schBusPaymentForm.note,
                             busPaymentNo: vm.schBusPaymentForm.busPaymentNo,
@@ -659,20 +669,18 @@
 
                             rolesArea: Session.get('area'),
                             studentId: vm.schBusPaymentForm.studentId,
-                            classId: vm.schBusPaymentForm.classId,
+                            busRegisterId: vm.schBusPaymentForm.busRegisterId,
                         };
                         schBusPaymentDoc.schedule = vm.schBusPaymentData;
                         Meteor.call("insertSchBusPayment", schBusPaymentDoc, (err, result) => {
                             if (!err) {
-
-
                                 if (isCloseDialog) {
                                     this.dialogAddSchBusPayment = false;
                                 }
 
                                 vm.schBusPaymentData.forEach((obj) => {
                                     if (obj.isPaid === true) {
-                                        Meteor.call("updateBusPaymentScheduleByBusPayment", obj, schBusPaymentDoc.busPaymentDate, (err, re) => {
+                                        Meteor.call("updateBusRegisterByBusPayment", obj, schBusPaymentDoc.busPaymentDate, vm.schBusPaymentForm.busRegisterId, (err, re) => {
                                             if (err) {
                                                 console.log(err.message);
                                             }

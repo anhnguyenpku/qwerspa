@@ -29,29 +29,31 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
+
+                    let customerList = Pos_Customer.find({
+                            name: {
+                                $regex: reg,
+                                $options: 'mi'
+                            }
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
                     selector.$or = [{saleOrderNo: {$regex: reg, $options: 'mi'}}, {
                         code: {
                             $regex: reg,
                             $options: 'mi'
                         }
-                    }, {"customerDoc.name": {$regex: reg, $options: 'mi'}}];
+                    }, {customerId: {$in: customerList}}];
                 }
             }
             let posSaleOrders = Pos_SaleOrder.aggregate([
-                {
-                    $lookup: {
-                        from: "pos_customer",
-                        localField: "customerId",
-                        foreignField: "_id",
-                        as: "customerDoc"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$customerDoc",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
+
                 {
                     $match: selector
                 },
@@ -65,6 +67,20 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                },
+                {
+                    $lookup: {
+                        from: "pos_customer",
+                        localField: "customerId",
+                        foreignField: "_id",
+                        as: "customerDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$customerDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
                 }
             ]).map((obj) => {
                 obj.total = formatCurrency(obj.total, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
@@ -85,7 +101,7 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = formatCurrency(obj.amount);
             return obj;
-        })
+        });
 
         return data;
     },
@@ -100,7 +116,7 @@ Meteor.methods({
             obj.price = formatCurrency(obj.price, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
             obj.amount = formatCurrency(obj.amount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
             return obj;
-        })
+        });
         return data;
     },
     insertPosSaleOrder(data) {

@@ -28,7 +28,12 @@ Meteor.methods({
                 {
                     $match: selector
                 },
-
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                },
                 {
                     $lookup: {
                         from: "acc_accountType",
@@ -66,12 +71,6 @@ Meteor.methods({
                         mapToAccount: 1,
                         subAccountOfName: {$concat: ["$subAccountOfDoc.code", " : ", "$subAccountOfDoc.name"]}
                     }
-                },
-                {
-                    $limit: options.limit
-                },
-                {
-                    $skip: options.skip
                 }
             ]);
             if (chartAccounts.length > 0) {

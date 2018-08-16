@@ -5,6 +5,7 @@ import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 
 import numeral from "numeral";
+import {Pos_Customer} from "../../../imports/collection/posCustomer";
 
 Meteor.methods({
     queryPosReceivePayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -22,29 +23,29 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
+                    let customerList = Pos_Customer.find({
+                            name: {
+                                $regex: reg,
+                                $options: 'mi'
+                            }
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
                     selector.$or = [{invoiceNo: {$regex: reg, $options: 'mi'}}, {
                         code: {
                             $regex: reg,
                             $options: 'mi'
                         }
-                    }, {"customerDoc.name": {$regex: reg, $options: 'mi'}}];
+                    }, {customerId: {$in: customerList}}];
                 }
             }
             let posReceivePayments = Pos_ReceivePayment.aggregate([
-                {
-                    $lookup: {
-                        from: "pos_customer",
-                        localField: "customerId",
-                        foreignField: "_id",
-                        as: "customerDoc"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$customerDoc",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
                 {
                     $match: selector
                 },
@@ -58,6 +59,20 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                }
+                , {
+                    $lookup: {
+                        from: "pos_customer",
+                        localField: "customerId",
+                        foreignField: "_id",
+                        as: "customerDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$customerDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
                 }
             ]).map((obj) => {
                 obj.totalAmount = formatCurrency(obj.totalAmount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);

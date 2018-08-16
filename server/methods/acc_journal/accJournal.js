@@ -69,7 +69,7 @@ Meteor.methods({
             obj.cr = formatCurrency(obj.cr, data.currencyId)
             obj.drcr = formatCurrency(obj.drcr, data.currencyId)
             return obj;
-        })
+        });
         return data;
     },
     insertJournal(data) {
@@ -83,7 +83,7 @@ Meteor.methods({
         }
         data.transaction.map(function (obj) {
             return obj.drcr = parseFloat(obj.dr) - parseFloat(obj.cr);
-        })
+        });
 
         return Acc_Journal.insert(data);
     },
@@ -118,7 +118,7 @@ Meteor.methods({
                     cr: 0,
                     drcr: parseFloat(obj.amount)
                 })
-            })
+            });
 
 
             newTransaction.push({
@@ -136,7 +136,7 @@ Meteor.methods({
         data.voucherId = data.rolesArea + moment(data.journalDate).format("YYYY") + pad(data.voucherId, 6);
         data.transaction.map(function (obj) {
             return obj.drcr = parseFloat(obj.dr) - parseFloat(obj.cr);
-        })
+        });
 
         return Acc_Journal.update({_id: id},
             {

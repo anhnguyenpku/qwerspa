@@ -24,19 +24,9 @@ Meteor.methods({
                 }
             }
             let posCustomers = Pos_Customer.aggregate([
+
                 {
                     $match: selector
-                },
-                {
-                    $lookup: {
-                        from: "pos_term",
-                        localField: "termId",
-                        foreignField: "_id",
-                        as: "termDoc"
-                    }
-                },
-                {
-                    $unwind: {path: "$termDoc", preserveNullAndEmptyArrays: true}
                 },
                 {
                     $sort: {
@@ -48,6 +38,17 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                },
+                {
+                    $lookup: {
+                        from: "pos_term",
+                        localField: "termId",
+                        foreignField: "_id",
+                        as: "termDoc"
+                    }
+                },
+                {
+                    $unwind: {path: "$termDoc", preserveNullAndEmptyArrays: true}
                 }
             ]);
             if (posCustomers.length > 0) {

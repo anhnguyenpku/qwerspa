@@ -115,7 +115,6 @@ Meteor.methods({
     },
     queryItemOption(selector) {
         let list = [];
-
         Pos_Product.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
         });

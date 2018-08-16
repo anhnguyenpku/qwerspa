@@ -45,6 +45,20 @@ Meteor.methods({
             }
             let schBusRegisters = Sch_BusRegister.aggregate([
                 {
+                    $match: selector
+                },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                },
+                {
                     $lookup: {
                         from: "sch_student",
                         localField: "studentId",
@@ -89,20 +103,6 @@ Meteor.methods({
                         path: "$busStopDoc",
                         preserveNullAndEmptyArrays: true
                     }
-                },
-                {
-                    $match: selector
-                },
-                {
-                    $sort: {
-                        createdAt: -1
-                    }
-                },
-                {
-                    $limit: options.limit
-                },
-                {
-                    $skip: options.skip
                 }
             ]);
             if (schBusRegisters.length > 0) {

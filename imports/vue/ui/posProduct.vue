@@ -153,7 +153,7 @@
         <el-dialog
                 :title="langConfig['add']"
                 :visible.sync="dialogAddPosProduct"
-                width="40%">
+                width="50%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="posProductForm" :rules="rules" :ref="refForm" label-width="120px"
                      class="posProductForm">
@@ -274,7 +274,7 @@
         <el-dialog
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdatePosProduct"
-                width="40%">
+                width="50%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="posProductForm" :rules="rules" :ref="refForm" label-width="120px"
                      class="posProductForm">
@@ -469,7 +469,7 @@
             },
             "posProductForm.categoryId"(val) {
                 let vm = this;
-                if (this.refForm == "posProductFormAdd") {
+                if (this.refForm === "posProductFormAdd") {
                     Meteor.call("getProductCodeByCateogry", val, (err, result) => {
                         if (!err) {
                             vm.posProductForm.code = result;
@@ -548,7 +548,9 @@
                                 vm.dialogAddPosProduct = false;
                                 vm.queryData();
                                 vm.queryCategoryDataOption();
-                                vm.$refs["posProductForm"].resetFields();
+                                if (vm.$refs["posProductFormAdd"]) {
+                                    vm.$refs["posProductFormAdd"].resetFields();
+                                }
                             } else {
                                 vm.$message({
                                     duration: 1000,
@@ -595,7 +597,9 @@
                                 vm.dialogUpdatePosProduct = false;
                                 vm.queryData();
                                 vm.queryCategoryDataOption();
-                                vm.$refs["posProductForm"].resetFields();
+                                if (vm.$refs["posProductFormUpdate"]) {
+                                    vm.$refs["posProductFormUpdate"].resetFields();
+                                }
                             } else {
                                 vm.$message({
                                     duration: 1000,

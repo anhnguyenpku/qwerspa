@@ -4,6 +4,7 @@ import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetu
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 import numeral from "numeral";
+import {Pos_Vendor} from "../../../imports/collection/posVendor";
 
 Meteor.methods({
     queryPayBill({q, filter, options = {limit: 10, skip: 0}}) {
@@ -18,32 +19,34 @@ Meteor.methods({
             let selector = {};
             if (!!q) {
                 let reg = new RegExp(q);
+
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
+                    let vendorList = Pos_Vendor.find({
+                            name: {
+                                $regex: reg,
+                                $options: 'mi'
+                            }
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
                     selector.$or = [{billNo: {$regex: reg, $options: 'mi'}}, {
                         code: {
                             $regex: reg,
                             $options: 'mi'
                         }
-                    }, {"vendorDoc.name": {$regex: reg, $options: 'mi'}}];
+                    }, {vendorId: {$in: vendorList}}];
                 }
             }
             let posPayBills = Pos_PayBill.aggregate([
-                {
-                    $lookup: {
-                        from: "pos_vendor",
-                        localField: "vendorId",
-                        foreignField: "_id",
-                        as: "vendorDoc"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$vendorDoc",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
+
                 {
                     $match: selector
                 },
@@ -57,6 +60,20 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                }
+                , {
+                    $lookup: {
+                        from: "pos_vendor",
+                        localField: "vendorId",
+                        foreignField: "_id",
+                        as: "vendorDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$vendorDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
                 }
             ]).map((obj) => {
                 obj.totalAmount = formatCurrency(obj.totalAmount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);

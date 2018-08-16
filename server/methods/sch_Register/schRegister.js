@@ -36,6 +36,20 @@ Meteor.methods({
             }
             let shcRegisters = Sch_Register.aggregate([
                 {
+                    $match: selector
+                },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                },
+                {
                     $lookup: {
                         from: "sch_student",
                         localField: "studentId",
@@ -78,20 +92,6 @@ Meteor.methods({
                         path: "$levelDoc",
                         preserveNullAndEmptyArrays: true
                     }
-                },
-                {
-                    $match: selector
-                },
-                {
-                    $sort: {
-                        createdAt: -1
-                    }
-                },
-                {
-                    $limit: options.limit
-                },
-                {
-                    $skip: options.skip
                 }
             ]);
             if (shcRegisters.length > 0) {

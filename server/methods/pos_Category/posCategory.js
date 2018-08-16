@@ -24,9 +24,22 @@ Meteor.methods({
                 }
             }
             let posCategorys = Pos_Category.aggregate([
+
                 {
                     $match: selector
                 },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                },
+
                 {
                     $lookup: {
                         from: "pos_category",
@@ -38,11 +51,7 @@ Meteor.methods({
                 {
                     $unwind: {path: "$subCategoryOfDoc", preserveNullAndEmptyArrays: true}
                 },
-                {
-                    $sort: {
-                        createdAt: -1
-                    }
-                },
+
                 {
                     $project: {
                         _id: 1,
@@ -53,13 +62,6 @@ Meteor.methods({
                         description: 1,
                         subCategoryOfName: {$concat: ["$subCategoryOfDoc.code", " : ", "$subCategoryOfDoc.name"]}
                     }
-                },
-
-                {
-                    $limit: options.limit
-                },
-                {
-                    $skip: options.skip
                 }
             ]);
             if (posCategorys.length > 0) {

@@ -18,20 +18,53 @@ Meteor.methods({
             let companyDoc = WB_waterBillingSetup.findOne({});
 
             let selector = {};
+
+
             if (!!q) {
                 let reg = new RegExp(q);
+
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
+                    let vendorList = Pos_Vendor.find({
+                            name: {
+                                $regex: reg,
+                                $options: 'mi'
+                            }
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
                     selector.$or = [{name: {$regex: reg, $options: 'mi'}}, {
                         code: {
                             $regex: reg,
                             $options: 'mi'
                         }
-                    }, {"vendorDoc.name": {$regex: reg, $options: 'mi'}}];
+                    }, {vendorId: {$in: vendorList}}];
                 }
             }
             let posBills = Pos_Bill.aggregate([
+                {
+                    $match: selector
+                }
+                ,
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+
+                {
+                    $limit: options.limit
+                },
+                {
+                    $skip: options.skip
+                },
                 {
                     $lookup: {
                         from: "pos_vendor",
@@ -45,20 +78,6 @@ Meteor.methods({
                         path: "$vendorDoc",
                         preserveNullAndEmptyArrays: true
                     }
-                },
-                {
-                    $match: selector
-                },
-                {
-                    $sort: {
-                        createdAt: -1
-                    }
-                },
-                {
-                    $limit: options.limit
-                },
-                {
-                    $skip: options.skip
                 }
             ]).map((obj) => {
                 obj.total = formatCurrency(obj.total, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
@@ -79,7 +98,7 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = formatCurrency(obj.amount);
             return obj;
-        })
+        });
 
         return data;
     },
@@ -96,7 +115,7 @@ Meteor.methods({
             obj.amount = formatCurrency(obj.amount, companyDoc.baseCurrency) + getCurrencySymbolById(companyDoc.baseCurrency);
 
             return obj;
-        })
+        });
         return data;
     },
     insertPosBill(data) {
@@ -105,7 +124,7 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             return obj;
-        })
+        });
         let id = Pos_Bill.insert(data);
         Pos_Vendor.direct.update({_id: data.vendorId}, {$inc: {billNumber: 1}});
         if (data.paid > 0) {
@@ -164,7 +183,7 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             return obj;
-        })
+        });
         let isUpdated = Pos_Bill.update({_id: _id},
             {
                 $set: data
