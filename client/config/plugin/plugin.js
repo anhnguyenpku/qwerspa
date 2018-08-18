@@ -8,9 +8,9 @@ import numeral from 'numeral';
 import math from 'mathjs';
 import GoogleMapsLoader from 'google-maps';
 import Cleave from 'cleave.js';
+import Croppa from 'vue-croppa';
 import bodymovin from 'bodymovin';
 import $ from 'jQuery';
-
 GoogleMapsLoader.KEY = 'AIzaSyDOld0lTG5Ku15U-p-kyhohZXmZra2rG1k';
 
 
@@ -21,6 +21,7 @@ Vue.prototype.$_GoogleMapsLoader = GoogleMapsLoader;
 Vue.prototype.$_bodymovin = bodymovin;
 Vue.prototype.$jQuery = $;
 
+Vue.use(Croppa);
 Vue.use(VueMask);
 Vue.use(CollapseTransition);
 Vue.use(ElementUI, {locale});

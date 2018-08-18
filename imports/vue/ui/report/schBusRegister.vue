@@ -1,26 +1,25 @@
 <!--suppress ALL -->
 <template>
-    <div class="profitLost-report">
+    <div class="schBusRegister-report">
         <a4>
             <div slot="header" class="no-print">
                 <el-row type="flex" class="row-bg" justify="center">
                     <el-col :span="24">
                         <el-card class="box-card">
                             <div slot="header" class="clearfix">
-                                <span>Profit Lost Report Filter <i class="header-icon el-icon-info"></i>
-                            Shows money you earned (income) and money you spent (expenses) so you can see how profitable you are. Also called an income statement.
-                        </span>
+                                <span> {{langConfig['titleFilter']}} <i class="header-icon el-icon-info"></i></span>
                                 <el-button :loading="loading" @click="handleRun" type="primary" icon="caret-right"
                                            style="float: right"
-                                           size="small">RUN REPORT
+                                           size="small">{{langConfig['run']}}
                                 </el-button>
                             </div>
                             <el-form :label-position="labelPosition">
                                 <el-row type="flex" class="row-bg" justify="center">
                                     <el-col>
-                                        <el-form-item label="Branch">
+                                        <el-form-item :label="langConfig['branch']">
                                             <el-select filterable v-model="params.branch"
-                                                       placeholder="All" clearable style="width: 95%">
+                                                       :placeholder="langConfig['all']" clearable
+                                                       style="width: 95%">
                                                 <el-option
                                                         v-for="item in branchOptions"
                                                         :label="item.label"
@@ -28,20 +27,11 @@
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
-                                        <el-form-item label="Currency">
-                                            <el-select filterable v-model="params.currency" placeholder="All"
-                                                       clearable style="width: 95%">
-                                                <el-option
-                                                        v-for="item in currencyOptions"
-                                                        :label="item.label"
-                                                        :value="item.value" :key="item._id">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
                                     </el-col>
                                     <el-col>
-                                        <el-form-item label="Area">
-                                            <el-select filterable v-model="params.area" clearable placeholder="All"
+                                        <el-form-item :label="langConfig['area']">
+                                            <el-select filterable v-model="params.area" clearable
+                                                       :placeholder="langConfig['all']"
                                                        style="width: 95%">
                                                 <el-option
                                                         v-for="item in areaOptions"
@@ -50,28 +40,53 @@
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
-                                        <el-form-item label="Date">
+
+                                    </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['dateRange']">
                                             <el-date-picker
                                                     align="right" style="width: 95%"
                                                     v-model="params.date"
                                                     type="daterange"
                                                     :picker-options="pickerDateOptions"
-                                                    placeholder="Select Date range"
+                                                    :placeholder="langConfig['pickDateRange']"
                                             >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
+
+                                </el-row>
+                                <el-row type="flex" class="row-bg" justify="center">
                                     <el-col>
-                                        <el-form-item label="Exchange">
-                                            <el-select filterable v-model="params.exchangeId"
-                                                       placeholder="Select One" style="width: 95%">
+                                        <el-form-item :label="langConfig['bus']">
+                                            <el-select filterable v-model="params.busId" clearable
+                                                       :placeholder="langConfig['all']"
+                                                       style="width: 95%">
                                                 <el-option
-                                                        v-for="item in exchangeOptions"
+                                                        v-for="item in busOptions"
                                                         :label="item.label"
                                                         :value="item.value" :key="item._id">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
+
+                                    </el-col>
+                                    <el-col>
+                                        <el-form-item :label="langConfig['busStop']">
+                                            <el-select filterable v-model="params.busStopId" clearable
+                                                       :placeholder="langConfig['all']"
+                                                       style="width: 95%">
+                                                <el-option
+                                                        v-for="item in busStopOptions"
+                                                        :label="item.label"
+                                                        :value="item.value" :key="item._id">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item>
+
+                                    </el-col>
+                                    <el-col>
+
                                     </el-col>
                                 </el-row>
                             </el-form>
@@ -84,50 +99,66 @@
             <span slot="content" style="margin: 0px !important;">
                 <table class="table table-report-block-summary table-bordered">
                       <caption>
-                          <div class="row">
-                               <div class="col-md-10">
-                                     <img style="width: 100px;height: 100px;float: left;" src="/mih.png"
-                                          alt="">
-                                        <span style="float: left; font-family: 'Khmer OS Muol light','Khmer OS Muol'; font-size: 15px;margin-left: 20px;"><br>
-                                            <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p></span>
-                                 </div>
-                                 <div class="col-md-2; pull-right"
-                                      style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
-                                     <span style="text-align: center">
-                                         ព្រះរាជាណាចក្រកម្ពុជា <br> ជាតិ សាសនា ព្រះមហាក្សត្រ
-                                          <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
-                                     </span>
 
-                                </div>
+                          <div class="row">
+                                <div class="col-md-12" style="text-align: center !important;">
+                                    <img style="width: auto;height: 100px; float: left;padding-top: 20px !important;"
+                                         src="/mih.png"
+                                         alt=""
+                                         :onLoad="onLoadHandler()">
+                                        <span class="blueOnPrint"
+                                              style="font-family:Khmer os muol; font-size: 15px  !important;padding-top: 15px !important;float: left;text-align: left !important;">
+
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ក្រសួងការងារ និង បណ្តុបណ្តាលវិជ្ជាជីវៈ</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Ministry of Labor and Vocational Training</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">{{waterBillingSetup.khName}}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    {{waterBillingSetup.enName}}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    លេខ៖ .............................{{waterBillingSetup.khShortName}}</p>
+
+                                            </span>
+
+                              <span style="text-align: center;font-size: 15px; border: 0px !important; float: right;"
+                              >
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ព្រះរាជាណាចក្រកម្ពុជា</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Kingdom Of Cambodia</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ជាតិ សាសនា ព្រះមហាក្សត្រ</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important; margin-bottom: 0px !important;"
+                                     class="blueOnPrint">Nation Religion King</p>
+                                  <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
+
+                              </span>
+                              </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                              <div class="col-md-12  balckOnPrint" style="text-align: center;">
+                                 {{langConfig['title']}}
+                                  <br>
+                                  <p style="font-family:tacteing ">rs</p>
+                              </div>
                           </div>
                           <div class="row">
-                              <div class="col-md-3">
-                                  លេខ..........រ.ទ
-                              </div>
-                              <div class="col-md-6"
-                                   style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px; border: 0px !important;">
-                                  <p>Profit Lost Report</p>
-                              </div>
-                              <div class="col-md-3">
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  Date: {{dateHeader}}
-                              </div>
                               <div class="col-md-6;" style="float:right">
-                                  Currency: {{currencyHeader}}
+                                  {{langConfig['currency']}}: {{currencyHeader}}
                               </div>
+                              <div class="col-md-6">
+                                  {{langConfig['date']}}: {{dateHeader}}
+                              </div>
+
                           </div>
                       </caption>
 
                 <thead style="margin-top: 5px">
                     <tr>
-                        <th></th>
-                        <th>Total</th>
+                        <th>{{langConfig['no']}}</th>
+                        <th>{{langConfig['student']}}</th>
+                        <th>{{langConfig['busRegisterDate']}}</th>
+                        <th>{{langConfig['bus']}}</th>
+                        <th>{{langConfig['busStop']}}</th>
+                        <th>{{langConfig['price']}}</th>
                     </tr>
                 </thead>
-                <tbody style="margin-bottom: 5px;" v-html="profitLostHtml">
+                <tbody style="margin-bottom: 5px;" v-html="busRegisterHtml">
 
                 </tbody>
 
@@ -135,11 +166,14 @@
             </table>
                  <div class="row" style="width: 100% !important;">
                     <div style="width: 50%;float: left !important;text-align: center !important;">
-                        បានឃើញ និង ពិនិត្យត្រឹមត្រូវ<br>.......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br><span
-                            style="font-family: 'Khmer OS Muol'">ប្រធាន</span>
+                        បានឃើញ និង ពិនិត្យត្រឹមត្រូវ<br><br>
+                        ថ្ងៃ ........................    ខែ  ........................ឆ្នាំ .................................<br><br>
+                        .......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br><span
+                            style="font-family: 'Khmer OS Muol'">នាយក</span>
                     </div>
 
                     <div style="width: 50%;float: right !important;text-align: center !important;">
+                          ថ្ងៃ ........................    ខែ  ........................ឆ្នាំ .................................<br><br>
                         .......................... ថ្ងៃទី  ............ ខែ   ....................  ឆ្នាំ  ...................<br><br><b>រៀបចំដោយ</b><br><br>
                     </div>
 
@@ -152,6 +186,7 @@
 <script>
     import PageA4 from '/imports/vue/ui/report/page/PageA4.vue';
     import {GenerateFile} from '/imports/api/mixins/file-saver-fn.js';
+    import compoLangReport from '../../../../both/i18n/lang/elem-label-sch-report';
 
     export default {
         mixins: [GenerateFile],
@@ -160,25 +195,20 @@
                 params: {
                     branch: '',
                     area: '',
-                    currency: '',
-                    checkedAccountType: [],
-                    account: "",
                     date: null,
-                    exchangeId: ""
+                    busId: "",
+                    busStopId: ""
+
                 },
                 rolesArea: '',
                 activeName: '1',
-                profitLostHtml: "",
+                busRegisterHtml: "",
                 labelPosition: 'top',
                 branchOptions: [],
                 areaOptions: [],
-                exchangeOptions: [],
-                currencyOptions: [
-                    {label: "KHR", value: "KHR"},
-                    {label: "USD", value: "USD"},
-                    {label: "THB", value: "THB"},
-                ],
-                accountOptions: [],
+                busOptions: [],
+                busStopOptions: [],
+
 
                 waterBillingSetup: {
                     khName: '',
@@ -189,8 +219,6 @@
                 exportLoading: false,
 
                 checkAll: false,
-                accountTypeOptions: [],
-                accountTypes: [],
                 isIndeterminate: true,
                 dateHeader: "",
                 currencyHeader: "",
@@ -233,20 +261,31 @@
                         }
                     }]
                 },
+                groupByOptions: [
+                    {label: "None", value: "None"},
+                    {label: "Transaction Type", value: "Transaction Type"},
+                    {label: "Customer", value: "Customer"},
+                    {label: "Item", value: "Item"},
+                    {label: "Day", value: "Day"},
+                    {label: "Week", value: "Week"},
+                    {label: "Month", value: "Month"},
+                    {label: "Quarter", value: "Quarter"},
+                    {label: "Year", value: "Year"},
+                ]
             };
         },
         meteor: {
             rolesArea() {
                 return Session.get('area');
+            },
+            langSessionReport() {
+                return Session.get('lang') || "en";
             }
         },
         watch: {
 
             "params.branch"(val) {
                 this.fetchArea(val);
-            },
-            "params.checkedAccountType"(val) {
-                this.fetchAccount(val);
             }
         },
         created() {
@@ -255,36 +294,12 @@
                     this.waterBillingSetup = result;
                 }
             })
-            this.fetchAccountType();
-            this.fetchExchange();
             this.fetchBranch();
+            this.fetchBus();
+            this.fetchBusStop();
         },
         methods: {
 
-            fetchAccountType() {
-                Meteor.call('queryAccountTypeOptionReport', (err, result) => {
-                    if (result) {
-                        this.accountTypeOptions = result.listWithId;
-                        this.accountTypes = result.list;
-                    }
-                });
-            },
-            fetchExchange() {
-                Meteor.call('queryExchangeOptionReport', (err, result) => {
-                    if (result) {
-                        this.exchangeOptions = result;
-                    }
-                });
-            },
-            fetchAccount(accountTypeList) {
-                let selector = {};
-                selector.accountTypeId = {$in: accountTypeList}
-                Meteor.call('queryChartAccountOptionReport', selector, (err, result) => {
-                    if (result) {
-                        this.accountOptions = result;
-                    }
-                });
-            },
             fetchBranch() {
                 Meteor.call("queryRoleBranchOptionReport", (err, result) => {
                     if (result) {
@@ -299,6 +314,24 @@
                     }
                 })
             },
+            fetchBus() {
+                let selector = {};
+                selector.rolesArea = Session.get("area");
+                Meteor.call("queryBusOption", selector, (err, result) => {
+                    if (result) {
+                        this.busOptions = result;
+                    }
+                })
+            },
+            fetchBusStop() {
+                let selector = {};
+                selector.rolesArea = Session.get("area");
+                Meteor.call("queryBusStopOption", selector, (err, result) => {
+                    if (result) {
+                        this.busStopOptions = result;
+                    }
+                })
+            },
             handleRun() {
                 this.loading = true;
 
@@ -307,36 +340,28 @@
                     this.loading = false;
                     return false;
                 }
-                if (this.params.exchangeId == "" || this.params.exchangeId == undefined) {
-                    alertify.error("Exchange can't not empty!!");
-                    this.loading = false;
-                    return false;
-                }
-
-                Meteor.call('profitLostReport', this.params, (err, result) => {
+                Meteor.call('schBusRegisterReport', this.params, this.langConfig, (err, result) => {
                     if (result) {
-                        this.profitLostHtml = result.profitLostHTML;
+                        this.busRegisterHtml = result.busRegisterHTML;
                         this.dateHeader = result.dateHeader;
                         this.currencyHeader = result.currencyHeader;
                     }
                     this.loading = false;
                 });
             },
-            handleCheckAllChange() {
-                this.params.checkedAccountType = this.checkAll ? this.accountTypeOptions : [];
-                this.isIndeterminate = false;
-            },
-            handleCheckedAccountTypeChange(value) {
-                let checkedCount = value.length;
-                this.checkAll = checkedCount === this.accountTypes.length;
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.accountTypes.length;
-            },
+            onLoadHandler: function () {
+                this.onLoad = true;
+            }
 
 
         },
         computed: {
             dataExist() {
-                return this.journalsData.length > 0;
+                // return this.posSaleData.length > 0;
+            },
+            langConfig() {
+                let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['busRegister'];
+                return data;
             }
         },
         components: {

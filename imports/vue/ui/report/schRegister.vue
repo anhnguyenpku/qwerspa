@@ -185,6 +185,7 @@
                         <th>{{langConfig['promotion']}}</th>
                         <!--<th>{{langConfig['longitude']}}</th>
                         <th>{{langConfig['width']}}</th>-->
+                        <th>{{langConfig['note']}}</th>
                         <th>{{langConfig['price']}}</th>
                     </tr>
                 </thead>

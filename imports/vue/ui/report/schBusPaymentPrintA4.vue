@@ -1,9 +1,9 @@
 <!--suppress ALL -->
 <template>
-    <div class="posInvoicePrintA4-report">
+    <div class="schBusPaymentPrintA4-report">
         <a4>
             <span slot="content" style="margin: 0px !important;">
-                <div class="printInvoice">
+                <div class="printPayment">
                 <table class="table table-bordered">
                       <caption style="padding-top: 0px !important;">
                           <div class="row">
@@ -19,36 +19,34 @@
 
                               <span style="text-align: center;font-size: 15px; border: 0px !important; float: right">
                                   <p style="font-family: 'Khmer OS Muol' !important;">វិក័យបត្រ</p>
-                                  Invoice<p class="invoiceNo">{{invoiceDoc && invoiceDoc.invoiceNo || ""}}</p>
+                                  BusPayment<p class="paymentNo">{{busPaymentDoc && busPaymentDoc.busPaymentNo || ""}}</p>
                               </span>
                               </div>
                           </div>
                           <br>
                           <div style="width: 100%; float: right">
                               <div style="width: 70% !important; float: left">
-                                  {{langConfig['customer']}} : {{invoiceDoc && invoiceDoc.customerDoc && invoiceDoc.customerDoc.name || ""}}
+                                  {{langConfig['student']}} : {{busPaymentDoc && busPaymentDoc.studentDoc && busPaymentDoc.studentDoc.personal.name || ""}}
                               </div>
                               <div style="width: 30% !important;float: right">
-                                  {{langConfig['date']}} : {{invoiceDoc && invoiceDoc.invoiceDateName || ""}}
+                                  {{langConfig['date']}} : {{busPaymentDoc && busPaymentDoc.busPaymentDateName || ""}}
                               </div>
                           </div>
                           <div style="width: 100%">
-                              <div style="width: 70% !important;float: left">
-                                  {{langConfig['address']}} : {{invoiceDoc && invoiceDoc.customerDoc && invoiceDoc.customerDoc.address || ""}}
+                              <div style="width: 100% !important;float: left">
+                                  {{langConfig['address']}} : {{busPaymentDoc && busPaymentDoc.studentDoc && busPaymentDoc.studentDoc.personal.villageCurrent || ""}}  {{busPaymentDoc && busPaymentDoc.studentDoc && busPaymentDoc.studentDoc.personal.communeCurrent || ""}}  {{busPaymentDoc && busPaymentDoc.studentDoc && busPaymentDoc.studentDoc.personal.districtCurrent || ""}}  {{busPaymentDoc && busPaymentDoc.studentDoc && busPaymentDoc.studentDoc.personal.provinceCurrent || ""}}
                               </div>
                           </div>
                       </caption>
 
                 <thead style="margin-top: 5px">
                     <tr>
-                        <td>{{langConfig['no']}}</td>
-                        <td>{{langConfig['productName']}}</td>
-                        <td>{{langConfig['qty']}}</td>
+                        <td>{{langConfig['dueDate']}}</td>
+                        <td>{{langConfig['description']}}</td>
                         <td>{{langConfig['price']}}</td>
-                        <td>{{langConfig['total']}}</td>
                     </tr>
                 </thead>
-                <tbody style="margin-bottom: 5px;" v-html="printInvoiceA4Html">
+                <tbody style="margin-bottom: 5px;" v-html="printBusPaymentA4Html">
 
                 </tbody>
 
@@ -63,7 +61,7 @@
 <script>
     import PageA4 from '/imports/vue/ui/report/page/PageA4.vue';
     import {GenerateFile} from '/imports/api/mixins/file-saver-fn.js';
-    import compoLangReport from '../../../../both/i18n/lang/elem-label-report';
+    import compoLangReport from '../../../../both/i18n/lang/elem-label-sch-report';
 
     export default {
         mixins: [GenerateFile],
@@ -76,8 +74,8 @@
                 },
                 rolesArea: '',
                 activeName: '1',
-                invoiceDoc: {},
-                printInvoiceA4Html: "",
+                busPaymentDoc: {},
+                printBusPaymentA4Html: "",
                 labelPosition: 'top',
                 waterBillingSetup: {
                     khName: '',
@@ -109,15 +107,16 @@
                     this.waterBillingSetup = result;
                 }
             })
-            this.handleRun(FlowRouter.query.get('inv'));
+            this.handleRun(FlowRouter.query.get('pmt'));
         },
         methods: {
-            handleRun(invoiceId) {
+            handleRun(busPaymentId) {
+                console.log("In Inovice");
                 this.loading = true;
-                Meteor.call('posInvoicePrintA4Report', invoiceId, this.langConfig, (err, result) => {
+                Meteor.call('schBusPaymentPrintA4Report', busPaymentId, this.langConfig, (err, result) => {
                     if (result) {
-                        this.printInvoiceA4Html = result.printInvoiceA4Html;
-                        this.invoiceDoc = result.invoiceDoc;
+                        this.printBusPaymentA4Html = result.printBusPaymentA4Html;
+                        this.busPaymentDoc = result.busPaymentDoc;
                         this.loading = false;
                     } else {
                         this.loading = false;
@@ -133,11 +132,11 @@
             vm.$nextTick(function () {
                 // Code that will run only after the
                 // entire view has been rendered
-                if (vm.printInvoiceA4Html != "" && vm.onLoad == true) {
+                if (vm.printBusPaymentA4Html != "" && vm.onLoad == true) {
                     setTimeout(function () {
                         window.print();
-                        FlowRouter.go('/pos-sale/posInvoice');
-                        vm.printInvoiceA4Html = "";
+                        FlowRouter.go('/sch-data/schBusPayment');
+                        vm.printBusPaymentA4Html = "";
                         vm.$message({
                             duration: 1000,
                             message: vm.langConfig['saveSuccess'],
@@ -152,7 +151,7 @@
 
         computed: {
             langConfig() {
-                let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['invoiceA4Print'];
+                let data = compoLangReport.filter(config => config.lang === this.langSessionReport)[0]['busPaymentA4Print'];
                 return data;
             }
         },

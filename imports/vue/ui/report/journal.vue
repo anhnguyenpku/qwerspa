@@ -122,6 +122,17 @@
 
 
             </table>
+                 <div class="row" style="width: 100% !important;">
+                    <div style="width: 50%;float: left !important;text-align: center !important;">
+                        បានឃើញ និង ពិនិត្យត្រឹមត្រូវ<br>.......................... ថ្ងៃទី ............    ខែ  ....................  ឆ្នាំ ...................<br><span
+                            style="font-family: 'Khmer OS Muol'">ប្រធាន</span>
+                    </div>
+
+                    <div style="width: 50%;float: right !important;text-align: center !important;">
+                        .......................... ថ្ងៃទី  ............ ខែ   ....................  ឆ្នាំ  ...................<br><br><b>រៀបចំដោយ</b><br><br>
+                    </div>
+
+                </div>
            </span>
         </a4>
     </div>

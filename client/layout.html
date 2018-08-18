@@ -173,6 +173,38 @@
                                                                             "sch.sidebarMenu.debtDetail"}}
                                                                     </a>
                                                                     </li>
+
+                                                                    <hr>
+
+                                                                </ul>
+                                                            </li>
+
+                                                            <li class="col-sm-4">
+                                                                <ul>
+
+                                                                    <a href="#" class="title-head">
+                                                                        <i class="fa fa-bus"></i> <span>{{_
+                                                                            "sch.sidebarMenu.bus"}}</span>
+                                                                    </a>
+                                                                    <li><a href="{{pathFor
+                                                                            'sch.schBusRegisterReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "sch.sidebarMenu.busRegister"}}
+                                                                    </a>
+                                                                    </li>
+
+                                                                    <hr>
+
+                                                                </ul>
+                                                            </li>
+                                                            <li class="col-sm-4">
+                                                                <ul>
+
+                                                                    <a href="#" class="title-head">
+                                                                        <i class="fa fa-file"></i> <span>{{_
+                                                                            "sch.sidebarMenu.general"}}</span>
+                                                                    </a>
                                                                     <li><a href="{{pathFor
                                                                             'sch.schStudentListReport'}}"
                                                                            class="title-body">
@@ -668,7 +700,7 @@
                             {{#if isSuper}}
                                 <li><a class="cursor-pointer" style="display: flex;"
                                        href="{{pathFor 'manage.module'}}"><i
-                                        class="fa fa-circle-o-notch" aria-hidden="true"></i>Manage Module</a>
+                                        class="fa fa-circle-o-notch" aria-hidden="true"></i>គ្រប់គ្រងប្រព័ន្ធ</a>
                                 </li>
                             {{/if}}
 
@@ -691,65 +723,45 @@
             {{#if accountLayout}}
                 <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
 
-                    <li><a href="{{pathFor 'acc.journal'}}"><i class="fa fa-dollar"></i> Journal
-                        Entry</a></li>
+                    <a style="color: white !important;" href="{{pathFor 'acc.journal'}}" class="title-head"><i
+                            class="fa fa-registered"></i> Journal
+                        Entry</a><br><br>
 
                     <!--Report -->
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-folder"></i> <span>Report</span>
-                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                        </a>
-                        <ul class="treeview-menu animated-padding">
-                            {{#if isAdminAndSuper }}
-                                <li><a href="{{pathFor 'acc.accountListReport'}}">
-                                    Account List
-                                    Report</a>
-                                </li>
-                                <li><a href="{{pathFor 'acc.journalReport'}}">
-                                    Journal​
-                                    Report</a>
-                                </li>
-                                <li><a href="{{pathFor
-                                        'acc.transactionDetailReport'}}">
-                                    Transaction Detail Report</a>
-                                </li>
-                                <li><a href="{{pathFor 'acc.ledgerReport'}}"> Ledger
-                                    Report</a>
-                                </li>
-                                <li><a href="{{pathFor 'acc.trialBalanceReport'}}">
-                                    Trial Balance
-                                    Report</a>
-                                </li>
-                                <li><a href="{{pathFor 'acc.profitLostReport'}}">
-                                    Profit Lost
-                                    Report</a>
-                                </li>
-                                <li><a href="{{pathFor 'acc.balanceSheetReport'}}">
-                                    Balance Sheet
-                                    Report</a>
-                                </li>
-                            {{/if}}
-
-                        </ul>
-                    </li>
+                    <a href="#" class="title-head" style="color: white !important;">
+                        <i class="fa fa-folder"></i> <span>Report</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    {{#if isAdminAndSuper }}
+                        <li><a href="{{pathFor 'acc.accountListReport'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> Account List
+                            Report</a>
+                        </li>
+                        <li><a href="{{pathFor 'acc.journalReport'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> Journal​
+                            Report</a>
+                        </li>
+                        <li><a href="{{pathFor
+                                'acc.transactionDetailReport'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> Transaction Detail Report</a>
+                        </li>
+                        <li><a href="{{pathFor 'acc.ledgerReport'}}"> <i class="fa fa-dollar"></i> Ledger
+                            Report</a>
+                        </li>
+                        <li><a href="{{pathFor 'acc.trialBalanceReport'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> Trial Balance
+                            Report</a>
+                        </li>
+                        <li><a href="{{pathFor 'acc.profitLostReport'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> Profit Lost
+                            Report</a>
+                        </li>
+                        <li><a href="{{pathFor 'acc.balanceSheetReport'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> Balance Sheet
+                            Report</a>
+                        </li>
+                    {{/if}}
                     <!--End Report-->
-                    <li class="treeview">
-                        {{#if isSuper}}
-                            <a href="#">
-                                <i class="fa fa-folder"></i> <span>Seed Data</span>
-                                <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li class="{{isActiveRoute 'wb.importData'}} "><a
-                                        href="{{pathFor 'wb.importData'}}"><i
-                                        class="fa fa-circle-o"></i> Import Data</a>
-                                </li>
-                            </ul>
-                        {{/if}}
-                    </li>
                 </ul>
             {{/if}}
 

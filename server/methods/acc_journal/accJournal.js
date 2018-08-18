@@ -91,7 +91,7 @@ Meteor.methods({
         data.voucherId = data.rolesArea + moment(data.journalData).format("YYYY") + pad(data.voucherId, 6);
         let totalMethod = 0;
         let newTransaction = [];
-        if (type == "Receive") {
+        if (type === "Receive") {
             data.transaction.map(function (obj) {
                 totalMethod += parseFloat(obj.amount);
                 newTransaction.push({
@@ -100,7 +100,7 @@ Meteor.methods({
                     cr: parseFloat(obj.amount),
                     drcr: -parseFloat(obj.amount)
                 })
-            })
+            });
 
             newTransaction.unshift({
                 account: data.method,

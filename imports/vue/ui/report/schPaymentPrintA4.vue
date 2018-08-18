@@ -7,7 +7,7 @@
                 <table class="table table-bordered">
                       <caption style="padding-top: 0px !important;">
                           <div class="row">
-                                <div class="col-md-12" style="text-align: center !important;">
+                                <div class="col-md-12" style="text-align: left !important;">
                                     <img style="width: auto;height: 100px; float: left;" src="/mih.png" alt=""
                                          :onLoad="onLoadHandler()">
                                         <span style="font-family:Khmer os muol; font-size: 15px; !important;float: left;">

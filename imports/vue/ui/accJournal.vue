@@ -452,10 +452,10 @@
                                 class="el-icon-circle-cross"> </i>&nbsp;​Cancel</el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
-                        <el-button type="success" @click="saveJournalPaid(false,$event,{type})"><i
+                        <el-button type="success" @click="saveJournalPaid(false,$event,type)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; Save and New</el-button>
 
-                        <el-button type="primary" @click.native="saveJournalPaid(true,$event,{type})"><i
+                        <el-button type="primary" @click.native="saveJournalPaid(true,$event,type)"><i
                                 class="el-icon-check"> </i>&nbsp; Save</el-button>
                     </el-col>
                 </el-row>
@@ -909,7 +909,7 @@
             }, 300),
             chartAccountOption() {
                 let selector = {};
-                if (this.accountTypeId != "" && this.accountTypeId != undefined) {
+                if (this.accountTypeId !== "" && this.accountTypeId !== undefined) {
                     selector.accountTypeId = this.accountTypeId;
                 }
 
@@ -919,7 +919,7 @@
             },
             chartAccountMethodOption() {
                 let selector = {};
-                if (this.accountTypeId != "" && this.accountTypeId != undefined) {
+                if (this.accountTypeId !== "" && this.accountTypeId !== undefined) {
                     selector.accountTypeId = this.accountTypeId;
                 }
                 Meteor.call('queryChartAccountMethodOption', selector, (err, result) => {
@@ -930,7 +930,7 @@
                 event.preventDefault();
                 let vm = this;
                 let checkSubmit = this.checkDrCr();
-                if (checkSubmit == false || vm.journalData.length == 0) {
+                if (checkSubmit === false || vm.journalData.length === 0) {
                     vm.$notify.error({
                         title: 'Error',
                         message: 'Dr and Cr is not balance!'
@@ -1014,7 +1014,7 @@
                 event.preventDefault();
                 let vm = this;
                 let checkSubmit = vm.checkDrCr();
-                if (checkSubmit == false || vm.journalData.length == 0) {
+                if (checkSubmit === false || vm.journalData.length === 0) {
                     vm.$notify.error({
                         title: 'Error',
                         message: 'Dr and Cr is not balance!'
@@ -1119,7 +1119,7 @@
             },
             popupJournalPayment() {
                 let vm = this;
-                vm.type = "Payment"
+                vm.type = "Payment";
                 // $('#dialog').attr('title', 'New Title').dialog();
 
                 $(".el-dialog__title").text("Payment (Account)");
@@ -1139,7 +1139,7 @@
                 $(".el-dialog__title").text("Receive (Account)");
 
                 Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
-                    if (re != undefined) {
+                    if (re !== undefined) {
                         vm.closeDate = re.closeDate;
                     } else {
                         vm.closeDate = "";
@@ -1149,12 +1149,12 @@
             popupJournalUpdate(index, row, scope) {
                 let vm = this;
                 $(".el-dialog__title").text("Update Journal Entry");
-                if (row.status == "Normal") {
+                if (row.status === "Normal") {
                     Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
-                        if (re == undefined || re.closeDate.getTime() < row.journalDate.getTime()) {
+                        if (re === undefined || re.closeDate.getTime() < row.journalDate.getTime()) {
                             vm.dialogUpdateJournal = true;
                             vm.findJournalById(scope);
-                            if (re != undefined) {
+                            if (re !== undefined) {
                                 vm.closeDate = re.closeDate;
                             } else {
                                 vm.closeDate = "";

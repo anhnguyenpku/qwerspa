@@ -181,6 +181,10 @@ Sch_Student.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    imgUrl: {
+        type: String,
+        optional: true
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

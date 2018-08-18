@@ -147,3 +147,14 @@ schData.route('/schBusPayment', {
         _Main('sch_busPayment');
     }
 });
+
+
+import '../../imports/ui/report/schBusPaymentPrintA4/schBusPaymentPrintA4';
+
+schData.route('/schBusPayment/print', {
+    name: 'sch.schBusPayment-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'sch_busPaymentPrintA4Report'});
+    }
+
+});

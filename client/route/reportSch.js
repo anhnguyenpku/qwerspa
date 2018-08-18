@@ -122,3 +122,15 @@ schReportStudent.route('/schStudentListReport', {
     }
 
 });
+
+import '../../imports/ui/report/schBusRegister/schBusRegister';
+
+schReportStudent.route('/schBusRegisterReport', {
+    name: 'sch.schBusRegisterReport',
+    title: "Bus Register Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_busRegisterReport');
+    }
+
+});

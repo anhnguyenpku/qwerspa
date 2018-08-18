@@ -72,6 +72,16 @@
                             :label="langConfig['province']">
                     </el-table-column>
                     <el-table-column
+                            label="Image"
+                            fit="true"
+
+                    >
+                        <template slot-scope="scope">
+                            <img :src="scope.row.imgUrl" alt="" @click="handlePictureCardPreview(scope.row.imgUrl)"
+                                 style="width: 30% !important; height: 30% !important;">
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                             :label="langConfig['action']"
                             width="120"
 
@@ -345,9 +355,6 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <el-form-item :label="langConfig['phoneNumber']" prop="phoneNumber">
-                                    <el-input v-model="schStudentForm.phoneNumber"></el-input>
-                                </el-form-item>
 
 
                             </el-col>
@@ -562,13 +569,41 @@
                         </el-row>
                         <br>
                         <br>
-                        <el-form-item :label="langConfig['personalContract']" prop="personalContract">
-                            <el-input type="textarea" v-model="schStudentForm.personalContract"></el-input>
-                        </el-form-item>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-form-item :label="langConfig['personalContract']" prop="personalContract">
+                                    <el-input type="textarea" v-model="schStudentForm.personalContract"></el-input>
+                                </el-form-item>
 
-                        <el-form-item :label="langConfig['note']" prop="note">
-                            <el-input type="textarea" v-model="schStudentForm.note"></el-input>
-                        </el-form-item>
+                                <el-form-item :label="langConfig['note']" prop="note">
+                                    <el-input type="textarea" v-model="schStudentForm.note"></el-input>
+                                </el-form-item>
+                                <el-form-item :label="langConfig['phoneNumber']" prop="phoneNumber">
+                                    <el-input v-model="schStudentForm.phoneNumber"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="4"></el-col>
+                            <el-col :span="8" style="float: right !important;">
+                                <croppa v-model="thumbImgCroppa"
+                                        :width="151.18110236"
+                                        :height="226.77165354"
+                                        :quality="1"
+                                        :canvas-color="'teal'"
+                                        :file-size-limit="3096000"
+                                        accept=".jpg,.jpeg,.png"
+                                        :loading-end="generateThumbImgUrl"
+                                        placeholder="Upload Image 4 x 6"
+                                        :placeholder-color="'black'"
+                                        :placeholder-font-size="16"
+                                        @image-remove="handleThumbImgRemove"
+                                        @move="handleThumbImgCroppaMove"
+                                        @zoom="handleThumbImgCroppaZoom"
+                                        :zoom-speed="10"
+                                >
+                                </croppa>
+                            </el-col>
+                        </el-row>
+                        <br><br>
                     </el-col>
                 </el-row>
 
@@ -824,10 +859,6 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-                                <el-form-item :label="langConfig['phoneNumber']" prop="phoneNumber">
-                                    <el-input v-model="schStudentForm.phoneNumber"></el-input>
-                                </el-form-item>
-
 
                             </el-col>
                         </el-row>
@@ -1041,12 +1072,45 @@
                         </el-row>
                         <br>
                         <br>
-                        <el-form-item :label="langConfig['personalContract']" prop="personalContract">
-                            <el-input type="textarea" v-model="schStudentForm.personalContract"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="langConfig['note']" prop="note">
-                            <el-input type="textarea" v-model="schStudentForm.note"></el-input>
-                        </el-form-item>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-form-item :label="langConfig['personalContract']" prop="personalContract">
+                                    <el-input type="textarea" v-model="schStudentForm.personalContract"></el-input>
+                                </el-form-item>
+
+                                <el-form-item :label="langConfig['note']" prop="note">
+                                    <el-input type="textarea" v-model="schStudentForm.note"></el-input>
+                                </el-form-item>
+                                <el-form-item :label="langConfig['phoneNumber']" prop="phoneNumber">
+                                    <el-input v-model="schStudentForm.phoneNumber"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="4"></el-col>
+                            <el-col :span="8" style="float: right !important;">
+                                <croppa v-model="thumbImgCroppa"
+                                        :width="151.18110236"
+                                        :height="226.77165354"
+                                        :quality="1"
+                                        :canvas-color="'teal'"
+                                        :file-size-limit="3096000"
+                                        accept=".jpg,.jpeg,.png"
+                                        :loading-end="generateThumbImgUrl"
+                                        placeholder=""
+                                        :placeholder-color="'black'"
+                                        :placeholder-font-size="16"
+                                        @image-remove="handleThumbImgRemove"
+                                        @move="handleThumbImgCroppaMove"
+                                        @zoom="handleThumbImgCroppaZoom"
+                                        :zoom-speed="10"
+                                >
+                                    <!--<img :src="imgUrlUpdate" crossOrigin="anonymous"
+                                         slot="initial">-->
+                                    <img :src="imgUrlUpdate"
+                                         slot="placeholder">
+                                </croppa>
+                            </el-col>
+                        </el-row>
+                        <br><br>
                     </el-col>
                 </el-row>
 
@@ -1067,11 +1131,16 @@
             </span>
         </el-dialog>
 
-
+        <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
     </div>
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import storagePath from '../../firebase/storage_path';
+    import firebase from '../../firebase/config';
+    import sha256 from 'sha256';
 
     export default {
         meteor: {
@@ -1087,6 +1156,8 @@
         },
         data() {
             return {
+                dialogImageUrl: '',
+                dialogVisible: false,
                 fullscreen: true,
                 langSession: null,
                 schStudentData: [],
@@ -1099,6 +1170,9 @@
                 dialogAddSchStudent: false,
                 dialogUpdateSchStudent: false,
                 schStudentId: "",
+                imgUrl: "",
+                imgUrlUpdate: "",
+                thumbImgCroppa: null,
                 cousinData: [{
                     name: "",
                     gender: "",
@@ -1198,6 +1272,12 @@
                 this.isSearching = true;
                 let skip = (this.currentPage - 1) * this.currentSize;
                 this.queryData(val, skip, this.currentSize + skip);
+            },
+            'thumbImgCroppa.loading'(val) {
+                console.log(val);
+                if (!val) {
+                    this.generateThumbImgUrl();
+                }
             },
 
         },
@@ -1357,7 +1437,7 @@
                             personal: personal,
                             family: family,
                             personalStudy: personalStudy,
-                            note: note,
+                            note: vm.schStudentForm.note,
                             personalContract: vm.schStudentForm.personalContract,
                             fromSchool: vm.schStudentForm.fromSchool,
                             provinceSchool: vm.schStudentForm.provinceSchool,
@@ -1371,9 +1451,48 @@
                                     message: this.langConfig['saveSuccess'],
                                     type: 'success'
                                 });
+                                if (vm.imgUrl) {
+                                    const storageRef = storagePath.student(firebase.storage, Meteor.userId(), result);
+                                    let uploadTask = storageRef
+                                        .child("student")
+                                        .putString(this.imgUrl, "data_url");
+                                    uploadTask.on(
+                                        "state_changed",
+                                        function (snapshot) {
+                                            // Observe state change events such as progress, pause, and resume
+                                            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                                            var progress =
+                                                snapshot.bytesTransferred / snapshot.totalBytes * 100;
+                                            console.log("Upload is " + progress + "% done");
+                                            switch (snapshot.state) {
+                                                case firebase.storageState.PAUSED: // or 'paused'
+                                                    console.log("Upload is paused");
+                                                    break;
+                                                case firebase.storageState.RUNNING: // or 'running'
+                                                    console.log("Upload is running " + progress);
+                                                    break;
+                                            }
+                                        },
+                                        function (error) {
+                                            /*setTimeout(() => {
+                                                loading.close();
+                                            }, 1000)*/
+                                        },
+                                        function () {
+                                            uploadTask.snapshot.ref.getDownloadURL()
+                                                .then(url => {
+                                                    Meteor.call('sch_updateStudentImageURlById', result, url, (err, re) => {
+                                                        if (err) {
+                                                            console.log(err.message);
+                                                        } else {
+                                                            vm.queryData();
+                                                        }
+                                                    });
+                                                }).catch(err => console.log(err));
+                                        });
+                                }
                                 vm.dialogAddSchStudent = false;
                                 vm.queryData();
-
                                 vm.$refs["schStudentFormAdd"].resetFields();
                                 vm.resetForm();
 
@@ -1463,7 +1582,7 @@
                             personal: personal,
                             family: family,
                             personalStudy: personalStudy,
-                            note: note,
+                            note: vm.schStudentForm.note,
                             personalContract: vm.schStudentForm.personalContract,
                             fromSchool: vm.schStudentForm.fromSchool,
                             provinceSchool: vm.schStudentForm.provinceSchool,
@@ -1478,6 +1597,48 @@
                                     message: this.langConfig['updateSuccess'],
                                     type: 'success'
                                 });
+
+                                if (vm.imgUrl) {
+                                    const storageRef = storagePath.student(firebase.storage, Meteor.userId(), _id);
+                                    let uploadTask = storageRef
+                                        .child("student")
+                                        .putString(this.imgUrl, "data_url");
+                                    uploadTask.on(
+                                        "state_changed",
+                                        function (snapshot) {
+                                            // Observe state change events such as progress, pause, and resume
+                                            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                                            var progress =
+                                                snapshot.bytesTransferred / snapshot.totalBytes * 100;
+                                            console.log("Upload is " + progress + "% done");
+                                            switch (snapshot.state) {
+                                                case firebase.storageState.PAUSED: // or 'paused'
+                                                    console.log("Upload is paused");
+                                                    break;
+                                                case firebase.storageState.RUNNING: // or 'running'
+                                                    console.log("Upload is running " + progress);
+                                                    break;
+                                            }
+                                        },
+                                        function (error) {
+                                            /*setTimeout(() => {
+                                                loading.close();
+                                            }, 1000)*/
+                                        },
+                                        function () {
+                                            uploadTask.snapshot.ref.getDownloadURL()
+                                                .then(url => {
+                                                    Meteor.call('sch_updateStudentImageURlById', _id, url, (err, re) => {
+                                                        if (err) {
+                                                            console.log(err.message);
+                                                        } else {
+                                                            vm.queryData();
+                                                        }
+                                                    });
+                                                }).catch(err => console.log(err));
+                                        });
+                                }
+
                                 vm.dialogUpdateSchStudent = false;
                                 vm.queryData();
 
@@ -1585,6 +1746,7 @@
                         vm.schStudentForm.provinceSchool = result.provinceSchool;
                         vm.schStudentForm.note = result.note;
 
+                        vm.imgUrlUpdate = result.imgUrl;
                     }
                 })
             },
@@ -1732,6 +1894,26 @@
                         }
                     }
                 )
+            },
+            generateThumbImgUrl: function () {
+                let url = this.thumbImgCroppa && this.thumbImgCroppa.generateDataUrl();
+                if (!url) {
+                    return
+                }
+                this.imgUrl = url
+            },
+            handleThumbImgCroppaZoom() {
+                this.generateThumbImgUrl();
+            },
+            handleThumbImgCroppaMove() {
+                this.generateThumbImgUrl();
+            },
+            handleThumbImgRemove() {
+                this.imgUrl = null
+            },
+            handlePictureCardPreview(url) {
+                this.dialogImageUrl = url;
+                this.dialogVisible = true;
             }
         },
         created() {

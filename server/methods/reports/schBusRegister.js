@@ -1,7 +1,6 @@
 import {Meteor} from 'meteor/meteor';
 import {WB_waterBillingSetup} from '../../../imports/collection/waterBillingSetup';
-import {Sch_Register} from '../../../imports/collection/schRegister';
-import {Pos_ReceivePayment} from '../../../imports/collection/posReceivePayment';
+import {Sch_BusRegister} from '../../../imports/collection/schBusRegister';
 
 import {SpaceChar} from "../../../both/config.js/space"
 
@@ -12,82 +11,61 @@ import {roundCurrency} from "../../../imports/api/methods/roundCurrency"
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
 
 Meteor.methods({
-    schRegisterReport(params, translate) {
+    schBusRegisterReport(params, translate) {
         let parameter = {};
 
-        if (params.area != "") {
+        if (params.area !== "") {
             parameter.rolesArea = params.area;
 
         }
-        if (params.programId != "") {
-            parameter.programId = params.programId;
+        if (params.busId !== "") {
+            parameter.busId = params.busId;
         }
-        if (params.majorId != "") {
-            parameter.majorId = params.majorId;
+        if (params.busStopId !== "") {
+            parameter.busStopId = params.busStopId;
         }
 
-        if (params.levelId != "") {
-            parameter.levelId = params.levelId;
-        }
-        if (params.promotionId != "") {
-            parameter.promotionId = params.promotionId;
-        }
         let data = {};
 
         let companyDoc = WB_waterBillingSetup.findOne({});
 
 
-        parameter.registerDate = {
+        parameter.busRegisterDate = {
             $lte: moment(params.date[1]).endOf("day").toDate(),
             $gte: moment(params.date[0]).startOf("day").toDate()
         };
 
-        let registerHTML = "";
+        let busRegisterHTML = "";
 
-        let registerList = Sch_Register.aggregate([
+        let busRegisterList = Sch_BusRegister.aggregate([
             {$match: parameter},
             {
                 $lookup: {
-                    from: 'sch_level',
-                    localField: 'levelId',
+                    from: 'sch_bus',
+                    localField: 'busId',
                     foreignField: '_id',
-                    as: 'levelDoc'
+                    as: 'busDoc'
                 }
             }
             ,
             {
                 $unwind: {
-                    path: "$levelDoc",
+                    path: "$busDoc",
                     preserveNullAndEmptyArrays: true
                 }
             },
             {
                 $lookup: {
-                    from: 'sch_program',
-                    localField: 'programId',
+                    from: 'sch_busStop',
+                    localField: 'busStopId',
                     foreignField: '_id',
-                    as: 'programDoc'
+                    as: 'busStopDoc'
                 }
             }
             ,
             {
                 $unwind: {
-                    path: "$programDoc",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $lookup: {
-                    from: 'sch_major',
-                    localField: 'majorId',
-                    foreignField: '_id',
-                    as: 'majorDoc'
-                }
-            }
-            ,
-            {
-                $unwind: {
-                    path: "$majorDoc",
+                    path: "$busStopDoc",
                     preserveNullAndEmptyArrays: true
                 }
             },
@@ -107,55 +85,37 @@ Meteor.methods({
                 }
             },
             {
-                $lookup: {
-                    from: 'sch_promotion',
-                    localField: 'promotionId',
-                    foreignField: '_id',
-                    as: 'promotionDoc'
-                }
-            }
-            ,
-            {
-                $unwind: {
-                    path: "$promotionDoc",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
                 $group: {
                     _id: null,
                     data: {$push: "$$ROOT"},
-                    totalPrice: {$sum: "$levelDoc.price"}
+                    totalPrice: {$sum: "$price"}
                 }
             },
         ]);
 
 
         let i = 1;
-        if (registerList[0] && registerList[0].data.length > 0) {
-            registerList[0].data.forEach((obj) => {
+        if (busRegisterList[0] && busRegisterList[0].data.length > 0) {
+            busRegisterList[0].data.forEach((obj) => {
                 if (obj) {
-                    registerHTML += `
+                    busRegisterHTML += `
                         <tr>
                             <td style="text-align: center !important;">${i}</td>
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
-                            <td style="text-align: center !important;">${obj.registerDateName}</td>
-                            <td style="text-align: center !important;">${obj.programDoc.name}</td>
-                            <td style="text-align: center !important;">${obj.majorDoc.name}</td>
-                            <td style="text-align: center !important;">${obj.levelDoc.name}</td>
-                            <td style="text-align: center !important;">${obj.promotionDoc.value} ${getTypePromotion(obj.promotionDoc.promotionType)}</td>
-                            <td style="text-align: left !important;">${obj.note || ""}</td>
-                            <td>${formatCurrency(obj.levelDoc.price)}</td>
+                            <td style="text-align: center !important;">${obj.busRegisterDateName}</td>
+                            <td style="text-align: center !important;">${obj.busDoc.name}</td>
+                            <td style="text-align: center !important;">${obj.busStopDoc.name}</td>
+                            <td>${formatCurrency(obj.price)}</td>
 
                         </tr>
                     `;
                     i++;
                 }
             });
-            registerHTML += `
+            busRegisterHTML += `
                     <tr>
-                        <th colspan="8">${translate['grandTotal']}</th>
-                        <td>${formatCurrency(registerList[0].totalPrice)}</td>
+                        <th colspan="5">${translate['grandTotal']}</th>
+                        <td>${formatCurrency(busRegisterList[0].totalPrice)}</td>
                     </tr>
             `;
         }
@@ -163,7 +123,7 @@ Meteor.methods({
         data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");
         data.currencyHeader = companyDoc.baseCurrency;
 
-        data.registerHTML = registerHTML;
+        data.busRegisterHTML = busRegisterHTML;
         return data;
     }
 })

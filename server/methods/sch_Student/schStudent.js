@@ -120,12 +120,13 @@ Meteor.methods({
     sch_getIdStudent(rolesAreas) {
         let data = Sch_Student.findOne({
             rolesArea: rolesAreas,
-        }, {sort: {code: -1}});
-
-        console.log(data);
+        }, {sort: {"personal.code": -1}});
         let code = parseInt(data && data.personal.code || "0") + 1;
         return pad(code + "", 6);
 
+    },
+    sch_updateStudentImageURlById(id, url) {
+        return Sch_Student.direct.update({_id: id}, {$set: {imgUrl: url}});
     },
     querySchStudentOptionUnPaid() {
         return [];

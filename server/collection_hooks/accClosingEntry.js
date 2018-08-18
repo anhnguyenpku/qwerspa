@@ -28,7 +28,7 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
             baseCurrency: companyDoc.baseCurrency
         });
         // month is december must convert Net Income to Retain Earning
-        if (currMonth == 12) {
+        if (currMonth === 12) {
             let selectorNetIncome = {};
             selectorNetIncome.rolesArea = doc.rolesArea;
 
@@ -336,7 +336,7 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
 Acc_ClosingEntry.after.remove(function (userId, doc) {
     Acc_Journal.remove({closingEntryId: doc._id});
     Acc_ChartAccountBalance.remove({closingEntryId: doc._id});
-})
+});
 
 
 let getCurrencyClosing = function (currencyId, roleArea, date, exchange, baseCurrency) {
