@@ -1,6 +1,9 @@
 import {Sch_BusRegister} from '../../../imports/collection/schBusRegister';
+import {Sch_Bus} from '../../../imports/collection/schBus';
+import {Sch_BusStop} from '../../../imports/collection/schBusStop';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_Student} from "../../../imports/collection/schStudent";
 
 Meteor.methods({
     querySchBusRegister({q, filter, options = {limit: 10, skip: 0}}) {
@@ -16,18 +19,48 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
-                    selector.$or = [
-                        {"studentDoc.personal.name": {$regex: reg, $options: 'mi'}},
+                    let studentList = Sch_Student.find({
+                            "personal.name": {$regex: reg, $options: 'mi'}
+                        }, {_id: true},
                         {
-                            "busDoc.name": {
-                                $regex: reg,
-                                $options: 'mi'
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
+                    let busList = Sch_Bus.find({
+                            name: {$regex: reg, $options: 'mi'}
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
+                    let busStopList = Sch_BusStop.find({
+                            name: {$regex: reg, $options: 'mi'}
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
+
+                    selector.$or = [
+                        {studentId: {$in: studentList}},
+                        {
+                            busId: {
+                                $in: busList
                             }
                         }, {
-                            "busStopDoc.name": {
-                                $regex: reg,
-                                $options: 'mi'
-                            }
+                            busStopId: {$in: busStopList}
                         },
                         {
                             "busStopType": {
@@ -110,6 +143,9 @@ Meteor.methods({
                 data.content = schBusRegisters;
                 let busReg = Sch_BusRegister.aggregate([
                     {
+                        $match: selector
+                    },
+                    {
                         $lookup: {
                             from: "sch_student",
                             localField: "studentId",
@@ -155,9 +191,7 @@ Meteor.methods({
                             preserveNullAndEmptyArrays: true
                         }
                     },
-                    {
-                        $match: selector
-                    },
+
                     {
                         $sort: {
                             createdAt: -1

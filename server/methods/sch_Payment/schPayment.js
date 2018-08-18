@@ -1,4 +1,5 @@
 import {Sch_Payment} from '../../../imports/collection/schPayment';
+import {Sch_Student} from '../../../imports/collection/schStudent';
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
@@ -6,6 +7,7 @@ import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 import numeral from "numeral";
 import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
 import {Pos_Invoice} from "../../../imports/collection/posInvoice";
+import {Pos_Customer} from "../../../imports/collection/posCustomer";
 
 Meteor.methods({
     querySchPayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -23,11 +25,23 @@ Meteor.methods({
                 if (!!filter) {
                     selector[filter] = {$regex: reg, $options: 'mi'}
                 } else {
-                    selector.$or = [{"studentDoc.personal.name": {$regex: reg, $options: 'mi'}}];
+                    let studentList = Sch_Student.find({
+                            "personal.name": {$regex: reg, $options: 'mi'}
+                        }, {_id: true},
+                        {
+                            $limit: options.limit
+                        },
+                        {
+                            $skip: options.skip
+                        }).fetch().map((obj) => {
+                        return obj._id;
+                    });
+
+                    selector.$or = [{studentId: {$in: studentList}}];
                 }
             }
             let schPayments = Sch_Payment.aggregate([
-                
+
                 {
                     $match: selector
                 },
