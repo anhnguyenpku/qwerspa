@@ -90,8 +90,11 @@
       "busStop": "ចំណតឡាន",
       "bus": "ឡាន",
       "busRegister": "ចុះឈ្មោះជិះឡាន",
+      "busRegisterActive": "ឈ្មោះកំពុងជិះឡាន",
       "busPayment": "បង់ថ្លៃជិះឡាន",
-      "general": "ទូទៅ"
+      "general": "ទូទៅ",
+      "busDebtSummary": "បំណុលសេវាឡានសង្ខេប",
+      "busDebtDetail": "បំណុលសេវាឡានលម្អិត"
     }
   }
 }

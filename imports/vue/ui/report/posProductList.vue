@@ -197,7 +197,6 @@
                 this.loading = true;
                 Meteor.call('posProductListReport', this.params, (err, result) => {
                     if (result) {
-                        console.log(result.productDoc);
                         this.productDoc = result.productDoc;
                     }
                     this.loading = false;

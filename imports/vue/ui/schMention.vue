@@ -534,7 +534,6 @@
             findSchMentionById(doc) {
                 let vm = this;
                 Meteor.call("querySchMentionById", doc.row._id, (err, result) => {
-                    console.log(result);
                     if (result) {
                         vm.schMentionForm._id = result._id;
                         vm.schMentionForm.date = result.date;

@@ -352,7 +352,6 @@ Meteor.methods({
             Meteor.call("addPosAverageInventory", data, (err, result) => {
                 if (err) {
                     console.log(err.message);
-                    console.log(data);
                 }
             })
         });
@@ -367,7 +366,6 @@ Meteor.methods({
             Meteor.call("addPosAverageInventory", data, (err, result) => {
                 if (err) {
                     console.log(err.message);
-                    console.log(data);
                 }
             })
         });
@@ -383,7 +381,6 @@ Meteor.methods({
             Meteor.call("addPosAverageInventory", data, (err, result) => {
                 if (err) {
                     console.log(err.message);
-                    console.log(data);
 
                 }
             })

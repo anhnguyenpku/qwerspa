@@ -77,7 +77,8 @@
       "requiredCredit": "Required Credit",
       "isCompleted": "Completed",
       "code": "Id",
-      "note": "Note"
+      "note": "Note",
+      "image": "Image"
     },
     "teacher": {
       "searchHere": "Search Here ...",
@@ -757,7 +758,8 @@
       "requiredCredit": "ទាមទារចំនួនក្រេឌីត",
       "isCompleted": "បំពេញរួចរាល់",
       "code": "អត្តលេខ",
-      "note": "កំណត់សំគាល់"
+      "note": "កំណត់សំគាល់",
+      "image": "រូបភាព"
     },
     "teacher": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

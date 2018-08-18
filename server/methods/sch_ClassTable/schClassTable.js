@@ -138,7 +138,6 @@ Meteor.methods({
         newData.data = data;
         newData.dataNotPromote = dataNotPromote;
         newData.dataPromote = dataPromote;
-        console.log(newData);
         return newData;
     },
     addPromoteToClass(data) {

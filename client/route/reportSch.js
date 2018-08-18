@@ -134,3 +134,50 @@ schReportStudent.route('/schBusRegisterReport', {
     }
 
 });
+import '../../imports/ui/report/schBusRegisterActive/schBusRegisterActive';
+
+schReportStudent.route('/schBusRegisterActiveReport', {
+    name: 'sch.schBusRegisterActiveReport',
+    title: "Bus Register Active Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_busRegisterActiveReport');
+    }
+
+});
+
+import '../../imports/ui/report/schBusPayment/schBusPayment';
+
+schReportStudent.route('/schBusPaymentReport', {
+    name: 'sch.schBusPaymentReport',
+    title: "Bus Payment Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_busPaymentReport');
+    }
+
+});
+
+import '../../imports/ui/report/schBusDebtDetail/schBusDebtDetail';
+
+schReportStudent.route('/schBusDebtDetailReport', {
+    name: 'sch.schBusDebtDetailReport',
+    title: "Bus Debt Detail Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_busDebtDetailReport');
+    }
+
+});
+
+import '../../imports/ui/report/schBusDebtSummary/schBusDebtSummary';
+
+schReportStudent.route('/schBusDebtSummaryReport', {
+    name: 'sch.schBusDebtSummaryReport',
+    title: "Bus Debt Summary Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_busDebtSummaryReport');
+    }
+
+});

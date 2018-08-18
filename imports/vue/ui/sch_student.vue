@@ -72,7 +72,7 @@
                             :label="langConfig['province']">
                     </el-table-column>
                     <el-table-column
-                            label="Image"
+                            :label="langConfig['image']"
                             fit="true"
 
                     >
@@ -1131,7 +1131,7 @@
             </span>
         </el-dialog>
 
-        <el-dialog :visible.sync="dialogVisible">
+        <el-dialog :visible.sync="dialogVisible" width="30%">
             <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
     </div>
