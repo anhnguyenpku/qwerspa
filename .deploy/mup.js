@@ -2,7 +2,7 @@ module.exports = {
     servers: {
         one: {
             // TODO: set host address, username, and authentication method
-            host: '45.118.135.240',
+            host: '139.162.31.153:7777',
             username: 'root',
             // pem: './path/to/pem'
             password: 'rrqwer123#'
@@ -12,7 +12,7 @@ module.exports = {
 
     meteor: {
         // TODO: change app name and path
-        name: 'wb',
+        name: 'spa',
         path: '../.',
 
         servers: {
@@ -26,8 +26,8 @@ module.exports = {
         env: {
             // TODO: Change to your app's url
             // If you are using ssl, it needs to start with https://
-            ROOT_URL: 'http://45.118.135.240',
-            MONGO_URL: 'mongodb://localhost/wb',
+            ROOT_URL: 'http://139.162.31.153:7777',
+            MONGO_URL: 'mongodb://localhost/rpitsb',
         },
 
         // ssl: { // (optional)
@@ -58,7 +58,7 @@ module.exports = {
 
     mongo: {
         port: 27017,
-        version: '3.4.1',
+        version: '3.6',
         servers: {
             one: {}
         }
