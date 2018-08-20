@@ -724,9 +724,9 @@
             },
             "schPromoteToClassForm.programId"(val) {
                 this.majorOpt(val);
-                if (this.ref !== "promoteToClass") {
+                /*if (this.ref !== "promoteToClass") {
                     this.schPromoteToClassForm.majorId = "";
-                }
+                }*/
             },
             "schPromoteToClassForm.majorId"(val) {
                 this.levelOpt(val);
