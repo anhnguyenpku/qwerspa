@@ -23,7 +23,7 @@ Accounts.onCreateUser((options, user) => {
             };
             if (user.username == 'super') {
                 user.profile.approved = true;
-                user.profile.modules = ['Water Billing', 'Accounting', "POS"];
+                user.profile.modules = ['School', 'Accounting', "POS"];
                 user.profile.status = 'enable';
                 user.roles = ['super'];
                 user.areaId = 'super';
@@ -31,7 +31,7 @@ Accounts.onCreateUser((options, user) => {
             } else {
                 user.profile.approved = false;
                 user.profile.status = 'enable';
-                user.profile.modules = ['Water Billing'];
+                user.profile.modules = ['School'];
                 user.roles = []
             }
         } else {
