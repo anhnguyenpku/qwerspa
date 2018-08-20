@@ -149,7 +149,7 @@ editTmpl.onCreated(function () {
 
     this.moduleOpt = new ReactiveVar([]);
 
-    let moduleListRaw = [{label: "Water Billing", value: "Water Billing"},
+    let moduleListRaw = [{label: "School", value: "School"},
         {label: "Accounting", value: "Accounting"},
         {label: "POS", value: "POS"}];
     let moduleList = [];
