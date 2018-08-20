@@ -344,7 +344,11 @@
                             message: 'Successfully',
                             type: 'success'
                         });
-                        this.$refs['waterBillingSetupForm'].reset();
+                        if(this.$refs['waterBillingSetupForm']){
+                            this.$refs['waterBillingSetupForm'].reset();
+
+                        }
+
                         this.fetchWaterBillingSetup();
                     } else {
                         this.$message({

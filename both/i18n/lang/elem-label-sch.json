@@ -148,7 +148,11 @@
       "subject": "Subject",
       "credit": "Credit",
       "score": "Score",
-      "grades": "Grade"
+      "grades": "Grade",
+      "position": "Position",
+      "idNumber": "Id Number",
+      "startWorkDate": "Start Work Date",
+      "startDate": "Start Date"
     },
     "level": {
       "searchHere": "Search Here ...",
@@ -358,6 +362,27 @@
       "desc": "desc",
       "add": "Add Faculty",
       "update": "Update Faculty"
+    },
+    "position": {
+      "searchHere": "Search Here ...",
+      "title": "Position",
+      "action": "Action",
+      "save": "Save",
+      "cancel": "Cancel",
+      "warning": "Warning",
+      "messageWarning": "This will permanently delete the file. Continue?",
+      "saveSuccess": "Save Successfully!",
+      "saveFail": "Save Fail!",
+      "updateSuccess": "Update Successfully!",
+      "updateFail": "Update Fail!",
+      "removeSuccess": "Remove Successfully!",
+      "removeFail": "Remove Fail!",
+      "removeCancel": "Remove Cancel",
+      "name": "Name",
+      "khName": "Khmer Name",
+      "desc": "desc",
+      "add": "Add Position",
+      "update": "Update Position"
     },
     "major": {
       "searchHere": "Search Here ...",
@@ -826,7 +851,11 @@
       "year": "ឆ្នាំ",
       "semester": "ឆមាស",
       "subject": "មុខវិជ្ជា",
-      "credit": "ក្រេឌីត"
+      "credit": "ក្រេឌីត",
+      "position": "តួនាទី",
+      "idNumber": "អត្តលេខ",
+      "startWorkDate": "ថ្ងៃចូលបម្រើការងារ",
+      "startDate": "ថ្ងៃចាប់ផ្តើម"
     },
     "level": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1043,6 +1072,28 @@
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានមហាវិទ្យាល័យ",
       "update": "កែប្រែព័តមានមហាវិទ្យាល័យ"
+    },
+    "position": {
+      "searchHere": "ស្វែងរក​នៅទីនេះ ...",
+      "title": "តួនាទី",
+      "show": "បង្ហាញតួនាទី",
+      "action": "សកម្មភាព",
+      "save": "រក្សាទុក",
+      "cancel": "បោះបង់",
+      "warning": "ប្រយ័ត្ន",
+      "messageWarning": "នេះគឺលុបបាត់មិនអាចយកមកវិញបានទេ. ចង់បន្ត?",
+      "saveSuccess": "រក្សាទុកបានជោគជ័យ!",
+      "saveFail": "រក្សាទុកមិនបានជោគជ័យទេ!",
+      "updateSuccess": "កែប្រែបានជោគជ័យ!",
+      "updateFail": "កែប្រែមិនបានជោគជ័យទេ!",
+      "removeSuccess": "លុបបានជោជ័យ!",
+      "removeFail": "លុបមិនបានជោគជ័យទេ!",
+      "message": "អ្នកផ្គត់ផ្គង់នេះមិនអាចលុបបានទេ!",
+      "name": "ឈ្មោះ",
+      "khName": "ឈ្មោះខ្មែរ",
+      "desc": "សម្គាល់",
+      "add": "បញ្ចូលព័តមានតួនាទី",
+      "update": "កែប្រែព័តមានតួនាទី"
     },
     "major": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

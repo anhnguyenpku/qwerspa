@@ -94,7 +94,8 @@
       "busPayment": "បង់ថ្លៃជិះឡាន",
       "general": "ទូទៅ",
       "busDebtSummary": "បំណុលសេវាឡានសង្ខេប",
-      "busDebtDetail": "បំណុលសេវាឡានលម្អិត"
+      "busDebtDetail": "បំណុលសេវាឡានលម្អិត",
+      "position": "តួនាទី"
     }
   }
 }

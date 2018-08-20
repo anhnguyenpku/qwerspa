@@ -124,13 +124,39 @@
                         <hr>
                         <el-row>
                             <el-col :span="24">
-                                <el-form-item :label="langConfig['name']" prop="name">
-                                    <el-input v-model="schTeacherForm.name"></el-input>
-                                </el-form-item>
+                                <el-row>
+                                    <el-col :span="14">
+
+                                        <el-form-item :label="langConfig['name']" prop="name">
+                                            <el-input v-model="schTeacherForm.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['idNumber']" prop="idNumber">
+                                            <el-input v-model="schTeacherForm.idNumber"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
                                 <el-row>
                                     <el-col :span="14">
                                         <el-form-item :label="langConfig['latinName']" prop="latinName">
                                             <el-input v-model="schTeacherForm.latinName"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['startWorkDate']" prop="startWorkDate">
+                                            <el-date-picker
+                                                    v-model="schTeacherForm.startWorkDate"
+                                                    type="date"
+                                                    style="width: 100%;"
+                                                    placeholder="Pick a day"
+                                            >
+                                            </el-date-picker>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="10">
@@ -463,6 +489,70 @@
                                         <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
                                                    size="small"
                                                    @click="removeStudy(scope.$index,scope.row)"
+                                        ></el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-row>
+
+                        <p><b><i class="material-icons">
+                            whatshot
+                        </i> {{langConfig['position']}}</b></p>
+                        <hr>
+                        <el-row>
+                            <el-table
+                                    :data="positionData"
+                                    stripe
+                                    style="width: 100%">
+                                <el-table-column
+                                        type="index"
+                                        :index="indexMethod">
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['startDate']" style="margin-left:0px !important; ">
+                                    <template slot-scope="scope">
+                                        <el-date-picker
+                                                v-model="scope.row.startDate"
+                                                type="date"
+                                                style="width: 100%;"
+                                                placeholder="Pick a day"
+                                                @change="handleEditPosition(scope.$index, scope.row)"
+                                        >
+                                        </el-date-picker>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column
+                                        :label="langConfig['position']">
+                                    <template slot-scope="scope">
+                                        <el-select style="display: block !important;"
+                                                   filterable
+                                                   v-model="scope.row.positionId"
+                                                   @change="handleEditPosition(scope.$index, scope.row)"
+                                                   :placeholder="langConfig['chooseItem']">
+                                            <el-option
+                                                    v-for="item in positionList"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                    :disabled="item.disabled">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['action']"
+                                        width="120"
+                                >
+                                    <template slot-scope="scope">
+                                        <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
+                                                   size="small"
+                                                   @click="handleAddPosition()"
+
+                                        ></el-button>
+                                        <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
+                                                   size="small"
+                                                   @click="removePositionData(scope.$index,scope.row)"
                                         ></el-button>
                                     </template>
                                 </el-table-column>
@@ -509,13 +599,39 @@
                         <hr>
                         <el-row>
                             <el-col :span="24">
-                                <el-form-item :label="langConfig['name']" prop="name">
-                                    <el-input v-model="schTeacherForm.name"></el-input>
-                                </el-form-item>
+                                <el-row>
+                                    <el-col :span="14">
+
+                                        <el-form-item :label="langConfig['name']" prop="name">
+                                            <el-input v-model="schTeacherForm.name"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['idNumber']" prop="idNumber">
+                                            <el-input v-model="schTeacherForm.idNumber"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
                                 <el-row>
                                     <el-col :span="14">
                                         <el-form-item :label="langConfig['latinName']" prop="latinName">
                                             <el-input v-model="schTeacherForm.latinName"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['startWorkDate']" prop="startWorkDate">
+                                            <el-date-picker
+                                                    v-model="schTeacherForm.startWorkDate"
+                                                    type="date"
+                                                    style="width: 100%;"
+                                                    placeholder="Pick a day"
+                                            >
+                                            </el-date-picker>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="10">
@@ -530,7 +646,6 @@
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
-
                                 <el-row>
                                     <el-col :span="12">
                                         <el-form-item :label="langConfig['gender']" prop="gender">
@@ -848,6 +963,71 @@
                                         <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
                                                    size="small"
                                                    @click="removeStudy(scope.$index,scope.row)"
+                                        ></el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-row>
+
+
+                        <p><b><i class="material-icons">
+                            whatshot
+                        </i> {{langConfig['position']}}</b></p>
+                        <hr>
+                        <el-row>
+                            <el-table
+                                    :data="positionData"
+                                    stripe
+                                    style="width: 100%">
+                                <el-table-column
+                                        type="index"
+                                        :index="indexMethod">
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['startDate']" style="margin-left:0px !important; ">
+                                    <template slot-scope="scope">
+                                        <el-date-picker
+                                                v-model="scope.row.startDate"
+                                                type="date"
+                                                style="width: 100%;"
+                                                placeholder="Pick a day"
+                                                @change="handleEditPosition(scope.$index, scope.row)"
+                                        >
+                                        </el-date-picker>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column
+                                        :label="langConfig['position']">
+                                    <template slot-scope="scope">
+                                        <el-select style="display: block !important;"
+                                                   filterable
+                                                   v-model="scope.row.positionId"
+                                                   @change="handleEditPosition(scope.$index, scope.row)"
+                                                   :placeholder="langConfig['chooseItem']">
+                                            <el-option
+                                                    v-for="item in positionList"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                    :disabled="item.disabled">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['action']"
+                                        width="120"
+                                >
+                                    <template slot-scope="scope">
+                                        <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
+                                                   size="small"
+                                                   @click="handleAddPosition()"
+
+                                        ></el-button>
+                                        <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
+                                                   size="small"
+                                                   @click="removePositionData(scope.$index,scope.row)"
                                         ></el-button>
                                     </template>
                                 </el-table-column>
@@ -911,6 +1091,10 @@
                     age: "",
                     occupation: ""
                 }],
+                positionData: [{
+                    startDate: "",
+                    positionId: ""
+                }],
                 studyData: [{
                     studyAt: "",
                     duration: "",
@@ -920,6 +1104,7 @@
                 }],
                 programList: [],
                 subjectList: [],
+                positionList: [],
 
                 genderList: [
                     {value: "Male", label: "Male"},
@@ -1011,7 +1196,10 @@
                         cousin:
                             [],
                         personalStudy:
-                            []
+                            [],
+                        idNumber: "",
+                        startWorkDate: "",
+                        position: []
 
                     }
                 ,
@@ -1070,6 +1258,12 @@
             indexMethod(index) {
                 return index + 1;
             },
+            postitionOpt() {
+                let selector = {};
+                Meteor.call('queryPositionOption', selector, (err, result) => {
+                    this.positionList = result;
+                })
+            },
             handleAddCousin() {
                 this.cousinData.push({
                     name: "",
@@ -1078,7 +1272,7 @@
                     occupation: ""
                 })
             },
-            handleEditCousin(row, index) {
+            handleEditCousin(index, row) {
                 this.cousinData[index] = row;
             },
             removeCousinData(index, row) {
@@ -1129,6 +1323,31 @@
                     }];
                 }
             },
+            handleAddPosition() {
+                this.positionData.push({
+                    startDate: "",
+                    positionId: ""
+                })
+            },
+            handleEditPosition(index, row) {
+                this.positionData[index] = row;
+            },
+            removePositionData(index, row) {
+                if (this.positionData.length > 1) {
+                    this.positionData.splice(index, 1);
+                    this.$message({
+                        message: `លុប ${row.name} បានជោគជ័យ`,
+                        type: 'success'
+                    });
+                } else {
+                    this.positionData = [{
+                        startDate: "",
+                        positionId: ""
+                    }];
+                }
+            },
+
+
             saveSchTeacher() {
                 let vm = this;
                 this.$refs["schTeacherFormAdd"].validate((valid) => {
@@ -1159,13 +1378,16 @@
 
                             degree: vm.schTeacherForm.degree,
                             degreeYear: vm.schTeacherForm.degreeYear,
-                            phoneNumber: vm.schTeacherForm.phoneNumber
+                            phoneNumber: vm.schTeacherForm.phoneNumber,
+                            idNumber: vm.schTeacherForm.idNumber,
+
                         };
 
 
                         let family = {};
                         let personalStudy = [];
                         let cousin = [];
+                        let position = [];
 
                         this.studyData.map((obj) => {
                             if (obj.studyAt) {
@@ -1176,6 +1398,11 @@
                         this.cousinData.map((obj) => {
                             if (obj.name) {
                                 cousin.push(obj);
+                            }
+                        });
+                        this.positionData.map((obj) => {
+                            if (obj.positionId) {
+                                position.push(obj);
                             }
                         });
 
@@ -1203,7 +1430,9 @@
                             personalStudy: personalStudy,
                             personalContract: vm.schTeacherForm.personalContract,
 
-                            rolesArea: Session.get('area')
+                            rolesArea: Session.get('area'),
+                            startWorkDate: vm.schTeacherForm.startWorkDate,
+                            position: position,
                         };
 
                         Meteor.call("insertSchTeacher", schTeacherDoc, (err, result) => {
@@ -1260,7 +1489,9 @@
 
                             degree: vm.schTeacherForm.degree,
                             degreeYear: vm.schTeacherForm.degreeYear,
-                            phoneNumber: vm.schTeacherForm.phoneNumber
+                            phoneNumber: vm.schTeacherForm.phoneNumber,
+                            idNumber: vm.schTeacherForm.idNumber,
+
                         };
 
 
@@ -1269,6 +1500,7 @@
 
                         let personalStudy = [];
                         let cousin = [];
+                        let position = [];
 
                         this.studyData.map((obj) => {
                             if (obj.studyAt) {
@@ -1279,6 +1511,11 @@
                         this.cousinData.map((obj) => {
                             if (obj.name) {
                                 cousin.push(obj);
+                            }
+                        });
+                        this.positionData.map((obj) => {
+                            if (obj.positionId) {
+                                position.push(obj);
                             }
                         });
 
@@ -1305,7 +1542,10 @@
                             family: family,
                             personalStudy: personalStudy,
                             rolesArea: Session.get('area'),
-                            _id: _id
+                            _id: _id,
+                            personalContract: vm.schTeacherForm.personalContract,
+                            startWorkDate: vm.schTeacherForm.startWorkDate,
+                            position: position,
                         };
 
                         Meteor.call("updateSchTeacher", schTeacherDoc, (err, result) => {
@@ -1371,6 +1611,8 @@
                 Meteor.call("querySchTeacherById", doc.row._id, (err, result) => {
                     if (result) {
                         vm.schTeacherId = result._id;
+                        vm.schTeacherForm.idNumber = result.personal.idNumber;
+                        vm.schTeacherForm.startWorkDate = result.startWorkDate;
                         vm.schTeacherForm.personal = result.personal;
 
 
@@ -1398,8 +1640,43 @@
                         vm.schTeacherForm.phoneNumber = result.personal.phoneNumber;
 
 
-                        vm.studyData = result.personalStudy;
-                        vm.cousinData = result.family.cousin;
+                        if (result.personalStudy.length > 0) {
+                            vm.studyData = result.personalStudy;
+
+                        } else {
+                            vm.studyData =
+                                [{
+                                    studyAt: "",
+                                    duration: "",
+                                    grade: "",
+                                    where: "",
+                                    graduatedYear: "",
+                                }];
+                        }
+                        if (result.family.cousin.length > 0) {
+                            vm.cousinData = result.family.cousin;
+
+                        } else {
+                            vm.cousinData =
+                                [{
+                                    name: "",
+                                    gender: "",
+                                    age: "",
+                                    occupation: ""
+                                }];
+                        }
+                        if (result.position.length > 0) {
+                            vm.positionData = result.position;
+
+                        } else {
+
+                            vm.positionData =
+                                [{
+                                    startDate: "",
+                                    positionId: ""
+                                }];
+
+                        }
 
                         vm.schTeacherForm.faName = result.family.parent.faName;
                         vm.schTeacherForm.faYob = result.family.parent.faYob;
@@ -1436,6 +1713,13 @@
                         age: "",
                         occupation: ""
                     }];
+
+                this.positionData =
+                    [{
+                        startDate: "",
+                        positionId: ""
+                    }];
+
                 this.studyData =
                     [{
                         studyAt: "",
@@ -1549,6 +1833,7 @@
         },
         created() {
             this.isSearching = true;
+            this.postitionOpt();
             this.queryData();
         },
         computed: {

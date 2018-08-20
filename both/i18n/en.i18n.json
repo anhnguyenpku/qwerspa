@@ -94,7 +94,8 @@
       "busPayment": "Bus Receive Payment",
       "general": "General",
       "busDebtSummary": "Bus Debt Summary",
-      "busDebtDetail": "Bus Debt Detail"
+      "busDebtDetail": "Bus Debt Detail",
+      "position": "Position"
     }
   },
   "global": {

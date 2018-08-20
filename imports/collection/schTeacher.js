@@ -1,6 +1,10 @@
 export const Sch_Teacher = new Mongo.Collection('sch_teacher');
 
 Sch_Teacher.schema = new SimpleSchema({
+    startWorkDate: {
+        type: Date,
+        optional: true
+    },
     personal: {
         type: Object
     },
@@ -70,6 +74,10 @@ Sch_Teacher.schema = new SimpleSchema({
         type: String,
         optional: true
     }, "personal.phoneNumber": {
+        type: String,
+        optional: true
+    },
+    "personal.idNumber": {
         type: String,
         optional: true
     },
@@ -159,6 +167,20 @@ Sch_Teacher.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    position: {
+        type: [Object],
+        optional: true,
+        blackbox: true
+    },
+    "position.startDate": {
+        type: Date,
+        optional: true
+    },
+    "position.positionId": {
+        type: String,
+        optional: true
+    },
+
     rolesArea: {
         type: String,
         label: "Role Area"

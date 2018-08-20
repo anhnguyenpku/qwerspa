@@ -1723,8 +1723,32 @@
                         vm.schStudentForm.phoneNumber = result.personal.phoneNumber;
 
 
-                        vm.studyData = result.personalStudy;
-                        vm.cousinData = result.family.cousin;
+                        if (result.personalStudy.length > 0) {
+                            vm.studyData = result.personalStudy;
+
+                        } else {
+                            vm.studyData =
+                                [{
+                                    studyAt: "",
+                                    duration: "",
+                                    grade: "",
+                                    where: "",
+                                    graduatedYear: "",
+                                }];
+                        }
+
+                        if (result.family.cousin > 0) {
+                            vm.cousinData = result.family.cousin;
+
+                        } else {
+                            vm.cousinData =
+                                [{
+                                    name: "",
+                                    gender: "",
+                                    age: "",
+                                    occupation: ""
+                                }];
+                        }
 
                         vm.schStudentForm.faName = result.family.parent.faName;
                         vm.schStudentForm.faYob = result.family.parent.faYob;

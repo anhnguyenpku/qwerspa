@@ -159,3 +159,14 @@ schSetting.route('/schBus', {
         _Main('sch_bus');
     }
 });
+
+import "../../imports/ui/sch_position/sch_position";
+//Student
+schSetting.route('/schPosition', {
+    name: 'sch.position',
+    title: "Position",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_position');
+    }
+});

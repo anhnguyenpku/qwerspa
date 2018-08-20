@@ -24,6 +24,7 @@ import {Sch_Time} from "../../imports/collection/schTime";
 import {Sch_Bus} from "../../imports/collection/schBus";
 import {Sch_BusStop} from "../../imports/collection/schBusStop";
 import {Sch_BusRegister} from "../../imports/collection/schBusRegister";
+import {Sch_Position} from "../../imports/collection/schPosition";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -280,6 +281,14 @@ Meteor.methods({
 
         Sch_Subject.find(selector, {sort: {code: 1}}).fetch().forEach(function (obj) {
             list.push({label: obj.code + " : " + obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryPositionOption(selector) {
+        let list = [];
+
+        Sch_Position.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name, value: obj._id});
         });
         return list;
     }
