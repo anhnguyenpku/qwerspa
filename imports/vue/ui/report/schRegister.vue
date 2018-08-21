@@ -187,6 +187,7 @@
                         <th>{{langConfig['width']}}</th>-->
                         <th>{{langConfig['note']}}</th>
                         <th>{{langConfig['price']}}</th>
+                        <th>{{langConfig['netPrice']}}</th>
                     </tr>
                 </thead>
                 <tbody style="margin-bottom: 5px;" v-html="registerHtml">

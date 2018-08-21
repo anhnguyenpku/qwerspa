@@ -61,7 +61,8 @@
       "major": "Major",
       "level": "Level",
       "price": "Price",
-      "promotion": "Promotion"
+      "promotion": "Promotion",
+      "netPrice": "Net Price"
     },
     "teacherActivity": {
       "run": "RUN REPORT",
@@ -613,7 +614,8 @@
       "major": "ជំនាញ",
       "level": "កម្រិត",
       "price": "ថ្លៃ",
-      "promotion": "ចុះថ្លៃ"
+      "promotion": "ចុះថ្លៃ",
+      "netPrice": "តម្លៃសុទ្ធ"
     },
     "teacherActivity": {
       "run": "ដំណើរការរបាយការណ៍",

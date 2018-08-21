@@ -132,9 +132,16 @@ Meteor.methods({
 
 
         let i = 1;
+        let totalNetPrice = 0;
         if (registerList[0] && registerList[0].data.length > 0) {
             registerList[0].data.forEach((obj) => {
                 if (obj) {
+                    let netPrice = 0;
+                    if (obj.promotionDoc.promotionType === "Percent") {
+                        netPrice = obj.levelDoc.price - (obj.levelDoc.price * obj.promotionDoc.value / 100);
+                    } else {
+                        netPrice = obj.levelDoc.price - obj.promotionDoc.value;
+                    }
                     registerHTML += `
                         <tr>
                             <td style="text-align: center !important;">${i}</td>
@@ -146,9 +153,11 @@ Meteor.methods({
                             <td style="text-align: center !important;">${obj.promotionDoc.value} ${getTypePromotion(obj.promotionDoc.promotionType)}</td>
                             <td style="text-align: left !important;">${obj.note || ""}</td>
                             <td>${formatCurrency(obj.levelDoc.price)}</td>
+                            <td>${formatCurrency(netPrice)}</td>
 
                         </tr>
                     `;
+                    totalNetPrice += netPrice;
                     i++;
                 }
             });
@@ -156,6 +165,7 @@ Meteor.methods({
                     <tr>
                         <th colspan="8">${translate['grandTotal']}</th>
                         <td>${formatCurrency(registerList[0].totalPrice)}</td>
+                        <td>${formatCurrency(totalNetPrice)}</td>
                     </tr>
             `;
         }
