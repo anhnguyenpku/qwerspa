@@ -179,54 +179,56 @@
                                                                 </ul>
                                                             </li>
 
-                                                            <li class="col-sm-4">
-                                                                <ul>
+                                                            {{#if manageModule.bus}}
+                                                                <li class="col-sm-4">
+                                                                    <ul>
 
-                                                                    <a href="#" class="title-head">
-                                                                        <i class="fa fa-bus"></i> <span>{{_
-                                                                            "sch.sidebarMenu.bus"}}</span>
-                                                                    </a>
-                                                                    <li><a href="{{pathFor
-                                                                            'sch.schBusRegisterReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "sch.sidebarMenu.busRegister"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'sch.schBusRegisterActiveReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "sch.sidebarMenu.busRegisterActive"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'sch.schBusPaymentReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "sch.sidebarMenu.busPayment"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'sch.schBusDebtSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "sch.sidebarMenu.busDebtSummary"}}
-                                                                    </a>
-                                                                    </li>
+                                                                        <a href="#" class="title-head">
+                                                                            <i class="fa fa-bus"></i> <span>{{_
+                                                                                "sch.sidebarMenu.bus"}}</span>
+                                                                        </a>
+                                                                        <li><a href="{{pathFor
+                                                                                'sch.schBusRegisterReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "sch.sidebarMenu.busRegister"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'sch.schBusRegisterActiveReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "sch.sidebarMenu.busRegisterActive"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'sch.schBusPaymentReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "sch.sidebarMenu.busPayment"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'sch.schBusDebtSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "sch.sidebarMenu.busDebtSummary"}}
+                                                                        </a>
+                                                                        </li>
 
-                                                                    <li><a href="{{pathFor
-                                                                            'sch.schBusDebtDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "sch.sidebarMenu.busDebtDetail"}}
-                                                                    </a>
-                                                                    </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'sch.schBusDebtDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "sch.sidebarMenu.busDebtDetail"}}
+                                                                        </a>
+                                                                        </li>
 
-                                                                    <hr>
+                                                                        <hr>
 
-                                                                </ul>
-                                                            </li>
+                                                                    </ul>
+                                                                </li>
+                                                            {{/if}}
                                                             <li class="col-sm-4">
                                                                 <ul>
 
@@ -241,19 +243,23 @@
                                                                             "sch.sidebarMenu.studentList"}}
                                                                     </a>
                                                                     </li>
+
                                                                     <hr>
-                                                                    <a href="#" class="title-head">
-                                                                        <i class="fa fa-user"></i> <span>{{_
-                                                                            "sch.sidebarMenu.teacher"}}</span>
-                                                                    </a>
-                                                                    <li><a href="{{pathFor
-                                                                            'sch.schTeacherActivityReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "sch.sidebarMenu.teacherActivity"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <hr>
+
+                                                                    {{#if manageModule.teacher}}
+                                                                        <a href="#" class="title-head">
+                                                                            <i class="fa fa-user"></i> <span>{{_
+                                                                                "sch.sidebarMenu.teacher"}}</span>
+                                                                        </a>
+                                                                        <li><a href="{{pathFor
+                                                                                'sch.schTeacherActivityReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "sch.sidebarMenu.teacherActivity"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <hr>
+                                                                    {{/if}}
 
                                                                 </ul>
                                                             </li>
@@ -263,153 +269,157 @@
                                                     {{#if posLayout}}
                                                         {{#if isShowReportRole}}
 
-                                                            <li class="col-sm-4">
-                                                                <ul>
+                                                            {{#if manageModule.customer}}
+                                                                <li class="col-sm-4">
+                                                                    <ul>
 
-                                                                    <a href="#" class="title-head">
-                                                                        <i class="fa fa-file"></i> <span>{{_
-                                                                            "pos.sidebarMenu.customer"}}</span>
-                                                                    </a>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posSaleByCustomerSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.saleByCustomerSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posSaleByCustomerDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.saleByCustomerDetail"}}
-                                                                    </a>
-                                                                    </li>
+                                                                        <a href="#" class="title-head">
+                                                                            <i class="fa fa-file"></i> <span>{{_
+                                                                                "pos.sidebarMenu.customer"}}</span>
+                                                                        </a>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posSaleByCustomerSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.saleByCustomerSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posSaleByCustomerDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.saleByCustomerDetail"}}
+                                                                        </a>
+                                                                        </li>
 
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posSaleByProductSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.saleByProductSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posSaleByProductDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.saleByProductDetail"}}
-                                                                    </a>
-                                                                    </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posSaleByProductSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.saleByProductSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posSaleByProductDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.saleByProductDetail"}}
+                                                                        </a>
+                                                                        </li>
 
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posReceivePaymentSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.receivePaymentSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posReceivePaymentDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.receivePaymentDetail"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posDebtSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.debtSummary"}}</a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posDebtDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.debtDetail"}}</a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posCollectionSheetSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.collectionSheetSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posCollectionSheetDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.collectionSheetDetail"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <hr>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posReceivePaymentSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.receivePaymentSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posReceivePaymentDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.receivePaymentDetail"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posDebtSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.debtSummary"}}</a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posDebtDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.debtDetail"}}</a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posCollectionSheetSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.collectionSheetSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posCollectionSheetDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.collectionSheetDetail"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <hr>
 
-                                                                </ul>
-                                                            </li>
-                                                            <li class="col-sm-4">
-                                                                <ul>
-                                                                    <a href="#" class="title-head">
-                                                                        <i class="fa fa-file"></i> <span>{{_
-                                                                            "pos.sidebarMenu.vendor"}}</span>
-                                                                    </a>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posPurchaseByVendorSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.purchaseByVendorSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posPurchaseByVendorDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.purchaseByVendorDetail"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posPurchaseByProductSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.purchaseByProductSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posPurchaseByProductDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.purchaseByProductDetail"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posPayBillSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.payBillSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posPayBillDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.payBillDetail"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posUnPaidSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.unPaidSummary"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posUnPaidDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.unPaidDetail"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <hr>
-                                                                </ul>
-                                                            </li>
+                                                                    </ul>
+                                                                </li>
+                                                            {{/if}}
 
+                                                            {{#if manageModule.vendor}}
+                                                                <li class="col-sm-4">
+                                                                    <ul>
+                                                                        <a href="#" class="title-head">
+                                                                            <i class="fa fa-file"></i> <span>{{_
+                                                                                "pos.sidebarMenu.vendor"}}</span>
+                                                                        </a>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posPurchaseByVendorSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.purchaseByVendorSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posPurchaseByVendorDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.purchaseByVendorDetail"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posPurchaseByProductSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.purchaseByProductSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posPurchaseByProductDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.purchaseByProductDetail"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posPayBillSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.payBillSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posPayBillDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.payBillDetail"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posUnPaidSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.unPaidSummary"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posUnPaidDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.unPaidDetail"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <hr>
+                                                                    </ul>
+                                                                </li>
+                                                            {{/if}}
                                                             <li class="col-sm-4">
                                                                 <ul>
 
@@ -423,34 +433,41 @@
                                                                         <i class="fa fa-dollar"></i> {{_
                                                                             "pos.sidebarMenu.productList"}}</a>
                                                                     </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posInventoryEndingReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.inventoryEnding"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posInventoryTransactionReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.inventoryTransaction"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posTransferLocationReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.transferLocation"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posTransferLocationSummaryReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.transferLocationSummary"}}
-                                                                    </a>
-                                                                    </li>
+
+                                                                    {{#if manageModule.inventory}}
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posInventoryEndingReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.inventoryEnding"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posInventoryTransactionReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.inventoryTransaction"}}
+                                                                        </a>
+                                                                        </li>
+                                                                    {{/if}}
+
+                                                                    {{#if manageModule.transfer}}
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posTransferLocationReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.transferLocation"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posTransferLocationSummaryReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.transferLocationSummary"}}
+                                                                        </a>
+                                                                        </li>
+
+                                                                    {{/if}}
                                                                     <li><a href="{{pathFor
                                                                             'pos.posPurchaseSaleByProductSummaryReport'}}"
                                                                            class="title-body">
@@ -460,37 +477,37 @@
                                                                     </li>
                                                                     <hr>
                                                                 </ul>
+                                                                {{#if manageModule.order}}
+                                                                    <ul>
+                                                                        <a href="#" class="title-head">
+                                                                            <i class="fa fa-file"></i> <span>{{_
+                                                                                "pos.sidebarMenu.saleOrder"}}</span>
+                                                                        </a>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posSaleOrderByCustomerDetailReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.saleOrderByCustomerDetail"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posStockDebtReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.stockDebt"}}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li><a href="{{pathFor
+                                                                                'pos.posStockReceiveReport'}}"
+                                                                               class="title-body">
+                                                                            <i class="fa fa-dollar"></i> {{_
+                                                                                "pos.sidebarMenu.stockReceive"}}
+                                                                        </a>
+                                                                        </li>
 
-                                                                <ul>
-
-                                                                    <a href="#" class="title-head">
-                                                                        <i class="fa fa-file"></i> <span>{{_
-                                                                            "pos.sidebarMenu.saleOrder"}}</span>
-                                                                    </a>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posSaleOrderByCustomerDetailReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.saleOrderByCustomerDetail"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posStockDebtReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.stockDebt"}}
-                                                                    </a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor
-                                                                            'pos.posStockReceiveReport'}}"
-                                                                           class="title-body">
-                                                                        <i class="fa fa-dollar"></i> {{_
-                                                                            "pos.sidebarMenu.stockReceive"}}
-                                                                    </a>
-                                                                    </li>
-
-                                                                    <hr>
-                                                                </ul>
+                                                                        <hr>
+                                                                    </ul>
+                                                                {{/if}}
                                                             </li>
                                                         {{/if}}
 
@@ -839,14 +856,18 @@
                     <li><a href="{{pathFor 'pos.receivePayment'}}" class="title-body">
                         <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.receivePayment"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'pos.saleOrder'}}" class="title-body">
-                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.saleOrder"}}</a>
-                    </li>
+                    {{#if manageModule.order}}
+                        <li><a href="{{pathFor 'pos.saleOrder'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.saleOrder"}}</a>
+                        </li>
+                    {{/if}}
                     <hr>
+                    {{#if manageModule.transfer}}
+                        <li><a href="{{pathFor 'pos.transferInventory'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.transferInventory"}}</a>
+                        </li>
+                    {{/if}}
 
-                    <li><a href="{{pathFor 'pos.transferInventory'}}" class="title-body">
-                        <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.transferInventory"}}</a>
-                    </li>
                     <li><a href="{{pathFor 'acc.exchange'}}" class="title-body">
                         <i class="fa fa-exchange" aria-hidden="true"></i> {{_ "pos.sidebarMenu.exchange"}}</a>
                     </li>
@@ -944,22 +965,26 @@
                             "sch.sidebarMenu.teacher"}}</span>
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>-->
-                    <hr>
-                    <a href="#" class="title-head">
-                        <i style="color: white !important;" class="fa fa-bus"></i> <span
-                            style="color: white;">{{_
-                            "sch.sidebarMenu.bus"}}</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                    </a>
 
-                    <li><a href="{{pathFor 'sch.busRegister'}}" class="title-body"><i class="fa fa-bus"
-                                                                                      aria-hidden="true"></i> {{_
-                            "sch.sidebarMenu.busRegister"}}</a>
-                    </li>
-                    <li><a href="{{pathFor 'sch.busPayment'}}" class="title-body"><i class="fa fa-shopping-cart"
-                                                                                     aria-hidden="true"></i> {{_
-                            "sch.sidebarMenu.busPayment"}}</a>
-                    </li>
+                    {{#if manageModule.bus}}
+                        <hr>
+                        <a href="#" class="title-head">
+                            <i style="color: white !important;" class="fa fa-bus"></i> <span
+                                style="color: white;">{{_
+                                "sch.sidebarMenu.bus"}}</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+
+                        <li><a href="{{pathFor 'sch.busRegister'}}" class="title-body"><i class="fa fa-bus"
+                                                                                          aria-hidden="true"></i> {{_
+                                "sch.sidebarMenu.busRegister"}}</a>
+                        </li>
+                        <li><a href="{{pathFor 'sch.busPayment'}}" class="title-body"><i class="fa fa-shopping-cart"
+                                                                                         aria-hidden="true"></i> {{_
+                                "sch.sidebarMenu.busPayment"}}</a>
+                        </li>
+
+                    {{/if}}
 
 
                     <hr>
@@ -976,10 +1001,13 @@
                                                                                 aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.class"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.teacherActivity'}}" class="title-body"><i class="fa fa-cube"
-                                                                                          aria-hidden="true"></i> {{_
-                            "sch.sidebarMenu.teacherActivity"}}</a>
-                    </li>
+
+                    {{#if manageModule.teacher}}
+                        <li><a href="{{pathFor 'sch.teacherActivity'}}" class="title-body"><i class="fa fa-plane"
+                                                                                              aria-hidden="true"></i> {{_
+                                "sch.sidebarMenu.teacherActivity"}}</a>
+                        </li>
+                    {{/if}}
                     <hr>
                     <a href="#" class="title-head">
                         <i style="color: white !important;" class="fa fa-cogs"></i> <span style="color: white;">{{_
@@ -1005,28 +1033,34 @@
                     <li><a href="{{pathFor 'sch.promotion'}}" class="title-body"><i class="fa fa-gift"></i> {{_
                             "sch.sidebarMenu.promotion"}}</a>
                     </li>
-                    <li><a href="{{pathFor 'sch.subject'}}" class="title-body"><i class="fa fa-book"></i> {{_
-                            "sch.sidebarMenu.subject"}}</a>
-                    </li>
-                    <li><a href="{{pathFor 'sch.ciriculumn'}}" class="title-body"><i class="el-icon-time"></i> {{_
-                            "sch.sidebarMenu.ciriculumn"}}</a>
-                    </li>
-                    <li><a href="{{pathFor 'sch.mention'}}" class="title-body"><i class="fa fa-star"></i> {{_
-                            "sch.sidebarMenu.mention"}}</a>
-                    </li>
-                    <li><a href="{{pathFor 'sch.position'}}" class="title-body"><i class="fa fa-star"></i> {{_
-                            "sch.sidebarMenu.position"}}</a>
-                    </li>
-                    <li><a href="{{pathFor 'sch.activity'}}" class="title-body"><i class="fa fa-star"></i> {{_
-                            "sch.sidebarMenu.activity"}}</a>
-                    </li>
-                    <hr>
-                    <li><a href="{{pathFor 'sch.busStop'}}" class="title-body"><i class="fa fa-map-marker"></i> {{_
-                            "sch.sidebarMenu.busStop"}}</a>
-                    </li>
-                    <li><a href="{{pathFor 'sch.bus'}}" class="title-body"><i class="fa fa-bus"></i> {{_
-                            "sch.sidebarMenu.bus"}}</a>
-                    </li>
+                    {{#if manageModule.trascript}}
+                        <li><a href="{{pathFor 'sch.subject'}}" class="title-body"><i class="fa fa-book"></i> {{_
+                                "sch.sidebarMenu.subject"}}</a>
+                        </li>
+                        <li><a href="{{pathFor 'sch.ciriculumn'}}" class="title-body"><i class="el-icon-time"></i> {{_
+                                "sch.sidebarMenu.ciriculumn"}}</a>
+                        </li>
+                        <li><a href="{{pathFor 'sch.mention'}}" class="title-body"><i class="fa fa-star"></i> {{_
+                                "sch.sidebarMenu.mention"}}</a>
+                        </li>
+                    {{/if}}
+                    {{#if manageModule.teacher}}
+                        <li><a href="{{pathFor 'sch.position'}}" class="title-body"><i class="fa fa-podcast"></i> {{_
+                                "sch.sidebarMenu.position"}}</a>
+                        </li>
+                        <li><a href="{{pathFor 'sch.activity'}}" class="title-body"><i class="fa fa-support"></i> {{_
+                                "sch.sidebarMenu.activity"}}</a>
+                        </li>
+                    {{/if}}
+                    {{#if manageModule.bus}}
+                        <hr>
+                        <li><a href="{{pathFor 'sch.busStop'}}" class="title-body"><i class="fa fa-map-marker"></i> {{_
+                                "sch.sidebarMenu.busStop"}}</a>
+                        </li>
+                        <li><a href="{{pathFor 'sch.bus'}}" class="title-body"><i class="fa fa-bus"></i> {{_
+                                "sch.sidebarMenu.bus"}}</a>
+                        </li>
+                    {{/if}}
                     <hr>
                     <li><a href="{{pathFor 'wb.waterBillingSetup'}}">
                         <i class="fa fa-cog"></i> Setup</a></li>

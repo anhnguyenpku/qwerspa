@@ -17,6 +17,7 @@ import fa from 'fontawesome'
 import './layout.html';
 import {CheckRoles} from "../imports/api/methods/checkRoles";
 import {WB_waterBillingSetup} from "../imports/collection/waterBillingSetup";
+import {Manage_Module} from "../imports/collection/manageModule";
 //collection
 import {Pos_Invoice} from '../imports/collection/posInvoice';
 import {LoginSetup} from '../imports/collection/loginSetup';
@@ -132,6 +133,23 @@ Template.MainLayout.helpers({
         let data = Counts.findOne();
         return data && data.count || 0;
 
+    },
+    manageModule() {
+        let ob = {};
+        let ma = Manage_Module.findOne();
+        ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.teacher = (ma.feature.indexOf("Teacher") > -1 ? true : false) || CheckRoles({roles: ['super']});
+
+        ob.inventory = (ma.feature.indexOf("Inventory") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.order = (ma.feature.indexOf("Order") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+
+
+        return ob;
     }
 
 });
@@ -160,6 +178,21 @@ Template.sidebar.helpers({
     isAdminSettingAndSuper() {
         return CheckRoles({roles: ['admin', 'super', 'setting']})
     },
+
+    manageModule() {
+        let ob = {};
+        let ma = Manage_Module.findOne();
+        ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.teacher = (ma.feature.indexOf("Teacher") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.inventory = (ma.feature.indexOf("Inventory") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.order = (ma.feature.indexOf("Order") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        return ob;
+    }
 });
 
 

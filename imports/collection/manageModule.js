@@ -13,6 +13,9 @@ Manage_Module.schema = new SimpleSchema({
         type: [String],
         label: 'Module'
     },
+    feature: {
+        type: [String]
+    },
     name: {
         type: String,
         label: "Name"

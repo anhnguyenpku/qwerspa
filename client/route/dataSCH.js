@@ -7,14 +7,53 @@ import {CheckRoles} from '../../imports/api/methods/checkRoles';
 require("materialize-css-meteor");
 import {_Main} from '../libs/_renderLayout';
 
-var schData = FlowRouter.group({
+let schData = FlowRouter.group({
     prefix: '/sch-data',
     name: 'schData',
     triggersEnter: [function (context, redirect) {
         if (!CheckRoles({roles: ['super', 'admin', 'data']})) {
             redirect('wb.home');
         }
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
 
+let schPayment = FlowRouter.group({
+    prefix: '/sch-data',
+    name: 'schData',
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['super', 'admin', 'payment']})) {
+            redirect('wb.home');
+        }
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
+
+let schAdmin = FlowRouter.group({
+    prefix: '/sch-data',
+    name: 'schData',
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['super', 'admin']})) {
+            redirect('wb.home');
+        }
         if (!CheckRoles({roles: ['remove', 'super']})) {
             Session.set("canRemove", true);
         } else {
@@ -63,7 +102,7 @@ schData.route('/schTranscript/print', {
 
 import "../../imports/ui/sch_class/sch_class";
 //Student
-schData.route('/schClass', {
+schAdmin.route('/schClass', {
     name: 'sch.class',
     title: "Class",
     parent: "wb.home",
@@ -84,7 +123,7 @@ schData.route('/schTeacher', {
 
 import "../../imports/ui/sch_register/sch_register";
 //Student
-schData.route('/schRegister', {
+schAdmin.route('/schRegister', {
     name: 'sch.register',
     title: "Register",
     parent: "wb.home",
@@ -95,7 +134,7 @@ schData.route('/schRegister', {
 
 import "../../imports/ui/sch_class/sch_classBoard";
 //Student
-schData.route('/schClassBoard', {
+schAdmin.route('/schClassBoard', {
     name: 'sch.classBoard',
     title: "Class Board",
     parent: "wb.home",
@@ -106,7 +145,7 @@ schData.route('/schClassBoard', {
 
 import "../../imports/ui/sch_payment/schPayment";
 //Student
-schData.route('/schPayment', {
+schPayment.route('/schPayment', {
     name: 'sch.payment',
     title: "Payment",
     parent: "wb.home",
@@ -117,7 +156,7 @@ schData.route('/schPayment', {
 
 import '../../imports/ui/report/schPaymentPrintA4/schPaymentPrintA4';
 
-schData.route('/schPayment/print', {
+schPayment.route('/schPayment/print', {
     name: 'sch.schPayment-print',
     action: function (params, queryParams) {
         BlazeLayout.render('PrintLayout', {printLayout: 'sch_paymentPrintA4Report'});
@@ -128,7 +167,7 @@ schData.route('/schPayment/print', {
 
 import "../../imports/ui/sch_busRegister/sch_busRegister";
 //Student
-schData.route('/schBusRegister', {
+schAdmin.route('/schBusRegister', {
     name: 'sch.busRegister',
     title: "Bus Register",
     parent: "wb.home",
@@ -139,7 +178,7 @@ schData.route('/schBusRegister', {
 
 import "../../imports/ui/sch_busPayment/schBusPayment";
 //Student
-schData.route('/schBusPayment', {
+schPayment.route('/schBusPayment', {
     name: 'sch.busPayment',
     title: "Bus Receive Payment",
     parent: "wb.home",
@@ -151,7 +190,7 @@ schData.route('/schBusPayment', {
 
 import '../../imports/ui/report/schBusPaymentPrintA4/schBusPaymentPrintA4';
 
-schData.route('/schBusPayment/print', {
+schPayment.route('/schBusPayment/print', {
     name: 'sch.schBusPayment-print',
     action: function (params, queryParams) {
         BlazeLayout.render('PrintLayout', {printLayout: 'sch_busPaymentPrintA4Report'});

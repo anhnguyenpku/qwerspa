@@ -71,16 +71,16 @@
                             prop="personal.province"
                             :label="langConfig['province']">
                     </el-table-column>
-                    <el-table-column
-                            :label="langConfig['image']"
-                            fit="true"
+                    <!--  <el-table-column
+                              :label="langConfig['image']"
+                              fit="true"
 
-                    >
-                        <template slot-scope="scope">
-                            <img :src="scope.row.imgUrl" alt="" @click="handlePictureCardPreview(scope.row.imgUrl)"
-                                 style="width: 30% !important; height: 30% !important;">
-                        </template>
-                    </el-table-column>
+                      >
+                          <template slot-scope="scope">
+                              <img :src="scope.row.imgUrl" alt="" @click="handlePictureCardPreview(scope.row.imgUrl)"
+                                   style="width: 30% !important; height: 30% !important;">
+                          </template>
+                      </el-table-column>-->
                     <el-table-column
                             :label="langConfig['action']"
                             width="120"
@@ -584,24 +584,24 @@
                             </el-col>
                             <el-col :span="4"></el-col>
                             <el-col :span="8" style="float: right !important;">
-                                <croppa v-model="thumbImgCroppa"
-                                        :width="151.18110236"
-                                        :height="226.77165354"
-                                        :quality="1"
-                                        :canvas-color="'teal'"
-                                        :file-size-limit="3096000"
-                                        accept=".jpg,.jpeg,.png"
-                                        :loading-end="generateThumbImgUrl"
-                                        placeholder="Upload Image 4 x 6"
-                                        :placeholder-color="'black'"
-                                        :placeholder-font-size="16"
-                                        @image-remove="handleThumbImgRemove"
-                                        @move="handleThumbImgCroppaMove"
-                                        @zoom="handleThumbImgCroppaZoom"
-                                        :zoom-speed="10"
-                                        crossOrigin="anonymous"
-                                >
-                                </croppa>
+                                <!-- <croppa v-model="thumbImgCroppa"
+                                         :width="151.18110236"
+                                         :height="226.77165354"
+                                         :quality="1"
+                                         :canvas-color="'teal'"
+                                         :file-size-limit="3096000"
+                                         accept=".jpg,.jpeg,.png"
+                                         :loading-end="generateThumbImgUrl"
+                                         placeholder="Upload Image 4 x 6"
+                                         :placeholder-color="'black'"
+                                         :placeholder-font-size="16"
+                                         @image-remove="handleThumbImgRemove"
+                                         @move="handleThumbImgCroppaMove"
+                                         @zoom="handleThumbImgCroppaZoom"
+                                         :zoom-speed="10"
+                                         crossOrigin="anonymous"
+                                 >
+                                 </croppa>-->
                             </el-col>
                         </el-row>
                         <br><br>
@@ -1088,7 +1088,7 @@
                             </el-col>
                             <el-col :span="4"></el-col>
                             <el-col :span="8" style="float: right !important;">
-                                <croppa v-model="thumbImgCroppa"
+                                <!--<croppa v-model="thumbImgCroppa"
                                         :width="151.18110236"
                                         :height="226.77165354"
                                         :quality="1"
@@ -1104,12 +1104,13 @@
                                         @zoom="handleThumbImgCroppaZoom"
                                         :zoom-speed="10"
                                         crossOrigin="anonymous"
+
                                 >
-                                    <!--<img :src="imgUrlUpdate" crossOrigin="anonymous"
-                                         slot="initial">-->
-                                    <img :src="imgUrlUpdate" crossOrigin="anonymous"
-                                         slot="placeholder">
-                                </croppa>
+                                    &lt;!&ndash;<img :src="imgUrlUpdate" crossOrigin="anonymous"
+                                         slot="initial">&ndash;&gt;&lt;!&ndash;
+                                    <img :src="imgUrlUpdate"
+                                         slot="placeholder">&ndash;&gt;
+                                </croppa>-->
                             </el-col>
                         </el-row>
                         <br><br>
@@ -1276,7 +1277,6 @@
                 this.queryData(val, skip, this.currentSize + skip);
             },
             'thumbImgCroppa.loading'(val) {
-                console.log(val);
                 if (!val) {
                     this.generateThumbImgUrl();
                 }
@@ -1488,6 +1488,7 @@
                                                             console.log(err.message);
                                                         } else {
                                                             vm.queryData();
+                                                            vm.thumbImgCroppa = null;
                                                         }
                                                     });
                                                 }).catch(err => console.log(err));
@@ -1773,6 +1774,8 @@
                         vm.schStudentForm.note = result.note;
 
                         vm.imgUrlUpdate = result.imgUrl;
+                        vm.thumbImgCroppa = null;
+
                     }
                 })
             },
@@ -1800,7 +1803,9 @@
                         where: "",
                         graduatedYear: "",
                     }];
-
+                this.thumbImgCroppa = null;
+                this.imgUrl = "";
+                this.imgUrlUpdate = "";
 
                 if (this.$refs["schStudentFormAdd"]) {
                     this.$refs["schStudentFormAdd"].resetFields();
@@ -1922,7 +1927,10 @@
                 )
             },
             generateThumbImgUrl: function () {
+                console.log(this.thumbImgCroppa);
                 let url = this.thumbImgCroppa && this.thumbImgCroppa.generateDataUrl();
+                console.log(this.url);
+
                 if (!url) {
                     return
                 }

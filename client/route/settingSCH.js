@@ -22,12 +22,34 @@ FlowRouter.notFound = {
 };
 
 
-var schSetting = FlowRouter.group({
+let schSetting = FlowRouter.group({
     prefix: '/sch-setting',
     name: 'schSetting',
     title: "Setting",
     triggersEnter: [function (context, redirect) {
         if (!CheckRoles({roles: ['admin', 'setting', 'super']})) {
+            redirect('wb.home');
+        }
+
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
+
+let schDepartment = FlowRouter.group({
+    prefix: '/sch-setting',
+    name: 'schSetting',
+    title: "Setting",
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['admin', 'setting', 'super', 'department']})) {
             redirect('wb.home');
         }
 
@@ -101,7 +123,7 @@ schSetting.route('/schProgram', {
 
 import "../../imports/ui/sch_subject/sch_subject";
 //Student
-schSetting.route('/schSubject', {
+schDepartment.route('/schSubject', {
     name: 'sch.subject',
     title: "Subject",
     parent: "wb.home",
@@ -111,7 +133,7 @@ schSetting.route('/schSubject', {
 });
 import "../../imports/ui/sch_ciriculumn/sch_ciriculumn";
 //Student
-schSetting.route('/schCiriculumn', {
+schDepartment.route('/schCiriculumn', {
     name: 'sch.ciriculumn',
     title: "Ciriculumn",
     parent: "wb.home",

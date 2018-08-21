@@ -7,6 +7,7 @@ import {Pos_AverageInventory} from "../imports/collection/posAverageInventory"
 import {Pos_Location} from "../imports/collection/posLocation"
 import {Pos_Product} from "../imports/collection/posProduct"
 import {LoginSetup} from "../imports/collection/loginSetup";
+import {Manage_Module} from "../imports/collection/manageModule";
 //Water Billing setup
 Meteor.publish('wb_waterBillingSetup', function (rolesArea) {
     if (this.userId) {
@@ -19,6 +20,11 @@ Meteor.publish('wb_waterBillingSetup', function (rolesArea) {
 //Login Setup
 Meteor.publish('loginSetup', function () {
     return LoginSetup.find({});
+
+});
+//Login Setup
+Meteor.publish('manageModule', function () {
+    return Manage_Module.find({});
 
 });
 //Exchange

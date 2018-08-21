@@ -103,7 +103,7 @@ wbSetting.route('/accChartAccount', {
 
 import '../../imports/ui/waterBillingSetup/waterBillingSetup';
 //waterBillingSetup
-FlowRouter.route('/waterBillingSetup', {
+wbSetting.route('/waterBillingSetup', {
     name: 'wb.waterBillingSetup',
     title: "Setup",
     parent: "wb.home",

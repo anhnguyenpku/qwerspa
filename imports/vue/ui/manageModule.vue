@@ -33,6 +33,15 @@
                         </el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
+
+                <el-form-item label="Feature" prop="feature">
+                    <el-checkbox-group v-model="manageModule.feature">
+                        <el-checkbox v-for="m in featureList" :label="m.value" :key="m.value">{{m.label}}
+                        </el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+
+
                 <el-form-item label="Branch" prop="rolesBranch">
                     <el-select style="display: block !important;" multiple filterable clearable
                                v-model="manageModule.rolesBranch"
@@ -76,6 +85,7 @@
                     rolesBranch: [],
                     rolesArea: [],
                     module: [],
+                    feature: [],
                     _id: ""
                 },
                 rules: {
@@ -84,6 +94,24 @@
                 // Options
                 rolesBranchOption: [],
                 rolesAreaOption: [],
+                featureList: [
+                    //School
+                    {label: "Bus", value: "Bus"},
+                    {label: "Transcript", value: "Transcript"},
+                    {label: "Score", value: "Score"},
+                    {label: "Teacher", value: "Teacher"},
+
+                    //Account
+
+
+                    //POS
+                    {label: "Inventory", value: "Inventory"},
+                    {label: "Order", value: "Order"},
+                    {label: "Transfer", value: "Transfer"},
+                    {label: "Vendor", value: "Vendor"},
+                    {label: "Customer", value: "Customer"},
+
+                ],
                 moduleOption: [
                     // {label: "Water Billing", value: "Water Billing"},
                     {label: "School", value: "School"},
@@ -107,6 +135,7 @@
                             rolesBranch: vm.manageModule.rolesBranch,
                             rolesArea: vm.manageModule.rolesArea,
                             module: vm.manageModule.module,
+                            feature: vm.manageModule.feature,
                             _id: vm.manageModule._id
                         };
 
