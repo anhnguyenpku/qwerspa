@@ -137,17 +137,18 @@ Template.MainLayout.helpers({
     manageModule() {
         let ob = {};
         let ma = Manage_Module.findOne();
-        ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.teacher = (ma.feature.indexOf("Teacher") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        if (ma.feature) {
+            ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.teacher = (ma.feature.indexOf("Teacher") > -1 ? true : false) || CheckRoles({roles: ['super']});
 
-        ob.inventory = (ma.feature.indexOf("Inventory") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.order = (ma.feature.indexOf("Order") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
-
+            ob.inventory = (ma.feature.indexOf("Inventory") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.order = (ma.feature.indexOf("Order") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        }
 
         return ob;
     }
@@ -182,15 +183,17 @@ Template.sidebar.helpers({
     manageModule() {
         let ob = {};
         let ma = Manage_Module.findOne();
-        ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.teacher = (ma.feature.indexOf("Teacher") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.inventory = (ma.feature.indexOf("Inventory") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.order = (ma.feature.indexOf("Order") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
-        ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        if (ma.feature) {
+            ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.teacher = (ma.feature.indexOf("Teacher") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.inventory = (ma.feature.indexOf("Inventory") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.order = (ma.feature.indexOf("Order") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+        }
         return ob;
     }
 });

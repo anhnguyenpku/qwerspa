@@ -161,6 +161,9 @@
                 let vm = this;
                 Meteor.call("queryManageModule", (err, result) => {
                     if (result) {
+                        if (result && result.feature === undefined) {
+                            result.feature = [];
+                        }
                         vm.manageModule = result;
                         this.rolesAreaOpt(result.rolesBranch);
                     }
