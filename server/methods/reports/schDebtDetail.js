@@ -121,7 +121,7 @@ Meteor.methods({
                         <tr>
                             <td style="text-align: center !important;">${i}</td>
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
-                            <td style="text-align: left !important;">${obj.studentDoc.personal.phoneNumber}</td>
+                            <td style="text-align: left !important;">${obj.studentDoc.personal.phoneNumber || ""}</td>
                             <td style="text-align: center !important;">${obj.classDoc && obj.classDoc.name || ""}</td>
                             <td >${formatCurrency(obj.totalAmount - obj.totalPaid - obj.totalDiscount)}</td>
                         </tr>

@@ -23,7 +23,7 @@ Meteor.methods({
     },
     schGeneratePaymentScheduleAStudent(classDoc, levelDoc, doc) {
         let order = 1;
-        let pricePerUnit = levelDoc.price / levelDoc.term;
+        let pricePerUnit = levelDoc.price * doc.term / levelDoc.term;
         let scheduleDoc = {};
         scheduleDoc.studentId = doc.studentId;
         scheduleDoc.classId = classDoc._id;
