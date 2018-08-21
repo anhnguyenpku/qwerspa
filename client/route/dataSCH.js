@@ -158,3 +158,15 @@ schData.route('/schBusPayment/print', {
     }
 
 });
+
+
+import "../../imports/ui/sch_teacherActivity/sch_teacherActivity";
+//Student
+schData.route('/schTeacherActivity', {
+    name: 'sch.teacherActivity',
+    title: "Teacher Activity",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_teacherActivity');
+    }
+});

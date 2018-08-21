@@ -181,3 +181,15 @@ schReportStudent.route('/schBusDebtSummaryReport', {
     }
 
 });
+
+import '../../imports/ui/report/schTeacherActivity/schTeacherActivity';
+
+schReportStudent.route('/schTeacherActivityReport', {
+    name: 'sch.schTeacherActivityReport',
+    title: "Teacher Activity Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_teacherActivityReport');
+    }
+
+});

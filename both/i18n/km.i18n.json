@@ -95,7 +95,9 @@
       "general": "ទូទៅ",
       "busDebtSummary": "បំណុលសេវាឡានសង្ខេប",
       "busDebtDetail": "បំណុលសេវាឡានលម្អិត",
-      "position": "តួនាទី"
+      "position": "តួនាទី",
+      "activity": "សកម្មភាព",
+      "teacherActivity": "សកម្មភាពគ្រូ "
     }
   }
 }

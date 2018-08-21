@@ -242,6 +242,18 @@
                                                                     </a>
                                                                     </li>
                                                                     <hr>
+                                                                    <a href="#" class="title-head">
+                                                                        <i class="fa fa-user"></i> <span>{{_
+                                                                            "sch.sidebarMenu.teacher"}}</span>
+                                                                    </a>
+                                                                    <li><a href="{{pathFor
+                                                                            'sch.schTeacherActivityReport'}}"
+                                                                           class="title-body">
+                                                                        <i class="fa fa-dollar"></i> {{_
+                                                                            "sch.sidebarMenu.teacherActivity"}}
+                                                                    </a>
+                                                                    </li>
+                                                                    <hr>
 
                                                                 </ul>
                                                             </li>
@@ -964,6 +976,10 @@
                                                                                 aria-hidden="true"></i> {{_
                             "sch.sidebarMenu.class"}}</a>
                     </li>
+                    <li><a href="{{pathFor 'sch.teacherActivity'}}" class="title-body"><i class="fa fa-cube"
+                                                                                          aria-hidden="true"></i> {{_
+                            "sch.sidebarMenu.teacherActivity"}}</a>
+                    </li>
                     <hr>
                     <a href="#" class="title-head">
                         <i style="color: white !important;" class="fa fa-cogs"></i> <span style="color: white;">{{_
@@ -1000,6 +1016,9 @@
                     </li>
                     <li><a href="{{pathFor 'sch.position'}}" class="title-body"><i class="fa fa-star"></i> {{_
                             "sch.sidebarMenu.position"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'sch.activity'}}" class="title-body"><i class="fa fa-star"></i> {{_
+                            "sch.sidebarMenu.activity"}}</a>
                     </li>
                     <hr>
                     <li><a href="{{pathFor 'sch.busStop'}}" class="title-body"><i class="fa fa-map-marker"></i> {{_

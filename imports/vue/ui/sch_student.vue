@@ -599,6 +599,7 @@
                                         @move="handleThumbImgCroppaMove"
                                         @zoom="handleThumbImgCroppaZoom"
                                         :zoom-speed="10"
+                                        crossOrigin="anonymous"
                                 >
                                 </croppa>
                             </el-col>
@@ -1102,10 +1103,11 @@
                                         @move="handleThumbImgCroppaMove"
                                         @zoom="handleThumbImgCroppaZoom"
                                         :zoom-speed="10"
+                                        crossOrigin="anonymous"
                                 >
                                     <!--<img :src="imgUrlUpdate" crossOrigin="anonymous"
                                          slot="initial">-->
-                                    <img :src="imgUrlUpdate"
+                                    <img :src="imgUrlUpdate" crossOrigin="anonymous"
                                          slot="placeholder">
                                 </croppa>
                             </el-col>

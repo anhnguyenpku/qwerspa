@@ -170,3 +170,14 @@ schSetting.route('/schPosition', {
         _Main('sch_position');
     }
 });
+
+import "../../imports/ui/sch_activity/sch_activity";
+//Student
+schSetting.route('/schActivity', {
+    name: 'sch.activity',
+    title: "Activity",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('sch_activity');
+    }
+});

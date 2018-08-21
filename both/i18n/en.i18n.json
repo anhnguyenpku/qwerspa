@@ -95,7 +95,9 @@
       "general": "General",
       "busDebtSummary": "Bus Debt Summary",
       "busDebtDetail": "Bus Debt Detail",
-      "position": "Position"
+      "position": "Position",
+      "activity": "Activity",
+      "teacherActivity": "Teacher Activity"
     }
   },
   "global": {
