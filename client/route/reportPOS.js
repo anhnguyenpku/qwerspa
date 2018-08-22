@@ -418,3 +418,25 @@ posReport.route('/posStockReceiveReport', {
     }
 
 });
+import '../../imports/ui/report/posConvertInventory/posConvertInventory';
+
+posReport.route('/posConvertInventoryReport', {
+    name: 'pos.posConvertInventoryReport',
+    title: "Convert Inventory",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_convertInventoryReport');
+    }
+
+});
+import '../../imports/ui/report/posConvertInventorySummary/posConvertInventorySummary';
+
+posReport.route('/posConvertInventorySummaryReport', {
+    name: 'pos.posConvertInventorySummaryReport',
+    title: "Convert Inventory Summary",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_convertInventorySummaryReport');
+    }
+
+});

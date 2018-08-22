@@ -153,10 +153,11 @@ Meteor.methods({
         if (isUpdated) {
             Meteor.defer(function () {
                 dataBeforeUpdate.transactionType = "Remove Convert Inventory";
+                dataBeforeUpdate.id = dataBeforeUpdate._id;
                 Meteor.call("reducePosAverageInventory", dataBeforeUpdate, (err1, result1) => {
                     if (!err1) {
                         data.transactionType = "Convert Inventory";
-                        data.id = _id;
+                        data.id = dataBeforeUpdate._id;
                         Meteor.call("addPosAverageInventory", data, (err2, result2) => {
                             if (err2) {
                                 console.log(err2.message);
@@ -172,9 +173,12 @@ Meteor.methods({
         return isUpdated;
     },
     removePosConvertInventory(id) {
+        let data = Pos_ConvertInventory.findOne({_id: id});
         let isRemoved = Pos_ConvertInventory.remove({_id: id});
         if (isRemoved) {
             data.transactionType = "Remove Convert Inventory";
+            data.id = id;
+
             Meteor.call("reducePosAverageInventory", data, (err, reuslt) => {
                 if (err) {
                     console.log(err.message);

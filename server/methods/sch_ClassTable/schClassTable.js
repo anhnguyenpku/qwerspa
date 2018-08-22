@@ -149,20 +149,31 @@ Meteor.methods({
             classTable.rolesArea = data.classFormDoc.rolesArea;
             let studentList = [];
             if (classTableDoc) {
-                studentList = classTableDoc.studentList;
+                studentList = classTableDoc.studentList || [];
             }
             data.studentList.forEach((obj) => {
                 if (obj) {
-                    data.classFormDoc.studentId = obj.studentList.studentId;
-                    data.classFormDoc._id = obj.studentList._id;
-                    data.classFormDoc.promotionId = obj.studentList.promotionId;
-                    data.classFormDoc.term = obj.studentList.term;
-                    data.classFormDoc.registerDate = classDoc.classDate;
-                    data.classFormDoc.isPromote = false;
-                    data.classFormDoc.isChangeClass = false;
-                    data.classFormDoc.status = "Active";
 
-                    studentList.push(data.classFormDoc);
+
+                    studentList.push({
+                        levelId: data.classFormDoc.levelId,
+                        majorId: data.classFormDoc.majorId,
+                        programId: data.classFormDoc.programId,
+                        classId: data.classFormDoc.classId,
+                        startClassDate: data.classFormDoc.startClassDate,
+                        rolesArea: data.classFormDoc.rolesArea,
+
+                        studentId: obj.studentList.studentId,
+                        _id: obj.studentList._id,
+                        promotionId: obj.studentList.promotionId,
+                        term: obj.studentList.term,
+                        registerDate: classDoc.classDate,
+                        isPromote: false,
+                        isChangeClass: false,
+                        status: "Active"
+
+                    })
+
                     Sch_ClassTable.direct.update({
                         "studentList.studentId": obj.studentList.studentId,
                         "studentList.programId": obj.studentList.programId,
@@ -206,20 +217,31 @@ Meteor.methods({
             classTable.rolesArea = data.classFormDoc.rolesArea;
             let studentList = [];
             if (classTableDoc) {
-                studentList = classTableDoc.studentList;
+                studentList = classTableDoc.studentList || [];
             }
             data.studentList.forEach((obj) => {
                 if (obj) {
-                    data.classFormDoc.studentId = obj.studentList.studentId;
-                    data.classFormDoc._id = obj.studentList._id;
-                    data.classFormDoc.promotionId = obj.studentList.promotionId;
-                    data.classFormDoc.term = obj.studentList.term;
-                    data.classFormDoc.registerDate = classDoc.classDate;
-                    data.classFormDoc.isPromote = false;
-                    data.classFormDoc.isChangeClass = false;
-                    data.classFormDoc.status = "Active";
 
-                    studentList.push(data.classFormDoc);
+                    studentList.push({
+                        levelId: data.classFormDoc.levelId,
+                        majorId: data.classFormDoc.majorId,
+                        programId: data.classFormDoc.programId,
+                        classId: data.classFormDoc.classId,
+                        startClassDate: data.classFormDoc.startClassDate,
+                        rolesArea: data.classFormDoc.rolesArea,
+
+                        studentId: obj.studentList.studentId,
+                        _id: obj.studentList._id,
+                        promotionId: obj.studentList.promotionId,
+                        term: obj.studentList.term,
+                        registerDate: classDoc.classDate,
+                        isPromote: false,
+                        isChangeClass: false,
+                        status: "Active"
+
+                    })
+
+
                     Sch_ClassTable.direct.update({
                         "studentList.studentId": obj.studentList.studentId,
                         "studentList.programId": obj.studentList.programId,

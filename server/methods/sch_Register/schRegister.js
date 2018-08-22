@@ -193,7 +193,7 @@ Meteor.methods({
                 //Take In
                 if (classTableDoc.studentList && classTableDoc.studentList.length > 0) {
                     classTableDoc.studentList.forEach((obj) => {
-                        if (obj.isPromote === undefined) {
+                        if (obj && obj.isPromote === undefined) {
                             obj.isPromote = false;
                         }
                         if (obj._id !== registerDoc._id) {
@@ -212,7 +212,7 @@ Meteor.methods({
                 if (takeOutClassDoc && (classTableDoc.classId !== takeOutClassDoc.classId)) {
                     if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {
                         takeOutClassDoc.studentList.forEach((obj) => {
-                            if (obj.isPromote === undefined) {
+                            if (obj && obj.isPromote === undefined) {
                                 obj.isPromote = false;
                             }
                             if (obj._id !== registerDoc._id) {
@@ -233,7 +233,7 @@ Meteor.methods({
                 if (takeOutClassDoc && (classTBDoc.classId !== takeOutClassDoc.classId)) {
                     if (takeOutClassDoc.studentList && takeOutClassDoc.studentList.length > 0) {
                         takeOutClassDoc.studentList.forEach((obj) => {
-                            if (obj.isPromote === undefined) {
+                            if (obj && obj.isPromote === undefined) {
                                 obj.isPromote = false;
                             }
                             if (obj._id !== registerDoc._id) {
