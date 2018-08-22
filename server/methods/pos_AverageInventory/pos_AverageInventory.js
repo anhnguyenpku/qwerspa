@@ -170,6 +170,70 @@ Meteor.methods({
                 let isInsrtTo = Pos_AverageInventory.insert(objTo);
 
             })
+        } else if (data.transactionType === "Convert Inventory") {
+            let locationDoc = Pos_Location.findOne({_id: data.locationId});
+            let obj = {};
+            let onHandInventory = Pos_AverageInventory.findOne({
+                itemId: data.productId,
+                locationId: data.locationId,
+                rolesArea: data.rolesArea
+            }, {sort: {createdAt: -1}});
+
+            obj = {
+                cusVendId: data.locationId,
+                cusVendName: locationDoc && locationDoc.name || "",
+
+                transactionId: data.id,
+                locationId: data.locationId,
+                averageInventoryDate: data.date,
+                averageInventoryDateName: data.dateName,
+                itemId: data.productId,
+                qty: data.qty,
+                price: onHandInventory.averageCost || 0,
+                amount: (onHandInventory.averageCost || 0) * data.qty,
+                amountEnding: (onHandInventory && onHandInventory.amountEnding || 0) - ((onHandInventory && onHandInventory.averageCost || 0) * data.qty),
+                qtyEnding: (onHandInventory && onHandInventory.qtyEnding || 0) - data.qty,
+                averageCost: onHandInventory && onHandInventory.averageCost || 0,
+                transactionType: "Convert Inventory From",
+                rolesArea: data.rolesArea,
+                profit: 0
+            };
+
+            let isInsrt = Pos_AverageInventory.insert(obj);
+
+            if (data && data.convert.length > 0) {
+                data.convert.forEach((doc) => {
+                    //Add To Location
+                    let objTo = {};
+                    let onHandInventoryTo = Pos_AverageInventory.findOne({
+                        itemId: doc.productId,
+                        locationId: data.locationId,
+                        rolesArea: data.rolesArea
+                    }, {sort: {createdAt: -1}});
+
+                    objTo = {
+                        cusVendId: data.locationId,
+                        cusVendName: locationDoc && locationDoc.name || "",
+
+                        transactionId: data.id,
+                        locationId: data.locationId,
+                        averageInventoryDate: data.date,
+                        averageInventoryDateName: data.dateName,
+                        itemId: doc.productId,
+                        qty: doc.qty,
+                        price: onHandInventory.averageCost || 0,
+                        amount: (onHandInventory.averageCost || 0) * doc.qty,
+                        amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventory.averageCost || 0) * doc.qty),
+                        qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty,
+                        averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventory.averageCost || 0) * doc.qty)) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty),
+                        transactionType: "Convert Inventory To",
+                        rolesArea: data.rolesArea
+                    };
+
+                    let isInsrtTo = Pos_AverageInventory.insert(objTo);
+
+                })
+            }
         }
 
 
@@ -302,6 +366,70 @@ Meteor.methods({
 
 
             })
+        } else if (data.transactionType === "Remove Convert Inventory") {
+            let locationDoc = Pos_Location.findOne({_id: data.locationId});
+            let obj = {};
+            let onHandInventory = Pos_AverageInventory.findOne({
+                itemId: data.productId,
+                locationId: data.locationId,
+                rolesArea: data.rolesArea
+            }, {sort: {createdAt: -1}});
+
+            obj = {
+                cusVendId: data.locationId,
+                cusVendName: locationDoc && locationDoc.name || "",
+
+                transactionId: data.id,
+                locationId: data.locationId,
+                averageInventoryDate: data.date,
+                averageInventoryDateName: data.dateName,
+                itemId: data.productId,
+                qty: data.qty,
+                price: onHandInventory.averageCost || 0,
+                amount: (onHandInventory.averageCost || 0) * data.qty,
+                amountEnding: (onHandInventory && onHandInventory.amountEnding || 0) + ((onHandInventory && onHandInventory.averageCost || 0) * data.qty),
+                qtyEnding: (onHandInventory && onHandInventory.qtyEnding || 0) + data.qty,
+                averageCost: onHandInventory && onHandInventory.averageCost || 0,
+                transactionType: "Remove Convert Inventory From",
+                rolesArea: data.rolesArea,
+                profit: 0
+            };
+
+            let isInsrt = Pos_AverageInventory.insert(obj);
+
+            if (data && data.convert.length > 0) {
+                data.convert.forEach((doc) => {
+                    //Add To Location
+                    let objTo = {};
+                    let onHandInventoryTo = Pos_AverageInventory.findOne({
+                        itemId: doc.productId,
+                        locationId: data.locationId,
+                        rolesArea: data.rolesArea
+                    }, {sort: {createdAt: -1}});
+
+                    objTo = {
+                        cusVendId: data.locationId,
+                        cusVendName: locationDoc && locationDoc.name || "",
+
+                        transactionId: data.id,
+                        locationId: data.locationId,
+                        averageInventoryDate: data.date,
+                        averageInventoryDateName: data.dateName,
+                        itemId: doc.productId,
+                        qty: doc.qty,
+                        price: onHandInventory.averageCost || 0,
+                        amount: (onHandInventory.averageCost || 0) * doc.qty,
+                        amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - ((onHandInventory.averageCost || 0) * doc.qty),
+                        qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty,
+                        averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - ((onHandInventory.averageCost || 0) * doc.qty)) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty),
+                        transactionType: "Remove Convert Inventory To",
+                        rolesArea: data.rolesArea
+                    };
+
+                    let isInsrtTo = Pos_AverageInventory.insert(objTo);
+
+                })
+            }
         }
     },
     queryPosAverageCostById(id, rolesArea, locationId) {

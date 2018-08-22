@@ -342,7 +342,7 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            
+
                             <el-form-item :label="langConfig['receiveDate']" prop="paymentDate">
                                 <el-date-picker
                                         v-model="schPaymentForm.paymentDate"
@@ -766,6 +766,8 @@
 
                                 if (isCloseDialog) {
                                     this.dialogAddSchPayment = false;
+                                } else {
+                                    vm.getPaymentNoByRoleAndDate(this.schPaymentForm.paymentDate);
                                 }
 
                                 vm.schPaymentData.forEach((obj) => {

@@ -48,7 +48,8 @@
       "saleOrder": "Sale Order",
       "saleOrderByCustomerDetail": "Sale Order By Customer Detail",
       "stockDebt": "Stock Debt",
-      "stockReceive": "Stock Receive"
+      "stockReceive": "Stock Receive",
+      "convertInventory":"Convert Inventory"
     },
     "customer": {
       "customerAdd": "Add Customer",

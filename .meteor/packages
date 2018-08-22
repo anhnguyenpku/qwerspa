@@ -78,7 +78,7 @@ brentjanderson:buzz
 tsega:bootstrap3-datetimepicker@=3.1.3_3
 reywood:publish-composite
 percolate:synced-cron
-dynamic-import@0.4.0
+dynamic-import@0.4.2
 underscore@1.0.10
 cultofcoders:persistent-session
 promise@0.11.1

@@ -125,7 +125,6 @@ posPurchase.route('/posPayBill', {
 });
 
 
-
 import '../../imports/ui/report/posInvoicePrintA4/posInvoicePrintA4';
 
 posData.route('/posInvoice/print', {
@@ -164,5 +163,16 @@ posSale.route('/posSaleOrder', {
     title: "SaleOrder",
     action: function (query, params) {
         _Main('pos_SaleOrder');
+    }
+});
+
+import "../../imports/ui/pos_convertInventory/posConvertInventory";
+// Invoice
+posData.route('/posConvertInventory', {
+    name: 'pos.convertInventory',
+    parent: 'wb.homeData',
+    title: "Convert Inventory",
+    action: function (query, params) {
+        _Main('pos_convertInventory');
     }
 });
