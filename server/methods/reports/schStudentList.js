@@ -231,8 +231,8 @@ Meteor.methods({
                             <td style="text-align: left !important;">${ob.studentDoc.personal.name}</td>
                             <td style="text-align: left !important;">${ob.studentDoc.personal.gender}</td>
                             <td style="text-align: center !important;">${ob.studentDoc.personal.dobName}</td>
-                            <td style="text-align: center !important;">${ob.studentDoc.personal.phoneNumber}</td>
-                            <td style="text-align: left !important;">${ob.studentDoc.personal.villageCurrent} ${ob.studentDoc.personal.communeCurrent} ${ob.studentDoc.personal.districtCurrent} ${ob.studentDoc.personal.provinceCurrent}</td>
+                            <td style="text-align: center !important;">${ob.studentDoc.personal.phoneNumber || ""}</td>
+                            <td style="text-align: left !important;">${ob.studentDoc.personal.villageCurrent || ""} ${ob.studentDoc.personal.communeCurrent || ""} ${ob.studentDoc.personal.districtCurrent || ""} ${ob.studentDoc.personal.provinceCurrent || ""}</td>
                            
                         </tr>
                     `;

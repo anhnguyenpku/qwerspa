@@ -1166,7 +1166,7 @@
     .transition-box {
         margin-bottom: 10px;
         width: 100%;
-        height: 100px;
+        height: 110px;
         border-radius: 4px;
         background-color: #409EFF;
         text-align: center;

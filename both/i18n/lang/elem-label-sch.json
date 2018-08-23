@@ -44,7 +44,7 @@
       "isDie": "Die",
       "address": "Address",
       "personalContract": "Personal Contract",
-      "cousin": "Cousin",
+      "cousin": "Sibling",
       "family": "Family",
       "study": "Study",
       "studyAt": "Study At?",
@@ -618,7 +618,8 @@
       "saveAndPrint": "Save and Print",
       "desc": "Note",
       "waived": "Waived",
-      "penalty": "Penalty"
+      "penalty": "Penalty",
+      "fee": "Admin Fee"
     },
     "busStop": {
       "searchHere": "Search Here ...",
@@ -1380,7 +1381,8 @@
       "saveAndPrint": "រក្សាទុក ហើយ បោះពុម្ភ",
       "desc": "បរិយាយ",
       "waived": "កាត់ចេញ",
-      "penalty": "ពិន័យ"
+      "penalty": "ពិន័យ",
+      "fee": "សេវារដ្ឋបាល"
     },
     "busStop": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

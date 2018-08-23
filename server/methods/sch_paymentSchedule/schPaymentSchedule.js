@@ -6,6 +6,7 @@ import {Sch_Class} from "../../../imports/collection/schClass";
 import {Sch_Transcript} from "../../../imports/collection/schTranscript";
 import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+import {Sch_Promotion} from "../../../imports/collection/schPromotion";
 
 Meteor.methods({
     schGeneratePaymentSchedule(classDoc, levelDoc, classTableDoc) {
@@ -23,21 +24,34 @@ Meteor.methods({
     },
     schGeneratePaymentScheduleAStudent(classDoc, levelDoc, doc) {
         let order = 1;
-        let pricePerUnit = levelDoc.price * doc.term / levelDoc.term;
+        let discount = 0;
+
+        let promotionDoc = Sch_Promotion.findOne({_id: doc.promotionId});
+        let pricePerUnitNotDiscount = levelDoc.price * doc.term / levelDoc.term;
+
+        if (promotionDoc.promotionType === "Percent") {
+            discount = levelDoc.price * promotionDoc.value / 100;
+        } else {
+            discount = promotionDoc.value;
+        }
+
+        let pricePerUnit = (levelDoc.price - discount) * doc.term / levelDoc.term;
+        let discountPerUnit = discount * doc.term / levelDoc.term;
+
         let scheduleDoc = {};
         scheduleDoc.studentId = doc.studentId;
         scheduleDoc.classId = classDoc._id;
         scheduleDoc.levelId = levelDoc._id;
         scheduleDoc.isPaid = false;
-        scheduleDoc.discount = 0;
         scheduleDoc.paid = 0;
         scheduleDoc.waived = 0;
 
 
         for (let i = 1; i <= levelDoc.term; i = i + doc.term) {
             scheduleDoc.order = order;
-            scheduleDoc.amount = formatCurrency(pricePerUnit);
+            scheduleDoc.amount = formatCurrency(pricePerUnitNotDiscount);
             scheduleDoc.rawAmount = formatCurrency(pricePerUnit);
+            scheduleDoc.discount = formatCurrency(discountPerUnit);
             scheduleDoc.netAmount = formatCurrency(pricePerUnit);
             scheduleDoc.balanceUnPaid = formatCurrency(pricePerUnit);
             scheduleDoc.rolesArea = classDoc.rolesArea;
@@ -89,9 +103,8 @@ Meteor.methods({
             obj.isApplyTerm = false;
             obj.promotionDoc = studentDoc && studentDoc[0].promotionDoc || "";
 
-            obj.amount = formatCurrency(obj.amount - obj.paid - (obj.waived || 0) - obj.discount - (obj.balanceNotCut || 0));
-            obj.discount = 0;
-            obj.netAmount = formatCurrency(obj.amount - obj.paid - (obj.waived || 0) - obj.discount - (obj.balanceNotCut || 0));
+            obj.amount = formatCurrency(obj.amount - obj.paid - (obj.waived || 0) - (obj.balanceNotCut || 0));
+            obj.netAmount = formatCurrency(obj.netAmount - obj.paid - (obj.waived || 0) - (obj.balanceNotCut || 0));
             obj.paid = 0;
             obj.isPaid = false;
             obj.desc = "";

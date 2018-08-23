@@ -72,48 +72,60 @@ Meteor.methods({
                 }
             ]);
             let totalPaid = 0;
-            let totalAmount = 0;
-            let totalDiscount = 0;
-            paymentList[0].schedule.forEach((obj) => {
-                if (obj.isPaid === true) {
-                    printPaymentA4Html += `
+            let totalNetAmount = 0;
+            if (paymentList[0].schedule.length > 0) {
+                paymentList[0].schedule.forEach((obj) => {
+                    if (obj.isPaid === true) {
+                        printPaymentA4Html += `
                     <tr>
                             <td style="border: 0px !important;">${obj.receivePaymentScheduleDateName}</td>
                             <td style="border: 0px !important;">${moment(moment(obj.receivePaymentScheduleDate).add(classTable[0].studentList.term || 0, "months").toDate()).format("DD/MM/YYYY")}</td>
                             <td style="text-align: left !important;border: 0px !important;">Tuition Fee</td>
-                            <td style="border: 0px !important;">${formatCurrency(obj.amount, companyDoc.baseCurrency)}</td>
+                            <td style="border: 0px !important;">${formatCurrency(obj.netAmount, companyDoc.baseCurrency)}</td>
                     </tr>
             
             `;
-                    totalAmount += obj.amount;
-                    totalPaid += obj.paid;
-                    totalDiscount += obj.discount;
-                    ind++;
-                }
-            });
+                        totalNetAmount += obj.netAmount;
+                        totalPaid += obj.paid;
+                        ind++;
+                    }
+                });
+            } else {
+                printPaymentA4Html += `
+                    <tr>
+                            <td style="text-align: left !important;border: 0px !important;" colspan="3">Tuition Fee Free</td>
+                            <td style="border: 0px !important;">${formatCurrency(0, companyDoc.baseCurrency)}</td>
+                    </tr>
+            
+            `;
+            }
 
             printPaymentA4Html += `
                 <tr>
-                    <td colspan="3" style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['total']} :</td>
-                    <td style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(totalAmount, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['discount']} :</td>
-                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(totalDiscount, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
-                </tr>
-                <tr>
                     <td colspan="3" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['netTotal']} :</td>
-                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(totalAmount - totalDiscount, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(paymentList[0].totalNetAmount, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['fee']} :</td>
+                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(paymentList[0].fee, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['penalty']} :</td>
+                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(paymentList[0].penalty, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['waived']} :</td>
+                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(paymentList[0].totalWaived, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
                 </tr>
                 <tr>
                     <td colspan="2" style="border: 0px !important;text-align: center;padding-bottom: 0px !important;">${translate['pleaseCheck']}</td>
                     <th colspan="1" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paid']} :</th>
-                    <th style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(totalPaid, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</th>
+                    <th style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</th>
                 </tr>
                 <tr>
                     <td colspan="2" style="border: 0px !important;text-align: center;padding-bottom: 0px !important;">${translate['thankYou']}</td>
                     <th colspan="1" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['totalDue']} :</th>
-                    <th style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(totalAmount - totalDiscount - totalPaid, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</th>
+                    <th style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(paymentList[0].balanceUnPaid)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</th>
                 </tr>
                 <tr>
                 <td colspan="4" style="border: 0px !important; text-align: center !important;font-size: 10px !important;">${translate['forQuestion']} ${companyDoc && companyDoc.phoneNumber}</td>

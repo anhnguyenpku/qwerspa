@@ -21,23 +21,11 @@ Sch_Payment.schema = new SimpleSchema({
         type: Date
     },
 
-    'schedule.$.isApplyTerm': {
-        type: Boolean,
-        defaultValue: true
-    },
     'schedule.$.isPaid': {
         type: Boolean,
         defaultValue: true
     },
-    'schedule.$.amount': {
-        type: Number,
-        decimal: true
-    },
     'schedule.$.rawAmount': {
-        type: Number,
-        decimal: true
-    },
-    'schedule.$.discount': {
         type: Number,
         decimal: true
     },
@@ -65,13 +53,6 @@ Sch_Payment.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    totalAmount: {
-        type: Number,
-        label: "Total Amount",
-        decimal: true,
-        optional: true,
-        defaultValue: 0
-    },
     totalNetAmount: {
         type: Number,
         label: "Paid",
@@ -82,13 +63,6 @@ Sch_Payment.schema = new SimpleSchema({
     totalPaid: {
         type: Number,
         label: "Paid",
-        decimal: true,
-        optional: true,
-        defaultValue: 0
-    },
-    totalDiscount: {
-        type: Number,
-        label: "Discount",
         decimal: true,
         optional: true,
         defaultValue: 0
@@ -123,6 +97,10 @@ Sch_Payment.schema = new SimpleSchema({
         optional: true
     },
     penalty: {
+        type: Number,
+        decimal: true
+    },
+    fee: {
         type: Number,
         decimal: true
     },

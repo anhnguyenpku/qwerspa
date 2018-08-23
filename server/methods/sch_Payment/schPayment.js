@@ -109,9 +109,7 @@ Meteor.methods({
     },
     insertSchPayment(data) {
         data.schedule.forEach((obj) => {
-            obj.amount = numeral(obj.amount).value();
             obj.rawAmount = numeral(obj.rawAmount).value();
-            obj.discount = numeral(obj.discount).value();
             obj.netAmount = numeral(obj.netAmount).value();
             obj.paid = numeral(obj.paid).value();
             obj.waived = numeral(obj.waived).value();
@@ -122,9 +120,7 @@ Meteor.methods({
     },
     updateSchPayment(data, _id) {
         data.schedule.map((obj) => {
-            obj.amount = numeral(obj.amount).value();
             obj.rawAmount = numeral(obj.rawAmount).value();
-            obj.discount = numeral(obj.discount).value();
             obj.netAmount = numeral(obj.netAmount).value();
             obj.paid = numeral(obj.paid).value();
             obj.waived = numeral(obj.waived).value();
@@ -143,7 +139,7 @@ Meteor.methods({
                 let paymentDoc = Sch_PaymentSchedule.findOne({_id: data._id});
                 let newStatus = paymentDoc.status;
 
-                if (paymentDoc.paid - (data.paid + data.discount) > 0) {
+                if (paymentDoc.paid - (data.paid) > 0) {
                     newStatus = "Partial";
                 } else {
                     newStatus = "Active";
@@ -153,7 +149,6 @@ Meteor.methods({
                     $set: {status: newStatus, closeDate: ""},
                     $inc: {
                         paid: -(data.paid),
-                        discount: -(data.discount),
                         waived: -(data.waived || 0),
                         paymentNumber: -1
                     }
@@ -166,11 +161,9 @@ Meteor.methods({
                     {
 
                         $inc: {
-                            "schedule.$.amount": (data.paid + data.discount + (data.waived || 0)),
-                            "schedule.$.netAmount": (data.paid + data.discount + (data.waived || 0)),
-                            totalAmount: (data.paid + data.discount + (data.waived || 0)),
-                            totalNetAmount: (data.paid + data.discount + (data.waived || 0)),
-                            balanceUnPaid: (data.paid + data.discount + (data.waived || 0))
+                            "schedule.$.netAmount": (data.paid + (data.waived || 0)),
+                            totalNetAmount: (data.paid + (data.waived || 0)),
+                            balanceUnPaid: (data.paid + (data.waived || 0))
                         }
                     }, {multi: true}, true);
             })
@@ -183,7 +176,7 @@ Meteor.methods({
         let paymentDoc = Sch_PaymentSchedule.findOne({_id: data._id});
         let newStatus = paymentDoc.status;
         let upd = {};
-        if (paymentDoc.paid + paymentDoc.discount + (paymentDoc.waived || 0) + (paymentDoc.balanceNotCut || 0) + numeral(data.paid).value() + numeral(data.discount).value() + numeral(data.waived || 0).value() >= paymentDoc.amount) {
+        if (paymentDoc.paid + (paymentDoc.waived || 0) + (paymentDoc.balanceNotCut || 0) + numeral(data.paid).value() + numeral(data.waived || 0).value() >= paymentDoc.netAmount) {
             newStatus = "Complete";
             upd.closeDate = date;
         } else {
@@ -195,7 +188,6 @@ Meteor.methods({
             $set: upd,
             $inc: {
                 paid: numeral(data.paid).value(),
-                discount: numeral(data.discount).value(),
                 waived: numeral(data.waived || 0).value(),
                 paymentNumber: 1
             }

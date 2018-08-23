@@ -44,9 +44,8 @@ Meteor.methods({
                         promotionId: "$promotionId"
 
                     },
-                    totalAmount: {$sum: "$amount"},
-                    totalPaid: {$sum: "$paid"},
-                    totalDiscount: {$sum: "$discount"},
+                    totalNetAmount: {$sum: "$netAmount"},
+                    totalPaid: {$sum: "$paid"}
                 }
             },
             {
@@ -97,9 +96,8 @@ Meteor.methods({
                 $group: {
                     _id: null,
                     data: {$push: "$$ROOT"},
-                    totalAmount: {$sum: "$totalAmount"},
-                    totalPaid: {$sum: "$totalPaid"},
-                    totalDiscount: {$sum: "$totalDiscount"}
+                    totalNetAmount: {$sum: "$totalNetAmount"},
+                    totalPaid: {$sum: "$totalPaid"}
                 }
             },
         ]);
@@ -111,9 +109,8 @@ Meteor.methods({
                 if (obj) {
                     if (obj.promotionDoc.promotionType === "Percent" && obj.promotionDoc.value === 100) {
 
-                        debtSummaryList[0].totalAmount -= obj.totalAmount;
+                        debtSummaryList[0].totalNetAmount -= obj.totalNetAmount;
                         debtSummaryList[0].totalPaid -= obj.totalPaid;
-                        debtSummaryList[0].totalDiscount -= obj.totalDiscount;
                     } else {
                         debtSummaryHTML += `
                         <tr>
@@ -121,7 +118,7 @@ Meteor.methods({
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
                             <td style="text-align: left !important;">${obj.studentDoc.personal.phoneNumber || ""}</td>
                             <td style="text-align: center !important;">${obj.classDoc && obj.classDoc.name || ""}</td>
-                            <td >${formatCurrency(obj.totalAmount - obj.totalPaid - obj.totalDiscount)}</td>
+                            <td >${formatCurrency(obj.totalNetAmount - obj.totalPaid)}</td>
                         </tr>
                     `;
                         i++;
@@ -131,7 +128,7 @@ Meteor.methods({
             debtSummaryHTML += `
                     <tr>
                         <th colspan="4">${translate['grandTotal']}</th>
-                        <td>${formatCurrency(debtSummaryList[0].totalAmount - debtSummaryList[0].totalPaid - debtSummaryList[0].totalDiscount)}</td>
+                        <td>${formatCurrency(debtSummaryList[0].totalNetAmount - debtSummaryList[0].totalPaid)}</td>
                     </tr>
             `;
         }

@@ -75,6 +75,7 @@ Meteor.methods({
                         totalPaid: {$sum: "$totalPaid"},
                         totalWaived: {$sum: "$totalWaived"},
                         totalPenalty: {$sum: "$penalty"},
+                        totalFee: {$sum: "$fee"},
                         balanceUnPaid: {$sum: "$balanceUnPaid"}
                     }
                 },
@@ -91,13 +92,13 @@ Meteor.methods({
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
                             <td style="text-align: center !important;">${obj.paymentDateName}</td>
                             <td style="text-align: center !important;">${obj.classDoc.name}</td>
-                            <td >${formatCurrency(obj.totalNetAmount + obj.totalDiscount, companyDoc.baseCurrency)}</td>
-                            <td >${formatCurrency(obj.totalDiscount, companyDoc.baseCurrency)}</td>
+         
                             <td >${formatCurrency(obj.totalNetAmount, companyDoc.baseCurrency)}</td>
+                                 <td >${formatCurrency(obj.penalty, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.fee, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.totalPaid, companyDoc.baseCurrency)}</td>
                              <td >${formatCurrency(obj.totalWaived, companyDoc.baseCurrency)}</td>
-                            <td >${formatCurrency(obj.penalty, companyDoc.baseCurrency)}</td>
-                            <td >${formatCurrency(obj.balanceUnPaid, companyDoc.baseCurrency)}</td>
+                       
                         </tr>
                     `;
                         i++;
@@ -105,11 +106,12 @@ Meteor.methods({
                 });
                 paymentHTML += `
                     <tr>
-                        <th colspan="7">${translate['grandTotal']}</th>
+                        <th colspan="5">${translate['grandTotal']}</th>
                         <td>${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)}</td>
+                                        <td>${formatCurrency(paymentList[0].totalPenalty, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].totalFee, companyDoc.baseCurrency)}</td>
                         <td>${formatCurrency(paymentList[0].totalWaived, companyDoc.baseCurrency)}</td>
-                        <td>${formatCurrency(paymentList[0].totalPenalty, companyDoc.baseCurrency)}</td>
-                        <td>${formatCurrency(paymentList[0].balanceUnPaid, companyDoc.baseCurrency)}</td>
+        
                     </tr>
             `;
             }

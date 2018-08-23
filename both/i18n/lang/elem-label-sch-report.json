@@ -208,7 +208,10 @@
       "location": "Location",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "description": "Description"
+      "description": "Description",
+      "waived": "Waived",
+      "fee": "Admin Fee",
+      "penalty": "Penalty"
     },
     "busPaymentA4Print": {
       "date": "Date",
@@ -282,7 +285,8 @@
       "discount": "Discount",
       "charge": "Charge",
       "waived": "Waived",
-      "penalty": "Penalty"
+      "penalty": "Penalty",
+      "fee": "Admin Fee"
     },
     "busPayment": {
       "run": "RUN REPORT",
@@ -766,7 +770,10 @@
       "location": "ទីតាំង",
       "startDate": "ថ្ងៃចាប់ផ្តើម",
       "endDate": "ដល់ថ្ងៃ",
-      "description": "បរិយាយ"
+      "description": "បរិយាយ",
+      "waived": "កាត់ចោល",
+      "fee": "សេវារដ្ឋបាល",
+      "penalty": "ពិន័យ"
     },
     "busPaymentA4Print": {
       "date": "កាលបរិច្ឆេទ",
@@ -843,7 +850,8 @@
       "discount": "បញ្ចុះតម្លៃ",
       "charge": "ទូទាត់",
       "waived": "កាត់ចោល",
-      "penalty": "ពិន័យ"
+      "penalty": "ពិន័យ",
+      "fee": "សេវារដ្ឋបាល"
     },
     "busPayment": {
       "run": "ដំណើរការរបាយការណ៍",

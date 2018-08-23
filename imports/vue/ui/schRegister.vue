@@ -518,7 +518,7 @@
                 <input type="hidden" v-model="schRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchRegister = false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button @click="dialogUpdateSchRegisterToClass = false ,cancel()">{{langConfig['cancel']}}</el-button>
                     <el-button type="primary" @click="updateSchRegister">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
