@@ -8,6 +8,14 @@ WB_waterBillingSetup.schema = new SimpleSchema({
     khName: {
         type: String
     },
+    ministryEnName: {
+        type: String,
+        optional: true
+    },
+    ministryKhName: {
+        type: String,
+        optional: true
+    },
     enShortName: {
         type: String
     },

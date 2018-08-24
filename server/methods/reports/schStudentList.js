@@ -180,8 +180,9 @@ Meteor.methods({
                                         <span class="blueOnPrint"
                                               style="font-family:Khmer os muol; font-size: 15px  !important;padding-top: 15px !important;float: left;text-align: left !important;">
 
-                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">ក្រសួងការងារ និង បណ្តុបណ្តាលវិជ្ជាជីវៈ</p>
-                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">Ministry of Labor and Vocational Training</p>
+                                           
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">${companyDoc.ministryKhName || ""}</p>
+                                              <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">${companyDoc.ministryEnName || ""}</p>
                                               <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">${companyDoc.khName}</p>
                                               <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">   ${companyDoc.enName}</p>
                                               <p style="font-family: 'Khmer OS Muol' !important;" class="blueOnPrint">    លេខ៖ .............................${companyDoc.khShortName}</p>
@@ -215,6 +216,7 @@ Meteor.methods({
                     <thead style="margin-top: 5px">
                         <tr>
                             <th>${translate['no']}</th>
+                            <th>${translate['idNumber']}</th>
                             <th>${translate['name']}</th>
                             <th>${translate['gender']}</th>
                             <th>${translate['dob']}</th>
@@ -228,6 +230,7 @@ Meteor.methods({
                             studentListHTML += `
                         <tr>
                             <td style="text-align: center !important;">${i}</td>
+                            <td style="text-align: left !important;">${(ob.studentDoc && ob.studentDoc.personal && ob.studentDoc.personal.code !== "" && ob.studentDoc.personal.code !== undefined) ? obj._id.programDoc.code : ""}${ob.studentDoc && ob.studentDoc.personal && ob.studentDoc.personal.code || ""}</td>
                             <td style="text-align: left !important;">${ob.studentDoc.personal.name}</td>
                             <td style="text-align: left !important;">${ob.studentDoc.personal.gender}</td>
                             <td style="text-align: center !important;">${ob.studentDoc.personal.dobName}</td>

@@ -550,7 +550,8 @@
       "phoneNumber": "Phone Number",
       "name": "Name",
       "class": "Class",
-      "status": "Status"
+      "status": "Status",
+      "idNumber": "Id Number"
     }
   },
   {
@@ -1121,7 +1122,8 @@
       "phoneNumber": "លេខទូរស័ព្ទ",
       "name": "ឈ្មោះ",
       "class": "ថ្នាក់",
-      "status": "ស្ថានភាព"
+      "status": "ស្ថានភាព",
+      "idNumber": "អត្តលេខ"
     }
   }
 ]

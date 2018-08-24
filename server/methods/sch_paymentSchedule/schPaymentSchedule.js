@@ -47,13 +47,42 @@ Meteor.methods({
         scheduleDoc.waived = 0;
 
 
-        for (let i = 1; i <= levelDoc.term; i = i + doc.term) {
-            scheduleDoc.order = order;
-            scheduleDoc.amount = formatCurrency(pricePerUnitNotDiscount);
-            scheduleDoc.rawAmount = formatCurrency(pricePerUnit);
-            scheduleDoc.discount = formatCurrency(discountPerUnit);
-            scheduleDoc.netAmount = formatCurrency(pricePerUnit);
-            scheduleDoc.balanceUnPaid = formatCurrency(pricePerUnit);
+        let installment = levelDoc.term / doc.term;
+
+        let newPricePerUnitNotDiscount = Math.floor(pricePerUnitNotDiscount);
+        let newDiscountPerUnit = Math.floor(discountPerUnit);
+        let newPricePerUnit = Math.floor(pricePerUnit);
+
+        let firstPricePerUnitNotDiscount = levelDoc.price - (newPricePerUnitNotDiscount * (installment - 1));
+        let firstDiscountPerUnit = discount - (newDiscountPerUnit * (installment - 1));
+        let firstPricePerUnit = (levelDoc.price - discount) - (newPricePerUnit * (installment - 1));
+
+        for (let i = 1; i <= installment; i++) {
+
+            if (installment === 1) {
+
+                scheduleDoc.order = order;
+                scheduleDoc.amount = formatCurrency(pricePerUnitNotDiscount);
+                scheduleDoc.rawAmount = formatCurrency(pricePerUnit);
+                scheduleDoc.discount = formatCurrency(discountPerUnit);
+                scheduleDoc.netAmount = formatCurrency(pricePerUnit);
+                scheduleDoc.balanceUnPaid = formatCurrency(pricePerUnit);
+            } else if (i === 1) {
+                scheduleDoc.order = order;
+                scheduleDoc.amount = formatCurrency(firstPricePerUnitNotDiscount);
+                scheduleDoc.rawAmount = formatCurrency(firstPricePerUnit);
+                scheduleDoc.discount = formatCurrency(firstDiscountPerUnit);
+                scheduleDoc.netAmount = formatCurrency(firstPricePerUnit);
+                scheduleDoc.balanceUnPaid = formatCurrency(firstPricePerUnit);
+            } else {
+                scheduleDoc.order = order;
+                scheduleDoc.amount = formatCurrency(newPricePerUnitNotDiscount);
+                scheduleDoc.rawAmount = formatCurrency(newPricePerUnit);
+                scheduleDoc.discount = formatCurrency(newDiscountPerUnit);
+                scheduleDoc.netAmount = formatCurrency(newPricePerUnit);
+                scheduleDoc.balanceUnPaid = formatCurrency(newPricePerUnit);
+            }
+
             scheduleDoc.rolesArea = classDoc.rolesArea;
             scheduleDoc.term = doc.term;
             scheduleDoc.promotionId = doc.promotionId;

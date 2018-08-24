@@ -161,7 +161,7 @@ Meteor.methods({
                         totalPaid: {$sum: "$totalPaid"},
                         totalWaived: {$sum: "$totalWaived"},
                         totalPenalty: {$sum: "$penalty"},
-                        balanceUnPaid: {$sum: "$balanceUnPaid"}
+                        totalFee: {$sum: "$fee"}
                     }
                 },
                 {
@@ -197,13 +197,14 @@ Meteor.methods({
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
                             <td style="text-align: center !important;">${obj.paymentDateName}</td>
                             <td style="text-align: center !important;">${obj.classDoc.name}</td>
-                            <td >${formatCurrency(obj.totalNetAmount + obj.totalDiscount, companyDoc.baseCurrency)}</td>
-                            <td >${formatCurrency(obj.totalDiscount, companyDoc.baseCurrency)}</td>
+            
                             <td >${formatCurrency(obj.totalNetAmount, companyDoc.baseCurrency)}</td>
-                            <td >${formatCurrency(obj.totalPaid, companyDoc.baseCurrency)}</td>
-                            <td >${formatCurrency(obj.totalWaived, companyDoc.baseCurrency)}</td>
                             <td >${formatCurrency(obj.penalty, companyDoc.baseCurrency)}</td>
-                            <td >${formatCurrency(obj.balanceUnPaid, companyDoc.baseCurrency)}</td>
+                            <td >${formatCurrency(obj.fee, companyDoc.baseCurrency)}</td>
+                                                        <td >${formatCurrency(obj.totalPaid, companyDoc.baseCurrency)}</td>
+
+                                                        <td >${formatCurrency(obj.totalWaived, companyDoc.baseCurrency)}</td>
+
                             <td >${formatCurrency(rateCharge, companyDoc.baseCurrency)}</td>
                         </tr>
                     `;
@@ -212,7 +213,7 @@ Meteor.methods({
                         });
                         paymentHTML += `
                             <tr>
-                                <td colspan="11" style="text-align: left !important;">${rawObj.teacherDoc.personal.name} (${rawObj.teacherDoc.personal.phoneNumber})</td>
+                                <td colspan="9" style="text-align: left !important;">${rawObj.teacherDoc.personal.name} (${rawObj.teacherDoc.personal.phoneNumber})</td>
                                 <td >${formatCurrency(totalCharge, companyDoc.baseCurrency)}</td>
                             </tr>
                         `;
@@ -223,11 +224,13 @@ Meteor.methods({
                 });
                 paymentHTML += `
                     <tr>
-                        <th colspan="7">${translate['grandTotal']}</th>
-                        <td>${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)}</td>
-                        <td>${formatCurrency(paymentList[0].totalWaived, companyDoc.baseCurrency)}</td>
+                        <th colspan="5">${translate['grandTotal']}</th>
                         <td>${formatCurrency(paymentList[0].totalPenalty, companyDoc.baseCurrency)}</td>
-                        <td>${formatCurrency(paymentList[0].balanceUnPaid, companyDoc.baseCurrency)}</td>
+                        <td>${formatCurrency(paymentList[0].totalFee, companyDoc.baseCurrency)}</td>
+                                                <td>${formatCurrency(paymentList[0].totalPaid, companyDoc.baseCurrency)}</td>
+
+                                                <td>${formatCurrency(paymentList[0].totalWaived, companyDoc.baseCurrency)}</td>
+
                         <td>${formatCurrency(grandTotalCharge, companyDoc.baseCurrency)}</td>
                     </tr>
             `;

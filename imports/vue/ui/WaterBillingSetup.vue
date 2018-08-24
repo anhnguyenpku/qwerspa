@@ -33,7 +33,7 @@
                         </el-table-column>
                         <el-table-column
                                 label="English Name"
-                                 prop="enName">
+                                prop="enName">
                         </el-table-column>
                         <el-table-column
                                 label="Khmer Short Name"
@@ -120,40 +120,45 @@
                                             <el-radio :label="'THB'">THB</el-radio>
                                         </el-radio-group>
                                     </el-form-item>
+
+                                    <el-form-item label="English Ministry Name">
+                                        <el-input v-model="form.ministryEnName"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="Khmer Ministry Name">
+                                        <el-input v-model="form.ministryKhName"></el-input>
+                                    </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="Director">
                                         <el-input v-model="form.director" auto-complete="off"></el-input>
                                     </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
                                     <el-form-item label="Province">
                                         <el-input v-model="form.province"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="Round Type">
+                                        <el-select v-model="form.roundType" filterable placeholder="Select">
+                                            <el-option
+                                                    v-for="item in roundTypeOption"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item label="Round KHR">
+                                        <el-input-number v-model="form.khrDigit" :step="2"></el-input-number>
+                                    </el-form-item>
+
+                                    <el-form-item label="Round USD">
+                                        <el-input-number v-model="form.usdDigit" :step="2"></el-input-number>
+                                    </el-form-item>
+
+                                    <el-form-item label="Round THB">
+                                        <el-input-number v-model="form.thbDigit" :step="2"></el-input-number>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
 
-                            <el-form-item label="Round Type">
-                                <el-select v-model="form.roundType" filterable placeholder="Select">
-                                    <el-option
-                                            v-for="item in roundTypeOption"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="Round KHR">
-                                <el-input-number v-model="form.khrDigit" :step="2"></el-input-number>
-                            </el-form-item>
-
-                            <el-form-item label="Round USD">
-                                <el-input-number v-model="form.usdDigit" :step="2"></el-input-number>
-                            </el-form-item>
-
-                            <el-form-item label="Round THB">
-                                <el-input-number v-model="form.thbDigit" :step="2"></el-input-number>
-                            </el-form-item>
 
                         </el-form>
                         <span slot="footer" class="dialog-footer">
@@ -230,6 +235,8 @@
                     invoiceExpiredAfter: 0,
                     khName: '',
                     enName: '',
+                    ministryKhName: '',
+                    ministryEnName: '',
                     khShortName: '',
                     enableZeroWaterConsumption: false,
                     enShortName: '',
@@ -329,6 +336,8 @@
                         this.form = {
                             khName: '',
                             enName: '',
+                            ministryKhName: '',
+                            ministryEnName: '',
                             khShortName: '',
                             enShortName: '',
                             waterBillingUsageShortName: '',
@@ -344,7 +353,7 @@
                             message: 'Successfully',
                             type: 'success'
                         });
-                        if(this.$refs['waterBillingSetupForm']){
+                        if (this.$refs['waterBillingSetupForm']) {
                             this.$refs['waterBillingSetupForm'].reset();
 
                         }
