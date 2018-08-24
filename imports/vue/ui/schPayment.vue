@@ -764,6 +764,7 @@
                                     message: ` ${row.paymentDateName} ` + this.langConfig['removeSuccess'],
                                     type: 'success'
                                 });
+                                vm.queryData();
 
                             } else {
                                 vm.$message({
