@@ -47,27 +47,31 @@ Meteor.methods({
                 }
             },
             {
-                $lookup: {
-                    from: "pos_product",
-                    localField: "productId",
-                    foreignField: "_id",
-                    as: "productDoc"
+                $group: {
+                    _id: {
+                        locationId: "$locationId",
+                        productId: "$productId",
+                    },
+                    totalQty: {$sum: "$qty"},
+                    data: {$push: "$convert"}
                 }
             },
+
             {
-                $unwind: {path: "$productDoc", preserveNullAndEmptyArrays: true}
-            },
-            {
-                $lookup: {
-                    from: "pos_location",
-                    localField: "locationId",
-                    foreignField: "_id",
-                    as: "locationDoc"
+                $project: {
+                    totalQty: 1,
+                    locationId: "$_id.locationId",
+                    productId: "$_id.productId",
+                    convert: {
+                        $reduce: {
+                            input: "$data",
+                            initialValue: [],
+                            in: {$concatArrays: ["$$value", "$$this"]}
+                        }
+                    }
                 }
             },
-            {
-                $unwind: {path: "$locationDoc", preserveNullAndEmptyArrays: true}
-            },
+
             {
                 $unwind: {path: "$convert", preserveNullAndEmptyArrays: true}
             }, {
@@ -86,12 +90,12 @@ Meteor.methods({
                         productId: "$productId",
                         locationId: "$locationId",
                         productIdTo: "$convert.productId"
+
                     },
-                    totalQty: {$sum: "$qty"},
-                    productDoc: {$last: "$productDoc"},
-                    locationDoc: {$last: "$locationDoc"},
+                    totalQty: {$last: "$totalQty"},
                     productConvertDoc: {$last: "$productConvertDoc"},
                     totalQtyTo: {$sum: "$convert.qty"}
+
                 }
             },
             {
@@ -100,20 +104,43 @@ Meteor.methods({
                         productId: "$_id.productId",
                         locationId: "$_id.locationId"
                     },
-                    totalQty: {$sum: "$totalQty"},
-                    productDoc: {$last: "$productDoc"},
-                    locationDoc: {$last: "$locationDoc"},
+                    totalQty: {$last: "$totalQty"},
                     data: {$push: "$$ROOT"}
                 }
-            }, {
+            },
+
+            {
+                $lookup: {
+                    from: "pos_product",
+                    localField: "_id.productId",
+                    foreignField: "_id",
+                    as: "productDoc"
+                }
+            },
+            {
+                $unwind: {path: "$productDoc", preserveNullAndEmptyArrays: true}
+            },
+            {
                 $group: {
                     _id: {
                         locationId: "$_id.locationId"
                     },
-                    locationDoc: {$last: "$locationDoc"},
                     data: {$push: "$$ROOT"}
                 }
+            },
+
+            {
+                $lookup: {
+                    from: "pos_location",
+                    localField: "_id.locationId",
+                    foreignField: "_id",
+                    as: "locationDoc"
+                }
+            },
+            {
+                $unwind: {path: "$locationDoc", preserveNullAndEmptyArrays: true}
             }
+
         ])
 
         if (convertInventoryList.length > 0) {
