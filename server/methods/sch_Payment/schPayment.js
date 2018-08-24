@@ -136,9 +136,7 @@ Meteor.methods({
         let paymentDoc = Sch_Payment.findOne({_id: id});
         if (paymentDoc) {
             paymentDoc.schedule.forEach((data) => {
-                let paymentDoc = Sch_PaymentSchedule.findOne({_id: data._id});
                 let newStatus = paymentDoc.status;
-
                 if (paymentDoc.paid - (data.paid) > 0) {
                     newStatus = "Partial";
                 } else {

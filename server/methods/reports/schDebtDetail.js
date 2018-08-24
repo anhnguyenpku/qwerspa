@@ -48,7 +48,8 @@ Meteor.methods({
                         $push: "$$ROOT"
                     },
                     totalNetAmount: {$sum: "$netAmount"},
-                    totalPaid: {$sum: "$paid"}
+                    totalPaid: {$sum: "$paid"},
+                    totalWaived: {$sum: "$waived"}
                 }
             },
             {
@@ -99,7 +100,8 @@ Meteor.methods({
                     _id: null,
                     data: {$push: "$$ROOT"},
                     totalNetAmount: {$sum: "$totalNetAmount"},
-                    totalPaid: {$sum: "$totalPaid"}
+                    totalPaid: {$sum: "$totalPaid"},
+                    totalWaived: {$sum: "$totalWaived"}
                 }
             },
         ]);
@@ -113,6 +115,7 @@ Meteor.methods({
 
                             debtDetailList[0].totalNetAmount -= obj.totalNetAmount;
                             debtDetailList[0].totalPaid -= obj.totalPaid;
+                            debtDetailList[0].totalWaived -= obj.totalWaived;
                         } else {
                             debtDetailHTML += `
                         <tr>
@@ -120,7 +123,7 @@ Meteor.methods({
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
                             <td style="text-align: left !important;">${obj.studentDoc.personal.phoneNumber || ""}</td>
                             <td style="text-align: center !important;">${obj.classDoc && obj.classDoc.name || ""}</td>
-                            <td >${formatCurrency(obj.totalNetAmount - obj.totalPaid)}</td>
+                            <td >${formatCurrency(obj.totalNetAmount - obj.totalPaid - (obj.totalWaived || 0))}</td>
                         </tr>
                     `;
                             i++;
@@ -128,7 +131,7 @@ Meteor.methods({
                                 debtDetailHTML += `
                             <tr>
                                 <td colspan="4" style="text-align: center !important;">${ob.receivePaymentScheduleDateName} - ${moment(moment(ob.receivePaymentScheduleDate).add(ob.term || 0, "months").toDate()).format("DD/MM/YYYY")}</td>                                    
-                                <td style="text-align: left !important;">${formatCurrency(ob.netAmount - ob.paid)}</td>                                    
+                                <td style="text-align: left !important;">${formatCurrency(ob.netAmount - ob.paid - (obj.totalWaived || 0))}</td>                                    
                             </tr>
                         `;
                             })
@@ -140,7 +143,7 @@ Meteor.methods({
             debtDetailHTML += `
                     <tr>
                         <th colspan="4">${translate['grandTotal']}</th>
-                        <td>${formatCurrency(debtDetailList[0].totalNetAmount - debtDetailList[0].totalPaid)}</td>
+                        <td>${formatCurrency(debtDetailList[0].totalNetAmount - debtDetailList[0].totalPaid - debtDetailList[0].totalWaived)}</td>
                     </tr>
             `;
         }

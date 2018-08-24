@@ -45,7 +45,8 @@ Meteor.methods({
 
                     },
                     totalNetAmount: {$sum: "$netAmount"},
-                    totalPaid: {$sum: "$paid"}
+                    totalPaid: {$sum: "$paid"},
+                    totalWaived: {$sum: "$waived"}
                 }
             },
             {
@@ -97,7 +98,8 @@ Meteor.methods({
                     _id: null,
                     data: {$push: "$$ROOT"},
                     totalNetAmount: {$sum: "$totalNetAmount"},
-                    totalPaid: {$sum: "$totalPaid"}
+                    totalPaid: {$sum: "$totalPaid"},
+                    totalWaived: {$sum: "$totalWaived"}
                 }
             },
         ]);
@@ -111,6 +113,7 @@ Meteor.methods({
 
                         debtSummaryList[0].totalNetAmount -= obj.totalNetAmount;
                         debtSummaryList[0].totalPaid -= obj.totalPaid;
+                        debtSummaryList[0].totalWaived -= obj.totalWaived;
                     } else {
                         debtSummaryHTML += `
                         <tr>
@@ -118,7 +121,7 @@ Meteor.methods({
                             <td style="text-align: left !important;">${obj.studentDoc.personal.name}</td>
                             <td style="text-align: left !important;">${obj.studentDoc.personal.phoneNumber || ""}</td>
                             <td style="text-align: center !important;">${obj.classDoc && obj.classDoc.name || ""}</td>
-                            <td >${formatCurrency(obj.totalNetAmount - obj.totalPaid)}</td>
+                            <td >${formatCurrency(obj.totalNetAmount - obj.totalPaid - obj.totalWaived)}</td>
                         </tr>
                     `;
                         i++;
@@ -128,7 +131,7 @@ Meteor.methods({
             debtSummaryHTML += `
                     <tr>
                         <th colspan="4">${translate['grandTotal']}</th>
-                        <td>${formatCurrency(debtSummaryList[0].totalNetAmount - debtSummaryList[0].totalPaid)}</td>
+                        <td>${formatCurrency(debtSummaryList[0].totalNetAmount - debtSummaryList[0].totalPaid - debtSummaryList[0].totalWaived)}</td>
                     </tr>
             `;
         }
