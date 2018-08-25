@@ -80,7 +80,7 @@
                 labelPosition: 'top',
                 waterBillingSetup: {
                     khName: '',
-                    enNamer: '',
+                    enName: '',
                     address: "",
                     phoneNumber: ""
                 },

@@ -182,7 +182,7 @@
 
                 waterBillingSetup: {
                     khName: '',
-                    enNamer: ''
+                    enName: ''
                 },
 
                 loading: false,

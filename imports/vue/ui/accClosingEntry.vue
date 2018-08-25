@@ -71,7 +71,7 @@
                                 <!--<el-button type="primary" :disabled="scope.row.month!=12" icon="more"
                                            class="cursor-pointer"
                                            @click="reportCurrencyClosing(scope)"></el-button>-->
-                                <el-button type="primary" icon="more"
+                                <el-button type="primary" icon="el-icon-more" size="small"
                                            class="cursor-pointer"
                                            @click="reportCurrencyClosing(scope.row)"></el-button>
                             </el-button-group>
@@ -272,10 +272,10 @@
             }, 300),
 
             reportCurrencyClosing(data) {
-                debugger;
                 let params = {};
                 let queryParams = {};
                 queryParams._id = data._id;
+                queryParams.area = Session.get("area");
                 let path = FlowRouter.path("acc.currencyClosingReport", params, queryParams);
                 window.open(path, "_blank");
             },

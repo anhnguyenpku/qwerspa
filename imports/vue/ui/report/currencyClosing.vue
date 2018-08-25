@@ -28,14 +28,15 @@
                                           alt="">
                                         <span style="float: left; font-family: 'Khmer OS Muol light','Khmer OS Muol'; font-size: 15px;margin-left: 20px;"><br>
                                             <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p></span>
-                                    </div>
-                                     <div class="col-md-2; pull-right"
-                                          style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
+                                 </div>
+                                 <div class="col-md-2; pull-right"
+                                      style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
                                      <span style="text-align: center">
                                          ព្រះរាជាណាចក្រកម្ពុជា <br> ជាតិ សាសនា ព្រះមហាក្សត្រ
+                                          <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
                                      </span>
 
-                                    </div>
+                                </div>
                                 </div>
                               <div class="row">
                                  <div class="col-md-3">
@@ -86,11 +87,12 @@
 
                 waterBillingSetup: {
                     khName: '',
-                    enNamer: ''
+                    enName: ''
                 },
 
                 loading: false,
                 exportLoading: false,
+                rolesArea: ""
             };
         },
         meteor: {
@@ -100,7 +102,8 @@
         },
         watch: {},
         created() {
-            Meteor.call('getWaterBillingSetup', Session.get('area'), (err, result) => {
+            let q = FlowRouter.current().queryParams;
+            Meteor.call('getWaterBillingSetup', q.area, (err, result) => {
                 if (result) {
                     this.waterBillingSetup = result;
                 }

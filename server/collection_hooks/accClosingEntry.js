@@ -176,8 +176,8 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
             exchangeDoc.transaction = transactionExchange;
 
             Meteor.call("autoIncreseVoucher", doc.rolesArea, doc.closeDate, companyDoc.baseCurrency, function (err, result) {
-                if (result) {
-                    exchangeDoc.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result) + 1, 6);
+                if (!err) {
+                    exchangeDoc.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result || 0) + 1, 6);
                     Acc_Journal.insert(exchangeDoc);
 
                 } else {
@@ -202,8 +202,8 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
 
             exchangeDoc.transaction = transactionExchange;
             Meteor.call("autoIncreseVoucher", doc.rolesArea, doc.closeDate, companyDoc.baseCurrency, function (err, result) {
-                if (result) {
-                    exchangeDoc.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result) + 1, 6);
+                if (!err) {
+                    exchangeDoc.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result || 0) + 1, 6);
                     Acc_Journal.insert(exchangeDoc);
 
                 } else {
@@ -540,16 +540,16 @@ let currencyClosing = function (doc, currencyClosingArr, equivalentDoc, foreignE
     currencyClosingDoc.status = "End Of Month";
     currencyClosingDoc.currencyId = currency;
     currencyClosingDoc.memo = "Closing " + currency;
-    currencyClosingDoc.total = numeral(numeral(total).format("0,00.000")).value();
+    currencyClosingDoc.total = Math.abs(numeral(numeral(total).format("0,00.000")).value());
     currencyClosingDoc.transaction = transaction;
     currencyClosingDoc.isCurrencyClosing = true;
 
     Meteor.call("autoIncreseVoucher", doc.rolesArea, doc.closeDate, currency, function (err, result) {
-        if (result) {
-            currencyClosingDoc.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result) + 1, 6);
+        if (!err) {
+            currencyClosingDoc.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result || 0) + 1, 6);
             Acc_Journal.insert(currencyClosingDoc);
         } else {
-            console.log(err.message());
+            console.log(err.message);
         }
     })
 
@@ -561,14 +561,14 @@ let currencyClosing = function (doc, currencyClosingArr, equivalentDoc, foreignE
     currencyClosingDocBase.status = "End Of Month";
     currencyClosingDocBase.currencyId = companyDoc.baseCurrency;
     currencyClosingDocBase.memo = "Opening " + companyDoc.baseCurrency;
-    currencyClosingDocBase.total = numeral(numeral(totalBase).format("0,00.000")).value();
+    currencyClosingDocBase.total = Math.abs(numeral(numeral(totalBase).format("0,00.000")).value());
     currencyClosingDocBase.transaction = transactionBase;
     currencyClosingDocBase.isCurrencyClosing = true;
 
 
     Meteor.call("autoIncreseVoucher", doc.rolesArea, doc.closeDate, companyDoc.baseCurrency, function (err, result) {
-        if (result) {
-            currencyClosingDocBase.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result) + 1, 6);
+        if (!err) {
+            currencyClosingDocBase.voucherId = doc.rolesArea + moment(doc.closeDate).format("YYYY") + pad(parseFloat(result || 0) + 1, 6);
             Acc_Journal.insert(currencyClosingDocBase);
         } else {
             console.log(err.message());
