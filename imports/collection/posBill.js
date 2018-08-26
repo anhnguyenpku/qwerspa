@@ -3,11 +3,13 @@ export const Pos_Bill = new Mongo.Collection('pos_bill');
 Pos_Bill.schema = new SimpleSchema({
     vendorId: {
         type: String,
-        label: "Vendor"
+        label: "Vendor",
+        index:true
     },
     locationId: {
         type: String,
-        label: "Location"
+        label: "Location",
+        index:true
     },
     address: {
         type: String,
@@ -18,7 +20,8 @@ Pos_Bill.schema = new SimpleSchema({
         type: String
     },
     billDate: {
-        type: Date
+        type: Date,
+        index:true
     },
     billDateName: {
         type: String,
@@ -99,7 +102,8 @@ Pos_Bill.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     item: {
         type: [Object],
@@ -154,7 +158,7 @@ Pos_Bill.schema = new SimpleSchema({
     createdAt: {
         type: Date,
         optional: true,
-
+        index:true,
         autoValue() {
             if (this.isInsert) {
                 return moment().toDate();

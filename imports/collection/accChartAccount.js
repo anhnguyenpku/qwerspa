@@ -5,11 +5,14 @@ Acc_ChartAccount.schema = new SimpleSchema({
         type: String,
         label: "Code",
         // unique: true,
+        index: true,
         max: 7
     },
     name: {
         type: String,
-        label: "Name"
+        label: "Name",
+        index: true,
+
     },
     khName: {
         type: String,

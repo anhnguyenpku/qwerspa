@@ -170,7 +170,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosVendor = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosVendor">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosVendor($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -343,7 +343,8 @@
                     this.termDataOption = result;
                 })
             },
-            savePosVendor() {
+            savePosVendor(event) {
+                event.preventDefault();
                 let vm = this;
                 this.$refs["posVendorFormAdd"].validate((valid) => {
                     if (valid) {

@@ -168,7 +168,7 @@
                     <el-button @click="dialogAddPosCustomer = false, cancel()"
                     >{{langConfig['cancel']}}
                     </el-button>
-                    <el-button type="primary" @click="savePosCustomer">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosCustomer($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -335,7 +335,9 @@
                     this.termDataOption = result;
                 })
             },
-            savePosCustomer() {
+            savePosCustomer(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["posCustomerFormAdd"].validate((valid) => {
                     if (valid) {

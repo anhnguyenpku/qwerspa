@@ -100,7 +100,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchTime = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchTime">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchTime($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -214,7 +214,9 @@
                     this.applyUserOption = result;
                 })
             },
-            saveSchTime() {
+            saveSchTime(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schTimeFormAdd"].validate((valid) => {
                     if (valid) {

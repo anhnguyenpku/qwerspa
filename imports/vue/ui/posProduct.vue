@@ -263,7 +263,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosProduct = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosProduct">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosProduct($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -517,7 +517,8 @@
                     }
                 })
             },
-            savePosProduct() {
+            savePosProduct(event) {
+                event.preventDefault();
                 let vm = this;
                 this.$refs["posProductFormAdd"].validate((valid) => {
                     if (valid) {

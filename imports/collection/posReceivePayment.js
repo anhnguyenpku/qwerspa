@@ -3,11 +3,13 @@ export const Pos_ReceivePayment = new Mongo.Collection('pos_receivePayment');
 Pos_ReceivePayment.schema = new SimpleSchema({
     customerId: {
         type: String,
-        label: "Customer"
+        label: "Customer",
+        index:true
     },
     locationId: {
         type: String,
-        label: "Location"
+        label: "Location",
+        index:true
     },
     invoice: {
         type: [Object],
@@ -58,7 +60,8 @@ Pos_ReceivePayment.schema = new SimpleSchema({
     },
     receivePaymentDate: {
         type: Date,
-        label: 'Receive Payment Date'
+        label: 'Receive Payment Date',
+        index:true
     },
     receivePaymentDateName: {
         type: String,
@@ -99,7 +102,8 @@ Pos_ReceivePayment.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        optional: true
+        optional: true,
+        index:true
     },
     canRemove: {
         type: Boolean,
@@ -130,7 +134,8 @@ Pos_ReceivePayment.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

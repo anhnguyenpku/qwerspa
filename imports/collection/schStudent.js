@@ -5,10 +5,12 @@ Sch_Student.schema = new SimpleSchema({
         type: Object
     },
     "personal.name": {
-        type: String
+        type: String,
+        index:true
     },
     "personal.latinName": {
-        type: String
+        type: String,
+        index:true
     },
     "personal.code": {
         type: String
@@ -187,7 +189,8 @@ Sch_Student.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     createdAt: {
         type: Date,
@@ -197,7 +200,8 @@ Sch_Student.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

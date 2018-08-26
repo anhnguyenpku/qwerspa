@@ -3,12 +3,14 @@ export const Pos_SaleOrder = new Mongo.Collection('pos_saleOrder');
 Pos_SaleOrder.schema = new SimpleSchema({
     customerId: {
         type: String,
-        label: "Customer"
+        label: "Customer",
+        index:true
     },
 
     locationId: {
         type: String,
-        label: "Location"
+        label: "Location",
+        index:true
     },
     address: {
         type: String,
@@ -19,7 +21,8 @@ Pos_SaleOrder.schema = new SimpleSchema({
         type: String
     },
     saleOrderDate: {
-        type: Date
+        type: Date,
+        index:true
     },
     saleOrderDateName: {
         type: String,
@@ -105,7 +108,8 @@ Pos_SaleOrder.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     item: {
         type: [Object],
@@ -206,7 +210,8 @@ Pos_SaleOrder.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

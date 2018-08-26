@@ -2,14 +2,18 @@ export const Acc_ChartAccountBalance = new Mongo.Collection('acc_chartAccountBal
 
 Acc_ChartAccountBalance.schema = new SimpleSchema({
     chartAccountId: {
-        type: String
+        type: String,
+        index: true,
+
     },
     value: {
         type: Number,
         decimal: true
     },
     closeDate: {
-        type: Date
+        type: Date,
+        index: true,
+
     },
     currencyId: {
         type: String
@@ -21,14 +25,18 @@ Acc_ChartAccountBalance.schema = new SimpleSchema({
         type: String
     },
     closingEntryId: {
-        type: String
+        type: String,
+        index: true,
+
     },
     rolesArea: {
-        type: String
+        type: String,
+        index:true
+
     },
     createdAt: {
         type: Date,
-        optional:true,
+        optional: true,
 
         autoValue() {
             if (this.isInsert) {
@@ -38,7 +46,7 @@ Acc_ChartAccountBalance.schema = new SimpleSchema({
     },
     updatedAt: {
         type: Date,
-        optional:true,
+        optional: true,
 
         autoValue() {
             if (this.isUpdate) {

@@ -181,7 +181,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosTerm = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosTerm">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosTerm($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -387,7 +387,9 @@
                     this.subTermDataOption = result;
                 })
             },
-            savePosTerm() {
+            savePosTerm(event) {
+                event.preventDefault();
+
                 let vm = this;
                 if (vm.posTermForm.dueMethod == "" || vm.posTermForm.dueMethod == undefined) {
                     vm.$message({

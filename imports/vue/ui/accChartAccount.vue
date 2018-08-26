@@ -216,7 +216,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddChartAccount = false, cancel()">Cancel</el-button>
-                    <el-button type="primary" @click="saveChartAccount">Save</el-button>
+                    <el-button type="primary" @click="saveChartAccount($event)">Save</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -487,7 +487,9 @@
                     this.chartAccountDataOption = result;
                 })
             },
-            saveChartAccount() {
+            saveChartAccount(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["chartAccountFormAdd"].validate((valid) => {
                     if (valid) {

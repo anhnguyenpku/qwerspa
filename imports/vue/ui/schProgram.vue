@@ -122,7 +122,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchProgram = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchProgram">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchProgram($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -248,7 +248,9 @@
                     this.applyUserOption = result;
                 })
             },
-            saveSchProgram() {
+            saveSchProgram(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schProgramFormAdd"].validate((valid) => {
                     if (valid) {

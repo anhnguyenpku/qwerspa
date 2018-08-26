@@ -288,7 +288,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchCiriculumn = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchCiriculumn">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchCiriculumn($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -666,7 +666,9 @@
             handleEditCulumn2(row, index) {
                 this.culumnData2[index] = row;
             },
-            saveSchCiriculumn() {
+            saveSchCiriculumn(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schCiriculumnFormAdd"].validate((valid) => {
                     if (valid) {

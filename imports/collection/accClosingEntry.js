@@ -16,7 +16,9 @@ Acc_ClosingEntry.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index: true,
+
     },
     month: {
         type: String,
@@ -30,13 +32,13 @@ Acc_ClosingEntry.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    exchangeId:{
+    exchangeId: {
         type: String,
-        optional:true
+        optional: true
     },
     createdAt: {
         type: Date,
-        optional:true,
+        optional: true,
 
         autoValue() {
             if (this.isInsert) {
@@ -46,7 +48,7 @@ Acc_ClosingEntry.schema = new SimpleSchema({
     },
     updatedAt: {
         type: Date,
-        optional:true,
+        optional: true,
 
         autoValue() {
             if (this.isUpdate) {

@@ -435,7 +435,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogPromoteToClass= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePromoteToClass">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePromoteToClass($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -541,7 +541,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogPromoteToGraduated= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePromoteToGraduated">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePromoteToGraduated($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -571,7 +571,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogUpdateStatusStudent= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveUpdateStatusStudent">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveUpdateStatusStudent($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -947,7 +947,9 @@
             handleSelectionChangeNotPromote(val) {
                 this.multipleSelectionNotPromote = val;
             },
-            savePromoteToClass() {
+            savePromoteToClass(event) {
+                event.preventDefault();
+
                 let vm = this;
                 let data = {};
                 data.studentList = this.multipleSelectionNotPromote;
@@ -982,7 +984,9 @@
                 })
 
             },
-            saveUnPromoteToClass() {
+            saveUnPromoteToClass(event) {
+                event.preventDefault();
+
                 let vm = this;
                 let data = {};
                 data.studentList = this.multipleSelectionNotPromote;
@@ -1017,7 +1021,9 @@
                 })
 
             },
-            savePromoteToGraduated() {
+            savePromoteToGraduated(event) {
+                event.preventDefault();
+
                 let vm = this;
                 let data = {};
                 data.studentList = this.multipleSelectionNotPromote;
@@ -1043,7 +1049,9 @@
                 })
 
             },
-            saveUpdateStatusStudent() {
+            saveUpdateStatusStudent(event) {
+                event.preventDefault();
+
                 let vm = this;
                 let data = {};
                 data.classId = this.updateStatusStudentForm.classId;

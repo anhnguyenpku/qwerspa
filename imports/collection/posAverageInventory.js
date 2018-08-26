@@ -13,7 +13,8 @@ Pos_AverageInventory.schema = new SimpleSchema({
 
     locationId: {
         type: String,
-        label: "Location"
+        label: "Location",
+        index:true
     },
     transactionId: {
         type: String,
@@ -28,7 +29,8 @@ Pos_AverageInventory.schema = new SimpleSchema({
     },
     itemId: {
         type: String,
-        label: "Item"
+        label: "Item",
+        index:true
     },
     qty: {
         type: Number,
@@ -78,7 +80,8 @@ Pos_AverageInventory.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,
@@ -112,7 +115,8 @@ Pos_AverageInventory.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     }
 
 });

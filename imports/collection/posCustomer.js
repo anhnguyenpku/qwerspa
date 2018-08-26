@@ -4,6 +4,8 @@ Pos_Customer.schema = new SimpleSchema({
 
     name: {
         type: String,
+        index:true,
+
         label: "Name /Company"
     },
     khName: {
@@ -40,11 +42,13 @@ Pos_Customer.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     createdAt: {
         type: Date,
         optional: true,
+        index:true,
 
         autoValue() {
             if (this.isInsert) {

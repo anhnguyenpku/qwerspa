@@ -9,7 +9,8 @@ Pos_Product.schema = new SimpleSchema({
     },
     name: {
         type: String,
-        label: "Name"
+        label: "Name",
+        index:true
     },
     khName: {
         type: String,
@@ -84,7 +85,8 @@ Pos_Product.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

@@ -3,14 +3,17 @@ export const Pos_TransferInventory = new Mongo.Collection('pos_transferInventory
 Pos_TransferInventory.schema = new SimpleSchema({
     locationFromId: {
         type: String,
-        label: "Location From"
+        label: "Location From",
+        index:true
     },
     locationToId: {
         type: String,
-        label: "Location To"
+        label: "Location To",
+        index:true
     },
     transferInventoryDate: {
-        type: Date
+        type: Date,
+        index:true
     },
     transferInventoryDateName: {
         type: String,
@@ -22,7 +25,8 @@ Pos_TransferInventory.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     total: {
         type: Number,
@@ -65,7 +69,8 @@ Pos_TransferInventory.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

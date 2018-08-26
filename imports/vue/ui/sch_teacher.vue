@@ -573,7 +573,7 @@
                                 class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
-                         <el-button type="primary" @click.native="saveSchTeacher()"><i
+                         <el-button type="primary" @click.native="saveSchTeacher($event)"><i
                                  class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
                     </el-col>
                 </el-row>
@@ -1348,7 +1348,9 @@
             },
 
 
-            saveSchTeacher() {
+            saveSchTeacher(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schTeacherFormAdd"].validate((valid) => {
                     if (valid) {

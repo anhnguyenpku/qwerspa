@@ -154,7 +154,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchPromotion = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchPromotion">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchPromotion($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -306,7 +306,9 @@
                     this.applyUserOption = result;
                 })
             },
-            saveSchPromotion() {
+            saveSchPromotion(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schPromotionFormAdd"].validate((valid) => {
                     if (valid) {

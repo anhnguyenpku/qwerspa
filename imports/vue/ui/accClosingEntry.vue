@@ -130,7 +130,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddClosingEntry= false, cancel()">Cancel</el-button>
-                    <el-button type="primary" @click="saveClosingEntry">Save</el-button>
+                    <el-button type="primary" @click="saveClosingEntry($event)">Save</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -297,7 +297,9 @@
                     }
                 })
             },
-            saveClosingEntry() {
+            saveClosingEntry(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["closingEntryForm"].validate((valid) => {
                     if (valid) {

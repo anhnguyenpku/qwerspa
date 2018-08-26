@@ -70,6 +70,10 @@
                             :label="langConfig['discount']">
                     </el-table-column>
                     <el-table-column
+                            prop="penalty"
+                            :label="langConfig['penalty']">
+                    </el-table-column>
+                    <el-table-column
                             prop="totalPaid"
                             :label="langConfig['totalPaid']">
                     </el-table-column>

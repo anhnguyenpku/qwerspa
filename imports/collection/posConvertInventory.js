@@ -3,6 +3,7 @@ export const Pos_ConvertInventory = new Mongo.Collection('pos_convertInventory')
 Pos_ConvertInventory.schema = new SimpleSchema({
     productId: {
         type: String,
+        index:true
     },
     qty: {
         type: Number,
@@ -15,7 +16,8 @@ Pos_ConvertInventory.schema = new SimpleSchema({
         type: String
     },
     locationId: {
-        type: String
+        type: String,
+        index:true
     },
     convert: {
         type: [Object],
@@ -37,6 +39,7 @@ Pos_ConvertInventory.schema = new SimpleSchema({
     createdAt: {
         type: Date,
         optional: true,
+        index:true,
 
         autoValue() {
             if (this.isInsert) {
@@ -62,7 +65,8 @@ Pos_ConvertInventory.schema = new SimpleSchema({
             if (this.isInsert) {
                 return Meteor.userId();
             }
-        }
+        },
+        index:true
     },
     updatedUser: {
         type: String,
@@ -76,7 +80,8 @@ Pos_ConvertInventory.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     }
 });
 

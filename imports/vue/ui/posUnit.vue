@@ -114,7 +114,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosUnit = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosUnit">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosUnit($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -229,7 +229,9 @@
                 });
             }, 300),
 
-            savePosUnit() {
+            savePosUnit(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["posUnitFormAdd"].validate((valid) => {
                     if (valid) {

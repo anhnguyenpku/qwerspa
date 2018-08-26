@@ -3,11 +3,14 @@ export const Pos_Invoice = new Mongo.Collection('pos_invoice');
 Pos_Invoice.schema = new SimpleSchema({
     customerId: {
         type: String,
-        label: "Customer"
+        index: true,
+        label: "Customer",
+        index:true
     },
 
     locationId: {
         type: String,
+        index: true,
         label: "Location"
     },
     address: {
@@ -19,7 +22,8 @@ Pos_Invoice.schema = new SimpleSchema({
         type: String
     },
     invoiceDate: {
-        type: Date
+        type: Date,
+        index:true
     },
     invoiceDateName: {
         type: String,
@@ -93,6 +97,7 @@ Pos_Invoice.schema = new SimpleSchema({
     },
     status: {
         type: String,
+        index: true,
         defaultValue: "Active"
         //    Active
         //    Partial
@@ -105,6 +110,7 @@ Pos_Invoice.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
+        index: true,
         label: "Role Area"
     },
     item: {
@@ -197,7 +203,7 @@ Pos_Invoice.schema = new SimpleSchema({
     createdAt: {
         type: Date,
         optional: true,
-
+        index: true,
         autoValue() {
             if (this.isInsert) {
                 return moment().toDate();

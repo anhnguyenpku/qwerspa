@@ -140,7 +140,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddExchange= false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveExchange">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveExchange($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -281,7 +281,8 @@
                     this.isSearching = false;
                 });
             }, 300),
-            saveExchange() {
+            saveExchange(event) {
+                event.preventDefault();
                 this.$refs["exchangeFormAdd"].validate((valid) => {
                     if (valid) {
                         let rates = {};

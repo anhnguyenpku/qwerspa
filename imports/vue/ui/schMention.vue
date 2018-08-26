@@ -197,7 +197,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchMention = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchMention">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchMention($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -418,7 +418,9 @@
                     }];
                 }
             },
-            saveSchMention() {
+            saveSchMention(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schMentionFormAdd"].validate((valid) => {
                     if (valid) {

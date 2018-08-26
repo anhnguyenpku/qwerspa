@@ -9,7 +9,8 @@ Pos_Category.schema = new SimpleSchema({
     },
     name: {
         type: String,
-        label: "Name"
+        label: "Name",
+        index:true
     },
     khName: {
         type: String,

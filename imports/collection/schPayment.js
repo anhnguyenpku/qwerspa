@@ -3,11 +3,13 @@ export const Sch_Payment = new Mongo.Collection('sch_payment');
 Sch_Payment.schema = new SimpleSchema({
     studentId: {
         type: String,
-        label: "Student"
+        label: "Student",
+        index:true
     },
     classId: {
         type: String,
-        label: "Class"
+        label: "Class",
+        index:true
     },
     schedule: {
         type: [Object],
@@ -47,7 +49,8 @@ Sch_Payment.schema = new SimpleSchema({
     },
     paymentDate: {
         type: Date,
-        label: 'Receive Payment Date'
+        label: 'Receive Payment Date',
+        index: true
     },
     paymentDateName: {
         type: String,
@@ -81,7 +84,8 @@ Sch_Payment.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        optional: true
+        optional: true,
+        index:true
     },
     canRemove: {
         type: Boolean,
@@ -112,7 +116,8 @@ Sch_Payment.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

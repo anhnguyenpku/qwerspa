@@ -229,7 +229,8 @@
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosConvertInventory = false, cancel()">{{langConfig['cancel']}}
                     </el-button>
-                    <el-button type="primary" @click="savePosConvertInventory">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosConvertInventory($event)">{{langConfig['save']}}
+                    </el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -471,7 +472,8 @@
                     this.locationOption = result;
                 })
             },
-            savePosConvertInventory() {
+            savePosConvertInventory(event) {
+                event.preventDefault();
                 let vm = this;
                 this.$refs["posConvertInventoryFormAdd"].validate((valid) => {
                     if (valid) {

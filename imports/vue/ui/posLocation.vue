@@ -166,7 +166,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosLocation = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosLocation">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosLocation($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -317,7 +317,9 @@
                     this.applyUserOption = result;
                 })
             },
-            savePosLocation() {
+            savePosLocation(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["posLocationFormAdd"].validate((valid) => {
                     if (valid) {

@@ -2,10 +2,12 @@ export const Sch_Transcript = new Mongo.Collection('sch_transcript');
 
 Sch_Transcript.schema = new SimpleSchema({
     studentId: {
-        type: String
+        type: String,
+        index:true
     },
     curiculumnId: {
-        type: String
+        type: String,
+        index:true
     },
     majorId: {
         type: String
@@ -22,7 +24,8 @@ Sch_Transcript.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     culumnSemester1: {
         type: [Object]
@@ -123,7 +126,8 @@ Sch_Transcript.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

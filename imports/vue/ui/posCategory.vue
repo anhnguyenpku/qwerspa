@@ -141,7 +141,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosCategory = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosCategory">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosCategory($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -282,7 +282,9 @@
                     this.subCategoryDataOption = result;
                 })
             },
-            savePosCategory() {
+            savePosCategory(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["posCategoryFormAdd"].validate((valid) => {
                     if (valid) {

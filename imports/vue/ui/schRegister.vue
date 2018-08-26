@@ -229,7 +229,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchRegister = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchRegister">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchRegister($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -1180,7 +1180,9 @@
                     })
                 }
             },
-            saveSchRegister() {
+            saveSchRegister(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schRegisterFormAdd"].validate((valid) => {
                     if (valid) {

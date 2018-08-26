@@ -3,11 +3,13 @@ export const Sch_BusPayment = new Mongo.Collection('sch_busPayment');
 Sch_BusPayment.schema = new SimpleSchema({
     busRegisterId: {
         type: String,
-        label: "Bus Register"
+        label: "Bus Register",
+        index:true
     },
     studentId: {
         type: String,
-        label: "Student"
+        label: "Student",
+        index:true
     },
     schedule: {
         type: [Object],
@@ -43,7 +45,8 @@ Sch_BusPayment.schema = new SimpleSchema({
     },
     busPaymentDate: {
         type: Date,
-        label: 'Receive BusPayment Date'
+        label: 'Receive BusPayment Date',
+        index:true
     },
     dueDate: {
         type: Date,
@@ -76,7 +79,8 @@ Sch_BusPayment.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        optional: true
+        optional: true,
+        index:true
     },
     canRemove: {
         type: Boolean,
@@ -103,7 +107,8 @@ Sch_BusPayment.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

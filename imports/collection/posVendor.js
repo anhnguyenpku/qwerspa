@@ -4,7 +4,8 @@ Pos_Vendor.schema = new SimpleSchema({
 
     name: {
         type: String,
-        label: "Name /Company"
+        label: "Name /Company",
+        index:true
     },
     khName: {
         type: String,
@@ -83,7 +84,8 @@ Pos_Vendor.schema = new SimpleSchema({
             if (this.isInsert) {
                 return Meteor.userId();
             }
-        }
+        },
+        index:true
     },
     updatedUser: {
         type: String,

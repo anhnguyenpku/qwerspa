@@ -3,7 +3,8 @@ export const Pos_Location = new Mongo.Collection('pos_location');
 Pos_Location.schema = new SimpleSchema({
     name: {
         type: String,
-        label: "Name"
+        label: "Name",
+        index:true
     },
     khName: {
         type: String,
@@ -36,7 +37,8 @@ Pos_Location.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     createdAt: {
         type: Date,
@@ -46,7 +48,8 @@ Pos_Location.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

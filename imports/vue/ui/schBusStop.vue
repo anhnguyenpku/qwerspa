@@ -149,7 +149,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchBusStop = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchBusStop">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchBusStop($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -306,7 +306,9 @@
                     this.applyUserOption = result;
                 })
             },
-            saveSchBusStop() {
+            saveSchBusStop(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schBusStopFormAdd"].validate((valid) => {
                     if (valid) {

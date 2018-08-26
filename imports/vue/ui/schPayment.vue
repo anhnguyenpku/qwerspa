@@ -65,6 +65,18 @@
                             :label="langConfig['amount']">
                     </el-table-column>
                     <el-table-column
+                            prop="waived"
+                            :label="langConfig['waived']">
+                    </el-table-column>
+                    <el-table-column
+                            prop="penalty"
+                            :label="langConfig['penalty']">
+                    </el-table-column>
+                    <el-table-column
+                            prop="fee"
+                            :label="langConfig['fee']">
+                    </el-table-column>
+                    <el-table-column
                             prop="totalPaid"
                             :label="langConfig['totalPaid']">
                     </el-table-column>

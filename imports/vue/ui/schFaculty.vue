@@ -113,7 +113,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchFaculty = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchFaculty">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchFaculty($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -232,7 +232,9 @@
                     this.applyUserOption = result;
                 })
             },
-            saveSchFaculty() {
+            saveSchFaculty(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schFacultyFormAdd"].validate((valid) => {
                     if (valid) {

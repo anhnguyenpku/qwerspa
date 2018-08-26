@@ -166,7 +166,7 @@
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchTeacherActivity = false, cancel()">{{langConfig['cancel']}}
                     </el-button>
-                    <el-button type="primary" @click="saveSchTeacherActivity">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchTeacherActivity($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -374,7 +374,9 @@
                     this.activityList = result;
                 })
             },
-            saveSchTeacherActivity() {
+            saveSchTeacherActivity(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schTeacherActivityFormAdd"].validate((valid) => {
                     if (valid) {

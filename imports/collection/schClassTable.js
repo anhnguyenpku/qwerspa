@@ -3,7 +3,8 @@ export const Sch_ClassTable = new Mongo.Collection('sch_classTable');
 Sch_ClassTable.schema = new SimpleSchema({
     classId: {
         type: String,
-        label: "Class"
+        label: "Class",
+        index: true
     },
     studentList: {
         type: [Object],
@@ -71,7 +72,8 @@ Sch_ClassTable.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index: true
     },
     createdAt: {
         type: Date,
@@ -81,7 +83,8 @@ Sch_ClassTable.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index: true
     },
     updatedAt: {
         type: Date,

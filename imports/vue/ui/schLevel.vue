@@ -178,7 +178,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchLevel = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchLevel">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchLevel($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -414,7 +414,9 @@
                     })
                 }
             },
-            saveSchLevel() {
+            saveSchLevel(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schLevelFormAdd"].validate((valid) => {
                     if (valid) {

@@ -113,7 +113,7 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddSchPosition = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchPosition">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchPosition($event)">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -232,7 +232,9 @@
                     this.applyUserOption = result;
                 })
             },
-            saveSchPosition() {
+            saveSchPosition(event) {
+                event.preventDefault();
+
                 let vm = this;
                 this.$refs["schPositionFormAdd"].validate((valid) => {
                     if (valid) {

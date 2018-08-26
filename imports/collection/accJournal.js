@@ -3,7 +3,8 @@ export const Acc_Journal = new Mongo.Collection('acc_journal');
 Acc_Journal.schema = new SimpleSchema({
     journalDate: {
         type: Date,
-        label: "Journal Date"
+        label: "Journal Date",
+        index: true
     },
     journalDateName: {
         type: String,
@@ -20,7 +21,8 @@ Acc_Journal.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index: true
     },
     memo: {
         type: String,
@@ -104,8 +106,8 @@ Acc_Journal.schema = new SimpleSchema({
     },
     createdAt: {
         type: Date,
-        optional:true,
-
+        optional: true,
+        index: true,
         autoValue() {
             if (this.isInsert) {
                 return moment().toDate();
@@ -114,7 +116,7 @@ Acc_Journal.schema = new SimpleSchema({
     },
     updatedAt: {
         type: Date,
-        optional:true,
+        optional: true,
 
         autoValue() {
             if (this.isUpdate) {

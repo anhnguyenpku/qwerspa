@@ -3,11 +3,13 @@ export const Sch_Register = new Mongo.Collection('sch_register');
 Sch_Register.schema = new SimpleSchema({
     studentId: {
         type: String,
-        label: "Student"
+        label: "Student",
+        index:true
     },
     levelId: {
         type: String,
         label: "Level",
+        index:true
     },
     majorId: {
         type: String,
@@ -55,7 +57,8 @@ Sch_Register.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     createdAt: {
         type: Date,
@@ -65,7 +68,8 @@ Sch_Register.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

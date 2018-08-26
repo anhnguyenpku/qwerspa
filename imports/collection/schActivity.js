@@ -3,7 +3,8 @@ export const Sch_Activity = new Mongo.Collection('sch_activity');
 Sch_Activity.schema = new SimpleSchema({
     name: {
         type: String,
-        label: "Name"
+        label: "Name",
+        index:true
     },
     khName: {
         type: String,
@@ -16,7 +17,8 @@ Sch_Activity.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     createdAt: {
         type: Date,
@@ -26,7 +28,8 @@ Sch_Activity.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,

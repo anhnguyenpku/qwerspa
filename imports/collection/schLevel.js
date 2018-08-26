@@ -3,7 +3,8 @@ export const Sch_Level = new Mongo.Collection('sch_level');
 Sch_Level.schema = new SimpleSchema({
     name: {
         type: String,
-        label: "Name"
+        label: "Name",
+        index:true
     },
     khName: {
         type: String,
@@ -33,7 +34,8 @@ Sch_Level.schema = new SimpleSchema({
     },
     rolesArea: {
         type: String,
-        label: "Role Area"
+        label: "Role Area",
+        index:true
     },
     createdAt: {
         type: Date,
@@ -43,7 +45,8 @@ Sch_Level.schema = new SimpleSchema({
             if (this.isInsert) {
                 return moment().toDate();
             }
-        }
+        },
+        index:true
     },
     updatedAt: {
         type: Date,
