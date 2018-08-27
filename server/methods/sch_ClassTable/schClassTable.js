@@ -332,6 +332,22 @@ Meteor.methods({
         }
 
     },
+    updateStudentPromotion(data, pormotionId) {
+        if (data) {
+            return Sch_ClassTable.direct.update({
+                "studentList.studentId": data.studentId,
+                "studentList.programId": data.programId,
+                "studentList.classId": data.classId,
+                "studentList.levelId": data.levelId,
+                "studentList.majorId": data.majorId
+            }, {
+                $set: {
+                    "studentList.$.promotionId": pormotionId
+                }
+            });
+        }
+
+    },
     removeSchStudentFromClass(classId, studentId) {
         let classTableDoc = Sch_ClassTable.findOne({classId: classId});
         let studentList = [];

@@ -184,7 +184,7 @@
     },
     "promotion": {
       "searchHere": "Search Here ...",
-      "title": "Promotion",
+      "title": "Scholarship",
       "action": "Action",
       "save": "Save",
       "cancel": "Cancel",
@@ -201,11 +201,11 @@
       "khName": "Khmer Name",
       "code": "Code",
       "desc": "desc",
-      "add": "Add Promotion",
-      "update": "Update Promotion",
+      "add": "Add Scholarship",
+      "update": "Update Scholarship",
       "price": "Price",
       "term": "Term (Months)",
-      "promotionType": "Promotion Type",
+      "promotionType": "Scholarship Type",
       "value": "Value",
       "status": "Status"
     },
@@ -229,7 +229,7 @@
       "student": "Student",
       "level": "Level",
       "program": "Program",
-      "promotion": "Promotion",
+      "promotion": "Scholarship",
       "term": "Term",
       "addToClass": "Add To Class",
       "class": "Class",
@@ -318,7 +318,8 @@
       "startClassDate": "Study On",
       "promoteToGraduated": "Promoted To Graduated",
       "unPromoteToClass": "Un Promote",
-      "updateStatusStudent": "Update Status Student"
+      "updateStatusStudent": "Update Status Student",
+      "promotion": "Scholarship"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -689,7 +690,7 @@
       "update": "Update Bus Registration",
       "bus": "Bus",
       "busStop": "Bus Stop",
-      "promotion": "Promotion",
+      "promotion": "Scholarship",
       "busRegisterDate": "Registration Date",
       "student": "Student",
       "busStopType": "Type",
@@ -933,8 +934,8 @@
     },
     "promotion": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
-      "title": "ប្រូមូសិន",
-      "show": "បង្ហាញប្រូមូសិន",
+      "title": "អាហារូបករណ៍",
+      "show": "បង្ហាញអាហារូបករណ៍",
       "action": "សកម្មភាព",
       "save": "រក្សាទុក",
       "cancel": "បោះបង់",
@@ -951,11 +952,11 @@
       "khName": "ឈ្មោះខ្មែរ",
       "code": "កូដ",
       "desc": "សម្គាល់",
-      "add": "បញ្ចូលព័តមានប្រូមូសិន",
-      "update": "កែប្រែព័តមានប្រូមូសិន",
+      "add": "បញ្ចូលព័តមានបអាហារូបករណ៍",
+      "update": "កែប្រែព័តមានអាហារូបករណ៍",
       "price": "តម្លៃ",
       "term": "រយៈពេល (ខែ)",
-      "promotionType": "ប្រភេទប្រូមូសិន",
+      "promotionType": "ប្រភេទអាហារូបករណ៍",
       "value": "តម្លៃ",
       "status": "ស្ថានភាព"
     },
@@ -980,7 +981,7 @@
       "student": "សិស្ស",
       "level": "កម្រិត",
       "program": "កម្មវិធី",
-      "promotion": "ប្រូមូសិន",
+      "promotion": "អាហារូបករណ៍",
       "term": "រយៈពេលក្នុងការបង់",
       "addToClass": "បញ្ចូលទៅថ្នាក់",
       "class": "ថ្នាក់",
@@ -998,7 +999,8 @@
       "gradePoint": "មធ្យមភាគ",
       "requiredCredit": "ទាមទារចំនួនក្រេឌីត",
       "isCompleted": "បំពេញរួចរាល់",
-      "startClassDate": "ចូលរៀននៅថ្ងៃ"
+      "startClassDate": "ចូលរៀននៅថ្ងៃ",
+      "note": "បរិយាយ"
     },
     "class": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1071,7 +1073,8 @@
       "unPromoteToClass": "ធ្លាក់ទៅកាន់ថ្នាក់",
       "startClassDate": "ចូលរៀននៅថ្ងៃ",
       "promoteToGraduated": "បញ្ចប់ការសិក្សា",
-      "updateStatusStudent": "កែប្រែស្ថានភាពសិស្ស"
+      "updateStatusStudent": "កែប្រែស្ថានភាពសិស្ស",
+      "promotion": "អាហារូបករណ៍"
     },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

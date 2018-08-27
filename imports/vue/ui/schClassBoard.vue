@@ -158,7 +158,7 @@
                                     </el-table-column>
                                     <el-table-column
                                             :label="langConfig['action']"
-                                            width="120"
+                                            width="180"
                                     >
                                         <template slot-scope="scope">
 
@@ -172,6 +172,11 @@
                                                 <el-button type="primary" icon="el-icon-edit" size="small"
                                                            class="cursor-pointer"
                                                            @click="dialogUpdateStatusStudent=true,popUpUpdateStaus(scope.row.studentList)"
+                                                ></el-button>
+
+                                                <el-button type="primary" icon="el-icon-d-caret" size="small"
+                                                           class="cursor-pointer"
+                                                           @click="dialogUpdatePromotionStudent=true,popUpUpdatePromotion(scope.row.studentList)"
                                                 ></el-button>
                                             </el-button-group>
 
@@ -423,6 +428,20 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schPromoteToClassForm.promotionId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in promotionList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item :label="langConfig['startClassDate']" prop="startClassDate">
                     <el-date-picker
                             v-model="schPromoteToClassForm.startClassDate"
@@ -509,6 +528,20 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="schUnPromoteToClassForm.promotionId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in promotionList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item :label="langConfig['startClassDate']" prop="startClassDate">
                     <el-date-picker
                             v-model="schUnPromoteToClassForm.startClassDate"
@@ -571,7 +604,40 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogUpdateStatusStudent= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveUpdateStatusStudent($event)">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveUpdateStatusStudent($event)">{{langConfig['save']}}
+                    </el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
+
+        <el-dialog
+                :title="langConfig['updatePromotionStudent']"
+                :visible.sync="dialogUpdatePromotionStudent"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="updatePromotionStudentForm" :rules="rulesUpdatePromotion" :ref="ref" label-width="120px"
+                     class="schPromoteToClassForm">
+                <el-form-item :label="langConfig['promotion']" prop="promotionId">
+                    <el-select style="display: block !important;"
+                               filterable
+                               v-model="updatePromotionStudentForm.promotionId"
+                               :placeholder="langConfig['chooseItem']">
+                        <el-option
+                                v-for="item in promotionList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                                :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogUpdatePromotionStudent= false ,cancel()">{{langConfig['cancel']}}
+                    </el-button>
+                    <el-button type="primary" @click="saveUpdatePromotionStudent($event)">{{langConfig['save']}}
+                    </el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -613,6 +679,7 @@
                 dialogPromoteToGraduated: false,
                 dialogUnPromoteToClass: false,
                 dialogUpdateStatusStudent: false,
+                dialogUpdatePromotionStudent: false,
                 tabPosition: 'left',
                 fullScreen: true,
                 ref: "",
@@ -641,6 +708,7 @@
                     majorId: "",
                     programId: "",
                     classId: "",
+
                     startClassDate: ""
                 },
                 schUnPromoteToClassForm: {
@@ -648,10 +716,19 @@
                     majorId: "",
                     programId: "",
                     classId: "",
+
                     startClassDate: ""
 
                 },
                 updateStatusStudentForm: {
+                    statusId: "",
+                    classId: "",
+                    studentId: "",
+                    programId: "",
+                    levelId: "",
+                    majorId: ""
+                },
+                updatePromotionStudentForm: {
                     statusId: "",
                     classId: "",
                     studentId: "",
@@ -671,6 +748,7 @@
                 teacherList: [],
                 levelList: [],
                 programList: [],
+                promotionList: [],
                 classList: [],
                 majorList: [],
                 rules: {},
@@ -697,6 +775,14 @@
                         required: true,
                         type: 'string',
                         message: 'Please choose status',
+                        trigger: 'change'
+                    }],
+                },
+                rulesUpdatePromotion: {
+                    promotionId: [{
+                        required: true,
+                        type: 'string',
+                        message: 'Please choose Scholarship',
                         trigger: 'change'
                     }],
                 },
@@ -815,6 +901,12 @@
                 let selector = {};
                 Meteor.call("queryProgramOption", selector, (err, result) => {
                     this.programList = result;
+                })
+            },
+            promotionOpt() {
+                let selector = {};
+                Meteor.call("queryPromotionOption", selector, (err, result) => {
+                    this.promotionList = result;
                 })
             },
             majorOpt(val) {
@@ -1083,12 +1175,47 @@
                 })
 
             },
+            saveUpdatePromotionStudent(event) {
+                event.preventDefault();
+
+                let vm = this;
+                let data = {};
+                data.classId = this.updatePromotionStudentForm.classId;
+                data.studentId = this.updatePromotionStudentForm.studentId;
+                data.programId = this.updatePromotionStudentForm.programId;
+                data.levelId = this.updatePromotionStudentForm.levelId;
+                data.majorId = this.updatePromotionStudentForm.majorId;
+                let oldClassDoc = {};
+                oldClassDoc._id = data.classId;
+                this.$refs["updatePromotionStudent"].validate((valid) => {
+                    Meteor.call("updateStudentPromotion", data, vm.updatePromotionStudentForm.promotionId, (err, result) => {
+                        if (!err) {
+                            vm.$message({
+                                message: `សិស្សកែប្រែអាហារូបករណ៍បានជោគជ័យ`,
+                                type: 'success'
+                            });
+                            vm.generateStudentList(oldClassDoc);
+
+                            vm.dialogUpdatePromotionStudent = false;
+                            vm.queryData();
+                        } else {
+                            vm.generateStudentList(oldClassDoc);
+                            vm.$message({
+                                type: 'error',
+                                message: err.message
+                            });
+                        }
+                    })
+                })
+
+            },
             popUpPromoteToClass() {
                 this.ref = "promoteToClass";
                 this.dialogPromoteToClass = true;
                 this.programOpt();
                 this.classOpt();
                 this.numSelectStudentPromoted = this.multipleSelectionNotPromote.length;
+
             },
             popUpUnPromoteToClass() {
                 this.ref = "unPromoteToClass";
@@ -1113,6 +1240,17 @@
                 this.updateStatusStudentForm.programId = data.programId;
                 this.updateStatusStudentForm.levelId = data.levelId;
                 this.updateStatusStudentForm.majorId = data.majorId;
+
+            },
+            popUpUpdatePromotion(data) {
+                this.promotionOpt();
+
+                this.ref = "updatePromotionStudent";
+                this.updatePromotionStudentForm.classId = data.classId;
+                this.updatePromotionStudentForm.studentId = data.studentId;
+                this.updatePromotionStudentForm.programId = data.programId;
+                this.updatePromotionStudentForm.levelId = data.levelId;
+                this.updatePromotionStudentForm.majorId = data.majorId;
 
             },
             removeSchStudentFromClass(classId, studentId) {
