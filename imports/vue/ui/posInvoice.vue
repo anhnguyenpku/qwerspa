@@ -1932,7 +1932,7 @@
                         Meteor.call("insertPosInvoice", posInvoiceDoc, true, (err, result) => {
                             if (!err) {
                                 if (isPrint) {
-                                    FlowRouter.go('/pos-data/posInvoice/print?inv=' + result);
+                                    FlowRouter.go('/pos-data/posInvoiceReceiveItem/print?inv=' + result);
                                 } else {
                                     vm.$message({
                                         duration: 1000,

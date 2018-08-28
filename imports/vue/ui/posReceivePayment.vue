@@ -364,6 +364,10 @@
                                 class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
+                        <el-button type="success" @click="savePosReceivePayment(true,$event,true)"><i
+                                class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
+
+
                         <el-button type="success" @click="savePosReceivePayment(false,$event)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}}</el-button>
 
@@ -765,7 +769,7 @@
                 })
             },
 
-            savePosReceivePayment(isCloseDialog, event) {
+            savePosReceivePayment(isCloseDialog, event, isPrint) {
                 event.preventDefault();
                 let vm = this;
                 this.$refs["posReceivePaymentFormAdd"].validate((valid) => {
@@ -790,11 +794,16 @@
                         posReceivePaymentDoc.invoice = vm.posReceivePaymentData;
                         Meteor.call("insertPosReceivePayment", posReceivePaymentDoc, (err, result) => {
                             if (!err) {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `Save Successfully!`,
-                                    type: 'success'
-                                });
+                                if (isPrint) {
+                                    FlowRouter.go('/pos-data/posInvoiceReceivePayment/print?inv=' + result);
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: this.langConfig['saveSuccess'],
+                                        type: 'success'
+                                    });
+                                }
+
 
                                 if (isCloseDialog) {
                                     this.dialogAddPosReceivePayment = false;

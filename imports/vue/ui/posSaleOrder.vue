@@ -462,9 +462,9 @@
                     </el-col>
                     <el-col :span="11" class="pull-right">
 
-                        <el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i
+                        <!--<el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i
                                 class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
-
+-->
                         <el-button type="warning" @click="savePosSaleOrder(false,$event,false)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}}</el-button>
 
@@ -811,9 +811,9 @@
                     </el-col>
                     <el-col :span="11" class="pull-right">
 
-                         <el-button type="success" @click.native="updatePosSaleOrder(posSaleOrderId,true)"><i
+                         <!--<el-button type="success" @click.native="updatePosSaleOrder(posSaleOrderId,true)"><i
                                  class="fa fa-print"></i>&nbsp;&nbsp; {{langConfig['saveAndPrint']}}</el-button>
-
+-->
                          <el-button type="primary" @click.native="updatePosSaleOrder(posSaleOrderId,false)"><i
                                  class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
                     </el-col>

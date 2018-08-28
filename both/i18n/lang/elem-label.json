@@ -131,7 +131,8 @@
       "note": "Note",
       "amountReceive": "Amount Receive",
       "location": "Location",
-      "chooseLocation": "Choose Location"
+      "chooseLocation": "Choose Location",
+      "saveAndPrint": "Save and Print"
     },
     "payBill": {
       "searchHere": "Search Here ...",
@@ -697,7 +698,8 @@
       "note": "កំណត់សម្គាល់",
       "amountReceive": "ទឹកប្រាក់ទទួល",
       "location": "ទីតាំង",
-      "chooseLocation": "ជ្រើសរើសទីតាំង"
+      "chooseLocation": "ជ្រើសរើសទីតាំង",
+      "saveAndPrint": "រក្សាទុក ហើយបោះពុម្ភ"
     },
     "payBill": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

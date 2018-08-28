@@ -105,7 +105,13 @@
       "address": "Address",
       "customer": "Customer",
       "saveSuccess": "Save Successfully!",
-      "location": "Location"
+      "location": "Location",
+      "cutOnPaid": "Cut On Prepaid",
+      "remainQty": "Remain Qty",
+      "invoiceDate": "Invoice Date",
+      "invoiceNo": "Invoice No",
+      "netAmount": "Net Amount",
+      "balanceUnpaid": "Balance Unpaid"
     },
     "receivePaymentDetail": {
       "run": "RUN REPORT",
@@ -822,7 +828,13 @@
       "address": "អាស័យដ្ឋាន",
       "customer": "អតិថិជន",
       "saveSuccess": "រក្សាទុកបានជោគជ័យ!",
-      "location": "ទីតាំង"
+      "location": "ទីតាំង",
+      "cutOnPaid": "កាត់ពីបង់មុន",
+      "remainQty": "ចំនួននៅសល់",
+      "invoiceDate": "ថ្ងៃទិញ",
+      "invoiceNo": "លេខវិក័យបត្រ",
+      "netAmount": "តម្លៃសរុប",
+      "balanceUnផaid": "សមតុល្យមិនទាន់បង់"
     },
     "receivePaymentDetail": {
       "run": "ដំណើរការរបាយការណ៍",

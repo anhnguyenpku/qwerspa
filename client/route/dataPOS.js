@@ -135,6 +135,26 @@ posData.route('/posInvoice/print', {
 
 });
 
+import '../../imports/ui/report/posInvoiceReceiveItemPrintA4/posInvoiceReceiveItemPrintA4';
+
+posData.route('/posInvoiceReceiveItem/print', {
+    name: 'pos.posInvoiceReceiveItem-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'pos_invoiceReceiveItemPrintA4Report'});
+    }
+
+});
+
+import '../../imports/ui/report/posInvoiceReceivePaymentPrintA4/posInvoiceReceivePaymentPrintA4';
+
+posData.route('/posInvoiceReceivePayment/print', {
+    name: 'pos.posInvoiceReceivePayment-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'pos_invoiceReceivePaymentPrintA4Report'});
+    }
+
+});
+
 
 //Vendor
 posPurchase.route('/posVendor', {
