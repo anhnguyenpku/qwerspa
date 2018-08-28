@@ -88,34 +88,39 @@
                                      <img style="width: 100px;height: 100px;float: left;" src="/mih.png"
                                           alt="">
                                         <span style="float: left; font-family: 'Khmer OS Muol light','Khmer OS Muol'; font-size: 15px;margin-left: 20px;"><br>
-                                            <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p></span>
+                                            <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p>
+
+                                        <p
+                                                style="text-align: left !important;font-family:'Khmer OS Battambang' !important;;font-size: 10 !important;">
+                                  អាស័យដ្ឋាន ៖ {{waterBillingSetup.address}}
+                          </p>
+                          <p
+                                  style="text-align: left !important;font-family:'Khmer OS Battambang' !important;;font-size: 10 !important;">
+                                  លេខទំនាក់ទំនង ៖ {{waterBillingSetup.phoneNumber}}
+                          </p>
+                                        </span>
+
                                  </div>
                                  <div class="col-md-2; pull-right"
                                       style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
                                      <span style="text-align: center">
-                                         ព្រះរាជាណាចក្រកម្ពុជា <br> ជាតិ សាសនា ព្រះមហាក្សត្រ
+                                         <p>របាយការណ៍</p>
+                                         <p>Balance Sheet Report</p>
                                           <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
                                      </span>
 
                                 </div>
                           </div>
                           <div class="row">
-                              <div class="col-md-3">
+                              <div class="col-md-12">
                                   លេខ..........រ.ទ
-                              </div>
-                              <div class="col-md-6"
-                                   style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px; border: 0px !important;">
-                                  <p>Balance Sheet Report</p>
-                              </div>
-                              <div class="col-md-3">
                               </div>
                           </div>
                           <div class="row">
                               <div class="col-md-6">
                                   Date: {{dateHeader}}
                               </div>
-
-                              <div class="col-md-6;" style="float: right !important;">
+                              <div class="col-md-6" style="text-align: right !important;">
                                   Currency: {{currencyHeader}}
                               </div>
                           </div>

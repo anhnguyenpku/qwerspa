@@ -127,12 +127,12 @@ export const exchangeCoefficient = function ({exchange, fieldToCalculate, baseCu
         coefficient.THB.$divide = [fieldToCalculate, exchange.rates.THB];
         coefficient.USD.$multiply = [fieldToCalculate, 1];
     } else if (baseCurrency === 'THB') {
-        coefficient.KHR.$divide = [fieldToCalculate, exchange.rates.KHR];
-        coefficient.USD.$divide = [fieldToCalculate, exchange.rates.USD];
+        coefficient.KHR.$divide = [fieldToCalculate, exchange.rates.THB / exchange.rates.KHR];
+        coefficient.USD.$multiply = [fieldToCalculate, exchange.rates.THB];
         coefficient.THB.$multiply = [fieldToCalculate, 1];
     } else {
-        coefficient.THB.$multiply = [fieldToCalculate, exchange.rates.THB];
-        coefficient.USD.$multiply = [fieldToCalculate, exchange.rates.USD];
+        coefficient.THB.$multiply = [fieldToCalculate, exchange.rates.KHR/exchange.rates.THB];
+        coefficient.USD.$multiply = [fieldToCalculate, exchange.rates.KHR];
         coefficient.KHR.$multiply = [fieldToCalculate, 1];
     }
     return coefficient;
