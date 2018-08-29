@@ -109,9 +109,7 @@
 
 
                           <div class="row">
-                              <div class="col-md-12">
                                   លេខ..........{{waterBillingSetup.khShortName}}
-                              </div>
                           </div>
                           <div style="width: 100%;display: inline-block">
                               <div style="width: 50%">

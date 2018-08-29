@@ -137,11 +137,10 @@
                                   <br>
                                   <p style="font-family:tacteing ">rs</p>
                               </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6;" style="float:right">
-                              </div>
-                              <div class="col-md-6">
+                          </div><div class="row">
+                              <div style="widows: 50% !important; float:right">
+                                  </div>
+                              <div style="width: 50% !important;">
                                   {{langConfig['date']}}: {{dateHeader}}
                               </div>
 

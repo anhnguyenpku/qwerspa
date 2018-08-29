@@ -118,11 +118,11 @@
                                                                 <span style="float: left !important;">{{langConfig['no']}}:.........</span>
 
                           </div>
-                          <div class="row">
-                              <div class="col-md-6;" style="float:right">
+                         <div class="row">
+                              <div style="widows: 50% !important; float:right">
                                   {{langConfig['currency']}}: {{currencyHeader}}
                               </div>
-                              <div class="col-md-6">
+                              <div style="width: 50% !important;">
                                   {{langConfig['date']}}: {{dateHeader}}
                               </div>
 
