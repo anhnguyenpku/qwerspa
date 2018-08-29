@@ -118,17 +118,14 @@
                                                                         Account
                                                                         Settings
                                                                     </li>
-                                                                    <li><a href="{{pathFor 'acc.closingEntry'}}">
-                                                                        Closing
-                                                                        Entry</a>
-                                                                    </li>
-                                                                    <li><a href="{{pathFor 'acc.chartAccount'}}"> Chart
+                                                                    <li><a href="{{pathFor 'acc.chartAccount'}}"><i
+                                                                            class="fa fa-superpowers"
+                                                                            aria-hidden="true"></i> Chart
                                                                         Account</a>
                                                                     </li>
-                                                                    <li><a href="{{pathFor 'acc.exchange'}}">
-                                                                        Exchange</a>
-                                                                    </li>
+
                                                                     <li><a href="{{pathFor 'wb.waterBillingSetup'}}">
+                                                                        <i class="fa fa-cog" aria-hidden="true"></i>
                                                                         Setup</a></li>
 
                                                                 </ul>
@@ -796,9 +793,22 @@
             {{#if accountLayout}}
                 <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
 
-                    <a style="color: white !important;" href="{{pathFor 'acc.journal'}}" class="title-head"><i
-                            class="fa fa-registered"></i> Journal
-                        Entry</a><br><br>
+                    <li><a style="color: white !important;" href="{{pathFor 'acc.journal'}}" class="title-head"><i
+                            class="fa fa-registered"></i>  {{_
+                            "acc.sidebarMenu.journal"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'acc.exchange'}}">
+                        <i class="fa fa-exchange" aria-hidden="true"></i>
+                        {{_
+                                "acc.sidebarMenu.exchange"}}</a>
+                    </li>
+                    <li><a href="{{pathFor 'acc.closingEntry'}}">
+                        <i class="fa fa-hourglass-end" aria-hidden="true"></i>
+                        Closing
+                        Entry</a>
+                    </li>
+
+                    <hr>
 
                     <!--Report -->
                     <a href="#" class="title-head" style="color: white !important;">

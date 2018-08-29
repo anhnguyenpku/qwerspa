@@ -156,9 +156,10 @@
                               </span>
                               </div>
                           </div>
-                          <br>
                           <div class="row">
                               <div class="col-md-12  balckOnPrint" style="text-align: center;">
+                                                                   <p style="font-family: 'Khmer OS Moul'">របាយការណ៍</p>
+
                                  {{langConfig['title']}}
                                   <br>
                                   <p style="font-family:tacteing ">rs</p>

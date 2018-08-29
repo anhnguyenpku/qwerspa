@@ -110,7 +110,6 @@
                           </div>
                 <table class="table table-report-block-summary table-bordered">
                       <caption>
-
                           <div class="row">
                               <div class="col-lg-3">
                                   <span style="float: left !important;">{{langConfig['no']}}:.........</span>

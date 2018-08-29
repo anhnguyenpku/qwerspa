@@ -102,6 +102,13 @@
       "teacherActivity": "Teacher Activity"
     }
   },
+  "acc": {
+    "sidebarMenu": {
+      "home": "home",
+      "journal": "Journal Entry",
+      "exchange": "Exchange"
+    }
+  },
   "global": {
     "save": "Save",
     "cancel": "Cancel"

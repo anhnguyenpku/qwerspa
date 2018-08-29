@@ -22,34 +22,41 @@
                 <div class="container">
                          <table class="table table-report-block-summary table-bordered">
                             <caption>
-                                <div class="row">
-                                    <div class="col-md-10">
-                                     <img style="width: 100px;height: 100px;float: left;" src="/mih.png"
+
+                                <div class="row"
+                                     style="text-align: center !important;display: flex !important;align-items: center !important;justify-content: center !important;margin-left: -100px !important;">
+                                     <img style="width: 100px;height: 100px;vertical-align: baseline !important;"
+                                          src="/mih.png"
                                           alt="">
-                                        <span style="float: left; font-family: 'Khmer OS Muol light','Khmer OS Muol'; font-size: 15px;margin-left: 20px;"><br>
-                                            <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p></span>
-                                 </div>
-                                 <div class="col-md-2; pull-right"
-                                      style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
-                                     <span style="text-align: center">
-                                         ព្រះរាជាណាចក្រកម្ពុជា <br> ជាតិ សាសនា ព្រះមហាក្សត្រ
-                                          <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
-                                     </span>
+                                        <span style="font-family: 'Khmer OS Muol light','Khmer OS Muol'; margin-left: 20px;font-size: 15px;vertical-align: middle !important;"><br>
+                                            <p style="font-size: 18px;">{{waterBillingSetup.khName}}</p><p>{{waterBillingSetup.enName}}</p>
 
-                                </div>
-                                </div>
-                              <div class="row">
-                                 <div class="col-md-3">
+  <p class="row"
+     style="text-align: center !important;font-family:'Khmer OS Battambang';font-size: 11 !important;">
+                                  អាស័យដ្ឋាន ៖ {{waterBillingSetup.address}}
+                          </p>
+                          <p class="row"
+                             style="text-align: center !important;font-family:'Khmer OS Battambang';font-size: 11 !important;">
+                                  លេខទំនាក់ទំនង ៖ {{waterBillingSetup.phoneNumber}}
+                          </p>
+                                        </span>
+                          </div>
 
-                                </div>
-                                <div class="col-md-6"
-                                     style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px; border: 0px !important;">
+                          <br>
+                          <div class="row">
+                              <div class="col-md-3">
+
+                              </div>
+                              <div class="col-md-6"
+                                   style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px; border: 0px !important;">
                                   <p>Closing Report</p>
-                                    <p>{{closingEntryDate}}</p>
-                                </div>
+                                  <p>{{closingEntryDate}}</p>
+
+                              </div>
                               <div class="col-md-3">
                               </div>
                           </div>
+
                              </caption>
                          </table>
                              <table class="table table-report-block-summary table-bordered"

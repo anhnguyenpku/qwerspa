@@ -9,7 +9,7 @@
                     <h4>
                         <a class="cursor-pointer"
                            @click="popupJournalAdd(),dialogAddJournal = true,autoIncreseVoucher(),resetForm()">
-                            <i class="fa fa-plus"></i> Journal Entry
+                            <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>
                 </el-col>
@@ -106,7 +106,7 @@
 
                     <el-table-column
                             label="Action"
-                            width="160"
+                            width="200"
                     >
                         <template slot-scope="scope">
                             <el-button-group>
@@ -116,6 +116,8 @@
                                            @click="popupJournalUpdate(scope.$index,scope.row,scope)"></el-button>
                                 <el-button type="success" icon="el-icon-view" size="small" class="cursor-pointer"
                                            @click="popupJournalShow(scope.row)"></el-button>
+                                <el-button type="info" icon="el-icon-printer" size="small" class="cursor-pointer"
+                                           @click="printPaymentInvoice(scope.row._id)"></el-button>
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -214,11 +216,13 @@
                                     <td>{{journalDoc.accountName}}</td>
                                     <td>
                                         <el-input placeholder="Please input Dr" v-model.number=journalDoc.dr
+                                                  type="number"
                                                   @keyup.native="updateJournalDetail(journalDoc, index)"
                                                   @change="updateJournalDetail(journalDoc, index)"></el-input>
                                     </td>
                                     <td>
                                         <el-input placeholder="Please input Cr" v-model.number=journalDoc.cr
+                                                  type="number"
                                                   @keyup.native="updateJournalDetail(journalDoc, index)"
                                                   @change="updateJournalDetail(journalDoc, index)"></el-input>
                                     </td>
@@ -452,6 +456,9 @@
                                 class="el-icon-circle-cross"> </i>&nbsp;​Cancel</el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
+                           <el-button type="success" @click="saveJournalPaid(true,$event,type,true)"><i
+                                   class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
+
                         <el-button type="success" @click="saveJournalPaid(false,$event,type)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; Save and New</el-button>
 
@@ -702,11 +709,23 @@
 <!--<script src="cleave-phone.{country}.js"></script>-->
 <script>
     import draggable from 'vuedraggable';
+    import compoLang from '../../../both/i18n/lang/elem-label-acc'
 
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
 
     export default {
+        meteor: {
+            langSession() {
+                return Session.get('lang') || "en";
+            },
+            disabledRemove() {
+                return Session.get("canRemove");
+            },
+            disabledUpdate() {
+                return Session.get("canUpdate");
+            }
+        },
 
         components: {
             draggable
@@ -973,7 +992,7 @@
 
 
             },
-            saveJournalPaid(isCloseDialog, event, type) {
+            saveJournalPaid(isCloseDialog, event, type, isPrint) {
                 event.preventDefault();
                 let vm = this;
                 this.$refs["journalFormPayment"].validate((valid) => {
@@ -992,11 +1011,17 @@
                         journalDoc.transaction = vm.journalData;
                         Meteor.call("insertJournalPaid", journalDoc, type, (err, result) => {
                             if (!err) {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `Save Successfully!`,
-                                    type: 'success'
-                                });
+                                if (isPrint === true) {
+                                    FlowRouter.go('/acc-data/accPayment/print?inv=' + result);
+
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: `Save Successfully!`,
+                                        type: 'success'
+                                    });
+
+                                }
 
                                 if (isCloseDialog) {
                                     this.dialogPaid = false;
@@ -1009,6 +1034,9 @@
                 })
 
 
+            },
+            printPaymentInvoice(journalId) {
+                FlowRouter.go('/acc-data/accPayment/print?inv=' + journalId);
             },
             updateJournal(id) {
                 event.preventDefault();
@@ -1419,6 +1447,12 @@
             this.chartAccountOption();
             this.chartAccountMethodOption();
             this.queryData();
+        },
+        computed: {
+            langConfig() {
+                let data = compoLang.filter(config => config.lang === this.langSession)[0]['journal'];
+                return data;
+            }
         }
     }
 

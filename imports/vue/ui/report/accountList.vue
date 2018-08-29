@@ -25,36 +25,34 @@
             <span slot="content" style="margin: 0px !important;">
                 <table class="table table-report-block-summary table-bordered">
                       <caption>
-                          <div class="row"
-                               style="text-align: center !important;display: flex !important;align-items: center !important;justify-content: center !important;">
-                                     <img style="width: 70px;height: 70px;vertical-align: middle !important;"
-                                          src="/mih.png"
+
+                           <div class="row">
+                               <div class="col-md-10">
+                                     <img style="width: 100px;height: 100px;float: left;" src="/mih.png"
                                           alt="">
-                                        <span style="font-family: 'Khmer OS Muol light','Khmer OS Muol'; font-size: 15px;margin-left: 20px;vertical-align: middle !important;"><br>
-                                            <p>{{waterBillingSetup.khName}}</p><p>{{waterBillingSetup.enName}}</p>
+                                        <span style="float: left; font-family: 'Khmer OS Muol light','Khmer OS Muol'; font-size: 15px;margin-left: 20px;"><br>
+                                            <p>{{waterBillingSetup.khName}}</p> <p>{{waterBillingSetup.enName}}</p>
 
-
-                                        </span>
-                          </div>
-                          <div class="row"
-                               style="text-align: center !important;font-family:'Khmer OS Battambang';font-size: 11;">
+                                        <p
+                                                style="text-align: left !important;font-family:'Khmer OS Battambang' !important;;font-size: 10 !important;">
                                   អាស័យដ្ឋាន ៖ {{waterBillingSetup.address}}
-                          </div>
-                          <div class="row"
-                               style="text-align: center !important;font-family:'Khmer OS Battambang';font-size: 11;">
+                          </p>
+                          <p
+                                  style="text-align: left !important;font-family:'Khmer OS Battambang' !important;;font-size: 10 !important;">
                                   លេខទំនាក់ទំនង ៖ {{waterBillingSetup.phoneNumber}}
-                          </div>
-                          <br>
-                          <div class="row">
-                              <div class="col-md-3">
+                          </p>
+                                        </span>
 
-                              </div>
-                              <div class="col-md-6"
-                                   style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px; border: 0px !important;">
-                                  <p>Account List Report</p>
-                              </div>
-                              <div class="col-md-3">
-                              </div>
+                                 </div>
+                                 <div class="col-md-2; pull-right"
+                                      style="text-align: center;font-family: 'Khmer OS Muol'; font-size: 15px;">
+                                     <span style="text-align: center">
+                                         <p>របាយការណ៍</p>
+                                         <p>Account List Report</p>
+                                          <p style="font-family:tacteing;font-size: 40px; margin: 0px !important;">6</p>
+                                     </span>
+
+                                </div>
                           </div>
                       </caption>
 

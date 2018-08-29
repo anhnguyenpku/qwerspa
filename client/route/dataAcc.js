@@ -4,7 +4,6 @@ import {CheckRoles} from '../../imports/api/methods/checkRoles';
 import '../../imports/ui/acc_journal/accJournal';
 
 
-
 //import layout render
 require("materialize-css-meteor");
 import {_Main} from '../libs/_renderLayout';
@@ -27,6 +26,18 @@ accData.route('/', {
         _Main('wb_home');
     }
 });
+
+
+import '../../imports/ui/report/accPaymentPrintA4/accPaymentPrintA4';
+
+accData.route('/accPayment/print', {
+    name: 'pos.accPayment-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'acc_paymentPrintA4Report'});
+    }
+
+});
+
 // Journal
 accData.route('/journal', {
     name: 'acc.journal',
