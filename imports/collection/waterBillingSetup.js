@@ -36,6 +36,12 @@ WB_waterBillingSetup.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    integratedPosAccount: {
+        type: Boolean,
+        optional: true,
+        defaultValue: false,
+        label: "Integrated Pos with Account"
+    },
     invoiceExpiredAfter: {
         type: Number,
         autoValue() {

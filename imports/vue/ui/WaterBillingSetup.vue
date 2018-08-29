@@ -127,6 +127,13 @@
                                     <el-form-item label="Khmer Ministry Name">
                                         <el-input v-model="form.ministryKhName"></el-input>
                                     </el-form-item>
+                                    <el-form-item label="Integrated Pos and Account">
+                                        <el-radio-group v-model="form.integratedPosAccount">
+                                            <el-radio :label="true">Yes</el-radio>
+                                            <el-radio :label="false">No</el-radio>
+                                        </el-radio-group>
+
+                                    </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="Director">
@@ -252,7 +259,8 @@
                     website: "",
                     director: "",
                     province: "",
-                    khAddress: ""
+                    khAddress: "",
+                    integratedPosAccount: false
                 },
                 rules: {
                     khName: [

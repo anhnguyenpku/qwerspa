@@ -235,6 +235,12 @@ Meteor.methods({
             })
         }
 
+        //Integrated To Account
+        let companyDoc = WB_waterBillingSetup.findOne({});
+        if (companyDoc.integratedPosAccount === true) {
+            
+        }
+
         return id;
     },
     updatePosInvoice(data, _id) {
