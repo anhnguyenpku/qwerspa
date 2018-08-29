@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="popUpAdd(),dialogAddClosingEntry = true,resetForm()">
+                        <a class="cursor-pointer" @click="popUpAdd(),dialogAddClosingEntry = true">
                             <i class="fa fa-plus"></i> Closing Entry
                         </a>
                     </h4>
@@ -204,24 +204,25 @@
                     }
                 },
                 disabledDate: false,
-                closeDate: ""
+                closeDate: "",
+                skip: 0
             }
         },
         watch: {
             currentSize(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * val;
-                this.queryData(this.searchData, skip, val + skip);
+                this.skip = (this.currentPage - 1) * val;
+                this.queryData(this.searchData, this.skip, val + this.skip);
             },
             currentPage(val) {
                 this.isSearching = true;
-                let skip = (val - 1) * this.currentSize;
-                this.queryData(this.searchData, skip, this.currentSize + skip);
+                this.skip = (val - 1) * this.currentSize;
+                this.queryData(this.searchData, this.skip, this.currentSize + this.skip);
             },
             searchData(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * this.currentSize;
-                this.queryData(val, skip, this.currentSize + skip);
+                this.skip = (this.currentPage - 1) * this.currentSize;
+                this.queryData(val, this.skip, this.currentSize + this.skip);
             },
             "closingEntryForm.closeDate"(val) {
                 let vm = this;
@@ -324,6 +325,8 @@
                                         vm.dialogAddClosingEntry = false;
                                         vm.queryData();
                                         vm.$refs["closingEntryForm"].resetFields();
+                                        vm.resetForm();
+
                                     } else {
                                         vm.$message({
                                             duration: 1000,
@@ -366,8 +369,10 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateClosingEntry = false;
-                                vm.queryData();
+                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.$refs["closingEntryForm"].resetFields();
+                                vm.resetForm();
+
                             } else {
                                 vm.$message({
                                     duration: 1000,

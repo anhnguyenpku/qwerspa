@@ -518,7 +518,8 @@
                 <input type="hidden" v-model="schRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchRegisterToClass = false ,cancel()">{{langConfig['cancel']}}</el-button>
+                    <el-button @click="dialogUpdateSchRegisterToClass = false ,cancel()">{{langConfig['cancel']}}
+                    </el-button>
                     <el-button type="primary" @click="updateSchRegister">{{langConfig['save']}}</el-button>
                 </el-row>
                 <br>
@@ -1016,24 +1017,25 @@
                 ],
                 curiculumnList: [],
                 mentionRange: [],
-                disabledCuriculumn: false
+                disabledCuriculumn: false,
+                skip: 0
             }
         },
         watch: {
             currentSize(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * val;
-                this.queryData(this.searchData, skip, val + skip);
+                this.skip = (this.currentPage - 1) * val;
+                this.queryData(this.searchData, this.skip, val + this.skip);
             },
             currentPage(val) {
                 this.isSearching = true;
-                let skip = (val - 1) * this.currentSize;
-                this.queryData(this.searchData, skip, this.currentSize + skip);
+                this.skip = (val - 1) * this.currentSize;
+                this.queryData(this.searchData, this.skip, this.currentSize + this.skip);
             },
             searchData(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * this.currentSize;
-                this.queryData(val, skip, this.currentSize + skip);
+                this.skip = (this.currentPage - 1) * this.currentSize;
+                this.queryData(val, this.skip, this.currentSize + this.skip);
             },
             "schRegisterForm.programId"(val) {
                 this.majorOpt(val);
@@ -1253,7 +1255,7 @@
                                 });
                                 vm.dialogUpdateSchRegister = false;
                                 vm.dialogUpdateSchRegisterToClass = false;
-                                vm.queryData();
+                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schRegisterFormUpdate"].resetFields();
                             } else {

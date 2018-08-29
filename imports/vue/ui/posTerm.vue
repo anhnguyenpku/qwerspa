@@ -75,9 +75,11 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button type="danger" class="cursor-pointer" icon="el-icon-delete" size="small"
-                                           @click="removePosTerm(scope.$index,scope.row,posTermData)" :disabled="disabledRemove"></el-button>
+                                           @click="removePosTerm(scope.$index,scope.row,posTermData)"
+                                           :disabled="disabledRemove"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
-                                           @click="findPosTermById(scope),dialogUpdatePosTerm= true" :disabled="disabledUpdate"></el-button>
+                                           @click="findPosTermById(scope),dialogUpdatePosTerm= true"
+                                           :disabled="disabledUpdate"></el-button>
                             </el-button-group>
 
                         </template>
@@ -326,24 +328,25 @@
                 dueMethodDataOption: [
                     {label: "Due in fixed number of days", value: "Due in fixed number of days"},
                     {label: "Due by certain day of the month", value: "Due by certain day of the month"}
-                ]
+                ],
+                skip: 0
             }
         },
         watch: {
             currentSize(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * val;
-                this.queryData(this.searchData, skip, val + skip);
+                this.skip = (this.currentPage - 1) * val;
+                this.queryData(this.searchData, this.skip, val + this.skip);
             },
             currentPage(val) {
                 this.isSearching = true;
-                let skip = (val - 1) * this.currentSize;
-                this.queryData(this.searchData, skip, this.currentSize + skip);
+                this.skip = (val - 1) * this.currentSize;
+                this.queryData(this.searchData, this.skip, this.currentSize + this.skip);
             },
             searchData(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * this.currentSize;
-                this.queryData(val, skip, this.currentSize + skip);
+                this.skip = (this.currentPage - 1) * this.currentSize;
+                this.queryData(val, this.skip, this.currentSize + this.skip);
             },
             "posTermForm.dueMethod"(val) {
                 if (val === "Due in fixed number of days") {
@@ -440,7 +443,7 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosTerm = false;
-                                vm.queryData();
+                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.$refs["posTermForm"].resetFields();
                             } else {
                                 vm.$message({

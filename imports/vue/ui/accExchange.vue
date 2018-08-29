@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="dialogAddExchange = true,resetForm()">
+                        <a class="cursor-pointer" @click="dialogAddExchange = true">
                             <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>
@@ -237,24 +237,25 @@
                         message: 'Please input THB',
                         trigger: 'blur'
                     }]
-                }
+                },
+                skip: 0
             }
         },
         watch: {
             currentSize(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * val;
-                this.queryData(this.searchData, skip, val + skip);
+                this.skip = (this.currentPage - 1) * val;
+                this.queryData(this.searchData, this.skip, val + this.skip);
             },
             currentPage(val) {
                 this.isSearching = true;
-                let skip = (val - 1) * this.currentSize;
-                this.queryData(this.searchData, skip, this.currentSize + skip);
+                this.skip = (val - 1) * this.currentSize;
+                this.queryData(this.searchData, this.skip, this.currentSize + this.skip);
             },
             searchData(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * this.currentSize;
-                this.queryData(val, skip, this.currentSize + skip);
+                this.skip = (this.currentPage - 1) * this.currentSize;
+                this.queryData(val, this.skip, this.currentSize + this.skip);
             }
         },
         methods: {
@@ -308,6 +309,8 @@
                                 this.dialogAddExchange = false;
                                 this.queryData();
                                 this.$refs["exchangeFormAdd"].resetFields();
+                                vm.resetForm();
+
                             } else {
                                 this.$message({
                                     duration: 1000,
@@ -341,8 +344,10 @@
                                     type: 'success'
                                 });
                                 this.dialogUpdateExchange = false;
-                                this.queryData();
+                                this.queryData(this.searchData, this.skip, this.currentSize + this.skip);
                                 this.$refs["exchangeFormUpdate"].resetFields();
+                                vm.resetForm();
+
                             } else {
                                 this.$message({
                                     duration: 1000,

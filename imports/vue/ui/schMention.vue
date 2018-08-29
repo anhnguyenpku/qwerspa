@@ -349,25 +349,26 @@
                 },
                 rangeData: [
                     {from: "", to: "", grade: "", gradePoint: ""}
-                ]
+                ],
+                skip: 0
 
             }
         },
         watch: {
             currentSize(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * val;
-                this.queryData(this.searchData, skip, val + skip);
+                this.skip = (this.currentPage - 1) * val;
+                this.queryData(this.searchData, this.skip, val + this.skip);
             },
             currentPage(val) {
                 this.isSearching = true;
-                let skip = (val - 1) * this.currentSize;
-                this.queryData(this.searchData, skip, this.currentSize + skip);
+                this.skip = (val - 1) * this.currentSize;
+                this.queryData(this.searchData, this.skip, this.currentSize + this.skip);
             },
             searchData(val) {
                 this.isSearching = true;
-                let skip = (this.currentPage - 1) * this.currentSize;
-                this.queryData(val, skip, this.currentSize + skip);
+                this.skip = (this.currentPage - 1) * this.currentSize;
+                this.queryData(val, this.skip, this.currentSize + this.skip);
             }
         },
         methods: {
@@ -479,7 +480,7 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchMention = false;
-                                vm.queryData();
+                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schMentionFormUpdate"].resetFields();
                             } else {
