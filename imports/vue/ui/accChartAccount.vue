@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="dialogAddChartAccount = true">
+                        <a class="cursor-pointer" @click="dialogAddChartAccount = true,resetForm()">
                             <i class="fa fa-plus"></i> Chart Account
                         </a>
                     </h4>
@@ -524,7 +524,7 @@
                                 vm.queryData();
                                 vm.accountTypeOption();
                                 vm.parentChartAccountOption();
-                                vm.$refs["chartAccountForm"].resetFields();
+                                vm.$refs["chartAccountFormAdd"].resetFields();
                                 vm.resetForm();
 
                             } else {
@@ -569,7 +569,7 @@
                                 vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.accountTypeOption();
                                 vm.parentChartAccountOption();
-                                vm.$refs["chartAccountForm"].resetFields();
+                                vm.$refs["chartAccountFormUpdate"].resetFields();
                                 vm.resetForm();
 
                             } else {
@@ -618,7 +618,7 @@
                                 vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.accountTypeOption();
                                 vm.parentChartAccountOption();
-                                vm.$refs["chartAccountForm"].resetFields();
+                                vm.$refs["mapChartAccount"].resetFields();
                                 vm.resetForm();
 
                             } else {

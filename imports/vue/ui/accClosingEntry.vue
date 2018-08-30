@@ -7,7 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="popUpAdd(),dialogAddClosingEntry = true">
+                        <a class="cursor-pointer" @click="popUpAdd(),dialogAddClosingEntry = true,resetForm()">
                             <i class="fa fa-plus"></i> Closing Entry
                         </a>
                     </h4>

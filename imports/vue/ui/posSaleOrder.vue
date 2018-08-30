@@ -914,6 +914,7 @@
 <script>
     import draggable from 'vuedraggable';
     import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+    import {formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
     import {GeneralFunction} from "../../../imports/api/methods/generalFunction";
     import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
     import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
@@ -1737,24 +1738,24 @@
                 vm.posSaleOrderForm.total = formatCurrency(total, companyDoc.baseCurrency);
 
                 if (vm.posSaleOrderForm.discountType == "Amount") {
-                    vm.posSaleOrderForm.netTotal = formatCurrency(total - vm.posSaleOrderForm.discount, companyDoc.baseCurrency);
-                    vm.posSaleOrderForm.balanceUnpaid = formatCurrency(total - vm.posSaleOrderForm.discount - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleOrderForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleOrderForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleOrderForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posSaleOrderForm.netTotal = formatCurrencyLast(total - vm.posSaleOrderForm.discount, companyDoc.baseCurrency);
+                    vm.posSaleOrderForm.balanceUnpaid = formatCurrencyLast(total - vm.posSaleOrderForm.discount - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleOrderForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleOrderForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleOrderForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posSaleOrderForm.remainUSD = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "USD");
-                    vm.posSaleOrderForm.remainKHR = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "KHR");
-                    vm.posSaleOrderForm.remainTHB = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "THB");
-                    vm.posSaleOrderForm.discountValue = formatCurrency(vm.posSaleOrderForm.discount, companyDoc.baseCurrency);
+                    vm.posSaleOrderForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "USD");
+                    vm.posSaleOrderForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "KHR");
+                    vm.posSaleOrderForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "THB");
+                    vm.posSaleOrderForm.discountValue = formatCurrencyLast(vm.posSaleOrderForm.discount, companyDoc.baseCurrency);
 
                     vm.posSaleOrderForm.balanceUnpaid = vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() <= 0 ? 0 : vm.posSaleOrderForm.balanceUnpaid;
                     this.typeDiscount = getCurrencySymbolById(companyDoc.baseCurrency);
                 } else {
-                    vm.posSaleOrderForm.netTotal = formatCurrency(total - (total * vm.posSaleOrderForm.discount / 100), companyDoc.baseCurrency);
-                    vm.posSaleOrderForm.balanceUnpaid = formatCurrency(total - (total * vm.posSaleOrderForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleOrderForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleOrderForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleOrderForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posSaleOrderForm.netTotal = formatCurrencyLast(total - (total * vm.posSaleOrderForm.discount / 100), companyDoc.baseCurrency);
+                    vm.posSaleOrderForm.balanceUnpaid = formatCurrencyLast(total - (total * vm.posSaleOrderForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleOrderForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleOrderForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleOrderForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posSaleOrderForm.remainUSD = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "USD");
-                    vm.posSaleOrderForm.remainKHR = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "KHR");
-                    vm.posSaleOrderForm.remainTHB = formatCurrency(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "THB");
-                    vm.posSaleOrderForm.discountValue = formatCurrency((total * vm.posSaleOrderForm.discount / 100), companyDoc.baseCurrency);
+                    vm.posSaleOrderForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "USD");
+                    vm.posSaleOrderForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "KHR");
+                    vm.posSaleOrderForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value(), Session.get("area")), "THB");
+                    vm.posSaleOrderForm.discountValue = formatCurrencyLast((total * vm.posSaleOrderForm.discount / 100), companyDoc.baseCurrency);
 
                     vm.posSaleOrderForm.balanceUnpaid = vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() <= 0 ? 0 : vm.posSaleOrderForm.balanceUnpaid;
                     this.typeDiscount = "%";

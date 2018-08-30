@@ -8,7 +8,7 @@
                 <el-col :span="8">
                     <h4>
                         <a class="cursor-pointer"
-                           @click="popupJournalAdd(),dialogAddJournal = true,autoIncreseVoucher()">
+                           @click="popupJournalAdd(),dialogAddJournal = true,autoIncreseVoucher(),resetForm()">
                             <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>

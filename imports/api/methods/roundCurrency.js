@@ -49,6 +49,28 @@ export const formatCurrency = (amount, currencyId) => {
         currencyId = settingDoc.baseCurrency;
     }
     let newAmount = math.round(numeral(amount).value(), 5);
+    let newForm = "";
+    switch (currencyId) {
+        case "USD":
+            newForm = newFormFormat(settingDoc.usdDigit);
+            break;
+        case "KHR":
+            newForm = newFormFormat(settingDoc.khrDigit);
+            break;
+        case "THB":
+            newForm = newFormFormat(settingDoc.thbDigit);
+            break;
+    }
+    return numeral(newAmount).format(newForm);
+
+};
+
+export const formatCurrencyLast = (amount, currencyId) => {
+    let settingDoc = WB_waterBillingSetup.findOne();
+    if (currencyId === undefined) {
+        currencyId = settingDoc.baseCurrency;
+    }
+    let newAmount = math.round(numeral(amount).value(), 5);
     if (currencyId === "KHR") {
         newAmount = roundKhrUp(newAmount, -2);
     }
@@ -131,7 +153,7 @@ export const exchangeCoefficient = function ({exchange, fieldToCalculate, baseCu
         coefficient.USD.$multiply = [fieldToCalculate, exchange.rates.THB];
         coefficient.THB.$multiply = [fieldToCalculate, 1];
     } else {
-        coefficient.THB.$multiply = [fieldToCalculate, exchange.rates.KHR/exchange.rates.THB];
+        coefficient.THB.$multiply = [fieldToCalculate, exchange.rates.KHR / exchange.rates.THB];
         coefficient.USD.$multiply = [fieldToCalculate, exchange.rates.KHR];
         coefficient.KHR.$multiply = [fieldToCalculate, 1];
     }

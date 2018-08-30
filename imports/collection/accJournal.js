@@ -90,10 +90,6 @@ Acc_Journal.schema = new SimpleSchema({
         type: String,
         optional: true
     },
-    refFrom: {
-        type: String,
-        optional: true
-    },
     status: {
         type: String,
         optional: true,

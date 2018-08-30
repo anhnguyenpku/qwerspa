@@ -381,6 +381,7 @@
 <script>
     import draggable from 'vuedraggable';
     import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+    import {formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
     import {GeneralFunction} from "../../../imports/api/methods/generalFunction";
     import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
     import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
@@ -975,10 +976,10 @@
                 });
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
                 this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
-                vm.posPayBillForm.totalNetAmount = formatCurrency(totalNetAmount, companyDoc.baseCurrency);
-                vm.posPayBillForm.totalDiscount = formatCurrency(totalDiscount, companyDoc.baseCurrency);
-                vm.posPayBillForm.totalPaid = formatCurrency(totalPaid, companyDoc.baseCurrency);
-                vm.posPayBillForm.balanceUnPaid = formatCurrency(totalNetAmount - totalPaid, companyDoc.baseCurrency);
+                vm.posPayBillForm.totalNetAmount = formatCurrencyLast(totalNetAmount, companyDoc.baseCurrency);
+                vm.posPayBillForm.totalDiscount = formatCurrencyLast(totalDiscount, companyDoc.baseCurrency);
+                vm.posPayBillForm.totalPaid = formatCurrencyLast(totalPaid, companyDoc.baseCurrency);
+                vm.posPayBillForm.balanceUnPaid = formatCurrencyLast(totalNetAmount - totalPaid, companyDoc.baseCurrency);
             },
             searchBill() {
                 let vm = this;

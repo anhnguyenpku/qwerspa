@@ -75,11 +75,9 @@ Meteor.methods({
     insertJournal(data) {
 
         if (data.voucherId) {
-            data.voucherId = data.rolesArea + moment(data.journalData).format("YYYY") + pad(data.voucherId, 6);
+            data.voucherId = data.rolesArea + moment(data.journalDate).format("YYYY") + pad(data.voucherId, 6);
         } else {
-            Meteor.call("autoIncreseVoucher", data.rolesArea, data.journalDate, data.currencyId, function (err, result) {
-                data.voucherId = result;
-            })
+            data.voucherId = Meteor.call("autoIncreseVoucher", data.rolesArea, data.journalDate, data.currencyId);
         }
         data.transaction.map(function (obj) {
             return obj.drcr = parseFloat(obj.dr) - parseFloat(obj.cr);

@@ -11,6 +11,8 @@ import {formatCurrency, getCurrencySymbolById} from "../../../imports/api/method
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import {Pos_Product} from "../../../imports/collection/posProduct";
 import {Pos_Location} from "../../../imports/collection/posLocation";
+import {Acc_Journal} from "../../../imports/collection/accJournal";
+import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
 import numeral from "numeral";
 
 Meteor.methods({
@@ -46,8 +48,11 @@ Meteor.methods({
                 Pos_AverageInventory.insert(obj);
 
             })
+
+
         } else if (data.transactionType === "Invoice") {
 
+            let avgCost = 0;
             data.item.forEach((doc) => {
                 let obj = {};
                 let onHandInventory = Pos_AverageInventory.findOne({
@@ -78,6 +83,8 @@ Meteor.methods({
                     profit: doc.amount - ((onHandInventory && onHandInventory.averageCost || 0) * doc.qty)
                 };
 
+                avgCost += obj.averageCost;
+
                 let isInsrt = Pos_AverageInventory.insert(obj);
                 if (isInsrt) {
                     Pos_Invoice.direct.update({
@@ -91,6 +98,88 @@ Meteor.methods({
                     });
                 }
             })
+
+
+            //Integrated To Account===============================================================================================
+            let companyDoc = WB_waterBillingSetup.findOne({});
+            if (companyDoc.integratedPosAccount === true) {
+                let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                let arrAcc = Acc_ChartAccount.findOne({mapToAccount: "006"});
+                let saleDiscountAcc = Acc_ChartAccount.findOne({mapToAccount: "011"});
+                let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
+                let cogsAcc = Acc_ChartAccount.findOne({mapToAccount: "010"});
+                let inventoryAcc = Acc_ChartAccount.findOne({mapToAccount: "007"});
+
+
+                let cusDoc = Pos_Customer.findOne({_id: data.customerId});
+
+                let journalDoc = {};
+                journalDoc.journalDate = data.invoiceDate;
+                journalDoc.journalDateName = moment(data.invoiceDate).format("DD/MM/YYYY");
+                journalDoc.currencyId = companyDoc.baseCurrency;
+                journalDoc.memo = cusDoc.name + " ទិញទំនិញ";
+                journalDoc.rolesArea = data.rolesArea;
+                journalDoc.closingEntryId = data.id;
+                journalDoc.status = "Invoice";
+                journalDoc.refId = data.id;
+                journalDoc.total = numeral(formatCurrency(data.total + avgCost, companyDoc.baseCurrency)).value();
+
+                let transaction = [];
+                transaction.push({
+                    account: cashAcc._id,
+                    dr: data.paid,
+                    cr: 0,
+                    drcr: data.paid
+                });
+                if (data.netTotal - data.paid > 0) {
+                    transaction.push({
+                        account: arrAcc._id,
+                        dr: data.netTotal - data.paid,
+                        cr: 0,
+                        drcr: data.netTotal - data.paid
+                    });
+                }
+                if (data.discountValue > 0) {
+                    transaction.push({
+                        account: saleDiscountAcc._id,
+                        dr: data.discountValue,
+                        cr: 0,
+                        drcr: data.discountValue
+                    });
+                }
+
+                transaction.push({
+                    account: saleIncomeAcc._id,
+                    dr: 0,
+                    cr: data.total,
+                    drcr: -data.total
+                });
+
+                if (avgCost > 0) {
+                    transaction.push({
+                        account: cogsAcc._id,
+                        dr: avgCost,
+                        cr: 0,
+                        drcr: avgCost
+                    });
+
+
+                    transaction.push({
+                        account: inventoryAcc._id,
+                        dr: 0,
+                        cr: avgCost,
+                        drcr: -avgCost
+                    });
+                }
+
+                console.log(journalDoc);
+
+                journalDoc.transaction = transaction;
+                Meteor.call("insertJournal", journalDoc);
+
+            }
+
+
         } else if (data.transactionType === "Transfer Inventory") {
             data.item.forEach((doc) => {
                 //Reduce From Location
@@ -299,6 +388,13 @@ Meteor.methods({
 
                 Pos_AverageInventory.insert(obj);
             })
+
+            //Integrated To Account===============================================================================================
+            let companyDoc = WB_waterBillingSetup.findOne({});
+            if (companyDoc.integratedPosAccount === true) {
+                Acc_Journal.remove({refId: data._id, status: "Invoice"});
+            }
+
         } else if (data.transactionType === "Remove Transfer Inventory") {
             data.item.forEach((doc) => {
                 //Reduce From Location

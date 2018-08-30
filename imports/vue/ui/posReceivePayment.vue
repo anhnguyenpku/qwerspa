@@ -385,6 +385,7 @@
 <script>
     import draggable from 'vuedraggable';
     import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+    import {formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
     import {GeneralFunction} from "../../../imports/api/methods/generalFunction";
     import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
     import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
@@ -983,10 +984,10 @@
                 });
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
                 this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
-                vm.posReceivePaymentForm.totalNetAmount = formatCurrency(totalNetAmount, companyDoc.baseCurrency);
-                vm.posReceivePaymentForm.totalDiscount = formatCurrency(totalDiscount, companyDoc.baseCurrency);
-                vm.posReceivePaymentForm.totalPaid = formatCurrency(totalPaid, companyDoc.baseCurrency);
-                vm.posReceivePaymentForm.balanceUnPaid = formatCurrency(totalNetAmount - totalPaid, companyDoc.baseCurrency);
+                vm.posReceivePaymentForm.totalNetAmount = formatCurrencyLast(totalNetAmount, companyDoc.baseCurrency);
+                vm.posReceivePaymentForm.totalDiscount = formatCurrencyLast(totalDiscount, companyDoc.baseCurrency);
+                vm.posReceivePaymentForm.totalPaid = formatCurrencyLast(totalPaid, companyDoc.baseCurrency);
+                vm.posReceivePaymentForm.balanceUnPaid = formatCurrencyLast(totalNetAmount - totalPaid, companyDoc.baseCurrency);
             },
             searchInvoice() {
                 let vm = this;
