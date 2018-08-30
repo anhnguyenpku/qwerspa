@@ -1,10 +1,13 @@
 import {Pos_PayBill} from '../../../imports/collection/posPayBill';
 import {Pos_Bill} from '../../../imports/collection/posBill';
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
-import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+import {formatCurrency, formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 import numeral from "numeral";
 import {Pos_Vendor} from "../../../imports/collection/posVendor";
+import {Acc_Journal} from "../../../imports/collection/accJournal";
+import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
+import {Pos_Customer} from "../../../imports/collection/posCustomer";
 
 Meteor.methods({
     queryPayBill({q, filter, options = {limit: 10, skip: 0}}) {
@@ -110,22 +113,55 @@ Meteor.methods({
 
             return obj;
         })
-        return Pos_PayBill.insert(data);
-    },
-    updatePosPayBill(data, _id) {
-        data.bill.forEach((obj) => {
-            obj.amount = numeral(obj.amount).value();
-            obj.discount = numeral(obj.discount).value();
-            obj.netAmount = numeral(obj.netAmount).value();
-            obj.paid = numeral(obj.paid).value();
+        let id = Pos_PayBill.insert(data);
 
+        if (id && data.totalPaid > 0) {
+            //Integrated To Account===============================================================================================
+            Meteor.defer(function () {
+                let companyDoc = WB_waterBillingSetup.findOne({});
+                if (companyDoc.integratedPosAccount === true) {
+                    let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                    let apAcc = Acc_ChartAccount.findOne({mapToAccount: "008"});
+                    let venDoc = Pos_Vendor.findOne({_id: data.vendorId});
 
-            return obj;
-        })
-        return Pos_PayBill.update({_id: _id},
-            {
-                $set: data
-            });
+                    let journalDoc = {};
+                    journalDoc.journalDate = data.payBillDate;
+                    journalDoc.journalDateName = moment(data.payBillDate).format("DD/MM/YYYY");
+                    journalDoc.currencyId = companyDoc.baseCurrency;
+                    journalDoc.memo = "បង់ប្រាក់ទៅឲ្យ​ " + venDoc.name;
+                    journalDoc.rolesArea = data.rolesArea;
+                    journalDoc.closingEntryId = id;
+                    journalDoc.status = "Pay Bill";
+                    journalDoc.refId = id;
+                    journalDoc.total = numeral(formatCurrencyLast(data.totalPaid, companyDoc.baseCurrency)).value();
+
+                    let transaction = [];
+                    if (data.totalPaid > 0) {
+                        transaction.push({
+                            account: apAcc._id,
+                            dr: data.totalPaid,
+                            cr: 0,
+                            drcr: data.totalPaid
+                        });
+                    }
+
+                    if (data.totalPaid > 0) {
+                        transaction.push({
+                            account: cashAcc._id,
+                            dr: 0,
+                            cr: data.totalPaid,
+                            drcr: -data.totalPaid
+                        });
+                    }
+
+                    journalDoc.transaction = transaction;
+                    Meteor.call("insertJournal", journalDoc);
+
+                }
+            })
+        }
+
+        return id;
     },
     removePosPayBill(id) {
         let payBillDoc = Pos_PayBill.findOne({_id: id});
@@ -164,8 +200,16 @@ Meteor.methods({
                     }, {multi: true}, true);
             })
         }
-        return Pos_PayBill.remove({_id: id});
+        let isRemove = Pos_PayBill.remove({_id: id});
 
+        //Integrated To Account===============================================================================================
+        if (isRemove) {
+            let companyDoc = WB_waterBillingSetup.findOne({});
+            if (companyDoc.integratedPosAccount === true) {
+                Acc_Journal.remove({refId: id, status: "Pay Bill"});
+            }
+        }
+        return isRemove;
 
     },
     queryPosBillByVendorId(vendorId, paidDate, locationId) {

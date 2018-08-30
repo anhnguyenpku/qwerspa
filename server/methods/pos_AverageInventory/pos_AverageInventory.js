@@ -7,7 +7,7 @@ import {Pos_Customer} from '../../../imports/collection/posCustomer';
 import {Pos_AverageInventory} from '../../../imports/collection/posAverageInventory';
 
 import {SpaceChar} from "../../../both/config.js/space"
-import {formatCurrency, getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
+import {formatCurrency, formatCurrencyLast, getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import {Pos_Product} from "../../../imports/collection/posProduct";
 import {Pos_Location} from "../../../imports/collection/posLocation";
@@ -48,6 +48,73 @@ Meteor.methods({
                 Pos_AverageInventory.insert(obj);
 
             })
+
+
+            //Integrated To Account===============================================================================================
+            let companyDoc = WB_waterBillingSetup.findOne({});
+            if (companyDoc.integratedPosAccount === true) {
+
+                if (data.total > 0) {
+                    let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                    let apAcc = Acc_ChartAccount.findOne({mapToAccount: "008"});
+                    let purchaseDiscountAcc = Acc_ChartAccount.findOne({mapToAccount: "012"});
+                    let inventoryAcc = Acc_ChartAccount.findOne({mapToAccount: "007"});
+
+
+                    let venDoc = Pos_Vendor.findOne({_id: data.vendorId});
+
+                    let journalDoc = {};
+                    journalDoc.journalDate = data.billDate;
+                    journalDoc.journalDateName = moment(data.billDate).format("DD/MM/YYYY");
+                    journalDoc.currencyId = companyDoc.baseCurrency;
+                    journalDoc.memo = "ទិញទំនិញពី " + venDoc.name;
+                    journalDoc.rolesArea = data.rolesArea;
+                    journalDoc.closingEntryId = data.id;
+                    journalDoc.status = "Bill";
+                    journalDoc.refId = data.id;
+                    journalDoc.total = numeral(formatCurrencyLast(data.total, companyDoc.baseCurrency)).value();
+
+                    let transaction = [];
+
+
+                    if (data.total > 0) {
+                        transaction.push({
+                            account: inventoryAcc._id,
+                            dr: data.total,
+                            cr: 0,
+                            drcr: data.total
+                        });
+                    }
+                    if (data.paid > 0) {
+                        transaction.push({
+                            account: cashAcc._id,
+                            dr: 0,
+                            cr: data.paid,
+                            drcr: -data.paid
+                        });
+                    }
+                    if (data.discountValue > 0) {
+                        transaction.push({
+                            account: purchaseDiscountAcc._id,
+                            dr: 0,
+                            cr: data.discountValue,
+                            drcr: -data.discountValue
+                        });
+                    }
+
+                    transaction.push({
+                        account: apAcc._id,
+                        dr: 0,
+                        cr: data.netTotal - data.paid,
+                        drcr: -(data.netTotal - data.paid)
+                    });
+
+
+                    journalDoc.transaction = transaction;
+                    Meteor.call("insertJournal", journalDoc);
+
+                }
+            }
 
 
         } else if (data.transactionType === "Invoice") {
@@ -122,15 +189,19 @@ Meteor.methods({
                 journalDoc.closingEntryId = data.id;
                 journalDoc.status = "Invoice";
                 journalDoc.refId = data.id;
-                journalDoc.total = numeral(formatCurrency(data.total + avgCost, companyDoc.baseCurrency)).value();
+                journalDoc.total = numeral(formatCurrencyLast(data.total + avgCost, companyDoc.baseCurrency)).value();
 
+                avgCost = formatCurrencyLast(avgCost, companyDoc.baseCurrency);
                 let transaction = [];
-                transaction.push({
-                    account: cashAcc._id,
-                    dr: data.paid,
-                    cr: 0,
-                    drcr: data.paid
-                });
+                if (data.paid > 0) {
+                    transaction.push({
+                        account: cashAcc._id,
+                        dr: data.paid,
+                        cr: 0,
+                        drcr: data.paid
+                    });
+                }
+
                 if (data.netTotal - data.paid > 0) {
                     transaction.push({
                         account: arrAcc._id,
@@ -171,8 +242,6 @@ Meteor.methods({
                         drcr: -avgCost
                     });
                 }
-
-                console.log(journalDoc);
 
                 journalDoc.transaction = transaction;
                 Meteor.call("insertJournal", journalDoc);
@@ -358,6 +427,14 @@ Meteor.methods({
 
                 Pos_AverageInventory.insert(obj);
             })
+
+
+            //Integrated To Account===============================================================================================
+            let companyDoc = WB_waterBillingSetup.findOne({});
+            if (companyDoc.integratedPosAccount === true) {
+                Acc_Journal.remove({refId: data._id, status: "Bill"});
+            }
+
         } else if (data.transactionType === "Remove Invoice") {
             data.item.forEach((doc) => {
                 let obj = {};

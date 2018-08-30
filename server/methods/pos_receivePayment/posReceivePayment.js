@@ -1,11 +1,13 @@
 import {Pos_ReceivePayment} from '../../../imports/collection/posReceivePayment';
 import {Pos_Invoice} from '../../../imports/collection/posInvoice';
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
-import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+import {formatCurrency, formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 
 import numeral from "numeral";
 import {Pos_Customer} from "../../../imports/collection/posCustomer";
+import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
+import {Acc_Journal} from "../../../imports/collection/accJournal";
 
 Meteor.methods({
     queryPosReceivePayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -101,23 +103,55 @@ Meteor.methods({
             obj.paid = numeral(obj.paid).value();
             return obj;
         })
+        let id = Pos_ReceivePayment.insert(data);
 
-        return Pos_ReceivePayment.insert(data);
-    },
-    updatePosReceivePayment(data, _id) {
-        data.invoice.forEach((obj) => {
-            obj.amount = numeral(obj.amount).value();
-            obj.rawAmount = numeral(obj.rawAmount).value();
-            obj.discount = numeral(obj.discount).value();
-            obj.netAmount = numeral(obj.netAmount).value();
-            obj.paid = numeral(obj.paid).value();
-            return obj;
-        })
+        if (id && data.totalPaid > 0) {
+            //Integrated To Account===============================================================================================
+            Meteor.defer(function () {
+                let companyDoc = WB_waterBillingSetup.findOne({});
+                if (companyDoc.integratedPosAccount === true) {
+                    let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                    let arrAcc = Acc_ChartAccount.findOne({mapToAccount: "006"});
+                    let cusDoc = Pos_Customer.findOne({_id: data.customerId});
 
-        return Pos_ReceivePayment.update({_id: _id},
-            {
-                $set: data
-            });
+                    let journalDoc = {};
+                    journalDoc.journalDate = data.receivePaymentDate;
+                    journalDoc.journalDateName = moment(data.receivePaymentDate).format("DD/MM/YYYY");
+                    journalDoc.currencyId = companyDoc.baseCurrency;
+                    journalDoc.memo = cusDoc.name + " បង់ប្រាក់";
+                    journalDoc.rolesArea = data.rolesArea;
+                    journalDoc.closingEntryId = id;
+                    journalDoc.status = "Receive Payment";
+                    journalDoc.refId = id;
+                    journalDoc.total = numeral(formatCurrencyLast(data.totalPaid, companyDoc.baseCurrency)).value();
+
+                    let transaction = [];
+                    if (data.totalPaid > 0) {
+                        transaction.push({
+                            account: cashAcc._id,
+                            dr: data.totalPaid,
+                            cr: 0,
+                            drcr: data.totalPaid
+                        });
+                    }
+
+                    if (data.totalPaid > 0) {
+                        transaction.push({
+                            account: arrAcc._id,
+                            dr: 0,
+                            cr: data.totalPaid,
+                            drcr: -data.totalPaid
+                        });
+                    }
+
+                    journalDoc.transaction = transaction;
+                    Meteor.call("insertJournal", journalDoc);
+
+                }
+            })
+        }
+
+        return id;
     },
     removePosReceivePayment(id) {
         let receviePaymentDoc = Pos_ReceivePayment.findOne({_id: id});
@@ -156,7 +190,17 @@ Meteor.methods({
                     }, {multi: true}, true);
             })
         }
-        return Pos_ReceivePayment.remove({_id: id});
+
+        let isRemove = Pos_ReceivePayment.remove({_id: id});
+
+        //Integrated To Account===============================================================================================
+        if (isRemove) {
+            let companyDoc = WB_waterBillingSetup.findOne({});
+            if (companyDoc.integratedPosAccount === true) {
+                Acc_Journal.remove({refId: id, status: "Receive Payment"});
+            }
+        }
+        return isRemove;
 
 
     },

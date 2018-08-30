@@ -8,7 +8,7 @@
                 <el-col :span="8">
                     <h4>
                         <a class="cursor-pointer"
-                           @click="popupJournalAdd(),dialogAddJournal = true,autoIncreseVoucher(),resetForm()">
+                           @click="popupJournalAdd(),dialogAddJournal = true,autoIncreseVouchers(),resetForm()">
                             <i class="fa fa-plus"></i> {{langConfig['title']}}
                         </a>
                     </h4>
@@ -20,12 +20,12 @@
                             <div class="block">
                                <span class="wrapper">
                                       <el-button :plain="true" type="warning" icon="arrow-up"
-                                                 @click="popupJournalPayment(),dialogPaid = true,autoIncreseVoucher(),resetForm()">
+                                                 @click="popupJournalPayment(),dialogPaid = true,autoIncreseVouchers(),resetForm()">
                                 Payment (Account)
                                          </el-button>
                                       <el-button :plain="true" icon="arrow-down"
                                                  type="success"
-                                                 @click="popupJournalReceive(),dialogPaid = true,autoIncreseVoucher(),resetForm()"> Receive (Account)</el-button>
+                                                 @click="popupJournalReceive(),dialogPaid = true,autoIncreseVouchers(),resetForm()"> Receive (Account)</el-button>
                                 </span>
                             </div>
                         </el-col>
@@ -827,7 +827,7 @@
                 let vm = this;
                 if (vm.dialogUpdateJournal == false) {
                     vm.journalForm.journalDate = val;
-                    vm.autoIncreseVoucher(val);
+                    vm.autoIncreseVouchers(val);
                 }
                 if (vm.closeDate && vm.closeDate != "" && vm.closeDate != undefined) {
                     vm.options = {
@@ -847,7 +847,7 @@
             "journalForm.currencyId"(val) {
                 if (this.dialogUpdateJournal == false) {
                     this.journalForm.currencyId = val;
-                    this.autoIncreseVoucher();
+                    this.autoIncreseVouchers();
                 }
             },
             dialogAddJournal(val) {
@@ -1389,7 +1389,7 @@
                     this.getTotalAmount();
                 }
                 this.journalForm.name = "";
-                this.autoIncreseVoucher();
+                this.autoIncreseVouchers();
             },
             getTotalDrCr() {
                 let vm = this;
@@ -1431,7 +1431,7 @@
                 }
                 return false;
             },
-            autoIncreseVoucher(val) {
+            autoIncreseVouchers(val) {
                 let vm = this;
                 if (val) {
                     vm.journalForm.journalDate = val;

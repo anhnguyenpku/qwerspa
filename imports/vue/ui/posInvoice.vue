@@ -71,13 +71,11 @@
                             prop="total"
                             :label="langConfig['total']">
                     </el-table-column>
-                    <!--<el-table-column
-                            prop="currencyId"
-                            sortable
-                            label="Currency"
-                            width="140"
+                    <el-table-column
+                            prop="note"
+                            :label="langConfig['note']"
                     >
-                    </el-table-column>-->
+                    </el-table-column>
 
                     <el-table-column
                             prop="status"
@@ -439,8 +437,6 @@
                                                 type="date"
                                                 style="width: 100%;"
                                                 placeholder="Pick a day"
-                                                :picker-options="options"
-                                                :disabled="disabledDate"
                                         >
                                         </el-date-picker>
                                     </el-form-item>
@@ -803,8 +799,6 @@
                                                 type="date"
                                                 style="width: 100%;"
                                                 placeholder="Pick a day"
-                                                :picker-options="options"
-                                                :disabled="disabledDate"
                                         >
                                         </el-date-picker>
                                     </el-form-item>
@@ -1250,7 +1244,6 @@
                                                 style="width: 100%;"
                                                 placeholder="Pick a day"
                                                 :picker-options="options"
-                                                :disabled="disabledDate"
                                         >
                                         </el-date-picker>
                                     </el-form-item>
@@ -1938,7 +1931,7 @@
                                 } else {
                                     vm.$message({
                                         duration: 1000,
-                                        message: this.langConfig['saveSuccess'],
+                                        message: vm.langConfig['saveSuccess'],
                                         type: 'success'
                                     });
                                 }
@@ -1967,44 +1960,107 @@
             },
             removePosInvoice(index, row, rows) {
                 let vm = this;
-                if (row.status === "Active" || row.paymentNumber < 2) {
 
-                    vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
-                        confirmButtonText: 'OK',
-                        cancelButtonText: 'Cancel',
-                        type: 'warning'
-                    }).then(() => {
-                        Meteor.call("removePosInvoice", row._id, row, (err, result) => {
-                            if (!err) {
-                                rows.splice(index, 1);
+                let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+                if (companyDoc.integratedPosAccount) {
+                    Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                        if (re !== undefined) {
+                            vm.closeDate = re.closeDate;
+                        } else {
+                            vm.closeDate = "";
+                        }
+
+                        if (vm.closeDate && vm.closeDate.getTime() >= row.invoiceDate.getTime()) {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Already Closing Entry In Account!!",
+                                type: 'error'
+                            });
+                            return false;
+                        }
+                        if (row.status === "Active" || row.paymentNumber < 2) {
+
+                            vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
+                                confirmButtonText: 'OK',
+                                cancelButtonText: 'Cancel',
+                                type: 'warning'
+                            }).then(() => {
+                                Meteor.call("removePosInvoice", row._id, row, (err, result) => {
+                                    if (!err) {
+                                        rows.splice(index, 1);
+                                        vm.$message({
+                                            message: `${row.invoiceDateName}​ : ${row.invoiceNo} ` + vm.langConfig['removeSuccess'],
+                                            type: 'success'
+                                        });
+                                        Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
+                                    } else {
+                                        vm.$message({
+                                            type: 'error',
+                                            message: vm.langConfig['removeFail']
+                                        });
+                                    }
+
+                                })
+
+
+                            }).catch(() => {
                                 vm.$message({
-                                    message: `${row.invoiceDateName}​ : ${row.invoiceNo} ` + this.langConfig['removeSuccess'],
-                                    type: 'success'
+                                    type: 'info',
+                                    message: 'Delete canceled'
                                 });
-                                Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
-                            } else {
-                                vm.$message({
-                                    type: 'error',
-                                    message: this.langConfig['removeFail']
-                                });
-                            }
+                            });
 
-                        })
+                        } else {
+                            vm.$message({
+                                type: 'error',
+                                message: 'Already Paid !!'
+                            });
+                        }
 
 
-                    }).catch(() => {
-                        vm.$message({
-                            type: 'info',
-                            message: 'Delete canceled'
-                        });
-                    });
-
+                    })
                 } else {
-                    vm.$message({
-                        type: 'error',
-                        message: 'Already Paid !!'
-                    });
+                    if (row.status === "Active" || row.paymentNumber < 2) {
+
+                        vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
+                            confirmButtonText: 'OK',
+                            cancelButtonText: 'Cancel',
+                            type: 'warning'
+                        }).then(() => {
+                            Meteor.call("removePosInvoice", row._id, row, (err, result) => {
+                                if (!err) {
+                                    rows.splice(index, 1);
+                                    vm.$message({
+                                        message: `${row.invoiceDateName}​ : ${row.invoiceNo} ` + vm.langConfig['removeSuccess'],
+                                        type: 'success'
+                                    });
+                                    Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
+                                } else {
+                                    vm.$message({
+                                        type: 'error',
+                                        message: vm.langConfig['removeFail']
+                                    });
+                                }
+
+                            })
+
+
+                        }).catch(() => {
+                            vm.$message({
+                                type: 'info',
+                                message: 'Delete canceled'
+                            });
+                        });
+
+                    } else {
+                        vm.$message({
+                            type: 'error',
+                            message: 'Already Paid !!'
+                        });
+                    }
                 }
+
+
             },
             popupPosInvoiceAdd() {
                 this.refForm = "posInvoiceFormAdd";
@@ -2016,6 +2072,14 @@
                 this.customerOpt();
                 this.termOpt();
                 this.getVoucherByRoleAndDate(moment().toDate());
+
+                Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                    if (re !== undefined) {
+                        vm.closeDate = re.closeDate;
+                    } else {
+                        vm.closeDate = "";
+                    }
+                })
             },
             popupPosReceiveItem() {
                 this.refForm = "posReceiveItem";
@@ -2027,6 +2091,14 @@
                 this.customerOpt();
                 this.termOpt();
                 this.getVoucherByRoleAndDate(moment().toDate());
+
+                Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                    if (re !== undefined) {
+                        vm.closeDate = re.closeDate;
+                    } else {
+                        vm.closeDate = "";
+                    }
+                })
             },
             getVoucherByRoleAndDate(date) {
                 let vm = this;
@@ -2042,18 +2114,54 @@
                 this.itemOpt();
                 let vm = this;
                 $(".el-dialog__title").text(this.langConfig['update']);
-                if ((row.status === "Active" || row.paymentNumber < 2) && row.transactionType !== "Invoice Sale Order") {
-                    this.customerOpt(row.customerDoc._id);
-                    this.termOpt();
-                    vm.dialogUpdatePosInvoice = true;
-                    vm.findPosInvoiceById(scope);
+
+                let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+                if (companyDoc.integratedPosAccount) {
+                    Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                        if (re !== undefined) {
+                            vm.closeDate = re.closeDate;
+                        } else {
+                            vm.closeDate = "";
+                        }
+
+                        if (vm.closeDate && vm.closeDate.getTime() >= row.invoiceDate.getTime()) {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Already Closing Entry In Account!!",
+                                type: 'error'
+                            });
+                            return false;
+                        }
+                        if ((row.status === "Active" || row.paymentNumber < 2) && row.transactionType !== "Invoice Sale Order") {
+                            vm.customerOpt(row.customerDoc._id);
+                            vm.termOpt();
+                            vm.dialogUpdatePosInvoice = true;
+                            vm.findPosInvoiceById(scope);
+                        } else {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Not Active State!!",
+                                type: 'error'
+                            });
+                        }
+
+                    })
                 } else {
-                    this.$message({
-                        duration: 1000,
-                        message: "Not Active State!!",
-                        type: 'error'
-                    });
+                    if ((row.status === "Active" || row.paymentNumber < 2) && row.transactionType !== "Invoice Sale Order") {
+                        vm.customerOpt(row.customerDoc._id);
+                        vm.termOpt();
+                        vm.dialogUpdatePosInvoice = true;
+                        vm.findPosInvoiceById(scope);
+                    } else {
+                        vm.$message({
+                            duration: 1000,
+                            message: "Not Active State!!",
+                            type: 'error'
+                        });
+                    }
                 }
+
+
             },
             findPosInvoiceById(doc) {
                 let vm = this;
@@ -2325,7 +2433,7 @@
                 }
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
                 this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
-                vm.posInvoiceForm.total = formatCurrency(total, companyDoc.baseCurrency);
+                vm.posInvoiceForm.total = formatCurrencyLast(total, companyDoc.baseCurrency);
 
                 if (vm.posInvoiceForm.discountType === "Amount") {
                     vm.posInvoiceForm.netTotal = formatCurrencyLast(total - vm.posInvoiceForm.discount, companyDoc.baseCurrency);

@@ -5,7 +5,7 @@ import {SpaceChar} from "../../../both/config.js/space"
 import {Pos_ReceivePayment} from "../../../imports/collection/posReceivePayment";
 import {Acc_Journal} from "../../../imports/collection/accJournal";
 import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
-import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+import {formatCurrency, formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
@@ -164,7 +164,54 @@ Meteor.methods({
                     posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
                 })
                 Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
+
             })
+
+
+            //Integrated To Account===============================================================================================
+            Meteor.defer(function () {
+                let companyDoc = WB_waterBillingSetup.findOne({});
+                if (companyDoc.integratedPosAccount === true) {
+
+                    if (data.paid > 0) {
+                        let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                        let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
+
+                        let cusDoc = Pos_Customer.findOne({_id: data.customerId});
+
+                        let journalDoc = {};
+                        journalDoc.journalDate = data.saleOrderDate;
+                        journalDoc.journalDateName = moment(data.saleOrderDate).format("DD/MM/YYYY");
+                        journalDoc.currencyId = companyDoc.baseCurrency;
+                        journalDoc.memo = cusDoc.name + " លក់តាមការកុម្មង់";
+                        journalDoc.rolesArea = data.rolesArea;
+                        journalDoc.closingEntryId = id;
+                        journalDoc.status = "Sale Order";
+                        journalDoc.refId = id;
+                        journalDoc.total = numeral(formatCurrencyLast(data.paid, companyDoc.baseCurrency)).value();
+
+                        let transaction = [];
+                        transaction.push({
+                            account: cashAcc._id,
+                            dr: data.paid,
+                            cr: 0,
+                            drcr: data.paid
+                        });
+
+
+                        transaction.push({
+                            account: saleIncomeAcc._id,
+                            dr: 0,
+                            cr: data.paid,
+                            drcr: -data.paid
+                        });
+
+                        journalDoc.transaction = transaction;
+                        Meteor.call("insertJournal", journalDoc);
+                    }
+                }
+            })
+
 
         }
 
@@ -223,6 +270,53 @@ Meteor.methods({
                 Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
             })
 
+
+            //Integrated To Account===============================================================================================
+            Meteor.defer(function () {
+                let companyDoc = WB_waterBillingSetup.findOne({});
+                if (companyDoc.integratedPosAccount === true) {
+                    Acc_Journal.remove({refId: _id, status: "Sale Order"});
+
+                    if (data.paid > 0) {
+                        let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                        let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
+
+                        let cusDoc = Pos_Customer.findOne({_id: data.customerId});
+
+                        let journalDoc = {};
+                        journalDoc.journalDate = data.saleOrderDate;
+                        journalDoc.journalDateName = moment(data.saleOrderDate).format("DD/MM/YYYY");
+                        journalDoc.currencyId = companyDoc.baseCurrency;
+                        journalDoc.memo = cusDoc.name + " លក់តាមការកុម្មង់";
+                        journalDoc.rolesArea = data.rolesArea;
+                        journalDoc.closingEntryId = _id;
+                        journalDoc.status = "Sale Order";
+                        journalDoc.refId = _id;
+                        journalDoc.total = numeral(formatCurrencyLast(data.paid, companyDoc.baseCurrency)).value();
+
+                        let transaction = [];
+                        transaction.push({
+                            account: cashAcc._id,
+                            dr: data.paid,
+                            cr: 0,
+                            drcr: data.paid
+                        });
+
+
+                        transaction.push({
+                            account: saleIncomeAcc._id,
+                            dr: 0,
+                            cr: data.paid,
+                            drcr: -data.paid
+                        });
+
+                        journalDoc.transaction = transaction;
+                        Meteor.call("insertJournal", journalDoc);
+                    }
+                }
+            })
+
+
         }
 
         return isUpdated;
@@ -231,6 +325,15 @@ Meteor.methods({
         Pos_ReceivePayment.direct.remove({saleOrderId: id});
         Pos_Customer.direct.update({_id: data.customerId}, {$inc: {saleOrderNumber: -1}});
         let isRemoved = Pos_SaleOrder.remove({_id: id});
+
+        //Integrated To Account===============================================================================================
+        if (isRemoved) {
+            let companyDoc = WB_waterBillingSetup.findOne({});
+            if (companyDoc.integratedPosAccount === true) {
+                Acc_Journal.remove({refId: id, status: "Sale Order"});
+            }
+        }
+
         return isRemoved;
     },
     pos_getSaleOrderNoByRoleAndDate(rolesAreas, date) {

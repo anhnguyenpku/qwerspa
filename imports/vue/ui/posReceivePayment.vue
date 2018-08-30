@@ -832,40 +832,100 @@
 
             removePosReceivePayment(index, row, rows) {
                 let vm = this;
-                if (row.canRemove === true) {
-                    vm.$confirm(this.langConfig['messageWarning'], this.langConfig['warning'], {
-                        confirmButtonText: 'OK',
-                        cancelButtonText: 'Cancel',
-                        type: 'warning'
-                    }).then(() => {
-                        Meteor.call("removePosReceivePayment", row._id, (err, result) => {
-                            if (!err) {
-                                rows.splice(index, 1);
-                                vm.$message({
-                                    message: ` ${row.receivePaymentDateName} ` + this.langConfig['removeSuccess'],
-                                    type: 'success'
-                                });
 
-                            } else {
-                                vm.$message({
-                                    type: 'error',
-                                    message: this.langConfig['removeFail']
-                                });
-                            }
 
-                        })
-                    }).catch(() => {
-                        vm.$message({
-                            type: 'info',
-                            message: 'Delete canceled'
-                        });
-                    });
+                let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+                if (companyDoc.integratedPosAccount) {
+                    Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                        if (re !== undefined) {
+                            vm.closeDate = re.closeDate;
+                        } else {
+                            vm.closeDate = "";
+                        }
+
+                        if (vm.closeDate && vm.closeDate.getTime() >= row.receivePaymentDate.getTime()) {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Already Closing Entry In Account!!",
+                                type: 'error'
+                            });
+                            return false;
+                        }
+
+                        if (row.canRemove === true) {
+                            vm.$confirm(vm.langConfig['messageWarning'], vm.langConfig['warning'], {
+                                confirmButtonText: 'OK',
+                                cancelButtonText: 'Cancel',
+                                type: 'warning'
+                            }).then(() => {
+                                Meteor.call("removePosReceivePayment", row._id, (err, result) => {
+                                    if (!err) {
+                                        rows.splice(index, 1);
+                                        vm.$message({
+                                            message: ` ${row.receivePaymentDateName} ` + vm.langConfig['removeSuccess'],
+                                            type: 'success'
+                                        });
+
+                                    } else {
+                                        vm.$message({
+                                            type: 'error',
+                                            message: vm.langConfig['removeFail']
+                                        });
+                                    }
+
+                                })
+                            }).catch(() => {
+                                vm.$message({
+                                    type: 'info',
+                                    message: 'Delete canceled'
+                                });
+                            });
+                        } else {
+                            vm.$message({
+                                type: 'error',
+                                message: vm.langConfig['message']
+                            });
+                        }
+
+
+                    })
                 } else {
-                    vm.$message({
-                        type: 'error',
-                        message: this.langConfig['message']
-                    });
+                    if (row.canRemove === true) {
+                        vm.$confirm(vm.langConfig['messageWarning'], vm.langConfig['warning'], {
+                            confirmButtonText: 'OK',
+                            cancelButtonText: 'Cancel',
+                            type: 'warning'
+                        }).then(() => {
+                            Meteor.call("removePosReceivePayment", row._id, (err, result) => {
+                                if (!err) {
+                                    rows.splice(index, 1);
+                                    vm.$message({
+                                        message: ` ${row.receivePaymentDateName} ` + vm.langConfig['removeSuccess'],
+                                        type: 'success'
+                                    });
+
+                                } else {
+                                    vm.$message({
+                                        type: 'error',
+                                        message: vm.langConfig['removeFail']
+                                    });
+                                }
+
+                            })
+                        }).catch(() => {
+                            vm.$message({
+                                type: 'info',
+                                message: 'Delete canceled'
+                            });
+                        });
+                    } else {
+                        vm.$message({
+                            type: 'error',
+                            message: vm.langConfig['message']
+                        });
+                    }
                 }
+
             },
             popupPosReceivePaymentAdd() {
                 this.resetForm();
@@ -875,6 +935,14 @@
 
                 this.customerOpt();
                 this.termOpt();
+
+                Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                    if (re !== undefined) {
+                        vm.closeDate = re.closeDate;
+                    } else {
+                        vm.closeDate = "";
+                    }
+                })
             },
             updatePosReceivePaymentDetail(row, index) {
                 let vm = this;

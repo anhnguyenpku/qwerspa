@@ -63,14 +63,11 @@
                             prop="total"
                             :label="langConfig['total']">
                     </el-table-column>
-                    <!--<el-table-column
-                            prop="currencyId"
-                            sortable
-                            label="Currency"
-                            width="140"
+                    <el-table-column
+                            prop="note"
+                            :label="langConfig['note']"
                     >
-                    </el-table-column>-->
-
+                    </el-table-column>
                     <el-table-column
                             prop="status"
                             :label="langConfig['status']"
@@ -402,8 +399,6 @@
                                                 type="date"
                                                 style="width: 100%;"
                                                 placeholder="Pick a day"
-                                                :picker-options="options"
-                                                :disabled="disabledDate"
                                         >
                                         </el-date-picker>
                                     </el-form-item>
@@ -739,8 +734,6 @@
                                                 type="date"
                                                 style="width: 100%;"
                                                 placeholder="Pick a day"
-                                                :picker-options="options"
-                                                :disabled="disabledDate"
                                         >
                                         </el-date-picker>
                                     </el-form-item>
@@ -1362,45 +1355,108 @@
             },
             removePosBill(index, row, rows) {
                 let vm = this;
-                if (row.status === "Active" || row.paymentNumber < 2) {
-                    vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
-                        confirmButtonText: 'OK',
-                        cancelButtonText: 'Cancel',
-                        type: 'warning'
-                    }).then(() => {
-                        Meteor.call("removePosBill", row._id, row, (err, result) => {
-                            if (!err) {
-                                rows.splice(index, 1);
+                let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+                if (companyDoc.integratedPosAccount) {
+                    Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                        if (re !== undefined) {
+                            vm.closeDate = re.closeDate;
+                        } else {
+                            vm.closeDate = "";
+                        }
+
+                        if (vm.closeDate && vm.closeDate.getTime() >= row.billDate.getTime()) {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Already Closing Entry In Account!!",
+                                type: 'error'
+                            });
+                            return false;
+                        }
+                        if (row.status === "Active" || row.paymentNumber < 2) {
+                            vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
+                                confirmButtonText: 'OK',
+                                cancelButtonText: 'Cancel',
+                                type: 'warning'
+                            }).then(() => {
+                                Meteor.call("removePosBill", row._id, row, (err, result) => {
+                                    if (!err) {
+                                        rows.splice(index, 1);
+                                        vm.$message({
+                                            message: `លុប ${row.billDateName}​ : ${row.billNo} បានជោគជ័យ`,
+                                            type: 'success'
+                                        });
+
+                                        Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
+
+                                    } else {
+                                        vm.$message({
+                                            type: 'error',
+                                            message: 'Delete Fialed'
+                                        });
+                                    }
+
+                                })
+
+
+                            }).catch(() => {
                                 vm.$message({
-                                    message: `លុប ${row.billDateName}​ : ${row.billNo} បានជោគជ័យ`,
-                                    type: 'success'
+                                    type: 'info',
+                                    message: 'Delete canceled'
                                 });
+                            });
 
-                                Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
-
-                            } else {
-                                vm.$message({
-                                    type: 'error',
-                                    message: 'Delete Fialed'
-                                });
-                            }
-
-                        })
+                        } else {
+                            vm.$message({
+                                type: 'error',
+                                message: 'Already Paid !!'
+                            });
+                        }
 
 
-                    }).catch(() => {
-                        vm.$message({
-                            type: 'info',
-                            message: 'Delete canceled'
-                        });
-                    });
-
+                    })
                 } else {
-                    vm.$message({
-                        type: 'error',
-                        message: 'Already Paid !!'
-                    });
+                    if (row.status === "Active" || row.paymentNumber < 2) {
+                        vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
+                            confirmButtonText: 'OK',
+                            cancelButtonText: 'Cancel',
+                            type: 'warning'
+                        }).then(() => {
+                            Meteor.call("removePosBill", row._id, row, (err, result) => {
+                                if (!err) {
+                                    rows.splice(index, 1);
+                                    vm.$message({
+                                        message: `លុប ${row.billDateName}​ : ${row.billNo} បានជោគជ័យ`,
+                                        type: 'success'
+                                    });
+
+                                    Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
+
+                                } else {
+                                    vm.$message({
+                                        type: 'error',
+                                        message: 'Delete Fialed'
+                                    });
+                                }
+
+                            })
+
+
+                        }).catch(() => {
+                            vm.$message({
+                                type: 'info',
+                                message: 'Delete canceled'
+                            });
+                        });
+
+                    } else {
+                        vm.$message({
+                            type: 'error',
+                            message: 'Already Paid !!'
+                        });
+                    }
                 }
+
+
             },
             popupPosBillAdd() {
                 this.refForm = "posBillFormAdd";
@@ -1412,6 +1468,15 @@
                 this.vendorOpt();
                 this.termOpt();
                 this.getVoucherByRoleAndDate(moment().toDate());
+
+
+                Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                    if (re !== undefined) {
+                        vm.closeDate = re.closeDate;
+                    } else {
+                        vm.closeDate = "";
+                    }
+                })
             },
             popupPosBillUpdate(index, row, scope) {
                 this.refForm = "posBillFormUpdate";
@@ -1422,15 +1487,46 @@
                 $(".el-dialog__title").text(this.langConfig['update']);
                 this.vendorOpt();
                 this.termOpt();
-                if (row.status === "Active" || row.paymentNumber < 2) {
-                    vm.dialogUpdatePosBill = true;
-                    vm.findPosBillById(scope);
+                let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+                if (companyDoc.integratedPosAccount) {
+                    Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                        if (re !== undefined) {
+                            vm.closeDate = re.closeDate;
+                        } else {
+                            vm.closeDate = "";
+                        }
+
+                        if (vm.closeDate && vm.closeDate.getTime() >= row.billDate.getTime()) {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Already Closing Entry In Account!!",
+                                type: 'error'
+                            });
+                            return false;
+                        }
+                        if (row.status === "Active" || row.paymentNumber < 2) {
+                            vm.dialogUpdatePosBill = true;
+                            vm.findPosBillById(scope);
+                        } else {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Not Active State!!",
+                                type: 'error'
+                            });
+                        }
+
+                    })
                 } else {
-                    this.$message({
-                        duration: 1000,
-                        message: "Not Active State!!",
-                        type: 'error'
-                    });
+                    if (row.status === "Active" || row.paymentNumber < 2) {
+                        vm.dialogUpdatePosBill = true;
+                        vm.findPosBillById(scope);
+                    } else {
+                        vm.$message({
+                            duration: 1000,
+                            message: "Not Active State!!",
+                            type: 'error'
+                        });
+                    }
                 }
             },
             getVoucherByRoleAndDate(date) {

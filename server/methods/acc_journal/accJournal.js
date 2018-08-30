@@ -73,11 +73,11 @@ Meteor.methods({
         return data;
     },
     insertJournal(data) {
-
-        if (data.voucherId) {
+        if (data.voucherId && data.voucherId !== "") {
             data.voucherId = data.rolesArea + moment(data.journalDate).format("YYYY") + pad(data.voucherId, 6);
         } else {
             data.voucherId = Meteor.call("autoIncreseVoucher", data.rolesArea, data.journalDate, data.currencyId);
+            data.voucherId = data.rolesArea + moment(data.journalDate).format("YYYY") + pad(parseInt(data.voucherId) + 1, 6);
         }
         data.transaction.map(function (obj) {
             return obj.drcr = parseFloat(obj.dr) - parseFloat(obj.cr);
@@ -155,7 +155,7 @@ Meteor.methods({
         if (journalDoc == undefined) {
             return 0;
         }
-        return journalDoc.voucherId.substr(8, 20);
+        return journalDoc.voucherId.length > 9 ? journalDoc.voucherId.substr(8, 20) : journalDoc.voucherId;
     }
 });
 

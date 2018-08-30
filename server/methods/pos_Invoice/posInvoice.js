@@ -192,12 +192,14 @@ Meteor.methods({
         }
 
         if (id) {
-            data.id = id;
-            data.transactionType = "Invoice";
-            Meteor.call("addPosAverageInventory", data, (err, result) => {
-                if (err) {
-                    console.log(err.message);
-                }
+            Meteor.defer(function () {
+                data.id = id;
+                data.transactionType = "Invoice";
+                Meteor.call("addPosAverageInventory", data, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                })
             })
         }
 

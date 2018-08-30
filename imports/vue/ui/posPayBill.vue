@@ -824,40 +824,101 @@
 
             removePayBill(index, row, rows) {
                 let vm = this;
-                if (row.canRemove == true) {
-                    vm.$confirm(this.langConfig['messageWarning'], this.langConfig['warning'], {
-                        confirmButtonText: 'OK',
-                        cancelButtonText: 'Cancel',
-                        type: 'warning'
-                    }).then(() => {
-                        Meteor.call("removePosPayBill", row._id, (err, result) => {
-                            if (!err) {
-                                rows.splice(index, 1);
-                                vm.$message({
-                                    message: ` ${row.payBillDateName} ` + this.langConfig['removeSuccess'],
-                                    type: 'success'
-                                });
 
-                            } else {
-                                vm.$message({
-                                    type: 'error',
-                                    message: this.langConfig['removeFail']
-                                });
-                            }
+                let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+                if (companyDoc.integratedPosAccount) {
+                    Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                        if (re !== undefined) {
+                            vm.closeDate = re.closeDate;
+                        } else {
+                            vm.closeDate = "";
+                        }
 
-                        })
-                    }).catch(() => {
-                        vm.$message({
-                            type: 'info',
-                            message: 'Delete canceled'
-                        });
-                    });
+                        if (vm.closeDate && vm.closeDate.getTime() >= row.payBillDate.getTime()) {
+                            vm.$message({
+                                duration: 1000,
+                                message: "Already Closing Entry In Account!!",
+                                type: 'error'
+                            });
+                            return false;
+                        }
+
+                        if (row.canRemove == true) {
+                            vm.$confirm(vm.langConfig['messageWarning'], vm.langConfig['warning'], {
+                                confirmButtonText: 'OK',
+                                cancelButtonText: 'Cancel',
+                                type: 'warning'
+                            }).then(() => {
+                                Meteor.call("removePosPayBill", row._id, (err, result) => {
+                                    if (!err) {
+                                        rows.splice(index, 1);
+                                        vm.$message({
+                                            message: ` ${row.payBillDateName} ` + vm.langConfig['removeSuccess'],
+                                            type: 'success'
+                                        });
+
+                                    } else {
+                                        vm.$message({
+                                            type: 'error',
+                                            message: vm.langConfig['removeFail']
+                                        });
+                                    }
+
+                                })
+                            }).catch(() => {
+                                vm.$message({
+                                    type: 'info',
+                                    message: 'Delete canceled'
+                                });
+                            });
+                        } else {
+                            vm.$message({
+                                type: 'error',
+                                message: vm.langConfig['message']
+                            });
+                        }
+
+
+                    })
                 } else {
-                    vm.$message({
-                        type: 'error',
-                        message: this.langConfig['message']
-                    });
+
+                    if (row.canRemove == true) {
+                        vm.$confirm(vm.langConfig['messageWarning'], vm.langConfig['warning'], {
+                            confirmButtonText: 'OK',
+                            cancelButtonText: 'Cancel',
+                            type: 'warning'
+                        }).then(() => {
+                            Meteor.call("removePosPayBill", row._id, (err, result) => {
+                                if (!err) {
+                                    rows.splice(index, 1);
+                                    vm.$message({
+                                        message: ` ${row.payBillDateName} ` + vm.langConfig['removeSuccess'],
+                                        type: 'success'
+                                    });
+
+                                } else {
+                                    vm.$message({
+                                        type: 'error',
+                                        message: vm.langConfig['removeFail']
+                                    });
+                                }
+
+                            })
+                        }).catch(() => {
+                            vm.$message({
+                                type: 'info',
+                                message: 'Delete canceled'
+                            });
+                        });
+                    } else {
+                        vm.$message({
+                            type: 'error',
+                            message: vm.langConfig['message']
+                        });
+                    }
+
                 }
+
             },
             popupPayBillAdd() {
                 this.resetForm();
@@ -867,6 +928,14 @@
 
                 this.vendorOpt();
                 this.termOpt();
+
+                Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                    if (re !== undefined) {
+                        vm.closeDate = re.closeDate;
+                    } else {
+                        vm.closeDate = "";
+                    }
+                })
             },
             updatePayBillDetail(row, index) {
                 let vm = this;
