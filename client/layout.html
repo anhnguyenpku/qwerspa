@@ -894,13 +894,28 @@
                             <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.saleOrder"}}</a>
                         </li>
                     {{/if}}
+                    {{#if manageModule.production}}
+                        <a href="#" class="title-head">
+                            <i style="color: white !important;" class="fa fa-user"></i> <span style="color: white;">{{_
+                                "pos.sidebarMenu.production"}}</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <li><a href="{{pathFor 'pos.production'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.production"}}</a>
+                        </li>
+                        <li><a href="{{pathFor 'pos.productionBoard'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.productionBoard"}}</a>
+                        </li>
+                        <li><a href="{{pathFor 'pos.productionResult'}}" class="title-body">
+                            <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.productionResult"}}</a>
+                        </li>
+                    {{/if}}
                     <hr>
                     {{#if manageModule.transfer}}
                         <li><a href="{{pathFor 'pos.transferInventory'}}" class="title-body">
                             <i class="fa fa-dollar"></i> {{_ "pos.sidebarMenu.transferInventory"}}</a>
                         </li>
                     {{/if}}
-
 
                     <li><a href="{{pathFor 'acc.exchange'}}" class="title-body">
                         <i class="fa fa-exchange" aria-hidden="true"></i> {{_ "pos.sidebarMenu.exchange"}}</a>

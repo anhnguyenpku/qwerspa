@@ -110,6 +110,7 @@
                     {label: "Transfer", value: "Transfer"},
                     {label: "Vendor", value: "Vendor"},
                     {label: "Customer", value: "Customer"},
+                    {label: "Production", value: "Production"},
 
                 ],
                 moduleOption: [

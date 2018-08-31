@@ -196,3 +196,35 @@ posData.route('/posConvertInventory', {
         _Main('pos_convertInventory');
     }
 });
+
+import "../../imports/ui/pos_production/posProduction";
+// Invoice
+posData.route('/posProduction', {
+    name: 'pos.production',
+    parent: 'wb.homeData',
+    title: "Production",
+    action: function (query, params) {
+        _Main('pos_production');
+    }
+});
+
+import "../../imports/ui/pos_productionBoard/posProductionBoard";
+// Invoice
+posData.route('/posProductionBoard', {
+    name: 'pos.productionBoard',
+    parent: 'wb.homeData',
+    title: "Production Board",
+    action: function (query, params) {
+        _Main('pos_productionBoard');
+    }
+});
+import "../../imports/ui/pos_productionResult/posProductionResult";
+// Invoice
+posData.route('/posProductionResult', {
+    name: 'pos.productionResult',
+    parent: 'wb.homeData',
+    title: "Production Result",
+    action: function (query, params) {
+        _Main('pos_productionResult');
+    }
+});

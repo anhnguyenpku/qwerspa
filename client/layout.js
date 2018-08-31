@@ -148,6 +148,7 @@ Template.MainLayout.helpers({
             ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.production = (ma.feature.indexOf("Production") > -1 ? true : false) || CheckRoles({roles: ['super']});
         }
 
         return ob;
@@ -193,6 +194,7 @@ Template.sidebar.helpers({
             ob.transfer = (ma.feature.indexOf("Transfer") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.production = (ma.feature.indexOf("Production") > -1 ? true : false) || CheckRoles({roles: ['super']});
         }
         return ob;
     }

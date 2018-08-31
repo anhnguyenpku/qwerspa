@@ -392,6 +392,76 @@ Meteor.methods({
 
                 })
             }
+        } else if (data.transactionType === "Production") {
+            let locationDoc = Pos_Location.findOne({_id: data.locationId});
+            if (data && data.convert.length > 0) {
+                data.convert.forEach((doc) => {
+                    //Add To Location
+                    let objTo = {};
+                    let onHandInventoryTo = Pos_AverageInventory.findOne({
+                        itemId: doc.productId,
+                        locationId: data.locationId,
+                        rolesArea: data.rolesArea
+                    }, {sort: {createdAt: -1}});
+
+                    objTo = {
+                        cusVendId: data.locationId,
+                        cusVendName: locationDoc && locationDoc.name || "",
+
+                        transactionId: data.id,
+                        locationId: data.locationId,
+                        averageInventoryDate: data.date,
+                        averageInventoryDateName: data.dateName,
+                        itemId: doc.productId,
+                        qty: doc.qty,
+                        price: onHandInventoryTo && onHandInventoryTo.averageCost || 0,
+                        amount: (onHandInventoryTo && onHandInventoryTo.averageCost || 0) * doc.qty,
+                        amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - ((onHandInventoryTo && onHandInventoryTo.averageCost || 0) * doc.qty),
+                        qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty,
+                        averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - ((onHandInventoryTo.averageCost || 0) * doc.qty)) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty),
+                        transactionType: "Production",
+                        rolesArea: data.rolesArea
+                    };
+
+                    let isInsrtTo = Pos_AverageInventory.insert(objTo);
+
+                })
+            }
+        } else if (data.transactionType === "Production Result") {
+            let locationDoc = Pos_Location.findOne({_id: data.locationId});
+            if (data && data.convert.length > 0) {
+                data.convert.forEach((doc) => {
+                    //Add To Location
+                    let objTo = {};
+                    let onHandInventoryTo = Pos_AverageInventory.findOne({
+                        itemId: doc.productId,
+                        locationId: data.locationId,
+                        rolesArea: data.rolesArea
+                    }, {sort: {createdAt: -1}});
+
+                    objTo = {
+                        cusVendId: data.locationId,
+                        cusVendName: locationDoc && locationDoc.name || "",
+
+                        transactionId: data.id,
+                        locationId: data.locationId,
+                        averageInventoryDate: data.date,
+                        averageInventoryDateName: data.dateName,
+                        itemId: doc.productId,
+                        qty: doc.qty,
+                        price: onHandInventoryTo && onHandInventoryTo.averageCost || 0,
+                        amount: (onHandInventoryTo && onHandInventoryTo.averageCost || 0) * doc.qty,
+                        amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventoryTo && onHandInventoryTo.averageCost || 0) * doc.qty),
+                        qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty,
+                        averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventoryTo.averageCost || 0) * doc.qty)) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty),
+                        transactionType: "Production Result",
+                        rolesArea: data.rolesArea
+                    };
+
+                    let isInsrtTo = Pos_AverageInventory.insert(objTo);
+
+                })
+            }
         }
 
 
@@ -599,6 +669,76 @@ Meteor.methods({
                         rolesArea: data.rolesArea
                     };
 
+                    let isInsrtTo = Pos_AverageInventory.insert(objTo);
+
+                })
+            }
+        } else if (data.transactionType === "Remove Production") {
+            let locationDoc = Pos_Location.findOne({_id: data.locationId});
+
+            if (data && data.convert.length > 0) {
+                data.convert.forEach((doc) => {
+                    //Add To Location
+                    let objTo = {};
+                    let onHandInventoryTo = Pos_AverageInventory.findOne({
+                        itemId: doc.productId,
+                        locationId: data.locationId,
+                        rolesArea: data.rolesArea
+                    }, {sort: {createdAt: -1}});
+
+                    objTo = {
+                        cusVendId: data.locationId,
+                        cusVendName: locationDoc && locationDoc.name || "",
+
+                        transactionId: data.id,
+                        locationId: data.locationId,
+                        averageInventoryDate: data.date,
+                        averageInventoryDateName: data.dateName,
+                        itemId: doc.productId,
+                        qty: doc.qty,
+                        price: onHandInventoryTo.averageCost || 0,
+                        amount: (onHandInventoryTo.averageCost || 0) * doc.qty,
+                        amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventoryTo.averageCost || 0) * doc.qty),
+                        qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty,
+                        averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) + ((onHandInventoryTo.averageCost || 0) * doc.qty)) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) + doc.qty),
+                        transactionType: "Remove Production",
+                        rolesArea: data.rolesArea
+                    };
+                    let isInsrtTo = Pos_AverageInventory.insert(objTo);
+
+                })
+            }
+        } else if (data.transactionType === "Remove Production Result") {
+            let locationDoc = Pos_Location.findOne({_id: data.locationId});
+
+            if (data && data.convert.length > 0) {
+                data.convert.forEach((doc) => {
+                    //Add To Location
+                    let objTo = {};
+                    let onHandInventoryTo = Pos_AverageInventory.findOne({
+                        itemId: doc.productId,
+                        locationId: data.locationId,
+                        rolesArea: data.rolesArea
+                    }, {sort: {createdAt: -1}});
+
+                    objTo = {
+                        cusVendId: data.locationId,
+                        cusVendName: locationDoc && locationDoc.name || "",
+
+                        transactionId: data.id,
+                        locationId: data.locationId,
+                        averageInventoryDate: data.date,
+                        averageInventoryDateName: data.dateName,
+                        itemId: doc.productId,
+                        qty: doc.qty,
+                        price: onHandInventoryTo.averageCost || 0,
+                        amount: (onHandInventoryTo.averageCost || 0) * doc.qty,
+                        amountEnding: (onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - ((onHandInventoryTo.averageCost || 0) * doc.qty),
+                        qtyEnding: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty,
+                        averageCost: (onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty === 0 ? 0 : ((onHandInventoryTo && onHandInventoryTo.amountEnding || 0) - ((onHandInventoryTo.averageCost || 0) * doc.qty)) / ((onHandInventoryTo && onHandInventoryTo.qtyEnding || 0) - doc.qty),
+                        transactionType: "Remove Production",
+                        rolesArea: data.rolesArea
+                    };
                     let isInsrtTo = Pos_AverageInventory.insert(objTo);
 
                 })

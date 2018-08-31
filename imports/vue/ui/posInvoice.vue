@@ -92,7 +92,7 @@
 
                     <el-table-column
                             :label="langConfig['action']"
-                            width="160"
+                            width="200"
                     >
                         <template slot-scope="scope">
                             <el-button-group>
@@ -104,6 +104,9 @@
                                            :disabled="disabledUpdate"></el-button>
                                 <el-button type="success" icon="el-icon-view" size="small" class="cursor-pointer"
                                            @click="popupPosInvoiceShow(scope.row)"></el-button>
+
+                                <el-button type="info" icon="el-icon-printer" size="small" class="cursor-pointer"
+                                           @click="printInvoice(scope.row)"></el-button>
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -2491,6 +2494,14 @@
                         vm.getTotal();
                     }
                 })
+            },
+            printInvoice(data) {
+                if (data.transactionType === "Invoice Sale Order") {
+                    FlowRouter.go('/pos-data/posInvoiceReceiveItem/print?inv=' + data._id);
+                } else {
+                    FlowRouter.go('/pos-data/posInvoice/print?inv=' + data._id);
+                }
+
             }
         },
         created() {

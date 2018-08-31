@@ -50,7 +50,10 @@
       "stockDebt": "Stock Debt",
       "stockReceive": "Stock Receive",
       "convertInventory": "Convert Inventory",
-      "convertInventorySummary": "Convert Inventory Summary"
+      "convertInventorySummary": "Convert Inventory Summary",
+      "production": "Production",
+      "productionBoard": "Production Board",
+      "productionResult": "Production Result"
     },
     "customer": {
       "customerAdd": "Add Customer",

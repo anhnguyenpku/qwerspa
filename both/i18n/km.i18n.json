@@ -50,7 +50,10 @@
       "stockDebt": "ជំពាក់ស្តុក",
       "stockReceive": "ទទួលស្តុក",
       "convertInventory": "ប្តូរស្តុក",
-      "convertInventorySummary": "ប្តូរស្តុកសង្ខេប"
+      "convertInventorySummary": "ប្តូរស្តុកសង្ខេប",
+      "production": "ផលិត",
+      "productionBoard": "បង្ហាញការផលិត",
+      "productionResult": "បង្ហាញការផលិតបាន"
     },
     "customer": {
       "customerAdd": "បញ្ចូលពត័មានអតិថិជន",

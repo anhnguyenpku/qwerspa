@@ -88,7 +88,7 @@
                     </el-table-column>
                     <el-table-column
                             :label="langConfig['action']"
-                            width="120"
+                            width="160"
                     >
                         <template slot-scope="scope">
                             <el-button-group>
@@ -98,6 +98,8 @@
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
                                            @click=""
                                            disabled></el-button>
+                                <el-button type="info" icon="el-icon-printer" size="small" class="cursor-pointer"
+                                           @click="printReceivePayment(scope.row)"></el-button>
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -1136,6 +1138,9 @@
                 } else {
                     vm.searchInvoice();
                 }
+            },
+            printReceivePayment(data) {
+                FlowRouter.go('/pos-data/posInvoiceReceivePayment/print?inv=' + data._id);
             }
         },
         created() {

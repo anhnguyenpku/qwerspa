@@ -26,6 +26,7 @@ import {Sch_BusStop} from "../../imports/collection/schBusStop";
 import {Sch_BusRegister} from "../../imports/collection/schBusRegister";
 import {Sch_Position} from "../../imports/collection/schPosition";
 import {Sch_Activity} from "../../imports/collection/schActivity";
+import {Pos_Production} from "../../imports/collection/posProduction";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -306,6 +307,13 @@ Meteor.methods({
         let list = [];
         Pos_Term.find().fetch().forEach(function (obj) {
             list.push({label: obj.name, value: obj._id});
+        });
+        return list;
+    },
+    queryProductionOption(selector) {
+        let list = [];
+        Pos_Production.find(selector).fetch().forEach(function (obj) {
+            list.push({label: obj.name + " (" + obj.dateName + ")", value: obj._id});
         });
         return list;
     }
