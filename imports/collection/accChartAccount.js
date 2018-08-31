@@ -60,6 +60,22 @@ Acc_ChartAccount.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    mapFixedAsset: {
+        type: Object,
+        optional: true
+    },
+    "mapFixedAsset.fixedAssetId": {
+        type: String,
+        optional: true
+    },
+    "mapFixedAsset.accumulatedId": {
+        type: String,
+        optional: true
+    },
+    "mapFixedAsset.expenseId": {
+        type: String,
+        optional: true
+    },
     createdAt: {
         type: Date,
         optional: true,

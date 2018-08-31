@@ -29,6 +29,11 @@ Meteor.methods({
                     $match: selector
                 },
                 {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
+                {
                     $limit: options.limit
                 },
                 {
@@ -69,6 +74,7 @@ Meteor.methods({
                         isPaidTax: 1,
                         isPayment: 1,
                         mapToAccount: 1,
+                        mapFixedAsset: 1,
                         subAccountOfName: {$concat: ["$subAccountOfDoc.code", " : ", "$subAccountOfDoc.name"]}
                     }
                 }
@@ -101,6 +107,14 @@ Meteor.methods({
         return Acc_ChartAccount.update({_id: data._id},
             {
                 $set: data
+            });
+    },
+    updateMapFixedAsset(mapFixedAssetDoc) {
+        let obj = {};
+        obj.mapFixedAsset = mapFixedAssetDoc;
+        return Acc_ChartAccount.update({_id: mapFixedAssetDoc.fixedAssetId},
+            {
+                $set: obj
             });
     },
     removeChartAccount(id) {

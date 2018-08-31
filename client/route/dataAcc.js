@@ -71,3 +71,13 @@ accData.route('/journal/:journalId/show', {
         _Main('acc_journal');
     }
 });
+import '../../imports/ui/acc_fixedAsset/accFixedAsset';
+
+accData.route('/fixedAsset', {
+    name: 'acc.fixedAsset',
+    parent: 'wb.homeData',
+    title: "Fixed Asset",
+    action: function (query, params) {
+        _Main('acc_fixedAsset');
+    }
+});

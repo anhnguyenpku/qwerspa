@@ -450,6 +450,36 @@ Meteor.methods({
 
     }
     ,
+    queryChartAccountFixAssetOption(selector) {
+        let listFixedAsset = [];
+        let listAccumulated = [];
+        let listExpense = [];
+        let obj = {};
+        Acc_ChartAccount.find(selector, {sort: {code: 1}}).fetch().map(function (obj) {
+            if (obj.accountTypeId === "20") {
+                listFixedAsset.push({
+                    label: SpaceChar.space(obj.level * 6) + obj.code + " | " + obj.name,
+                    value: obj._id
+                })
+            } else if (obj.accountTypeId === "29") {
+                listAccumulated.push({
+                    label: SpaceChar.space(obj.level * 6) + obj.code + " | " + obj.name,
+                    value: obj._id
+                })
+            } else if (obj.accountTypeId === "61") {
+                listExpense.push({
+                    label: SpaceChar.space(obj.level * 6) + obj.code + " | " + obj.name,
+                    value: obj._id
+                })
+            }
+        })
+        obj.listFixedAsset = listFixedAsset;
+        obj.listAccumulated = listAccumulated;
+        obj.listExpense = listExpense;
+        return obj;
+
+    }
+    ,
     queryParentPosCategoryOption(selector, categoryId) {
         return Pos_Category.find(selector, {sort: {code: 1}}).fetch().map(function (obj) {
             let valDisable = false;

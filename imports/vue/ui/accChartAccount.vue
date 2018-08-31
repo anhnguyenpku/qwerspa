@@ -65,7 +65,7 @@
                     <el-table-column
                             prop="level"
                             sortable
-                            width="120"
+                            width="70"
                             label="Level">
                     </el-table-column>
                     <!--<el-table-column
@@ -88,7 +88,7 @@
                     <el-table-column
                             prop="isPaidTax"
                             label="Tax"
-                            width="150"
+                            width="100"
                             filter-placement="bottom-end">
                         <template slot-scope="scope">
                             <el-tag
@@ -101,7 +101,7 @@
                     <el-table-column
                             prop="isPayment"
                             label="Paid Method"
-                            width="150"
+                            width="100"
                             filter-placement="bottom-end">
                         <template slot-scope="scope">
                             <el-tag
@@ -114,12 +114,21 @@
                     <el-table-column
                             prop="mapToAccount"
                             sortable
-                            width="120"
+                            width="70"
                             label="Map To">
                     </el-table-column>
                     <el-table-column
+                            sortable
+                            width="120"
+                            label="Fixed Asset">
+                        <template slot-scope="scope">
+                            <i v-show="scope.row.mapFixedAsset && scope.row.mapFixedAsset.fixedAssetId!==''"
+                               class="el-icon-upload-success el-icon-circle-check" style="color: blue;"></i>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                             label="Action"
-                            width="160"
+                            width="200"
                     >
                         <template slot-scope="scope">
                             <el-button-group>
@@ -129,6 +138,8 @@
                                            @click="findChartAccountById(scope),dialogUpdateChartAccount = true"></el-button>
                                 <el-button type="success" icon="el-icon-info" size="small" class="cursor-pointer"
                                            @click="findChartAccountById(scope),dialogMapChartAccount = true"></el-button>
+                                <el-button type="warning" icon="el-icon-question" size="small" class="cursor-pointer"
+                                           @click="findChartAccountById(scope),popUpMapFixedAsset(scope.row),fetchChartAccountOpt()"></el-button>
                             </el-button-group>
 
                         </template>
@@ -379,6 +390,58 @@
                 </el-row>
                 <br>
             </el-form>
+        </el-dialog> <!--Form Modal-->
+        <el-dialog
+                title="Map Fixed Asset"
+                :visible.sync="dialogMapFixedAsset"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="mapFixedAsset" :rules="rulesFixedAsset" ref="mapFixedAsset" label-width="120px"
+                     class="chartAccountForm">
+
+                <el-form-item label="Fixed Asset" prop="fixedAssetId">
+                    <el-select style="display: block !important;" filterable clearable :disabled="true"
+                               v-model="mapFixedAsset.fixedAssetId" placeholder="Fixed Asset">
+                        <el-option
+                                v-for="item in chartAccountFixedAssetOption"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="Accumulated" prop="accumulatedId">
+                    <el-select style="display: block !important;" filterable clearable
+                               v-model="mapFixedAsset.accumulatedId" placeholder="Accumulated">
+                        <el-option
+                                v-for="item in chartAccountAccumulatedOption"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="Expense" prop="expenseId">
+                    <el-select style="display: block !important;" filterable clearable
+                               v-model="mapFixedAsset.expenseId" placeholder="Expense">
+                        <el-option
+                                v-for="item in chartAccountExpenseOption"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+
+                <input type="hidden" v-model="chartAccountForm._id"/>
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button @click="dialogMapFixedAsset = false ,cancel()">Cancel</el-button>
+                    <el-button type="primary" @click="updateMapFixedAsset">Save</el-button>
+                </el-row>
+                <br>
+            </el-form>
         </el-dialog>
         <!--End Form modal-->
     </div>
@@ -397,6 +460,7 @@
                 dialogAddChartAccount: false,
                 dialogUpdateChartAccount: false,
                 dialogMapChartAccount: false,
+                dialogMapFixedAsset: false,
 
                 mapToAccount: "",
 
@@ -411,10 +475,22 @@
                     isPayment: false,
                     _id: ""
                 },
+
+                mapFixedAsset: {
+                    fixedAssetId: "",
+                    accumulatedId: "",
+                    expenseId: ""
+
+                },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
                     code: [{required: true, message: 'Please input Code', trigger: 'blur'}],
-                    accountTypeId: [{required: true, message: 'Please input Account Type', trigger: 'blur'}],
+                    accountTypeId: [{required: true, message: 'Please input Account Type', trigger: 'change'}],
+
+                },
+                rulesFixedAsset: {
+                    accumulatedId: [{required: true, message: 'Please input Depreciation', trigger: 'change'}],
+                    expenseId: [{required: true, message: 'Please input Expense', trigger: 'change'}],
 
                 },
                 // Options
@@ -434,6 +510,9 @@
                     {value: "012", label: "012 : Purchase Discount (60)"},
                 ],
                 chartAccountDataOption: [],
+                chartAccountExpenseOption: [],
+                chartAccountAccumulatedOption: [],
+                chartAccountFixedAssetOption: [],
                 accountTypeId: "",
                 skip: 0
             }
@@ -494,6 +573,18 @@
                 }
                 Meteor.call('queryParentChartAccountOption', selector, this.chartAccountForm._id, (err, result) => {
                     this.chartAccountDataOption = result;
+                })
+            },
+            fetchChartAccountOpt() {
+                let selector = {};
+                let vm = this;
+                Meteor.call("queryChartAccountFixAssetOption", selector, (err, result) => {
+                    if (result) {
+                        vm.chartAccountFixedAssetOption = result.listFixedAsset;
+                        vm.chartAccountAccumulatedOption = result.listAccumulated;
+                        vm.chartAccountExpenseOption = result.listExpense;
+
+                    }
                 })
             },
             saveChartAccount(event) {
@@ -636,6 +727,50 @@
                 })
 
             },
+
+            updateMapFixedAsset() {
+                let vm = this;
+                this.$refs["mapFixedAsset"].validate((valid) => {
+                    if (valid) {
+                        let mapFixedAssetDoc = {
+                            fixedAssetId: vm.mapFixedAsset.fixedAssetId,
+                            accumulatedId: vm.mapFixedAsset.accumulatedId,
+                            expenseId: vm.mapFixedAsset.expenseId
+
+                        };
+
+                        Meteor.call("updateMapFixedAsset", mapFixedAssetDoc, (err, result) => {
+                            if (!err) {
+                                vm.$message({
+                                    duration: 1000,
+                                    message: `
+                        Update
+                        Successfully
+                        !`,
+                                    type: 'success'
+                                });
+                                vm.dialogMapFixedAsset = false;
+                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
+                                vm.accountTypeOption();
+                                vm.parentChartAccountOption();
+                                vm.$refs["mapFixedAsset"].resetFields();
+                                vm.resetForm();
+
+                            } else {
+                                vm.$message({
+                                    duration: 1000,
+                                    message: `
+                        Update
+                        Failed
+                        !`,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                    }
+                })
+
+            },
             removeChartAccount(index, row, rows) {
                 let vm = this;
                 this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
@@ -665,7 +800,7 @@
                     })
 
                 }).catch(() => {
-                    this.$message({
+                    vm.$message({
                         type: 'info',
                         message: 'Delete canceled'
                     });
@@ -673,10 +808,22 @@
 
 
             },
+            popUpMapFixedAsset(row) {
+                let vm = this;
+                if (row.accountTypeId === "20") {
+                    vm.dialogMapFixedAsset = true;
+                } else {
+                    vm.$message({
+                        type: 'error',
+                        message: 'Not Fixed Asset'
+                    });
+                }
+            },
             findChartAccountById(doc) {
                 let vm = this;
                 vm.chartAccountForm = {};
                 vm.mapToAccount = "";
+                vm.mapFixedAsset = {};
 
                 Meteor.call("queryChartAccountById", doc.row._id, (err, result) => {
                     if (result) {
@@ -687,6 +834,15 @@
                         }
                         vm.chartAccountForm = result;
                         vm.mapToAccount = result.mapToAccount;
+                        vm.mapFixedAsset.fixedAssetId = result._id;
+                        if (result.mapFixedAsset && result.mapFixedAsset.accumulatedId) {
+                            vm.mapFixedAsset.accumulatedId = result.mapFixedAsset.accumulatedId;
+
+                        }
+                        if (result.mapFixedAsset && result.mapFixedAsset.expenseId) {
+                            vm.mapFixedAsset.expenseId = result.mapFixedAsset.expenseId;
+
+                        }
                     }
                 })
             },

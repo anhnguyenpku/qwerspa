@@ -106,7 +106,8 @@
     "sidebarMenu": {
       "home": "home",
       "journal": "បញ្ចូលប្រតិបត្តការណ៍",
-      "exchange": "អត្រាប្តូរប្រាក់"
+      "exchange": "អត្រាប្តូរប្រាក់",
+      "fixedAsset": "ទ្រព្យសកម្ម"
     }
   }
 }

@@ -134,6 +134,17 @@
                                         </el-radio-group>
 
                                     </el-form-item>
+                                    <el-form-item label="Depreciation Type">
+                                        <el-select v-model="form.depreciationType" filterable placeholder="Select">
+                                            <el-option
+                                                    v-for="item in depreciationTypeOption"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="Director">
@@ -260,7 +271,8 @@
                     director: "",
                     province: "",
                     khAddress: "",
-                    integratedPosAccount: false
+                    integratedPosAccount: false,
+                    depreciationType: ""
                 },
                 rules: {
                     khName: [
@@ -283,7 +295,13 @@
                     {label: "Normal", value: "Normal"},
                     {label: "Up", value: "Up"},
                     {label: "Down", value: "Down"}
+                ],
+                depreciationTypeOption: [
+                    {label: "001 : Straight-Line Depreciation Method", value: "001"},
+                    {label: "002 : Double Declining Balance Depreciation Method", value: "002"},
+                    {label: "003 : Sum-of-the-Years-Digits Depreciation Method", value: "003"},
                 ]
+
             }
         },
         computed: {

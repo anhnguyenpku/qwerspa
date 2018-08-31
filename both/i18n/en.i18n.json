@@ -106,7 +106,8 @@
     "sidebarMenu": {
       "home": "home",
       "journal": "Journal Entry",
-      "exchange": "Exchange"
+      "exchange": "Exchange",
+      "fixedAsset": "Fixed Asset"
     }
   },
   "global": {

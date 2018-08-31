@@ -42,6 +42,10 @@ WB_waterBillingSetup.schema = new SimpleSchema({
         defaultValue: false,
         label: "Integrated Pos with Account"
     },
+    depreciationType: {
+        type: String,
+        optional: true
+    },
     invoiceExpiredAfter: {
         type: Number,
         autoValue() {
