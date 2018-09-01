@@ -53,7 +53,9 @@
       "convertInventorySummary": "ប្តូរស្តុកសង្ខេប",
       "production": "ផលិត",
       "productionBoard": "បង្ហាញការផលិត",
-      "productionResult": "បង្ហាញការផលិតបាន"
+      "productionResult": "បង្ហាញការផលិតបាន",
+      "productionSummary": "ការផលិតសង្ខេប",
+      "productionResultSummary": "ការផលិតបានសង្ខេប"
     },
     "customer": {
       "customerAdd": "បញ្ចូលពត័មានអតិថិជន",

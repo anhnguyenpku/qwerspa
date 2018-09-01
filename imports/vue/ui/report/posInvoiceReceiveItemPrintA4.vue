@@ -37,6 +37,9 @@
                               <div style="width: 70% !important;float: left">
                                   {{langConfig['address']}} : {{invoiceDoc && invoiceDoc.customerDoc && invoiceDoc.customerDoc.address || ""}}
                               </div>
+                              <div style="width: 30% !important;float: right">
+                                  {{langConfig['phoneNumber']}} : {{invoiceDoc && invoiceDoc.customerDoc && invoiceDoc.customerDoc.phoneNumber || ""}}
+                              </div>
                           </div>
                       </caption>
 

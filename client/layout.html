@@ -415,6 +415,46 @@
                                                                         </li>
                                                                         <hr>
                                                                     </ul>
+
+                                                                    {{#if manageModule.production}}
+                                                                        <ul>
+                                                                            <a href="#" class="title-head">
+                                                                                <i class="fa fa-file"></i> <span>{{_
+                                                                                    "pos.sidebarMenu.production"}}</span>
+                                                                            </a>
+                                                                            <li><a href="{{pathFor
+                                                                                    'pos.posProductionReport'}}"
+                                                                                   class="title-body">
+                                                                                <i class="fa fa-dollar"></i> {{_
+                                                                                    "pos.sidebarMenu.production"}}
+                                                                            </a>
+                                                                            </li>
+                                                                            <li><a href="{{pathFor
+                                                                                    'pos.posProductionSummaryReport'}}"
+                                                                                   class="title-body">
+                                                                                <i class="fa fa-dollar"></i> {{_
+                                                                                    "pos.sidebarMenu.productionSummary"}}
+                                                                            </a>
+                                                                            </li>
+
+                                                                            <li><a href="{{pathFor
+                                                                                    'pos.posProductionResultReport'}}"
+                                                                                   class="title-body">
+                                                                                <i class="fa fa-dollar"></i> {{_
+                                                                                    "pos.sidebarMenu.productionResult"}}
+                                                                            </a>
+                                                                            </li>
+                                                                            <li><a href="{{pathFor
+                                                                                    'pos.posProductionResultSummaryReport'}}"
+                                                                                   class="title-body">
+                                                                                <i class="fa fa-dollar"></i> {{_
+                                                                                    "pos.sidebarMenu.productionResultSummary"}}
+                                                                            </a>
+                                                                            </li>
+
+                                                                            <hr>
+                                                                        </ul>
+                                                                    {{/if}}
                                                                 </li>
                                                             {{/if}}
                                                             <li class="col-sm-4">

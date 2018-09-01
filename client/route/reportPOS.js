@@ -440,3 +440,48 @@ posReport.route('/posConvertInventorySummaryReport', {
     }
 
 });
+
+import '../../imports/ui/report/posProduction/posProduction';
+
+posReport.route('/posProductionReport', {
+    name: 'pos.posProductionReport',
+    title: "Production",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_productionReport');
+    }
+
+});
+import '../../imports/ui/report/posProductionSummary/posProductionSummary';
+
+posReport.route('/posProductionSummaryReport', {
+    name: 'pos.posProductionSummaryReport',
+    title: "Production Summary",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_productionSummaryReport');
+    }
+
+});
+import '../../imports/ui/report/posProductionResult/posProductionResult';
+
+posReport.route('/posProductionResultReport', {
+    name: 'pos.posProductionResultReport',
+    title: "Production Result",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_productionResultReport');
+    }
+
+});
+import '../../imports/ui/report/posProductionResultSummary/posProductionResultSummary';
+
+posReport.route('/posProductionResultSummaryReport', {
+    name: 'pos.posProductionResultSummaryReport',
+    title: "Production Result Summary",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_productionResultSummaryReport');
+    }
+
+});

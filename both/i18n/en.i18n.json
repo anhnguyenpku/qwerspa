@@ -53,7 +53,9 @@
       "convertInventorySummary": "Convert Inventory Summary",
       "production": "Production",
       "productionBoard": "Production Board",
-      "productionResult": "Production Result"
+      "productionResult": "Production Result",
+      "productionSummary": "Production Summary",
+      "productionResultSummary": "Production Result Summary"
     },
     "customer": {
       "customerAdd": "Add Customer",
