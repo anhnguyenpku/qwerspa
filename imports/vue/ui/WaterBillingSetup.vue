@@ -144,6 +144,16 @@
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
+                                    <el-form-item label="Depreciation Per Time">
+                                        <el-select v-model="form.depreciationPerTime" filterable placeholder="Select">
+                                            <el-option
+                                                    v-for="item in depreciationPerTimeOption"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
 
                                 </el-col>
                                 <el-col :span="12">
@@ -248,6 +258,14 @@
                         label: 'Kh', value: 'kh'
                     }
                 ],
+                depreciationPerTimeOption: [
+                    {label: "1 Month", value: 1},
+                    {label: "2 Month", value: 2},
+                    {label: "3 Month", value: 3},
+                    {label: "4 Month", value: 4},
+                    {label: "6 Month", value: 6},
+                    {label: "12 Month", value: 12}
+                ],
                 form: {
                     cutValue: 480,
                     invoiceExpiredAfter: 0,
@@ -272,7 +290,8 @@
                     province: "",
                     khAddress: "",
                     integratedPosAccount: false,
-                    depreciationType: ""
+                    depreciationType: "",
+                    depreciationPerTime: 12
                 },
                 rules: {
                     khName: [

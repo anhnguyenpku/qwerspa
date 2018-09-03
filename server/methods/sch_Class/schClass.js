@@ -89,11 +89,7 @@ Meteor.methods({
                 {
                     $match: selector
                 },
-                {
-                    $sort: {
-                        createdAt: -1
-                    }
-                },
+
                 {
                     $lookup: {
                         from: "sch_classTable",
@@ -136,6 +132,12 @@ Meteor.methods({
                         preserveNullAndEmptyArrays: true
                     }
                 },
+                {
+                    $sort: {
+                        "levelDoc.code": 1
+                    }
+                },
+
                 {
                     $lookup: {
                         from: "sch_major",

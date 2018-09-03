@@ -46,6 +46,10 @@ WB_waterBillingSetup.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    depreciationPerTime: {
+        type: Number,
+        optional: true
+    },
     invoiceExpiredAfter: {
         type: Number,
         autoValue() {

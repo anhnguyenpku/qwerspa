@@ -93,7 +93,7 @@
 
                     <el-table-column
                             :label="langConfig['action']"
-                            width="120"
+                            width="160"
                     >
                         <template slot-scope="scope">
                             <el-button-group>
@@ -101,6 +101,9 @@
                                            @click="removeFixedAsset(scope.$index,scope.row,fixedAssetData)"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
                                            @click="dialogUpdateFixedAsset= true ,findFixedAssetById(scope)"></el-button>
+
+                                <el-button type="info" icon="el-icon-printer" size="small" class="cursor-pointer"
+                                           @click="printFixedAsstSchedule(scope.row._id)"></el-button>
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -210,8 +213,6 @@
                                     :placeholder="langConfig['pickDate']">
                     </el-date-picker>
                 </el-form-item>
-
-
                 <el-form-item :label="langConfig['account']" prop="account">
                     <el-select style="display: block !important;" filterable clearable
                                v-model="fixedAssetForm.account"
@@ -439,7 +440,6 @@
 
                         let fixedAssetDoc = {
                             _id: vm.fixedAssetForm._id,
-
                             account: vm.fixedAssetForm.account,
                             value: vm.fixedAssetForm.value,
                             life: vm.fixedAssetForm.life,
@@ -452,7 +452,7 @@
                             currencyId: vm.fixedAssetForm.currencyId,
                             rolesArea: Session.get("area")
                         };
-
+                        console.log(fixedAssetDoc);
 
                         Meteor.call("updateAccFixedAsset", fixedAssetDoc, (err, result) => {
                             if (!err) {
@@ -515,6 +515,9 @@
                         this.fixedAssetForm = result;
                     }
                 })
+            },
+            printFixedAsstSchedule(id) {
+                FlowRouter.go('/acc-data/accFixedAssetSchedule/print?inv=' + id);
             },
             cancel() {
                 this.$message({

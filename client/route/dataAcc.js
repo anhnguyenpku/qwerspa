@@ -38,6 +38,17 @@ accData.route('/accPayment/print', {
 
 });
 
+
+import '../../imports/ui/report/accFixedAssetSchedule/accFixedAssetSchedule';
+
+accData.route('/accFixedAssetSchedule/print', {
+    name: 'pos.accFixedAssetSchedule-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'acc_fixedAssetScheduleReport'});
+    }
+
+});
+
 // Journal
 accData.route('/journal', {
     name: 'acc.journal',

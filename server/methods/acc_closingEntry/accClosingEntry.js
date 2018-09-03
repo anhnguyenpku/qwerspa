@@ -59,9 +59,12 @@ Meteor.methods({
     },
 
     insertChartAccountBalance: function (selector, rolesArea, selectorLastBalance, lastDate, dateSelect, closingEntryId, selectorChartAccount) {
+
+
         let data = [];
         let dataRaw = [];
         let dataLast;
+
         let result = Acc_Journal.aggregate([
             {$match: selector},
             {$unwind: "$transaction"},

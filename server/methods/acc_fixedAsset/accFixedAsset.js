@@ -1,7 +1,8 @@
-import {Acc_FixedAsset} from "../../imports/collection/accFixedAsset";
-import {WB_waterBillingSetup} from "../../imports/collection/waterBillingSetup";
+import {Acc_FixedAsset} from "../../../imports/collection/accFixedAsset";
+import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import numeral from "numeral";
 import math from "mathjs";
+import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 
 Meteor.methods({
     queryAccFixedAsset({q, filter, options = {limit: 10, skip: 0}}) {
@@ -82,6 +83,7 @@ Meteor.methods({
     },
     updateAccFixedAsset(data) {
         let transaction = generateScheduleFixedAsset(data);
+        console.log(data);
         data.transaction = transaction;
         let doc = Acc_FixedAsset.update({_id: data._id},
             {
@@ -98,18 +100,19 @@ Meteor.methods({
 function generateScheduleFixedAsset(doc) {
     let transaction = [];
     let curMonth = moment(doc.buyDate).format("MM");
-    let depPerYear = (doc.value - doc.estSalvage) / doc.life;
 
     let companyDoc = WB_waterBillingSetup.findOne();
     if (companyDoc.depreciationType === "001") {
+        let depPerYear = (doc.value - doc.estSalvage) / doc.life;
+
         if (curMonth != "12") {
             for (let i = 1; i <= doc.life + 1; i++) {
                 if (i == 1 || i == doc.life + 1) {
                     let maxMonth = i == 1 ? 12 - parseInt(curMonth) : parseInt(curMonth);
                     transaction.push({
                         year: i,
-                        perMonth: math.round((depPerYear / 12), 2),
-                        perYear: math.round((depPerYear / 12) * maxMonth, 2),
+                        perMonth: numeral(formatCurrency((depPerYear / 12), doc.currencyId)).value(),
+                        perYear: numeral(formatCurrency((depPerYear / 12) * maxMonth, doc.currencyId)).value(),
                         month: 0,
                         maxMonth: maxMonth,
                         status: false
@@ -117,8 +120,8 @@ function generateScheduleFixedAsset(doc) {
                 } else {
                     transaction.push({
                         year: i,
-                        perMonth: math.round((depPerYear / 12), 2),
-                        perYear: depPerYear,
+                        perMonth: numeral(formatCurrency((depPerYear / 12), doc.currencyId)).value(),
+                        perYear: numeral(formatCurrency(depPerYear, doc.currencyId)).value(),
                         month: 0,
                         maxMonth: 12,
                         status: false
@@ -129,16 +132,62 @@ function generateScheduleFixedAsset(doc) {
             for (let i = 1; i <= doc.life; i++) {
                 transaction.push({
                     year: i,
-                    perMonth: math.round((depPerYear / 12), 2),
-                    perYear: depPerYear,
+                    perMonth: numeral(formatCurrency((depPerYear / 12), doc.currencyId)).value(),
+                    perYear: numeral(formatCurrency(depPerYear, doc.currencyId)).value(),
                     month: 0,
                     maxMonth: 12,
                     status: false
                 })
             }
         }
-    }
+    } else if (companyDoc.depreciationType === "002") {
+        let percentage = math.round(((100 / doc.life) * 2), 2);
+        let amount = doc.value;
+        for (let i = 1; i <= doc.life; i++) {
+            let depPerYear = 0;
+            let maxMonth = (i === 1 || i === doc.life) && curMonth !== 12 ? 12 - parseInt(curMonth) : 12;
 
+            if (i === doc.life) {
+                depPerYear = numeral(formatCurrency(amount - doc.estSalvage, doc.currencyId)).value();
+            } else {
+                depPerYear = numeral(formatCurrency(((amount - doc.estSalvage) * (percentage / 100)), doc.currencyId)).value();
+
+            }
+
+            transaction.push({
+                year: i,
+                perMonth: numeral(formatCurrency(depPerYear / maxMonth, doc.currencyId)).value(),
+                perYear: numeral(formatCurrency(depPerYear, doc.currencyId)).value(),
+                month: 0,
+                maxMonth: maxMonth,
+                status: false
+            })
+            amount -= depPerYear;
+
+        }
+    } else if (companyDoc.depreciationType === "003") {
+        let numYear = 0;
+        for (let i = 1; i <= doc.life; i++) {
+            numYear += i;
+        }
+
+        let depreAmount = numeral(formatCurrency((doc.value - doc.estSalvage), companyDoc.baseCurrency)).value();
+        let y = 1;
+        for (let i = doc.life; i > 0; i--) {
+            let maxMonth = (i === 1 || i === doc.life) && curMonth !== 12 ? 12 - parseInt(curMonth) : 12;
+
+            let depPerYear = numeral(formatCurrency((i / numYear) * depreAmount, doc.currencyId)).value();
+            transaction.push({
+                year: y,
+                perMonth: numeral(formatCurrency((depPerYear / maxMonth), doc.currencyId)).value(),
+                perYear: numeral(formatCurrency(depPerYear, doc.currencyId)).value(),
+                month: 0,
+                maxMonth: maxMonth,
+                status: false
+            })
+            y++;
+        }
+    }
 
     return transaction;
 }

@@ -14,6 +14,7 @@ import {formatCurrency} from "../../imports/api/methods/roundCurrency"
 import {exchangeCoefficient} from "../../imports/api/methods/roundCurrency"
 import {getCurrencySymbolById} from "../../imports/api/methods/roundCurrency"
 import {roundCurrency} from "../../imports/api/methods/roundCurrency"
+import {Acc_FixedAsset} from "../../imports/collection/accFixedAsset";
 
 
 Acc_ClosingEntry.before.insert(function (userId, doc) {
@@ -27,7 +28,103 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
             fieldToCalculate: '$transaction.drcr',
             baseCurrency: companyDoc.baseCurrency
         });
-        // month is december must convert Net Income to Retain Earning
+
+
+        //Fixed Asset Expense=================================================
+
+        let selectorFixedAsset = {};
+        selectorFixedAsset.buyDate = {$lte: moment(doc.closeDate).add(-1, 'months').endOf('months').toDate()};
+        selectorFixedAsset.isDep = false;
+        selectorFixedAsset.rolesArea = doc.rolesArea;
+        let depList = Acc_FixedAsset.find(selectorFixedAsset).fetch();
+        let startYear = moment(doc.closeDate).year();
+        let startDate = moment(startYear + '-' + '01-01').toDate();
+        if (depList.length > 0) {
+            let selectorExpenseList = [];
+            Acc_FixedAsset.update({isDep: true}, {$inc: {increment: 1}}, {multi: true});
+
+            depList.forEach(function (obj) {
+
+                obj.transaction.sort(compareASD);
+
+                //Insert into FixAssetExpense
+                let selectorExpenseObj = {};
+                selectorExpenseObj.fixedAssetid = obj._id;
+                selectorExpenseObj.account = obj.account;
+                selectorExpenseObj.buyDate = obj.buyDate;
+                selectorExpenseObj.currencyId = obj.currencyId;
+
+                for (let ob of obj.transaction) {
+                    if (ob.status == false) {
+                        let depTime = ob.maxMonth < companyDoc.depreciationPerTime ? ob.maxMonth : companyDoc.depreciationPerTime;
+                        let depValue = formatCurrency(depTime * ob.perMonth, obj.currencyId);
+                        selectorExpenseObj.value = numeral(depValue).value();
+                        break;
+                    }
+                }
+                selectorExpenseList.push(selectorExpenseObj);
+
+
+                //Insert Into Journal
+                let selectorJournal = {};
+                selectorJournal.journalDate = doc.closeDate;
+                selectorJournal.journalDateName = moment(doc.closeDate).format("DD/MM/YYYY");
+                selectorJournal.currencyId = obj.currencyId;
+                selectorJournal.memo = "Depreciation Expense " + moment(doc.closeDate).format("DD/MM/YYYY");
+
+
+                selectorJournal.rolesArea = doc.rolesArea;
+                selectorJournal.total = selectorExpenseObj.value;
+                selectorJournal.closingEntryId = doc._id;
+                selectorJournal.status = "Depreciation Expense";
+
+
+                let accountFixedAssetDoc = Acc_ChartAccount.findOne({_id: obj.account});
+                if (accountFixedAssetDoc) {
+                    let transaction = [];
+                    transaction.push({
+                        account: accountFixedAssetDoc.mapFixedAsset.expenseId,
+                        dr: selectorExpenseObj.value,
+                        cr: 0,
+                    }, {
+                        account: accountFixedAssetDoc.mapFixedAsset.accumulatedId,
+                        dr: 0,
+                        cr: selectorExpenseObj.value,
+                    });
+                    selectorJournal.transaction = transaction;
+                    Meteor.call("insertJournal", selectorJournal);
+
+
+                    //Update FixedAsset
+
+                    let transactionUpdate = [];
+                    let i = 1;
+                    let yearLength = obj.transaction.length;
+                    obj.transaction.forEach(function (ob) {
+                        if (i == 1 && ob.status == false) {
+                            let depTime = ob.maxMonth < companyDoc.depreciationPerTime ? ob.maxMonth : companyDoc.depreciationPerTime;
+                            ob.month += depTime;
+                            i++;
+
+                            if (ob.month == ob.maxMonth && yearLength == ob.year) {
+                                obj.isDep = true;
+                            }
+                        }
+                        if (ob.month == ob.maxMonth) {
+                            ob.status = true;
+                        }
+                        transactionUpdate.push(ob);
+                    })
+                    obj.transaction = transactionUpdate;
+                    Acc_FixedAsset.update({_id: obj._id}, {$set: obj});
+                }
+            })
+            doc.transactionExpense = selectorExpenseList;
+        }
+        //End Fixed Asset expense=============================================
+
+
+        // month is december must convert Net Income to Retain Earning==========================
         if (currMonth === 12) {
             let selectorNetIncome = {};
             selectorNetIncome.rolesArea = doc.rolesArea;
@@ -108,8 +205,7 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
             retainEarningDoc.transaction = transaction;
             Acc_Journal.insert(retainEarningDoc);
         }
-
-
+        //End Month 12==========================================================================
         //Currency Closing
 
         let exchangeGainDoc = Acc_ChartAccount.findOne({mapToAccount: "001"});
@@ -334,6 +430,40 @@ Acc_ClosingEntry.after.insert(function (userId, doc) {
 });
 
 Acc_ClosingEntry.after.remove(function (userId, doc) {
+
+
+    let companyDoc = WB_waterBillingSetup.findOne();
+    Acc_FixedAsset.update({isDep: true}, {$inc: {increment: -1}}, {multi: true});
+    let depList = Acc_FixedAsset.find({increment: 0}).fetch();
+
+    if (depList.length > 0) {
+        depList.forEach(function (obj) {
+            //Update DepExpList
+            let transactionUpdate = [];
+            let i = 1;
+
+            obj.transaction.sort(compare);
+            obj.transaction.forEach(function (ob) {
+                if (i == 1 && ob.month > 0) {
+                    ob.month -= companyDoc.depreciationPerTime;
+                    ob.month = ob.month > 0 ? ob.month : 0;
+                    i++;
+
+                    if (ob.month < ob.maxMonth) {
+                        obj.isDep = false;
+                    }
+                }
+                if (ob.month < ob.maxMonth) {
+                    ob.status = false;
+                }
+                transactionUpdate.push(ob);
+            })
+            transactionUpdate.sort(compareASD);
+            obj.transaction = transactionUpdate;
+            Acc_FixedAsset.update({_id: obj._id}, {$set: obj});
+        })
+    }
+
     Acc_Journal.remove({closingEntryId: doc._id});
     Acc_ChartAccountBalance.remove({closingEntryId: doc._id});
 });
@@ -753,4 +883,24 @@ let getLastBalanceByAccount = function (baseCurrency, accountId, exchange, closi
     }
     return total;
 
+}
+
+function compare(a, b) {
+    if (a.year < b.year) {
+        return 1;
+    } else if (a.year > b.year) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
+function compareASD(a, b) {
+    if (a.year < b.year) {
+        return -1;
+    } else if (a.year > b.year) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
