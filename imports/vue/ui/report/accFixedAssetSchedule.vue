@@ -66,6 +66,7 @@
                         <td>{{langConfig['perYear']}}</td>
                         <td>{{langConfig['cumDepre']}}</td>
                         <td>{{langConfig['bvEndYear']}}</td>
+                        <td>{{langConfig['maxMonth']}}</td>
                         <td>{{langConfig['expenseMonth']}}</td>
                     </tr>
                 </thead>

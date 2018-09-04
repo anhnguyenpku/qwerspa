@@ -83,7 +83,6 @@ Meteor.methods({
     },
     updateAccFixedAsset(data) {
         let transaction = generateScheduleFixedAsset(data);
-        console.log(data);
         data.transaction = transaction;
         let doc = Acc_FixedAsset.update({_id: data._id},
             {
@@ -145,7 +144,10 @@ function generateScheduleFixedAsset(doc) {
         let amount = doc.value;
         for (let i = 1; i <= doc.life; i++) {
             let depPerYear = 0;
-            let maxMonth = (i === 1 || i === doc.life) && curMonth !== 12 ? 12 - parseInt(curMonth) : 12;
+            let maxMonth = 12;
+            if (i === 1 || i === doc.life && curMonth !== 12) {
+                maxMonth = i === 1 ? 12 - parseInt(curMonth) : parseInt(curMonth);
+            }
 
             if (i === doc.life) {
                 depPerYear = numeral(formatCurrency(amount - doc.estSalvage, doc.currencyId)).value();
@@ -174,8 +176,10 @@ function generateScheduleFixedAsset(doc) {
         let depreAmount = numeral(formatCurrency((doc.value - doc.estSalvage), companyDoc.baseCurrency)).value();
         let y = 1;
         for (let i = doc.life; i > 0; i--) {
-            let maxMonth = (i === 1 || i === doc.life) && curMonth !== 12 ? 12 - parseInt(curMonth) : 12;
-
+            let maxMonth = 12;
+            if (i === 1 || i === doc.life && curMonth !== 12) {
+                maxMonth = i == doc.life ? 12 - parseInt(curMonth) : parseInt(curMonth);
+            }
             let depPerYear = numeral(formatCurrency((i / numYear) * depreAmount, doc.currencyId)).value();
             transaction.push({
                 year: y,

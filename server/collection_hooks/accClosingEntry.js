@@ -44,9 +44,7 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
             Acc_FixedAsset.update({isDep: true}, {$inc: {increment: 1}}, {multi: true});
 
             depList.forEach(function (obj) {
-
                 obj.transaction.sort(compareASD);
-
                 //Insert into FixAssetExpense
                 let selectorExpenseObj = {};
                 selectorExpenseObj.fixedAssetid = obj._id;
@@ -125,7 +123,7 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
 
 
         // month is december must convert Net Income to Retain Earning==========================
-        if (currMonth === 12) {
+        if (currMonth === "12") {
             let selectorNetIncome = {};
             selectorNetIncome.rolesArea = doc.rolesArea;
 
@@ -181,8 +179,7 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
 
             ]);
 
-
-            let accountRetainEarning = Acc_ChartAccount.findOne({accountTypeId: "41"});
+            let accountRetainEarning = Acc_ChartAccount.findOne({mapToAccount: "013"});
             let retainEarningDoc = {};
             retainEarningDoc.journalDate = moment("01/01/" + (parseInt(moment(doc.closeDate).format("YYYY")) + 1), "DD/MM/YYYY").toDate();
             retainEarningDoc.journalDateName = "01/01/" + (parseInt(moment(doc.closeDate).format("YYYY")) + 1);
@@ -190,7 +187,7 @@ Acc_ClosingEntry.before.insert(function (userId, doc) {
             retainEarningDoc.voucherId = doc.rolesArea + (parseInt(moment(doc.closeDate).format("YYYY")) + 1) + "000001";
             retainEarningDoc.memo = "Net Income to Retain Earning";
             retainEarningDoc.rolesArea = doc.rolesArea;
-            retainEarningDoc.total = Math.abs(netIncome[0] && numeral(numeral(netIncome[0].balance).format("0,00.000")).value() || 0);
+            retainEarningDoc.total = Math.abs(netIncome[0] && numeral(formatCurrency(netIncome[0].balance, companyDoc.baseCurrency)).value() || 0);
             retainEarningDoc.closingEntryId = doc._id;
             retainEarningDoc.status = "End Of Year";
 

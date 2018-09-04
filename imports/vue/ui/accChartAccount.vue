@@ -508,6 +508,7 @@
                     {value: "010", label: "010 : COGS (70)"},
                     {value: "011", label: "011 : Sale Discount (50)"},
                     {value: "012", label: "012 : Purchase Discount (60)"},
+                    {value: "013", label: "013 : Retain Earning (41)"},
                 ],
                 chartAccountDataOption: [],
                 chartAccountExpenseOption: [],

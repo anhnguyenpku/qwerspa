@@ -74,7 +74,8 @@
       "bvEndYear": "BV End Year",
       "expenseMonth": "Expense Month",
       "buyDate": "Buy Date",
-      "code": "Code"
+      "code": "Code",
+      "maxMonth": "Month Need To Expense"
     },
     "receivePaymentDetail": {
       "run": "RUN REPORT",
@@ -177,7 +178,8 @@
       "bvEndYear": "នៅសល់ចុងឆ្នាំ",
       "expenseMonth": "ចំនួនខែដែលបានបង់រួច",
       "buyDate": "ថ្ងៃទិញ",
-      "code": "លេខកូដ"
+      "code": "លេខកូដ",
+      "maxMonth": "ចំនួនខែដែលត្រូវរំលស់"
     },
     "receivePaymentDetail": {
       "run": "ដំណើរការរបាយការណ៍",

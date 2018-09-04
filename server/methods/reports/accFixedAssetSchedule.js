@@ -29,7 +29,7 @@ Meteor.methods({
                 let bvEndYear = fixedAssetDoc.value;
                 fixedAssetScheduleHtml += `
                     <tr>
-                        <td colspan="6">${accountDoc.code} : ${accountDoc.name}  = ${fixedAssetDoc.value} ${getCurrencySymbolById(fixedAssetDoc.currencyId)}</td>
+                        <td colspan="6">${accountDoc.code} : ${accountDoc.name}  = ${formatCurrency(fixedAssetDoc.value, fixedAssetDoc.currencyId)} ${getCurrencySymbolById(fixedAssetDoc.currencyId)}</td>
                     </tr>
                 `;
 
@@ -45,6 +45,7 @@ Meteor.methods({
                             <td>${formatCurrency(obj.perYear, fixedAssetDoc.currencyId)}</td>
                             <td>${formatCurrency(cumDeprec, fixedAssetDoc.currencyId)}</td>
                             <td>${formatCurrency(bvEndYear, fixedAssetDoc.currencyId)}</td>
+                            <td>${obj.maxMonth}</td>
                             <td>${obj.month}</td>
                         </tr>
                     `;

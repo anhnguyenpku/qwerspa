@@ -243,6 +243,7 @@
                 accountTypes: [],
                 isIndeterminate: true,
                 dateHeader: "",
+                currencyHeader: "",
                 pickerOptions: {
                     shortcuts: [{
                         text: 'Last week',

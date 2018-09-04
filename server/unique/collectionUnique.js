@@ -1,5 +1,6 @@
 import {Acc_ClosingEntry} from '../../imports/collection/accClosingEntry';
 import {Acc_ChartAccountBalance} from '../../imports/collection/accChartAccountBalance';
+import {Acc_ChartAccount} from '../../imports/collection/accChartAccount';
 import {Pos_Invoice} from '../../imports/collection/posInvoice';
 import {Pos_Vendor} from '../../imports/collection/posVendor';
 import {Pos_Customer} from '../../imports/collection/posCustomer';
@@ -17,6 +18,7 @@ import {Pos_Product} from '../../imports/collection/posProduct';
 
 
 Acc_ClosingEntry._ensureIndex({month: 1, year: 1, rolesArea: 1}, {unique: 1});
+Acc_ChartAccount._ensureIndex({code: 1, rolesArea: 1}, {unique: 1});
 Acc_ChartAccountBalance._ensureIndex({month: 1, year: 1, rolesArea: 1, chartAccountId: 1, currencyId: 1}, {unique: 1});
 Pos_Vendor._ensureIndex({name: 1, rolesArea: 1, createdUser: 1, phoneNumber: 1}, {unique: 1});
 Pos_Customer._ensureIndex({name: 1, rolesArea: 1, createdUser: 1, phoneNumber: 1}, {unique: 1});
