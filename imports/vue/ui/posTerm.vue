@@ -414,7 +414,7 @@
                                 });
                                 vm.dialogAddPosTerm = false;
                                 vm.queryData();
-                                vm.$refs["posTermForm"].resetFields();
+                                vm.$refs["posTermFormAdd"].resetFields();
                             } else {
                                 vm.$message({
                                     duration: 1000,
@@ -444,7 +444,7 @@
                                 });
                                 vm.dialogUpdatePosTerm = false;
                                 vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
-                                vm.$refs["posTermForm"].resetFields();
+                                vm.$refs["posTermFormUpdate"].resetFields();
                             } else {
                                 vm.$message({
                                     duration: 1000,

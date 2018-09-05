@@ -142,6 +142,8 @@ Meteor.methods({
             })
         }
 
+        Meteor.call("updatePosProductionById", data.productionId);
+
 
         return id;
     }

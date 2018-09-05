@@ -140,13 +140,18 @@
                         <table class="table table-responsive​​​ table-striped table-hover responstable">
                             <thead>
                             <tr>
-                                <th colspan="5">
+                                <th colspan="3">
                                     <el-input :placeholder="langConfig['searchByInvoice']" v-model="searchByInvoice"
                                               @keyup.native.enter="searchInvoice()">
                                         <template slot="prepend">{{langConfig['invoice']}}:</template>
                                         <el-button slot="append" icon="el-icon-search"
                                                    @click.native="searchInvoice()"></el-button>
                                     </el-input>
+                                </th>
+
+                                <th style="text-align: right; vertical-align: middle;">
+                                    <el-checkbox v-model="isOverDue"
+                                                 :label="langConfig['overdueStatusOnly']"></el-checkbox>
                                 </th>
                                 <th colspan="2">
                                     <el-date-picker
@@ -158,9 +163,17 @@
                                     >
                                     </el-date-picker>
                                 </th>
-                                <th style="text-align: right; vertical-align: middle;" colspan="2">
-                                    <el-checkbox v-model="isOverDue"
-                                                 :label="langConfig['overdueStatusOnly']"></el-checkbox>
+                                <th colspan="3">
+                                    <el-input placeholder="totalPaid"
+                                              v-model.number=totalPaidInput
+                                              @keyup.native="inputTotalPaid()"
+                                              @change="inputTotalPaid()"
+
+                                    >
+                                        <template slot="prepend">{{langConfig['totalPaid']}}:</template>
+                                        <template slot="append">{{currencySymbol}}</template>
+
+                                    </el-input>
                                 </th>
                             </tr>
                             </thead>
@@ -432,6 +445,7 @@
                 searchByDate: "",
                 searchByInvoice: "",
                 isOverDue: false,
+                totalPaidInput: 0,
                 posReceivePaymentForm: {
                     totalPaid: 0,
                     amount: 0,
@@ -681,6 +695,9 @@
                     this.disabledCustomer = true;
 
                 }
+            },
+            "totalPaidInput"(val) {
+                this.totalPaidInput = val || 0;
             }
         },
         methods: {
@@ -946,7 +963,7 @@
                     }
                 })
             },
-            updatePosReceivePaymentDetail(row, index) {
+            updatePosReceivePaymentDetail(row, index, type) {
                 let vm = this;
                 if (row.isPaid === false) {
                     row.paid = 0;
@@ -983,7 +1000,7 @@
                             }
                         }
                         this.posReceivePaymentData[index] = row;
-                        vm.getTotal();
+                        vm.getTotal(type);
                     })
 
                 } else {
@@ -1000,7 +1017,7 @@
                     vm.getTotal();
                 }
             },
-            updatePosReceivePaymentDetailPaid(row, index) {
+            updatePosReceivePaymentDetailPaid(row, index, type) {
                 if (row.netAmount !== row.paid) {
                     if (row.paid > 0) {
                         row.isPaid = true;
@@ -1017,7 +1034,7 @@
                         row.isPaid = false;
                     }
                     this.posReceivePaymentData[index] = row;
-                    this.updatePosReceivePaymentDetail(row, index);
+                    this.updatePosReceivePaymentDetail(row, index, type);
                 }
                 this.getTotal();
             },
@@ -1040,7 +1057,7 @@
 
                 }
             },
-            getTotal() {
+            getTotal(type) {
                 let vm = this;
                 let totalNetAmount = 0;
                 let totalDiscount = 0;
@@ -1052,6 +1069,10 @@
                         totalPaid += parseFloat(vm.$_numeral(obj.paid).value() || 0);
                     }
                 });
+
+                if (type === undefined || type === "") {
+                    vm.totalPaidInput = totalPaid;
+                }
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
                 this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
                 vm.posReceivePaymentForm.totalNetAmount = formatCurrencyLast(totalNetAmount, companyDoc.baseCurrency);
@@ -1141,6 +1162,24 @@
             },
             printReceivePayment(data) {
                 FlowRouter.go('/pos-data/posInvoiceReceivePayment/print?inv=' + data._id);
+            },
+            inputTotalPaid() {
+                let vm = this;
+                let totalPaidInput = vm.totalPaidInput;
+                let ind = 0;
+                vm.posReceivePaymentData.map(function (obj) {
+                    if (obj.isShow) {
+                        if (totalPaidInput >= 0) {
+                            let pay = totalPaidInput > (parseFloat(vm.$_numeral(obj.netAmount).value() || 0)) ? (parseFloat(vm.$_numeral(obj.netAmount).value() || 0)) : totalPaidInput;
+                            obj.paid = pay;
+                            totalPaidInput -= pay;
+                            vm.updatePosReceivePaymentDetailPaid(obj, ind, true);
+                            ind++;
+                        }
+
+                    }
+                });
+
             }
         },
         created() {
