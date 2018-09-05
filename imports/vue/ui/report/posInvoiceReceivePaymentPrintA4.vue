@@ -18,7 +18,7 @@
                                             </span>
 
                               <span style="text-align: center !important;font-size: 15px; border: 0px !important; float: right">
-                                  <p style="font-family: 'Khmer OS Muol' !important;">វិក័យបត្រកបង់ប្រាក់</p>
+                                  <p style="font-family: 'Khmer OS Muol' !important;">វិក័យបត្របង់ប្រាក់</p>
                                   <p>Invoice Payment</p>
                               </span>
                               </div>
@@ -55,9 +55,22 @@
                 <tbody style="margin-bottom: 5px;" v-html="printInvoiceA4Html">
 
                 </tbody>
-
-
             </table>
+                                     <div style="width: 100% !important;">
+                    <div style="width: 30%;text-align: center !important;float: left !important;">
+                           <span style="font-family: 'Khmer OS Muol'">អ្នកទិញ/Buyer</span>
+                    </div>
+
+                    <div style="width: 40%;text-align: center !important;float: left !important;">
+                        <span style="font-family: 'Khmer OS Muol'">អ្នកទទួល/Receiver</span>
+                    </div>
+
+                    <div style="width: 30%;text-align: center !important;float: left !important;">
+                        <span style="font-family: 'Khmer OS Muol'">អ្នកលក់/Seller</span>
+                    </div>
+
+                </div>
+
                     </div>
            </span>
         </a4>

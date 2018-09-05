@@ -59,6 +59,21 @@
 
 
             </table>
+                                     <div style="width: 100% !important;">
+                    <div style="width: 30%;text-align: center !important;float: left !important;">
+                           <span style="font-family: 'Khmer OS Muol'">អ្នកទិញ/Buyer</span>
+                    </div>
+
+                    <div style="width: 40%;text-align: center !important;float: left !important;">
+                        <span style="font-family: 'Khmer OS Muol'">អ្នកទទួល/Receiver</span>
+                    </div>
+
+                    <div style="width: 30%;text-align: center !important;float: left !important;">
+                        <span style="font-family: 'Khmer OS Muol'">អ្នកលក់/Seller</span>
+                    </div>
+
+                </div>
+
                     </div>
            </span>
         </a4>

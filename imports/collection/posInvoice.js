@@ -4,8 +4,7 @@ Pos_Invoice.schema = new SimpleSchema({
     customerId: {
         type: String,
         index: true,
-        label: "Customer",
-        index:true
+        label: "Customer"
     },
 
     locationId: {
