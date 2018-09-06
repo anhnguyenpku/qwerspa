@@ -205,8 +205,27 @@ Meteor.methods({
     queryClassOption(selector) {
         let list = [];
         //selector.status = true;
-        Sch_Class.find(selector).fetch().forEach(function (obj) {
-            list.push({label: obj.name + " - " + obj.classDateName, value: obj._id});
+        Sch_Class.aggregate([
+            {$match: selector},
+            {
+                $lookup: {
+                    from: "sch_time",
+                    localField: "timeId",
+                    foreignField: "_id",
+                    as: "timeDoc"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$timeDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]).forEach(function (obj) {
+            list.push({
+                label: obj.name + " - " + obj.classDateName + "(" + (obj.timeDoc && obj.timeDoc.name || "") + ")",
+                value: obj._id
+            });
         });
         return list;
     }

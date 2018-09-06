@@ -44,6 +44,20 @@ Meteor.methods({
                 },
                 {
                     $skip: options.skip
+                },
+                {
+                    $lookup: {
+                        from: "sch_time",
+                        localField: "timeId",
+                        foreignField: "_id",
+                        as: "timeDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$timeDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
                 }
             ]);
             if (shcClasss.length > 0) {
@@ -129,6 +143,20 @@ Meteor.methods({
                 {
                     $unwind: {
                         path: "$levelDoc",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "sch_time",
+                        localField: "timeId",
+                        foreignField: "_id",
+                        as: "timeDoc"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$timeDoc",
                         preserveNullAndEmptyArrays: true
                     }
                 },

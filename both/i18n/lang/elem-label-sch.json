@@ -319,7 +319,8 @@
       "promoteToGraduated": "Promoted To Graduated",
       "unPromoteToClass": "Un Promote",
       "updateStatusStudent": "Update Status Student",
-      "promotion": "Scholarship"
+      "promotion": "Scholarship",
+      "time": "Time"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -1074,7 +1075,8 @@
       "startClassDate": "ចូលរៀននៅថ្ងៃ",
       "promoteToGraduated": "បញ្ចប់ការសិក្សា",
       "updateStatusStudent": "កែប្រែស្ថានភាពសិស្ស",
-      "promotion": "អាហារូបករណ៍"
+      "promotion": "អាហារូបករណ៍",
+      "time": "ពេលសិក្សា"
     },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

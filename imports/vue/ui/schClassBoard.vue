@@ -67,11 +67,23 @@
                                     </div>
                                 </transition>
                                 <div style="padding: 14px;">
-                                    <span>{{langConfig['teacher']}} : {{d.teacherDoc && d.teacherDoc.personal.name || ""}} ({{d.teacherDoc && d.teacherDoc.personal.phoneNumber || ""}})</span>
+                                    <span><b>{{langConfig['teacher']}} : </b>{{d.teacherDoc && d.teacherDoc.personal.name || ""}} ({{d.teacherDoc && d.teacherDoc.personal.phoneNumber || ""}})</span>
                                     <div class="bottom clearfix">
-                                        <time class="time" style="float: left !important;">{{ d.classDate |
+                                        <time class="time" style="float: left !important;"> <b>{{langConfig['startClassDate']}} :</b> {{
+                                            d.classDate |
                                             momentFormat}}
                                         </time>
+                                        <br>
+                                        <div style="float: left !important;">
+                                            <b>{{langConfig['level']}} :</b>  {{d.levelDoc && d.levelDoc.code || ""}}
+                                            {{d.levelDoc &&
+                                            d.levelDoc.name ||
+                                            ""}}
+                                        </div>
+                                        <br>
+                                        <div style="float: left !important;">
+                                            <b>{{langConfig['time']}} : </b>{{d.timeDoc && d.timeDoc.name|| ""}}
+                                        </div>
                                         <el-button type="text" class="button" style="float: right !important;">
                                             <el-button type="success" icon="el-icon-circle-close-outline"
                                                        @click="closeSchClass(index,d,schClassData)"

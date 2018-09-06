@@ -59,6 +59,10 @@
                             :label="langConfig['khName']">
                     </el-table-column>
                     <el-table-column
+                            prop="timeDoc.name"
+                            :label="langConfig['time']">
+                    </el-table-column>
+                    <el-table-column
                             prop="note"
                             :label="langConfig['desc']">
                     </el-table-column>
