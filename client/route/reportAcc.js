@@ -10,6 +10,7 @@ import '../../imports/ui/report/accountList/accountList';
 import '../../imports/ui/report/balanceSheet/balanceSheet';
 import '../../imports/ui/report/profitLost/profitLost';
 import '../../imports/ui/report/currencyClosing/currencyClosing';
+import '../../imports/ui/report/accFixedAsset/accFixedAsset';
 
 
 //import layout render
@@ -103,6 +104,16 @@ accReport.route('/profitLostReport', {
     parent: 'wb.home',
     action: function (query, params) {
         _Main('acc_profitLostReport');
+    }
+
+});
+
+accReport.route('/fixedAsset', {
+    name: 'acc.fixedAssetReport',
+    title: "Fixed Asset",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('acc_fixedAssetReport');
     }
 
 });

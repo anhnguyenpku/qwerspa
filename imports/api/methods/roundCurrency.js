@@ -2,8 +2,14 @@ import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
 import math from "mathjs";
 import numeral from 'numeral';
 
-export const roundCurrency = (amount, currencyId) => {
-    let settingDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
+export const roundCurrency = (amount, currencyId, rolesArea) => {
+    let area;
+    if (rolesArea) {
+        area = rolesArea;
+    } else {
+        area = Session.get("area");
+    }
+    let settingDoc = WB_waterBillingSetup.findOne({rolesArea: area});
     let newAmount;
     settingDoc.usdDigit = settingDoc.usdDigit || 2;
     settingDoc.khrDigit = settingDoc.khrDigit || -2;

@@ -83,37 +83,42 @@ export class GeneralFunction {
         return returnValue;
     }
 
-    static exchange(curFrom, curTo, val, rolesArea) {
+    static exchange(curFrom, curTo, val, rolesArea, exchangeDocParam) {
         if (val == 0) {
             return val;
         } else {
-            let exchangeDoc = Acc_Exchange.findOne({status: true, rolesArea: rolesArea});
+            let exchangeDoc = {};
+            if (exchangeDocParam) {
+                exchangeDoc = exchangeDocParam;
+            } else {
+                exchangeDoc = Acc_Exchange.findOne({status: true, rolesArea: rolesArea});
+            }
             let result = 0;
             if (exchangeDoc) {
                 if (curFrom == "USD") {
                     if (curTo == "KHR") {
-                        result = roundCurrency(val * exchangeDoc.rates.KHR, "KHR");
+                        result = roundCurrency(val * exchangeDoc.rates.KHR, "KHR", rolesArea);
                     } else if (curTo == "THB") {
-                        result = roundCurrency(val * exchangeDoc.rates.THB, "THB");
+                        result = roundCurrency(val * exchangeDoc.rates.THB, "THB", rolesArea);
                     } else {
                         result = val;
                     }
 
                 } else if (curFrom == "KHR") {
                     if (curTo == "USD") {
-                        result = roundCurrency(val / exchangeDoc.rates.KHR, "USD");
+                        result = roundCurrency(val / exchangeDoc.rates.KHR, "USD", rolesArea);
                     } else if (curTo == "THB") {
                         result = roundCurrency(val * exchangeDoc.rates.THB / exchangeDoc.rates.KHR,
-                            "THB"
+                            "THB", rolesArea
                         );
                     } else {
                         result = val;
                     }
                 } else if (curFrom == "THB") {
                     if (curTo == "USD") {
-                        result = roundCurrency(val / exchangeDoc.rates.THB, "USD");
+                        result = roundCurrency(val / exchangeDoc.rates.THB, "USD", rolesArea);
                     } else if (curTo == "KHR") {
-                        result = roundCurrency(val * exchangeDoc.rates.KHR / exchangeDoc.rates.THB, "KHR"
+                        result = roundCurrency(val * exchangeDoc.rates.KHR / exchangeDoc.rates.THB, "KHR", rolesArea
                         );
                     } else {
                         result = val;

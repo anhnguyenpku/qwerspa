@@ -65,7 +65,7 @@ Meteor.methods({
                     remainAmount = formatCurrency(Math.abs(invoiceList[0].remainKHR), "KHR") + getCurrencySymbolById("KHR");
                 }
             } else if (companyDoc.baseCurrency === "USD") {
-                if (invoiceList[0].remainUSD< 0) {
+                if (invoiceList[0].remainUSD < 0) {
                     returnAmount = translate['returnUSD'];
                     remainAmount = formatCurrency(Math.abs(invoiceList[0].remainUSD), "USD") + getCurrencySymbolById("USD");
                 }
@@ -81,8 +81,8 @@ Meteor.methods({
                     <td style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;text-align: right;padding-bottom: 0px !important;">${returnAmount}</td>
                     <td style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;text-align: right;padding-bottom: 0px !important;text-align: left !important;">${remainAmount}</td>
 
-                    <td colspan="2" style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['total']} :</td>
-                    <td colspan="2" style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].total, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                    <td colspan="3" style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['total']} :</td>
+                    <td style="border-left: 0px !important;border-bottom: 0px !important;border-right: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].total, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
                 </tr>
                `;
 
@@ -90,12 +90,12 @@ Meteor.methods({
 
                 printInvoiceA4Html += `
                 <tr>
-                    <td colspan="4" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['discount']} :</td>
-                    <td colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].discountValue, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                    <td colspan="5" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['discount']} :</td>
+                    <td  style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].discountValue, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
                 </tr>
                 <tr>
-                    <td colspan="4" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['netTotal']} :</td>
-                    <td  colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].netTotal, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                    <td colspan="5" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['netTotal']} :</td>
+                    <td  style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].netTotal, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
                 </tr>
             
             `;
@@ -104,24 +104,24 @@ Meteor.methods({
 
             printInvoiceA4Html += `
                 <tr>
-                    <td colspan="4" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['cutOnPaid']} :</td>
-                    <td  colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].balanceNotCut, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                    <td colspan="5" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['cutOnPaid']} :</td>
+                    <td  style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].balanceNotCut, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
                 </tr>  
             
             `;
             if (invoiceList[0].paidUSD > 0) {
                 printInvoiceA4Html += `
                   <tr>
-                    <td colspan="4" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paidUSD']} :</td>
-                    <td colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: left !important;">${formatCurrency(invoiceList[0].paidUSD, "USD")} ${getCurrencySymbolById("USD")}</td>
+                    <td colspan="5" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paidUSD']} :</td>
+                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: left !important;">${formatCurrency(invoiceList[0].paidUSD, "USD")} ${getCurrencySymbolById("USD")}</td>
                 </tr>
                 `;
             }
             if (invoiceList[0].paidTHB > 0) {
                 printInvoiceA4Html += `
                   <tr>
-                    <td colspan="4" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paidTHB']} :</td>
-                    <td colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: left !important;">${formatCurrency(invoiceList[0].paidTHB, "THB")} ${getCurrencySymbolById("THB")}</td>
+                    <td colspan="5" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paidTHB']} :</td>
+                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: left !important;">${formatCurrency(invoiceList[0].paidTHB, "THB")} ${getCurrencySymbolById("THB")}</td>
                 </tr>
                 `;
             }
@@ -129,8 +129,8 @@ Meteor.methods({
             if (invoiceList[0].paidKHR > 0) {
                 printInvoiceA4Html += `
                   <tr>
-                    <td colspan="4" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paidKHR']} :</td>
-                    <td colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: left !important;">${formatCurrency(invoiceList[0].paidKHR, "KHR")} ${getCurrencySymbolById("KHR")}</td>
+                    <td colspan="5" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paidKHR']} :</td>
+                    <td style="border: 0px !important;padding-bottom: 0px !important;text-align: left !important;">${formatCurrency(invoiceList[0].paidKHR, "KHR")} ${getCurrencySymbolById("KHR")}</td>
                 </tr>
                 `;
             }
@@ -147,14 +147,14 @@ Meteor.methods({
 
 
             printInvoiceA4Html += ` <tr>                    
-                    <td colspan="2" style="border: 0px !important;text-align: center;padding-bottom: 0px !important;">${noteLabel} ${note}</td>
+                    <td colspan="3" style="border: 0px !important;text-align: center;padding-bottom: 0px !important;">${noteLabel} ${note}</td>
                     <th colspan="2" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['paid']} :</th>
-                    <th  colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].paid, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</th>
+                    <th style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].paid, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="border: 0px !important;text-align: center;padding-bottom: 0px !important;">${translate['thankYou']}</td>
+                    <td colspan="3" style="border: 0px !important;text-align: center;padding-bottom: 0px !important;">${translate['thankYou']}</td>
                     <td colspan="2" style="border: 0px !important;text-align: right;padding-bottom: 0px !important;">${translate['totalDue']} :</td>
-                    <td  colspan="2" style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].netTotal - invoiceList[0].paid - invoiceList[0].balanceNotCut, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
+                    <td  style="border: 0px !important;padding-bottom: 0px !important;text-align: right !important;">${formatCurrency(invoiceList[0].netTotal - invoiceList[0].paid - invoiceList[0].balanceNotCut, companyDoc.baseCurrency)} ${getCurrencySymbolById(companyDoc.baseCurrency)}</td>
                 </tr>
                 <tr>
                 <td colspan="6" style="border: 0px !important; text-align: center !important;font-size: 10px !important;">${translate['forQuestion']} ${companyDoc && companyDoc.phoneNumber || ""}</td>

@@ -100,7 +100,7 @@
                                 <el-button type="danger" class="cursor-pointer" icon="el-icon-delete" size="small"
                                            @click="removeFixedAsset(scope.$index,scope.row,fixedAssetData)"></el-button>
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
-                                           @click="dialogUpdateFixedAsset= true ,findFixedAssetById(scope)"></el-button>
+                                           @click="popUpUpdateFixedAsset(scope.row),findFixedAssetById(scope)"></el-button>
 
                                 <el-button type="info" icon="el-icon-printer" size="small" class="cursor-pointer"
                                            @click="printFixedAsstSchedule(scope.row._id)"></el-button>
@@ -479,6 +479,14 @@
 
             },
             removeFixedAsset(index, row, rows) {
+                if (row.transaction[0].month > 0) {
+                    this.$message({
+                        type: 'error',
+                        message: 'Already have expense'
+                    });
+                    return false;
+                }
+
                 this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
@@ -531,6 +539,16 @@
                 }
                 if (this.$refs["fixedAssetFormUpdate"]) {
                     this.$refs["fixedAssetFormUpdate"].resetFields();
+                }
+            },
+            popUpUpdateFixedAsset(data) {
+                if (data.transaction[0].month > 0) {
+                    this.dialogUpdateFixedAsset = true;
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: 'Already have expense'
+                    });
                 }
             }
         },

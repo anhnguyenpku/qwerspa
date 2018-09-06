@@ -1,3 +1,4 @@
+/*
 import firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -15,4 +16,4 @@ export default {
     storage: firebaseApp.storage(),
     storageState: firebase.storage.TaskState,
     messaging: firebaseApp.messaging()
-}
+}*/
