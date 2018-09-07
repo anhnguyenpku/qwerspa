@@ -284,6 +284,7 @@
             }, 300),
             saveExchange(event) {
                 event.preventDefault();
+                let vm = this;
                 this.$refs["exchangeFormAdd"].validate((valid) => {
                     if (valid) {
                         let rates = {};
@@ -324,6 +325,7 @@
 
             },
             updateExchange() {
+                let vm = this;
                 this.$refs["exchangeFormUpdate"].validate((valid) => {
                     if (valid) {
                         let exchangeDoc = {
