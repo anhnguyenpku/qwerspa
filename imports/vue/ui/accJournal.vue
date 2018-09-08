@@ -1152,6 +1152,7 @@
                 // $('#dialog').attr('title', 'New Title').dialog();
 
                 $(".el-dialog__title").text("Payment (Account)");
+                vm.journalForm.method = "";
 
                 Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
                     if (re != undefined) {
@@ -1164,6 +1165,8 @@
             popupJournalReceive() {
                 let vm = this;
                 vm.type = "Receive";
+                vm.journalForm.method = "";
+
                 // $('#dialog').attr('title', 'New Title').dialog();
                 $(".el-dialog__title").text("Receive (Account)");
 
@@ -1297,7 +1300,6 @@
                     });
                     return false;
                 }
-
                 Meteor.call("queryChartAccountById", vm.journalForm.account, (err, data) => {
                     if (data) {
                         vm.journalData.push({
@@ -1375,6 +1377,7 @@
             },
             resetForm() {
                 this.journalData = [];
+                this.journalForm.method = "";
                 if (this.$refs["journalFormAdd"]) {
                     this.$refs["journalFormAdd"].resetFields();
                     this.getTotalDrCr();
