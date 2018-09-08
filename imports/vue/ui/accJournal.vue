@@ -322,7 +322,7 @@
 
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="journalForm" :rules="rules" ref="journalFormPayment" label-width="120px"
+            <el-form :model="journalForm" :rules="rulesPayment" ref="journalFormPayment" label-width="120px"
                      :label-position="labelPosition"
                      class="journalForm">
                 <el-row :gutter="20">
@@ -331,11 +331,14 @@
                             <thead>
                             <tr>
                                 <th colspan="4">
-                                    <el-radio-group v-model="journalForm.method">
-                                        <el-radio v-for="mt in methodOption" :label="mt.value" :key="mt.value" border>
-                                            {{mt.label}}
-                                        </el-radio>
-                                    </el-radio-group>
+                                    <el-form-item prop="method">
+                                        <el-radio-group v-model="journalForm.method">
+                                            <el-radio v-for="mt in methodOption" :label="mt.value" :key="mt.value"
+                                                      border>
+                                                {{mt.label}}
+                                            </el-radio>
+                                        </el-radio-group>
+                                    </el-form-item>
                                 </th>
                             </tr>
                             <tr>
@@ -776,6 +779,18 @@
                     voucherId: [{required: true, type: 'string', message: 'Please input Journal No', trigger: 'blur'}],
                     memo: [{required: true, type: 'string', message: 'Please input Memo', trigger: 'blur'}],
                 },
+                rulesPayment: {
+                    journalDate: [{
+                        type: 'date',
+                        required: true,
+                        message: 'Please input Journal Date',
+                        trigger: 'blur'
+                    }],
+                    currencyId: [{required: true, type: 'string', message: 'Please input Currency', trigger: 'blur'}],
+                    method: [{required: true, type: 'string', message: 'Please input Cash Method', trigger: 'blur'}],
+                    voucherId: [{required: true, type: 'string', message: 'Please input Journal No', trigger: 'blur'}],
+                    memo: [{required: true, type: 'string', message: 'Please input Memo', trigger: 'blur'}],
+                },
 
                 // Options
                 chartAccountDataOption: [],
@@ -1010,6 +1025,15 @@
                             method: vm.journalForm.method
                         };
                         journalDoc.transaction = vm.journalData;
+                        if (journalDoc.transaction.length <= 0) {
+                            vm.$message({
+                                duration: 1000,
+                                message: `Add Payment Account!`,
+                                type: 'error'
+                            });
+                            return false;
+                        }
+
                         Meteor.call("insertJournalPaid", journalDoc, type, (err, result) => {
                             if (!err) {
                                 if (isPrint === true) {
