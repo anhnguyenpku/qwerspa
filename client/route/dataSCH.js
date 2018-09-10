@@ -67,6 +67,64 @@ let schAdmin = FlowRouter.group({
     }]
 });
 
+let schRegister = FlowRouter.group({
+    prefix: '/sch-data',
+    name: 'schData',
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['super', 'register']})) {
+            redirect('wb.home');
+        }
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
+let schBoard = FlowRouter.group({
+    prefix: '/sch-data',
+    name: 'schData',
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['super', 'board']})) {
+            redirect('wb.home');
+        }
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
+let schTeacher = FlowRouter.group({
+    prefix: '/sch-data',
+    name: 'schData',
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['super', 'teacher']})) {
+            redirect('wb.home');
+        }
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
+
 
 // home
 schData.route('/', {
@@ -91,7 +149,7 @@ schData.route('/schStudent', {
 
 import '../../imports/ui/report/schTranscript/schTranscript';
 
-schData.route('/schTranscript/print', {
+schAdmin.route('/schTranscript/print', {
     name: 'sch.schTranscript-print',
     action: function (params, queryParams) {
         BlazeLayout.render('PrintLayout', {printLayout: 'sch_transcriptReport'});
@@ -123,7 +181,7 @@ schData.route('/schTeacher', {
 
 import "../../imports/ui/sch_register/sch_register";
 //Student
-schAdmin.route('/schRegister', {
+schRegister.route('/schRegister', {
     name: 'sch.register',
     title: "Register",
     parent: "wb.home",
@@ -134,7 +192,7 @@ schAdmin.route('/schRegister', {
 
 import "../../imports/ui/sch_class/sch_classBoard";
 //Student
-schAdmin.route('/schClassBoard', {
+schBoard.route('/schClassBoard', {
     name: 'sch.classBoard',
     title: "Class Board",
     parent: "wb.home",
@@ -167,7 +225,7 @@ schPayment.route('/schPayment/print', {
 
 import "../../imports/ui/sch_busRegister/sch_busRegister";
 //Student
-schAdmin.route('/schBusRegister', {
+schRegister.route('/schBusRegister', {
     name: 'sch.busRegister',
     title: "Bus Register",
     parent: "wb.home",
@@ -201,7 +259,7 @@ schPayment.route('/schBusPayment/print', {
 
 import "../../imports/ui/sch_teacherActivity/sch_teacherActivity";
 //Student
-schData.route('/schTeacherActivity', {
+schTeacher.route('/schTeacherActivity', {
     name: 'sch.teacherActivity',
     title: "Teacher Activity",
     parent: "wb.home",

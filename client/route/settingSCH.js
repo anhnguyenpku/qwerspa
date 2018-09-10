@@ -66,6 +66,28 @@ let schDepartment = FlowRouter.group({
     }]
 });
 
+let schTeacher= FlowRouter.group({
+    prefix: '/sch-setting',
+    name: 'schSetting',
+    title: "Setting",
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['admin', 'setting', 'super', 'teacher']})) {
+            redirect('wb.home');
+        }
+
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
+
 import '../../imports/ui/manage_module/manage_module';
 
 import "../../imports/ui/sch_major/sch_major";
@@ -195,7 +217,7 @@ schSetting.route('/schPosition', {
 
 import "../../imports/ui/sch_activity/sch_activity";
 //Student
-schSetting.route('/schActivity', {
+schTeacher.route('/schActivity', {
     name: 'sch.activity',
     title: "Activity",
     parent: "wb.home",
