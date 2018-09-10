@@ -220,6 +220,9 @@ Meteor.methods({
                     path: "$timeDoc",
                     preserveNullAndEmptyArrays: true
                 }
+            },
+            {
+                $limit: 200
             }
         ]).forEach(function (obj) {
             list.push({
@@ -243,9 +246,36 @@ Meteor.methods({
             ];
         }
         selector.status = true;
-        return Sch_Class.find(selector, {limit: 100}).fetch().map(obj => ({
-            label: obj.name + " - " + obj.classDateName, value: obj._id
-        }));
+
+
+        let list = [];
+
+        Sch_Class.aggregate([
+            {$match: selector},
+            {
+                $lookup: {
+                    from: "sch_time",
+                    localField: "timeId",
+                    foreignField: "_id",
+                    as: "timeDoc"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$timeDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $limit: 200
+            }
+        ]).forEach(function (obj) {
+            list.push({
+                label: obj.name + " - " + obj.classDateName + "(" + (obj.timeDoc && obj.timeDoc.name || "") + ")",
+                value: obj._id
+            });
+        });
+        return list;
     },
     queryClassOptionSearchStatusNull(q, date) {
         let selector = {};
@@ -266,16 +296,64 @@ Meteor.methods({
         } else {
             selector.status = true;
         }
-        return Sch_Class.find(selector, {limit: 100}).fetch().map(obj => ({
-            label: obj.name + " - " + obj.classDateName, value: obj._id
-        }));
+
+        let list = [];
+
+        Sch_Class.aggregate([
+            {$match: selector},
+            {
+                $lookup: {
+                    from: "sch_time",
+                    localField: "timeId",
+                    foreignField: "_id",
+                    as: "timeDoc"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$timeDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $limit: 200
+            }
+        ]).forEach(function (obj) {
+            list.push({
+                label: obj.name + " - " + obj.classDateName + "(" + (obj.timeDoc && obj.timeDoc.name || "") + ")",
+                value: obj._id
+            });
+        });
+
+        return list;
     },
     queryClassOptionActive(selector) {
         let list = [];
         selector.status = true;
-        Sch_Class.find(selector).fetch().forEach(function (obj) {
-            list.push({label: obj.name + " - " + obj.classDateName, value: obj._id});
+
+        Sch_Class.aggregate([
+            {$match: selector},
+            {
+                $lookup: {
+                    from: "sch_time",
+                    localField: "timeId",
+                    foreignField: "_id",
+                    as: "timeDoc"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$timeDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]).forEach(function (obj) {
+            list.push({
+                label: obj.name + " - " + obj.classDateName + "(" + (obj.timeDoc && obj.timeDoc.name || "") + ")",
+                value: obj._id
+            });
         });
+
         return list;
     }
     ,

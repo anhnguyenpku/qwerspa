@@ -68,7 +68,7 @@ Meteor.methods({
             return data;
         }
     },
-    querySchClassBoard({q, filter, options = {limit: 10, skip: 0}}) {
+    querySchClassBoard({q, filter, faculty, major, options = {limit: 10, skip: 0}}) {
         if (Meteor.userId()) {
             let data = {
                 content: [],
@@ -76,6 +76,13 @@ Meteor.methods({
             };
             let selector = {};
             selector.status = true;
+            let selectorBoard = {};
+
+            if (major !== "" && major !== undefined) {
+                selectorBoard["levelDoc.majorId"] = major;
+
+            }
+
             if (!!q) {
                 let reg = new RegExp(q);
                 if (!!filter) {
@@ -99,6 +106,8 @@ Meteor.methods({
                     }, {desc: {$regex: reg, $options: 'mi'}}];
                 }
             }
+
+
             let shcClasss = Sch_Class.aggregate([
                 {
                     $match: selector
@@ -147,6 +156,9 @@ Meteor.methods({
                     }
                 },
                 {
+                    $match: selectorBoard
+                },
+                {
                     $lookup: {
                         from: "sch_time",
                         localField: "timeId",
@@ -165,7 +177,6 @@ Meteor.methods({
                         "levelDoc.code": 1
                     }
                 },
-
                 {
                     $lookup: {
                         from: "sch_major",

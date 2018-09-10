@@ -5,14 +5,52 @@
                 <i class="material-icons"><i class="material-icons">streetview</i></i>
             </div>
             <el-row type="flex" justify="right">
-                <el-col :span="8">
-                    <h4>
+                <el-col :span="5">
+                    <h2>
                         <a class="cursor-pointer" @click="dialogAddSchClass = true,resetForm()">
                             {{langConfig['title']}}
                         </a>
+                    </h2>
+                </el-col>
+
+                <el-col :span="5">
+                    <h4>
+                        <el-select style="display: block !important;width: 100% !important;"
+                                   filterable
+                                   clearable
+                                   v-model="facultyBoardId"
+                                   :placeholder="langConfig['faculty']">
+                            <el-option
+                                    v-for="item in facultyBoardList"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                    :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
                     </h4>
                 </el-col>
-                <el-col :span="16" style="text-align: right; margin-right: 10px">
+                <el-col :span="2">
+                    <div></div>
+                </el-col>
+                <el-col :span="5">
+                    <h4>
+                        <el-select style="display: block !important;width: 100% !important;"
+                                   filterable
+                                   v-model="majorBoardId"
+                                   clearable
+                                   :placeholder="langConfig['major']">
+                            <el-option
+                                    v-for="item in majorBoardList"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                    :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </h4>
+                </el-col>
+                <el-col :span="8" style="text-align: right; margin-right: 10px">
                     <br>
                     <el-row type="flex" justify="center">
                         <el-col :span="8"></el-col>
@@ -69,13 +107,14 @@
                                 <div style="padding: 14px;">
                                     <span><b>{{langConfig['teacher']}} : </b>{{d.teacherDoc && d.teacherDoc.personal.name || ""}} ({{d.teacherDoc && d.teacherDoc.personal.phoneNumber || ""}})</span>
                                     <div class="bottom clearfix">
-                                        <time class="time" style="float: left !important;"> <b>{{langConfig['startClassDate']}} :</b> {{
+                                        <time class="time" style="float: left !important;"><b>{{langConfig['startClassDate']}}
+                                            :</b> {{
                                             d.classDate |
                                             momentFormat}}
                                         </time>
                                         <br>
                                         <div style="float: left !important;">
-                                            <b>{{langConfig['level']}} :</b>  {{d.levelDoc && d.levelDoc.code || ""}}
+                                            <b>{{langConfig['level']}} :</b> {{d.levelDoc && d.levelDoc.code || ""}}
                                             {{d.levelDoc &&
                                             d.levelDoc.name ||
                                             ""}}
@@ -763,6 +802,8 @@
                 promotionList: [],
                 classList: [],
                 majorList: [],
+                facultyBoardList: [],
+                majorBoardList: [],
                 rules: {},
                 studentList: [],
                 studentListNotPromote: [],
@@ -781,6 +822,8 @@
                 majorName: "",
                 levelName: "",
                 oldClassId: "",
+                facultyBoardId: "",
+                majorBoardId: "",
                 numSelectStudentPromoted: 0,
                 rulesUpdateStatus: {
                     statusId: [{
@@ -859,6 +902,18 @@
                         }
                     }
                 })
+            },
+            "facultyBoardId"(val) {
+                this.majorBoardOpt(val);
+                this.facultyBoardId = val;
+                this.majorBoardId = "";
+                this.queryData();
+
+            },
+            "majorBoardId"(val) {
+                this.majorBoardId = val;
+                this.queryData();
+
             }
         }
         ,
@@ -878,9 +933,12 @@
             }
             ,
             queryData: _.debounce(function (val, skip, limit) {
+                let vm = this;
                 Meteor.call('querySchClassBoard', {
                     q: val,
-                    filter: this.filter,
+                    filter: vm.filter,
+                    faculty: vm.facultyBoardId,
+                    major: vm.majorBoardId,
                     options: {skip: skip || 0, limit: limit || 12}
                 }, (err, result) => {
                     if (!err) {
@@ -929,6 +987,19 @@
                 }
                 Meteor.call("queryMajorOption", selector, (err, result) => {
                     this.majorList = result;
+                })
+            },
+            majorBoardOpt(val) {
+                let selector = {};
+                selector.facultyId = val;
+                Meteor.call("queryMajorOption", selector, (err, result) => {
+                    this.majorBoardList = result;
+                })
+            },
+            facultyBoardOpt() {
+                let selector = {};
+                Meteor.call("queryFacultyOption", selector, (err, result) => {
+                    this.facultyBoardList = result;
                 })
             },
             classOpt(val) {
@@ -1311,6 +1382,7 @@
         created() {
             this.isSearching = true;
             this.queryData();
+            this.facultyBoardOpt();
         }
         ,
         computed: {

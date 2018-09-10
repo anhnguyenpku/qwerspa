@@ -320,7 +320,8 @@
       "unPromoteToClass": "Un Promote",
       "updateStatusStudent": "Update Status Student",
       "promotion": "Scholarship",
-      "time": "Time"
+      "time": "Time",
+      "faculty":"Faculty"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -1076,7 +1077,8 @@
       "promoteToGraduated": "បញ្ចប់ការសិក្សា",
       "updateStatusStudent": "កែប្រែស្ថានភាពសិស្ស",
       "promotion": "អាហារូបករណ៍",
-      "time": "ពេលសិក្សា"
+      "time": "ពេលសិក្សា",
+      "faculty":"មហាវិទ្យាល័យ"
     },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
