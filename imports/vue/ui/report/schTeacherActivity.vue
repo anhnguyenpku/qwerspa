@@ -345,11 +345,11 @@
             handleRun() {
                 this.loading = true;
 
-                if (this.params.date == "" || this.params.date == undefined) {
+                /*if (this.params.date == "" || this.params.date == undefined) {
                     alertify.error("Date can't not empty!!");
                     this.loading = false;
                     return false;
-                }
+                }*/
                 Meteor.call('schTeacherActivityReport', this.params, this.langConfig, (err, result) => {
                     if (result) {
                         this.teacherActivityHtml = result.teacherActivityHTML;

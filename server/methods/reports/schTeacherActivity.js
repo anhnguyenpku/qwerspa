@@ -30,32 +30,34 @@ Meteor.methods({
 
         let companyDoc = WB_waterBillingSetup.findOne({});
 
-        parameter.$or = [
-            {
-                startDate: {
-                    $lte: moment(params.date[1]).endOf("day").toDate(),
-                    $gte: moment(params.date[0]).endOf("day").toDate(),
-                }
-            }, {
-
-                endDate: {
-                    $lte: moment(params.date[1]).endOf("day").toDate(),
-                    $gte: moment(params.date[0]).startOf("day").toDate()
-                }
-            }, {
-                $and: [{
+        if (params.date !== null && params.date !== "" && params.date !== undefined) {
+            parameter.$or = [
+                {
                     startDate: {
-                        $lte: moment(params.date[0]).endOf("day").toDate(),
-                    },
+                        $lte: moment(params.date[1]).endOf("day").toDate(),
+                        $gte: moment(params.date[0]).endOf("day").toDate(),
+                    }
+                }, {
+
                     endDate: {
-                        $gte: moment(params.date[1]).startOf("day").toDate()
-                    },
+                        $lte: moment(params.date[1]).endOf("day").toDate(),
+                        $gte: moment(params.date[0]).startOf("day").toDate()
+                    }
+                }, {
+                    $and: [{
+                        startDate: {
+                            $lte: moment(params.date[0]).endOf("day").toDate(),
+                        },
+                        endDate: {
+                            $gte: moment(params.date[1]).startOf("day").toDate()
+                        },
+                    }
+                    ]
+
+
                 }
-                ]
-
-
-            }
-        ]
+            ]
+        }
 
         let teacherActivityHTML = "";
 
@@ -121,7 +123,11 @@ Meteor.methods({
             });
         }
 
-        data.dateHeader = moment(params.date[0]).format("DD/MM/YYYY") + " - " + moment(params.date[1]).format("DD/MM/YYYY");
+        if (params.date !== null && params.date !== "" && params.date !== undefined) {
+            data.dateHeader = moment(params.date && params.date[0] || "").format("DD/MM/YYYY") + " - " + moment(params.date && params.date[1] || "").format("DD/MM/YYYY");
+        } else {
+            data.dateHeader = "";
+        }
         data.teacherActivityHTML = teacherActivityHTML;
         return data;
     }
