@@ -6,7 +6,7 @@ import {Sch_Register} from "../../../imports/collection/schRegister";
 import {Pos_Invoice} from "../../../imports/collection/posInvoice";
 
 Meteor.methods({
-    querySchStudent({q, filter, options = {limit: 10, skip: 0}}) {
+    querySchStudent({q, filter, options = {limit: 10, skip: 0}, sortItem}) {
         if (Meteor.userId()) {
             let data = {
                 content: [],
@@ -29,14 +29,23 @@ Meteor.methods({
                     ];
                 }
             }
+
+            let selectorSort = {};
+            if (sortItem === "createdAt") {
+                selectorSort = {createdAt: -1};
+
+            } else if (sortItem === "latinName") {
+                selectorSort = {"personal.latinName": 1}
+            } else if (sortItem === "name") {
+                selectorSort = {"personal.name": 1}
+            }
+
             let schStudents = Sch_Student.aggregate([
                 {
                     $match: selector
                 },
                 {
-                    $sort: {
-                        createdAt: -1
-                    }
+                    $sort: selectorSort
                 },
                 {
                     $limit: options.limit

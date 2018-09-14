@@ -16,13 +16,24 @@
                     <br>
                     <el-row type="flex" justify="center">
                         <el-col :span="8"></el-col>
-                        <el-col :span="8"></el-col>
-                        <el-col :span="8">
+                        <el-col :span="4"></el-col>
+                        <el-col :span="12">
                             <el-input
                                     :placeholder="langConfig['searchHere']"
                                     suffix-icon="el-icon-search"
                                     v-model="searchData"
                             >
+                                <el-select v-model="sortItem" slot="prepend"
+                                           :placeholder="langConfig['chooseItem']"
+                                >
+                                    <el-option
+                                            v-for="item in sortItemList"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                            :disabled="item.disabled">
+                                    </el-option>
+                                </el-select>
                             </el-input>
                         </el-col>
                     </el-row>
@@ -1176,6 +1187,12 @@
                 imgUrl: "",
                 imgUrlUpdate: "",
                 thumbImgCroppa: null,
+                sortItem: "createdAt",
+                sortItemList: [
+                    {label: "Created At", value: "createdAt"},
+                    {label: "Latin Name", value: "latinName"},
+                    {label: "Name", value: "name"},
+                ],
                 cousinData: [{
                     name: "",
                     gender: "",
@@ -1256,6 +1273,9 @@
                     "code":
                         [{required: true, message: 'Please input code', trigger: 'blur'}],
 
+                    "dob":
+                        [{required: true, message: 'Please input dob', trigger: 'blur'}],
+
 
                 },
                 skip: 0
@@ -1282,6 +1302,11 @@
                     this.generateThumbImgUrl();
                 }
             },
+            "sortItem"(val) {
+                let vm = this;
+                this.sortItem = val;
+                this.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
+            }
 
         },
         methods: {
@@ -1295,7 +1320,8 @@
                 Meteor.call('querySchStudent', {
                     q: val,
                     filter: this.filter,
-                    options: {skip: skip || 0, limit: limit || 10}
+                    options: {skip: skip || 0, limit: limit || 10},
+                    sortItem: this.sortItem
                 }, (err, result) => {
                     if (!err) {
                         this.schStudentData = result.content;
@@ -1497,6 +1523,7 @@
                                         });
                                 }
                                 vm.dialogAddSchStudent = false;
+                                vm.sortItem = "createdAt";
                                 vm.queryData();
                                 vm.$refs["schStudentFormAdd"].resetFields();
                                 vm.resetForm();

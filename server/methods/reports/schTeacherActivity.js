@@ -114,7 +114,7 @@ Meteor.methods({
                             <td style="text-align: center !important;">${obj.startDateName}</td>
                             <td style="text-align: center !important;">${obj.endDateName}</td>
                             <td style="text-align: center !important;">${obj.activityDoc.name}</td>
-                            <td style="text-align: center !important;">${obj.desc}</td>
+                            <td style="text-align: center !important;">${obj.desc || ""}</td>
 
                         </tr>
                     `;
