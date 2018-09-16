@@ -5,6 +5,7 @@ import {Pos_PayBill} from '../../../imports/collection/posPayBill';
 import {Pos_Vendor} from '../../../imports/collection/posVendor';
 import {Pos_Customer} from '../../../imports/collection/posCustomer';
 import {Pos_AverageInventory} from '../../../imports/collection/posAverageInventory';
+import {Pos_AverageInventory2} from '../../../imports/collection/posAverageInventory';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {formatCurrency, formatCurrencyLast, getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
@@ -14,6 +15,9 @@ import {Pos_Location} from "../../../imports/collection/posLocation";
 import {Acc_Journal} from "../../../imports/collection/accJournal";
 import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
 import numeral from "numeral";
+import {Pos_Production} from "../../../imports/collection/posProduction";
+import {Pos_ProductionResult} from "../../../imports/collection/posProductionResult";
+import {Pos_ConvertInventory} from "../../../imports/collection/posConvertInventory";
 
 Meteor.methods({
     addPosAverageInventory(data) {
@@ -785,48 +789,128 @@ Meteor.methods({
             return i;
         }
     },
+
     fixStock() {
-        let billList = Pos_Bill.find().fetch();
-        billList.forEach((data) => {
-            data.id = data._id;
-            data.transactionType = "Bill";
-            Meteor.call("addPosAverageInventory", data, (err, result) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            })
-        });
-        console.log("Finish Bill");
+        let startInv = Pos_AverageInventory2.findOne({}, {sort: {averageInventoryDate: 1}});
+        let endInv = Pos_AverageInventory2.findOne({}, {sort: {averageInventoryDate: -1}});
+        console.log(startInv);
+        console.log(startInv.averageInventoryDate.getTime());
+        console.log(endInv.averageInventoryDate.getTime());
+        for (let startDate = startInv.averageInventoryDate.getTime(); startDate <= endInv.averageInventoryDate.getTime();) {
+            let selectorBill = {};
+            selectorBill.billDate = {
+                $gte: moment(startDate).startOf("days").toDate(),
+                $lte: moment(startDate).endOf("days").toDate(),
+            }
+            let billList = Pos_Bill.find(selectorBill).fetch();
+            billList.forEach((data) => {
+                data.id = data._id;
+                data.transactionType = "Bill";
+                Meteor.call("addPosAverageInventory", data, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                })
+            });
+            //console.log("Finish Bill");
+
+            let selectorProduction = {};
+            selectorProduction.date = {
+                $gte: moment(startDate).startOf("days").toDate(),
+                $lte: moment(startDate).endOf("days").toDate(),
+            }
+            let productionList = Pos_Production.find(selectorProduction).fetch();
+
+            productionList.forEach((data) => {
+                data.id = data._id;
+                data.transactionType = "Production";
+                Meteor.call("addPosAverageInventory", data, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                })
+            });
+            //console.log("Finish Production");
 
 
-        let transferList = Pos_TransferInventory.find().fetch();
+            let selectorProductionResult = {};
+            selectorProductionResult.date = {
+                $gte: moment(startDate).startOf("days").toDate(),
+                $lte: moment(startDate).endOf("days").toDate(),
+            }
+            let productionListResult = Pos_ProductionResult.find(selectorProductionResult).fetch();
 
-        transferList.forEach((data) => {
-            data.id = data._id;
-            data.transactionType = "Transfer Inventory";
-            Meteor.call("addPosAverageInventory", data, (err, result) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            })
-        });
-        console.log("Finish Transfer");
+            productionListResult.forEach((data) => {
+                data.id = data._id;
+                data.transactionType = "Production Result";
+                Meteor.call("addPosAverageInventory", data, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                })
+            });
+            //console.log("Finish Production Result");
+
+            let selectorConvert = {};
+            selectorConvert.date = {
+                $gte: moment(startDate).startOf("days").toDate(),
+                $lte: moment(startDate).endOf("days").toDate(),
+            }
+            let convertStock = Pos_ConvertInventory.find(selectorConvert).fetch();
+
+            convertStock.forEach((data) => {
+                data.id = data._id;
+                data.transactionType = "Convert Inventory";
+                Meteor.call("addPosAverageInventory", data, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                })
+            });
+            //console.log("Finish Convert Inventory");
+
+            let selectorTransfer = {};
+            selectorTransfer.transferInventoryDate = {
+                $gte: moment(startDate).startOf("days").toDate(),
+                $lte: moment(startDate).endOf("days").toDate(),
+            }
+            let transferList = Pos_TransferInventory.find(selectorTransfer).fetch();
+
+            transferList.forEach((data) => {
+                data.id = data._id;
+                data.transactionType = "Transfer Inventory";
+                Meteor.call("addPosAverageInventory", data, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                })
+            });
+            //console.log("Finish Transfer");
 
 
-        let invoiceList = Pos_Invoice.find().fetch();
-        invoiceList.forEach((data) => {
-            data.id = data._id;
-            data.transactionType = "Invoice";
+            let selectorInvoice = {};
+            selectorInvoice.invoiceDate = {
+                $gte: moment(startDate).startOf("days").toDate(),
+                $lte: moment(startDate).endOf("days").toDate(),
+            }
+            let invoiceList = Pos_Invoice.find(selectorInvoice).fetch();
+            invoiceList.forEach((data) => {
+                data.id = data._id;
+                data.transactionType = "Invoice";
 
 
-            Meteor.call("addPosAverageInventory", data, (err, result) => {
-                if (err) {
-                    console.log(err.message);
+                Meteor.call("addPosAverageInventory", data, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
 
-                }
-            })
-        });
-        console.log("Finish Invoice");
+                    }
+                })
+            });
+            //console.log("Finish Invoice");
+            console.log("Finish" + startDate);
+            startDate += 86400000;
+            console.log(startDate);
+        }
     }
 });
 
