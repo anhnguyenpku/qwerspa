@@ -153,42 +153,44 @@ Meteor.methods({
         });
 
         let id = Pos_Invoice.insert(data);
-        Pos_Customer.direct.update({_id: data.customerId}, {$inc: {invoiceNumber: 1}});
-        if (data.paid > 0) {
+        if (id) {
+            Pos_Customer.direct.update({_id: data.customerId}, {$inc: {invoiceNumber: 1}});
+            if (data.paid > 0) {
 
-            let posReceivePaymentDoc = {
-                totalPaid: data.paid,
-                totalNetAmount: data.netTotal,
-                totalDiscount: data.discountValue,
+                let posReceivePaymentDoc = {
+                    totalPaid: data.paid,
+                    totalNetAmount: data.netTotal,
+                    totalDiscount: data.discountValue,
 
-                balanceUnPaid: data.netTotal - data.paid,
-                totalAmount: data.total,
+                    balanceUnPaid: data.netTotal - data.paid,
+                    totalAmount: data.total,
 
-                receivePaymentDate: moment(data.invoiceDate).toDate(),
-                receivePaymentDateName: moment(data.invoiceDate).format("DD/MM/YYYY"),
-                note: data.note,
-                address: data.address,
+                    receivePaymentDate: moment(data.invoiceDate).toDate(),
+                    receivePaymentDateName: moment(data.invoiceDate).format("DD/MM/YYYY"),
+                    note: data.note,
+                    address: data.address,
 
-                rolesArea: data.rolesArea,
-                customerId: data.customerId,
-                invoiceId: id,
-                invoiceNo: data.invoiceNo,
-                canRemove: false,
-                locationId: data.locationId,
-                closeDate: data.netTotal - data.paid == 0 ? moment(data.invoiceDate).toDate() : "",
-                transactionType: isReceiveItem == true ? "Invoice Sale Order" : (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
-            };
+                    rolesArea: data.rolesArea,
+                    customerId: data.customerId,
+                    invoiceId: id,
+                    invoiceNo: data.invoiceNo,
+                    canRemove: false,
+                    locationId: data.locationId,
+                    closeDate: data.netTotal - data.paid == 0 ? moment(data.invoiceDate).toDate() : "",
+                    transactionType: isReceiveItem == true ? "Invoice Sale Order" : (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
+                };
 
-            Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.invoiceDate, (err, result) => {
-                posReceivePaymentDoc.invoice = result;
-                result.forEach((obj) => {
-                    if (obj._id != id) {
-                        posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
-                    }
-                });
-                Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
-            })
+                Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.invoiceDate, (err, result) => {
+                    posReceivePaymentDoc.invoice = result;
+                    result.forEach((obj) => {
+                        if (obj._id != id) {
+                            posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
+                        }
+                    });
+                    Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
+                })
 
+            }
         }
 
         if (id) {
@@ -261,56 +263,60 @@ Meteor.methods({
             {
                 $set: data
             });
-        Pos_ReceivePayment.direct.remove({invoiceId: _id});
-        if (data.paid > 0) {
-            let posReceivePaymentDoc = {
-                    totalPaid: data.paid,
-                    totalNetAmount: data.netTotal,
-                    totalDiscount: data.discountValue,
 
-                    balanceUnPaid: data.netTotal - data.paid,
-                    totalAmount: data.total,
+        if (isUpdated) {
 
-                    receivePaymentDate: moment(data.invoiceDate).toDate(),
-                    receivePaymentDateName: moment(data.invoiceDate).format("DD/MM/YYYY"),
-                    note: data.note,
-                    address: data.address,
+            Pos_ReceivePayment.direct.remove({invoiceId: _id});
+            if (data.paid > 0) {
+                let posReceivePaymentDoc = {
+                        totalPaid: data.paid,
+                        totalNetAmount: data.netTotal,
+                        totalDiscount: data.discountValue,
 
-                    rolesArea: data.rolesArea,
-                    customerId: data.customerId,
-                    invoiceId: _id,
-                    invoiceNo: data.invoiceNo,
-                    canRemove: false,
-                    locationId: data.locationId,
-                    closeDate: data.netTotal - data.paid === 0 ? moment(data.invoiceDate).toDate() : "",
-                    transactionType: (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
+                        balanceUnPaid: data.netTotal - data.paid,
+                        totalAmount: data.total,
 
-                }
-            ;
+                        receivePaymentDate: moment(data.invoiceDate).toDate(),
+                        receivePaymentDateName: moment(data.invoiceDate).format("DD/MM/YYYY"),
+                        note: data.note,
+                        address: data.address,
 
-            /*posReceivePaymentDoc.invoice = [
-                {
-                    _id: _id,
-                    invoiceNo: data.invoiceNo,
-                    dueDate: data.dueDate,
-                    isApplyTerm: false,
-                    isPaid: true,
-                    amount: data.total,
-                    discount: 0,
-                    netAmount: data.total,
-                    paid: data.paid
-                }
-            ];
-            */
-            Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.invoiceDate, (err, result) => {
-                posReceivePaymentDoc.invoice = result;
-                result.forEach((obj) => {
-                    if (obj._id != _id) {
-                        posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
+                        rolesArea: data.rolesArea,
+                        customerId: data.customerId,
+                        invoiceId: _id,
+                        invoiceNo: data.invoiceNo,
+                        canRemove: false,
+                        locationId: data.locationId,
+                        closeDate: data.netTotal - data.paid === 0 ? moment(data.invoiceDate).toDate() : "",
+                        transactionType: (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
+
                     }
-                });
-                Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
-            })
+                ;
+
+                /*posReceivePaymentDoc.invoice = [
+                    {
+                        _id: _id,
+                        invoiceNo: data.invoiceNo,
+                        dueDate: data.dueDate,
+                        isApplyTerm: false,
+                        isPaid: true,
+                        amount: data.total,
+                        discount: 0,
+                        netAmount: data.total,
+                        paid: data.paid
+                    }
+                ];
+                */
+                Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.invoiceDate, (err, result) => {
+                    posReceivePaymentDoc.invoice = result;
+                    result.forEach((obj) => {
+                        if (obj._id != _id) {
+                            posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
+                        }
+                    });
+                    Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
+                })
+            }
         }
 
         if (isUpdated) {

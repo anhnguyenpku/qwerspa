@@ -7,8 +7,7 @@
             <el-row type="flex" justify="right">
                 <el-col :span="8">
                     <h4>
-                        <a class="cursor-pointer" @click="dialogAddPosProduction = true,resetForm()">
-                            <i class="fa fa-plus"></i> {{langConfig['title']}}
+                        <a class="cursor-pointer" @click="dialogAddPosProduction = true,resetForm()">{{langConfig['title']}}
                         </a>
                     </h4>
                 </el-col>

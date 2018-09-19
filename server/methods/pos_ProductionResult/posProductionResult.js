@@ -140,9 +140,8 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+            Meteor.call("updatePosProductionById", data.productionId);
         }
-
-        Meteor.call("updatePosProductionById", data.productionId);
 
 
         return id;

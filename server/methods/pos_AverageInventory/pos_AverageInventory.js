@@ -167,6 +167,9 @@ Meteor.methods({
                             "item.$.totalCost": (onHandInventory && onHandInventory.averageCost || 0) * doc.qty
                         }
                     });
+
+
+
                 }
             })
 

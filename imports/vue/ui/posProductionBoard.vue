@@ -98,7 +98,7 @@
                 :visible.sync="dialogAddPosProductionResult"
                 width="40%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="posProductionResultForm" :rules="rules" ref="posProductionResultFormAdd"
+            <el-form :model="posProductionResultForm" :rules="productionResultRules" ref="posProductionResultFormAdd"
                      label-width="120px"
                      class="posProductionResultForm">
                 <el-form-item :label="langConfig['production']" prop="productionId">
@@ -270,6 +270,20 @@
                 },
 
                 rules: {},
+                productionResultRules: {
+                    date: [{
+                        type: 'date',
+                        required: true,
+                        message: 'Please input PayBillDate',
+                        trigger: 'blur'
+                    }],
+                    locationId: [{
+                        required: true,
+                        type: 'string',
+                        message: 'Please choose Location',
+                        trigger: 'change'
+                    }]
+                },
                 productionOption: [],
                 skip: 0
             }
