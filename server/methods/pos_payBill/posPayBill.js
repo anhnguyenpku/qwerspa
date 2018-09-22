@@ -165,42 +165,44 @@ Meteor.methods({
     },
     removePosPayBill(id) {
         let payBillDoc = Pos_PayBill.findOne({_id: id});
-        if (payBillDoc) {
-            payBillDoc.bill.forEach((data) => {
-                let billDoc = Pos_Bill.findOne({_id: data._id});
-                let newStatus = billDoc.status;
-
-                if (billDoc.paid - (data.paid + data.discount) > 0) {
-                    newStatus = "Partial";
-                } else {
-                    newStatus = "Active";
-                }
-
-                Pos_Bill.direct.update({_id: data._id}, {
-                    $set: {status: newStatus, closeDate: ""},
-                    $inc: {
-                        paid: -(data.paid + data.discount),
-                        paymentNumber: -1
-                    }
-                }, true);
-
-                Pos_PayBill.direct.update({
-                        "bill._id": data._id,
-                        createdAt: {$gt: payBillDoc.createdAt}
-                    },
-                    {
-
-                        $inc: {
-                            "bill.$.amount": (data.paid + data.discount),
-                            "bill.$.netAmount": (data.paid + data.discount),
-                            totalAmount: (data.paid + data.discount),
-                            totalNetAmount: (data.paid + data.discount),
-                            balanceUnPaid: (data.paid + data.discount)
-                        }
-                    }, {multi: true}, true);
-            })
-        }
         let isRemove = Pos_PayBill.remove({_id: id});
+        if (isRemove) {
+            if (payBillDoc) {
+                payBillDoc.bill.forEach((data) => {
+                    let billDoc = Pos_Bill.findOne({_id: data._id});
+                    let newStatus = billDoc.status;
+
+                    if (billDoc.paid - (data.paid + data.discount) > 0) {
+                        newStatus = "Partial";
+                    } else {
+                        newStatus = "Active";
+                    }
+
+                    Pos_Bill.direct.update({_id: data._id}, {
+                        $set: {status: newStatus, closeDate: ""},
+                        $inc: {
+                            paid: -(data.paid + data.discount),
+                            paymentNumber: -1
+                        }
+                    }, true);
+
+                    Pos_PayBill.direct.update({
+                            "bill._id": data._id,
+                            createdAt: {$gt: payBillDoc.createdAt}
+                        },
+                        {
+
+                            $inc: {
+                                "bill.$.amount": (data.paid + data.discount),
+                                "bill.$.netAmount": (data.paid + data.discount),
+                                totalAmount: (data.paid + data.discount),
+                                totalNetAmount: (data.paid + data.discount),
+                                balanceUnPaid: (data.paid + data.discount)
+                            }
+                        }, {multi: true}, true);
+                })
+            }
+        }
 
         //Integrated To Account===============================================================================================
         if (isRemove) {

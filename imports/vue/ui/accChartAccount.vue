@@ -447,7 +447,9 @@
     </div>
 </template>
 <script>
+    let CountRow = new Mongo.Collection("countRow");
     export default {
+
         data() {
             return {
                 chartAccountData: [],
@@ -887,6 +889,14 @@
             this.accountTypeOption();
             this.parentChartAccountOption();
             this.queryData();
+            //Meteor.subscribe("acc_chartAccountCount", Session.get("area"));
+        },
+        mounted() {
+            /*if (CountRow) {
+                let num = CountRow.findOne({type: "Acc_ChartAccount", rolesArea: Session.get("area")});
+                console.log(num);
+            }
+*/
         }
     }
 </script>

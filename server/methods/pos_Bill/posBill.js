@@ -123,6 +123,7 @@ Meteor.methods({
         data.billNo = data.rolesArea + "-" + moment(data.billDate).format("YYYY") + pad(data.billNo, 6);
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
+            obj.cost = numeral(obj.cost || 0).value();
             return obj;
         });
         let id = Pos_Bill.insert(data);
@@ -162,6 +163,7 @@ Meteor.methods({
             })
 
         }
+
         if (id) {
             data.id = id;
             data.transactionType = "Bill";
@@ -182,13 +184,13 @@ Meteor.methods({
         let dataBeforeUpdate = Pos_Bill.findOne({_id: _id});
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
+            obj.cost = numeral(obj.cost || 0).value();
             return obj;
         });
         let isUpdated = Pos_Bill.update({_id: _id},
             {
                 $set: data
             });
-
 
         if (isUpdated) {
             Pos_PayBill.direct.remove({billId: _id});
@@ -230,26 +232,24 @@ Meteor.methods({
                 })
 
 
-                Meteor.defer(function () {
-                    dataBeforeUpdate.transactionType = "Remove Bill";
-                    Meteor.call("reducePosAverageInventory", dataBeforeUpdate, (err1, result1) => {
-                        if (!err1) {
-                            data.transactionType = "Bill";
-                            data.id = _id;
-                            Meteor.call("addPosAverageInventory", data, (err2, result2) => {
-                                if (err2) {
-                                    console.log(err2.message);
-                                }
-                            })
-                        } else {
-                            console.log(err1.message);
-                        }
-
-                    })
-                });
             }
+            Meteor.defer(function () {
+                dataBeforeUpdate.transactionType = "Remove Bill";
+                Meteor.call("reducePosAverageInventory", dataBeforeUpdate, (err1, result1) => {
+                    if (!err1) {
+                        data.transactionType = "Bill";
+                        data.id = _id;
+                        Meteor.call("addPosAverageInventory", data, (err2, result2) => {
+                            if (err2) {
+                                console.log(err2.message);
+                            }
+                        })
+                    } else {
+                        console.log(err1.message);
+                    }
 
-
+                })
+            });
         }
 
 
