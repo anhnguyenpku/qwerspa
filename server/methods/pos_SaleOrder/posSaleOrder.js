@@ -133,84 +133,86 @@ Meteor.methods({
 
         let id = Pos_SaleOrder.insert(data);
         Pos_Customer.direct.update({_id: data.customerId}, {$inc: {saleOrderNumber: 1}});
-        if (data.paid > 0) {
+        if (id) {
+            if (data.paid > 0) {
 
-            let posReceivePaymentDoc = {
-                totalPaid: data.paid,
-                totalNetAmount: data.netTotal,
-                totalDiscount: data.discountValue,
+                let posReceivePaymentDoc = {
+                    totalPaid: data.paid,
+                    totalNetAmount: data.netTotal,
+                    totalDiscount: data.discountValue,
 
-                balanceUnPaid: data.netTotal - data.paid,
-                totalAmount: data.total,
+                    balanceUnPaid: data.netTotal - data.paid,
+                    totalAmount: data.total,
 
-                receivePaymentDate: moment(data.saleOrderDate).toDate(),
-                receivePaymentDateName: moment(data.saleOrderDate).format("DD/MM/YYYY"),
-                note: data.note,
-                address: data.address,
+                    receivePaymentDate: moment(data.saleOrderDate).toDate(),
+                    receivePaymentDateName: moment(data.saleOrderDate).format("DD/MM/YYYY"),
+                    note: data.note,
+                    address: data.address,
 
-                rolesArea: data.rolesArea,
-                customerId: data.customerId,
-                saleOrderId: id,
-                saleOrderNo: data.saleOrderNo,
-                canRemove: false,
-                locationId: data.locationId,
-                closeDate: data.netTotal - data.paid == 0 ? moment(data.saleOrderDate).toDate() : "",
-                transactionType: (data.netTotal - data.paid) > 0 ? "SaleOrder" : "Sale Order Receipt"
-            };
+                    rolesArea: data.rolesArea,
+                    customerId: data.customerId,
+                    saleOrderId: id,
+                    saleOrderNo: data.saleOrderNo,
+                    canRemove: false,
+                    locationId: data.locationId,
+                    closeDate: data.netTotal - data.paid == 0 ? moment(data.saleOrderDate).toDate() : "",
+                    transactionType: (data.netTotal - data.paid) > 0 ? "SaleOrder" : "Sale Order Receipt"
+                };
 
-            Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.saleOrderDate, (err, result) => {
-                posReceivePaymentDoc.invoice = result;
-                result.forEach((obj) => {
-                    posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
+                Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.saleOrderDate, (err, result) => {
+                    posReceivePaymentDoc.invoice = result;
+                    result.forEach((obj) => {
+                        posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
+                    })
+                    Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
+
                 })
-                Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
-
-            })
 
 
-            //Integrated To Account===============================================================================================
-            Meteor.defer(function () {
-                let companyDoc = WB_waterBillingSetup.findOne({});
-                if (companyDoc.integratedPosAccount === true) {
+                //Integrated To Account===============================================================================================
+                Meteor.defer(function () {
+                    let companyDoc = WB_waterBillingSetup.findOne({});
+                    if (companyDoc.integratedPosAccount === true) {
 
-                    if (data.paid > 0) {
-                        let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
-                        let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
+                        if (data.paid > 0) {
+                            let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                            let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
 
-                        let cusDoc = Pos_Customer.findOne({_id: data.customerId});
+                            let cusDoc = Pos_Customer.findOne({_id: data.customerId});
 
-                        let journalDoc = {};
-                        journalDoc.journalDate = data.saleOrderDate;
-                        journalDoc.journalDateName = moment(data.saleOrderDate).format("DD/MM/YYYY");
-                        journalDoc.currencyId = companyDoc.baseCurrency;
-                        journalDoc.memo = cusDoc.name + " លក់តាមការកុម្មង់";
-                        journalDoc.rolesArea = data.rolesArea;
-                        journalDoc.closingEntryId = id;
-                        journalDoc.status = "Sale Order";
-                        journalDoc.refId = id;
-                        journalDoc.total = numeral(formatCurrencyLast(data.paid, companyDoc.baseCurrency)).value();
+                            let journalDoc = {};
+                            journalDoc.journalDate = data.saleOrderDate;
+                            journalDoc.journalDateName = moment(data.saleOrderDate).format("DD/MM/YYYY");
+                            journalDoc.currencyId = companyDoc.baseCurrency;
+                            journalDoc.memo = cusDoc.name + " លក់តាមការកុម្មង់";
+                            journalDoc.rolesArea = data.rolesArea;
+                            journalDoc.closingEntryId = id;
+                            journalDoc.status = "Sale Order";
+                            journalDoc.refId = id;
+                            journalDoc.total = numeral(formatCurrencyLast(data.paid, companyDoc.baseCurrency)).value();
 
-                        let transaction = [];
-                        transaction.push({
-                            account: cashAcc._id,
-                            dr: data.paid,
-                            cr: 0,
-                            drcr: data.paid
-                        });
+                            let transaction = [];
+                            transaction.push({
+                                account: cashAcc._id,
+                                dr: data.paid,
+                                cr: 0,
+                                drcr: data.paid
+                            });
 
 
-                        transaction.push({
-                            account: saleIncomeAcc._id,
-                            dr: 0,
-                            cr: data.paid,
-                            drcr: -data.paid
-                        });
+                            transaction.push({
+                                account: saleIncomeAcc._id,
+                                dr: 0,
+                                cr: data.paid,
+                                drcr: -data.paid
+                            });
 
-                        journalDoc.transaction = transaction;
-                        Meteor.call("insertJournal", journalDoc);
+                            journalDoc.transaction = transaction;
+                            Meteor.call("insertJournal", journalDoc);
+                        }
                     }
-                }
-            })
+                })
+            }
 
 
         }
@@ -236,86 +238,87 @@ Meteor.methods({
                 $set: data
             });
         Pos_ReceivePayment.direct.remove({saleOrderId: _id});
-        if (data.paid > 0) {
-            let posReceivePaymentDoc = {
-                    totalPaid: data.paid,
-                    totalNetAmount: data.netTotal,
-                    totalDiscount: data.discountValue,
+        if (isUpdated) {
+            if (data.paid > 0) {
+                let posReceivePaymentDoc = {
+                        totalPaid: data.paid,
+                        totalNetAmount: data.netTotal,
+                        totalDiscount: data.discountValue,
 
-                    balanceUnPaid: data.netTotal - data.paid,
-                    totalAmount: data.total,
+                        balanceUnPaid: data.netTotal - data.paid,
+                        totalAmount: data.total,
 
-                    receivePaymentDate: moment(data.saleOrderDate).toDate(),
-                    receivePaymentDateName: moment(data.saleOrderDate).format("DD/MM/YYYY"),
-                    note: data.note,
-                    address: data.address,
+                        receivePaymentDate: moment(data.saleOrderDate).toDate(),
+                        receivePaymentDateName: moment(data.saleOrderDate).format("DD/MM/YYYY"),
+                        note: data.note,
+                        address: data.address,
 
-                    rolesArea: data.rolesArea,
-                    customerId: data.customerId,
-                    saleOrderId: _id,
-                    saleOrderNo: data.saleOrderNo,
-                    canRemove: false,
-                    locationId: data.locationId,
-                    closeDate: data.netTotal - data.paid == 0 ? moment(data.saleOrderDate).toDate() : "",
-                    transactionType: (data.netTotal - data.paid) > 0 ? "SaleOrder" : "Sale Order Receipt"
+                        rolesArea: data.rolesArea,
+                        customerId: data.customerId,
+                        saleOrderId: _id,
+                        saleOrderNo: data.saleOrderNo,
+                        canRemove: false,
+                        locationId: data.locationId,
+                        closeDate: data.netTotal - data.paid == 0 ? moment(data.saleOrderDate).toDate() : "",
+                        transactionType: (data.netTotal - data.paid) > 0 ? "SaleOrder" : "Sale Order Receipt"
 
-                }
-            ;
-
-            Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.saleOrderDate, (err, result) => {
-                posReceivePaymentDoc.invoice = result;
-                result.forEach((obj) => {
-                    posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
-                })
-                Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
-            })
-
-
-            //Integrated To Account===============================================================================================
-            Meteor.defer(function () {
-                let companyDoc = WB_waterBillingSetup.findOne({});
-                if (companyDoc.integratedPosAccount === true) {
-                    Acc_Journal.remove({refId: _id, status: "Sale Order"});
-
-                    if (data.paid > 0) {
-                        let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
-                        let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
-
-                        let cusDoc = Pos_Customer.findOne({_id: data.customerId});
-
-                        let journalDoc = {};
-                        journalDoc.journalDate = data.saleOrderDate;
-                        journalDoc.journalDateName = moment(data.saleOrderDate).format("DD/MM/YYYY");
-                        journalDoc.currencyId = companyDoc.baseCurrency;
-                        journalDoc.memo = cusDoc.name + " លក់តាមការកុម្មង់";
-                        journalDoc.rolesArea = data.rolesArea;
-                        journalDoc.closingEntryId = _id;
-                        journalDoc.status = "Sale Order";
-                        journalDoc.refId = _id;
-                        journalDoc.total = numeral(formatCurrencyLast(data.paid, companyDoc.baseCurrency)).value();
-
-                        let transaction = [];
-                        transaction.push({
-                            account: cashAcc._id,
-                            dr: data.paid,
-                            cr: 0,
-                            drcr: data.paid
-                        });
-
-
-                        transaction.push({
-                            account: saleIncomeAcc._id,
-                            dr: 0,
-                            cr: data.paid,
-                            drcr: -data.paid
-                        });
-
-                        journalDoc.transaction = transaction;
-                        Meteor.call("insertJournal", journalDoc);
                     }
-                }
-            })
+                ;
 
+                Meteor.call("queryPosInvoiceByCustomerId", data.customerId, data.saleOrderDate, (err, result) => {
+                    posReceivePaymentDoc.invoice = result;
+                    result.forEach((obj) => {
+                        posReceivePaymentDoc.balanceUnPaid += numeral(obj.amount).value();
+                    })
+                    Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
+                })
+
+
+                //Integrated To Account===============================================================================================
+                Meteor.defer(function () {
+                    let companyDoc = WB_waterBillingSetup.findOne({});
+                    if (companyDoc.integratedPosAccount === true) {
+                        Acc_Journal.remove({refId: _id, status: "Sale Order"});
+
+                        if (data.paid > 0) {
+                            let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                            let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
+
+                            let cusDoc = Pos_Customer.findOne({_id: data.customerId});
+
+                            let journalDoc = {};
+                            journalDoc.journalDate = data.saleOrderDate;
+                            journalDoc.journalDateName = moment(data.saleOrderDate).format("DD/MM/YYYY");
+                            journalDoc.currencyId = companyDoc.baseCurrency;
+                            journalDoc.memo = cusDoc.name + " លក់តាមការកុម្មង់";
+                            journalDoc.rolesArea = data.rolesArea;
+                            journalDoc.closingEntryId = _id;
+                            journalDoc.status = "Sale Order";
+                            journalDoc.refId = _id;
+                            journalDoc.total = numeral(formatCurrencyLast(data.paid, companyDoc.baseCurrency)).value();
+
+                            let transaction = [];
+                            transaction.push({
+                                account: cashAcc._id,
+                                dr: data.paid,
+                                cr: 0,
+                                drcr: data.paid
+                            });
+
+
+                            transaction.push({
+                                account: saleIncomeAcc._id,
+                                dr: 0,
+                                cr: data.paid,
+                                drcr: -data.paid
+                            });
+
+                            journalDoc.transaction = transaction;
+                            Meteor.call("insertJournal", journalDoc);
+                        }
+                    }
+                })
+            }
 
         }
 

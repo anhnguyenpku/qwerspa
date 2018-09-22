@@ -155,44 +155,44 @@ Meteor.methods({
     },
     removePosReceivePayment(id) {
         let receviePaymentDoc = Pos_ReceivePayment.findOne({_id: id});
-        if (receviePaymentDoc) {
-            receviePaymentDoc.invoice.forEach((data) => {
-                let invoiceDoc = Pos_Invoice.findOne({_id: data._id});
-                let newStatus = invoiceDoc.status;
-
-                if (invoiceDoc.paid - (data.paid + data.discount) > 0) {
-                    newStatus = "Partial";
-                } else {
-                    newStatus = "Active";
-                }
-
-                Pos_Invoice.direct.update({_id: data._id}, {
-                    $set: {status: newStatus, closeDate: ""},
-                    $inc: {
-                        paid: -(data.paid + data.discount),
-                        paymentNumber: -1
-                    }
-                }, true);
-
-                Pos_ReceivePayment.direct.update({
-                        "invoice._id": data._id,
-                        createdAt: {$gt: receviePaymentDoc.createdAt}
-                    },
-                    {
-
-                        $inc: {
-                            "invoice.$.amount": (data.paid + data.discount),
-                            "invoice.$.netAmount": (data.paid + data.discount),
-                            totalAmount: (data.paid + data.discount),
-                            totalNetAmount: (data.paid + data.discount),
-                            balanceUnPaid: (data.paid + data.discount)
-                        }
-                    }, {multi: true}, true);
-            })
-        }
-
         let isRemove = Pos_ReceivePayment.remove({_id: id});
+        if (isRemove) {
+            if (receviePaymentDoc) {
+                receviePaymentDoc.invoice.forEach((data) => {
+                    let invoiceDoc = Pos_Invoice.findOne({_id: data._id});
+                    let newStatus = invoiceDoc.status;
 
+                    if (invoiceDoc.paid - (data.paid + data.discount) > 0) {
+                        newStatus = "Partial";
+                    } else {
+                        newStatus = "Active";
+                    }
+
+                    Pos_Invoice.direct.update({_id: data._id}, {
+                        $set: {status: newStatus, closeDate: ""},
+                        $inc: {
+                            paid: -(data.paid + data.discount),
+                            paymentNumber: -1
+                        }
+                    }, true);
+
+                    Pos_ReceivePayment.direct.update({
+                            "invoice._id": data._id,
+                            createdAt: {$gt: receviePaymentDoc.createdAt}
+                        },
+                        {
+
+                            $inc: {
+                                "invoice.$.amount": (data.paid + data.discount),
+                                "invoice.$.netAmount": (data.paid + data.discount),
+                                totalAmount: (data.paid + data.discount),
+                                totalNetAmount: (data.paid + data.discount),
+                                balanceUnPaid: (data.paid + data.discount)
+                            }
+                        }, {multi: true}, true);
+                })
+            }
+        }
         //Integrated To Account===============================================================================================
         if (isRemove) {
             let companyDoc = WB_waterBillingSetup.findOne({});

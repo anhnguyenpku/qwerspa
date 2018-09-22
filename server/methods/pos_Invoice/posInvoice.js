@@ -147,7 +147,7 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             obj.price = numeral(obj.price).value();
-            obj.cost = numeral(obj.cost).value();
+            obj.cost = numeral(obj.cost || 0).value();
             obj.totalCost = numeral(obj.totalCost).value();
             return obj;
         });
@@ -203,41 +203,45 @@ Meteor.methods({
                     }
                 })
             })
-        }
 
-        if (isReceiveItem === true) {
-            let balanceNotCut = data.balanceNotCut;
-            data.item.forEach((obj) => {
-                if (obj.isReceive === true) {
-                    Pos_SaleOrder.direct.update({
-                            _id: obj.saleOrderId,
-                            "item.itemId": obj.itemId
-                        }, {
-                            $set: {"item.$.isReceive": obj.qty >= obj.rawQty ? true : false},
-                            $inc: {
-                                "item.$.receive": obj.qty
+            if (isReceiveItem === true) {
+                let balanceNotCut = data.balanceNotCut;
+                data.item.forEach((obj) => {
+                    if (obj.isReceive === true) {
+                        Pos_SaleOrder.direct.update({
+                                _id: obj.saleOrderId,
+                                "item.itemId": obj.itemId
+                            }, {
+                                $set: {"item.$.isReceive": obj.qty >= obj.rawQty ? true : false},
+                                $inc: {
+                                    "item.$.receive": obj.qty
+                                }
                             }
-                        }
-                    );
+                        );
 
-                    Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {
-                        $inc: {
-                            cutOnPaid: balanceNotCut >= obj.amount ? obj.amount : balanceNotCut,
-                            receiveNumber: 1
+                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {
+                            $inc: {
+                                cutOnPaid: balanceNotCut >= obj.amount ? obj.amount : balanceNotCut,
+                                receiveNumber: 1
+                            }
+                        });
+                        balanceNotCut -= balanceNotCut >= obj.amount ? obj.amount : balanceNotCut;
+                        balanceNotCut = balanceNotCut >= 0 ? balanceNotCut : 0;
+                        let countNotReceive = Pos_SaleOrder.find({
+                            "item.isReceive": false,
+                            _id: obj.saleOrderId
+                        }).count();
+                        if (countNotReceive === 0) {
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Complete"}});
+                        } else {
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Partial"}});
                         }
-                    });
-                    balanceNotCut -= balanceNotCut >= obj.amount ? obj.amount : balanceNotCut;
-                    balanceNotCut = balanceNotCut >= 0 ? balanceNotCut : 0;
-                    let countNotReceive = Pos_SaleOrder.find({"item.isReceive": false, _id: obj.saleOrderId}).count();
-                    if (countNotReceive === 0) {
-                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Complete"}});
-                    } else {
-                        Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Partial"}});
+
                     }
-
-                }
-            })
+                })
+            }
         }
+
         return id;
     },
     updatePosInvoice(data, _id) {
@@ -254,7 +258,7 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             obj.price = numeral(obj.price).value();
-            obj.cost = numeral(obj.cost).value();
+            obj.cost = numeral(obj.cost || 0).value();
             obj.totalCost = numeral(obj.totalCost).value();
             return obj;
         });
