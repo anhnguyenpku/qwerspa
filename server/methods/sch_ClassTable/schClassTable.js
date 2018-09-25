@@ -208,12 +208,15 @@ Meteor.methods({
                 let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: classTableDoc._id});
                 let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
                 Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+
+                classTableReact(classTableDoc._id);
                 return d;
             } else {
                 let d = Sch_ClassTable.insert(classTable);
                 let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: d});
                 let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
                 Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+                classTableReact(d);
                 return d;
             }
 
@@ -276,12 +279,14 @@ Meteor.methods({
                 let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: classTableDoc._id});
                 let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
                 Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+                classTableReact(classTableDoc._id);
                 return d;
             } else {
                 let d = Sch_ClassTable.insert(classTable);
                 let ndwSchClassTableDoc = Sch_ClassTable.findOne({_id: d});
                 let levelDoc = Sch_Level.findOne({_id: data.classFormDoc.levelId});
                 Meteor.call("schGeneratePaymentSchedule", classDoc, levelDoc, ndwSchClassTableDoc);
+                classTableReact(d);
                 return d;
             }
 
@@ -304,6 +309,8 @@ Meteor.methods({
                             "studentList.$.status": "Graduated"
                         }
                     });
+
+                    classTableReact(obj.studentList.studentId);
                 }
             });
         }
@@ -329,7 +336,7 @@ Meteor.methods({
                     classId: data.classId
                 }, {$set: {status: payDoc.oldStatus,}}, {multi: true});
             }
-            return Sch_ClassTable.direct.update({
+            let isUpdated = Sch_ClassTable.direct.update({
                 "studentList.studentId": data.studentId,
                 "studentList.programId": data.programId,
                 "studentList.classId": data.classId,
@@ -340,12 +347,14 @@ Meteor.methods({
                     "studentList.$.status": status
                 }
             });
+            classTableReact(data.studentId);
+            return isUpdated;
         }
 
     },
     updateStudentPromotion(data, pormotionId) {
         if (data) {
-            return Sch_ClassTable.direct.update({
+            let isUpdated = Sch_ClassTable.direct.update({
                 "studentList.studentId": data.studentId,
                 "studentList.programId": data.programId,
                 "studentList.classId": data.classId,
@@ -356,6 +365,8 @@ Meteor.methods({
                     "studentList.$.promotionId": pormotionId
                 }
             });
+            classTableReact(data.studentId);
+            return isUpdated;
         }
 
     },
@@ -369,7 +380,9 @@ Meteor.methods({
                 }
             });
             Sch_PaymentSchedule.direct.remove({classId: classId, studentId: studentId});
-            return Sch_ClassTable.direct.update({classId: classId}, {$set: {studentList: studentList}});
+            let isUpdated = Sch_ClassTable.direct.update({classId: classId}, {$set: {studentList: studentList}});
+            classTableReact(studentId);
+            return isUpdated;
         }
         return false;
 

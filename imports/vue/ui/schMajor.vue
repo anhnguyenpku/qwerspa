@@ -227,6 +227,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_MajorReact} from "../../collection/schMajor";
 
     export default {
         meteor: {
@@ -238,6 +239,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_MajorReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -367,7 +373,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchMajor = false;
-                                vm.queryData();
 
                                 vm.$refs["schMajorFormAdd"].resetFields();
                             } else {
@@ -409,7 +414,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchMajor = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schMajorFormUpdate"].resetFields();
                             } else {
@@ -497,6 +501,8 @@
             this.programOpt();
             this.facultyOpt();
             this.queryData();
+            Meteor.subscribe('Sch_MajorReact');
+
         },
         computed: {
             langConfig() {

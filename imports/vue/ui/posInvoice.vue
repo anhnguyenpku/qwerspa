@@ -1322,6 +1322,7 @@
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_InvoiceReact} from "../../collection/posInvoice";
 
     export default {
         meteor: {
@@ -1333,6 +1334,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_InvoiceReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         components: {
@@ -1783,7 +1789,6 @@
 
                                 Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
 
-                                vm.queryData();
                                 vm.resetForm();
                             } else {
                                 vm.$notify.error({
@@ -1860,7 +1865,6 @@
 
                                 vm.dialogUpdatePosInvoice = false;
 
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.resetForm();
                             } else {
                                 vm.$notify.error({
@@ -1946,7 +1950,6 @@
 
                                 Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
 
-                                vm.queryData();
                                 vm.resetForm();
                             } else {
                                 vm.$notify.error({
@@ -2509,6 +2512,8 @@
             this.queryData();
             this.getTotal();
             this.locationOpt();
+            Meteor.subscribe('Pos_InvoiceReact');
+
         },
         computed: {
             langConfig() {

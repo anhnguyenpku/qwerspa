@@ -213,6 +213,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_BusStopReact} from "../../collection/schBusStop";
 
     export default {
         meteor: {
@@ -224,6 +225,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_BusStopReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -328,7 +334,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchBusStop = false;
-                                vm.queryData();
 
                                 vm.$refs["schBusStopFormAdd"].resetFields();
                             } else {
@@ -365,7 +370,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchBusStop = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schBusStopFormUpdate"].resetFields();
                             } else {
@@ -470,6 +474,8 @@
             this.isSearching = true;
             this.fetchUser();
             this.queryData();
+            Meteor.subscribe('Sch_BusStopReact');
+
         },
         computed: {
             langConfig() {

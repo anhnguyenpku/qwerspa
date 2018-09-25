@@ -360,6 +360,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_ConvertInventoryReact} from "../../collection/posConvertInventory";
 
     export default {
         meteor: {
@@ -371,6 +372,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_ConvertInventoryReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -498,7 +504,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosConvertInventory = false;
-                                vm.queryData();
                                 vm.productOpt();
                                 vm.$refs["posConvertInventoryFormAdd"].resetFields();
                             } else {
@@ -540,7 +545,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosConvertInventory = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.productOpt();
                                 vm.$refs["posConvertInventoryFormUpdate"].resetFields();
                             } else {
@@ -659,6 +663,8 @@
             this.productOpt();
             this.locationOpt();
             this.queryData();
+            Meteor.subscribe('Pos_ConvertInventoryReact');
+
         },
         computed: {
             langConfig() {

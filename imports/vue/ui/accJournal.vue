@@ -713,6 +713,7 @@
 <script>
     import draggable from 'vuedraggable';
     import compoLang from '../../../both/i18n/lang/elem-label-acc'
+    import {Acc_JournalReact} from "../../collection/accJournal";
 
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
@@ -727,6 +728,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Acc_JournalReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
 
@@ -998,7 +1004,6 @@
                                     if (isCloseDialog) {
                                         this.dialogAddJournal = false;
                                     }
-                                    vm.queryData();
                                     vm.resetForm();
                                 }
                             })
@@ -1051,7 +1056,6 @@
                                 if (isCloseDialog) {
                                     this.dialogPaid = false;
                                 }
-                                vm.queryData();
                                 vm.resetForm();
                             }
                         })
@@ -1097,7 +1101,6 @@
 
                                     vm.dialogUpdateJournal = false;
 
-                                    vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                     vm.resetForm();
                                 }
                             })
@@ -1475,6 +1478,8 @@
             this.chartAccountOption();
             this.chartAccountMethodOption();
             this.queryData();
+            Meteor.subscribe('Acc_JournalReact');
+
         },
         computed: {
             langConfig() {

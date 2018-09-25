@@ -165,6 +165,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_SubjectReact} from "../../collection/schSubject";
 
     export default {
         meteor: {
@@ -176,6 +177,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_SubjectReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -269,7 +275,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchSubject = false;
-                                vm.queryData();
 
                                 vm.$refs["schSubjectFormAdd"].resetFields();
                             } else {
@@ -308,7 +313,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchSubject = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schSubjectFormUpdate"].resetFields();
                             } else {
@@ -394,6 +398,8 @@
             this.isSearching = true;
             this.fetchUser();
             this.queryData();
+            Meteor.subscribe('Sch_SubjectReact');
+
         },
         computed: {
             langConfig() {

@@ -2,7 +2,8 @@ import './userSetting.html';
 import {FlowRouter} from 'meteor/kadira:flow-router'
 import {Template} from 'meteor/templating'
 // import collection
-import {UserSchema} from '../../collection/userSchema'
+import {UserSchema} from '../../collection/userSchema';
+import moment from "moment";
 
 let index = Template.wb_userSetting,
     // userSettingOptions = Template.wb_userSettingOptions,
@@ -250,7 +251,8 @@ AutoForm.hooks({
     wb_userEdit: {
         onSuccess(formType, result) {
             FlowRouter.query.unset();
-            FlowRouter.go('wb.userSetting')
+            Meteor.call("userSchemaReact", moment().toDate().getTime());
+            FlowRouter.go('wb.userSetting');
         },
         onError(formType, err) {
             FlowRouter.query.unset();
@@ -258,6 +260,7 @@ AutoForm.hooks({
     },
     wb_userAdd: {
         onSuccess(formType, result) {
+            Meteor.call("userSchemaReact", moment().toDate().getTime());
             Meteor.setTimeout(function () {
                 FlowRouter.query.unset();
             }, 500);

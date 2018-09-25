@@ -868,6 +868,7 @@
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
     //import $ from 'jQuery';
+    import {Pos_BillReact} from "../../collection/posBill";
 
     export default {
         meteor: {
@@ -879,6 +880,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_BillReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         components: {
@@ -1280,7 +1286,6 @@
                                     this.getVoucherByRoleAndDate(moment().toDate());
                                 }
                                 vm.skip = 0;
-                                vm.queryData();
                                 vm.resetForm();
                             }
                         })
@@ -1339,7 +1344,6 @@
 
                                 vm.dialogUpdatePosBill = false;
 
-                                vm.queryData(this.searchData, this.skip, this.currentSize + this.skip);
                                 vm.resetForm();
                             } else {
                                 vm.$message({
@@ -1758,6 +1762,8 @@
             this.queryData();
             this.getTotal();
             this.locationOpt();
+            Meteor.subscribe('Pos_BillReact');
+
         },
         computed: {
             langConfig() {

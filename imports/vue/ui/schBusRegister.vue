@@ -368,6 +368,7 @@
     import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
     import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
     import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
+    import {Sch_BusRegisterReact} from "../../collection/schBusRegister";
 
     export default {
         meteor: {
@@ -379,6 +380,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_BusRegisterReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -601,7 +607,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchBusRegister = false;
-                                vm.queryData();
 
                                 vm.$refs["schBusRegisterFormAdd"].resetFields();
                             } else {
@@ -648,7 +653,6 @@
                                 });
                                 vm.dialogUpdateSchBusRegister = false;
                                 vm.dialogUpdateSchBusRegisterToClass = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schBusRegisterFormUpdate"].resetFields();
                             } else {
@@ -770,6 +774,8 @@
             this.busStopOpt();
             this.companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
             this.sym = getCurrencySymbolById(this.companyDoc.baseCurrency);
+            Meteor.subscribe('Sch_BusRegisterReact');
+
 
         },
         computed: {

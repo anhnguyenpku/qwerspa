@@ -196,11 +196,17 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Acc_ExchangeReact} from "../../collection/accExchange";
 
     export default {
         meteor: {
             langSession() {
                 return Session.get('lang') || "en";
+            },
+            newRe() {
+                let vm = this;
+                Acc_ExchangeReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -308,7 +314,6 @@
                                     type: 'success'
                                 });
                                 this.dialogAddExchange = false;
-                                this.queryData();
                                 this.$refs["exchangeFormAdd"].resetFields();
                                 vm.resetForm();
 
@@ -346,7 +351,6 @@
                                     type: 'success'
                                 });
                                 this.dialogUpdateExchange = false;
-                                this.queryData(this.searchData, this.skip, this.currentSize + this.skip);
                                 this.$refs["exchangeFormUpdate"].resetFields();
                                 vm.resetForm();
 
@@ -421,6 +425,8 @@
         created() {
             this.isSearching = true;
             this.queryData();
+            Meteor.subscribe('Acc_ExchangeReact');
+
         },
         computed: {
             langConfig() {

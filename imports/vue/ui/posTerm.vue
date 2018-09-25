@@ -280,6 +280,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_TermReact} from "../../collection/posTerm";
 
     export default {
         meteor: {
@@ -291,6 +292,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_TermReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -413,7 +419,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosTerm = false;
-                                vm.queryData();
                                 vm.$refs["posTermFormAdd"].resetFields();
                             } else {
                                 vm.$message({
@@ -443,7 +448,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosTerm = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.$refs["posTermFormUpdate"].resetFields();
                             } else {
                                 vm.$message({
@@ -534,6 +538,8 @@
             this.isSearching = true;
             this.parentPosTermOption();
             this.queryData();
+            Meteor.subscribe('Pos_TermReact');
+
         },
         computed: {
             langConfig() {

@@ -362,6 +362,7 @@
     // require('cleave.js/dist/addons/cleave-phone.{country}');
 
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_BusPaymentReact} from "../../collection/schBusPayment";
 
     export default {
         meteor: {
@@ -373,6 +374,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_BusPaymentReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         components: {
@@ -722,7 +728,6 @@
                                     });
                                 }
 
-                                vm.queryData();
                                 vm.resetForm();
                             }
                         })
@@ -868,6 +873,8 @@
             this.isSearching = true;
             this.queryData();
             this.getTotal();
+            Meteor.subscribe('Sch_BusPaymentReact');
+
         }
         ,
         computed: {

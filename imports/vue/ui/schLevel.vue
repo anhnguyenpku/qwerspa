@@ -268,6 +268,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_LevelReact} from "../../collection/schLevel";
 
     export default {
         meteor: {
@@ -279,6 +280,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_LevelReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -441,7 +447,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchLevel = false;
-                                vm.queryData();
 
                                 vm.$refs["schLevelFormAdd"].resetFields();
                             } else {
@@ -484,7 +489,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchLevel = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schLevelFormUpdate"].resetFields();
                             } else {
@@ -577,6 +581,8 @@
             this.fetchUser();
             this.programOpt();
             this.queryData();
+            Meteor.subscribe('Sch_LevelReact');
+
         },
         computed: {
             langConfig() {

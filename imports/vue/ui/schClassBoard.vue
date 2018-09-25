@@ -698,6 +698,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_ClassTableReact} from "../../collection/schClassTable";
 
     export default {
         meteor: {
@@ -709,6 +710,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_ClassTableReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -1148,7 +1154,6 @@
                         });
                         vm.generateStudentList(oldClassDoc);
                         vm.dialogPromoteToClass = false;
-                        vm.queryData();
                     } else {
                         vm.$message({
                             type: 'error',
@@ -1185,7 +1190,6 @@
                         });
                         vm.generateStudentList(oldClassDoc);
                         vm.dialogUnPromoteToClass = false;
-                        vm.queryData();
                     } else {
                         vm.$message({
                             type: 'error',
@@ -1214,7 +1218,6 @@
                         vm.generateStudentList(oldClassDoc);
 
                         vm.dialogPromoteToGraduated = false;
-                        vm.queryData();
                     } else {
                         vm.generateStudentList(oldClassDoc);
                         vm.$message({
@@ -1247,7 +1250,6 @@
                             vm.generateStudentList(oldClassDoc);
 
                             vm.dialogUpdateStatusStudent = false;
-                            vm.queryData();
                         } else {
                             vm.generateStudentList(oldClassDoc);
                             vm.$message({
@@ -1281,7 +1283,6 @@
                             vm.generateStudentList(oldClassDoc);
 
                             vm.dialogUpdatePromotionStudent = false;
-                            vm.queryData();
                         } else {
                             vm.generateStudentList(oldClassDoc);
                             vm.$message({
@@ -1354,7 +1355,6 @@
                                 type: 'success'
                             });
                             vm.generateStudentList(oldClassDoc);
-                            vm.queryData();
 
                         } else {
                             vm.$message({
@@ -1383,6 +1383,8 @@
             this.isSearching = true;
             this.queryData();
             this.facultyBoardOpt();
+            Meteor.subscribe('Sch_ClassTableReact');
+
         }
         ,
         computed: {

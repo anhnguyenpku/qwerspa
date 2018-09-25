@@ -313,6 +313,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_MentionReact} from "../../collection/schMention";
 
     export default {
         meteor: {
@@ -324,6 +325,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_MentionReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -441,7 +447,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchMention = false;
-                                vm.queryData();
 
                                 vm.$refs["schMentionFormAdd"].resetFields();
                             } else {
@@ -480,7 +485,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchMention = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schMentionFormUpdate"].resetFields();
                             } else {
@@ -575,6 +579,8 @@
         created() {
             this.isSearching = true;
             this.queryData();
+            Meteor.subscribe('Sch_MentionReact');
+
         },
         computed: {
             langConfig() {

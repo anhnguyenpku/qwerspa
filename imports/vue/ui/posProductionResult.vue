@@ -114,6 +114,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_ProductionResultReact} from "../../collection/posProductionResult";
 
     export default {
         meteor: {
@@ -125,6 +126,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_ProductionResultReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -253,7 +259,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosProduction = false;
-                                vm.queryData();
                                 vm.productOpt();
                                 vm.$refs["posProductionFormAdd"].resetFields();
                             } else {
@@ -296,7 +301,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosProduction = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.productOpt();
                                 vm.$refs["posProductionFormUpdate"].resetFields();
                             } else {
@@ -415,6 +419,8 @@
             this.productOpt();
             this.locationOpt();
             this.queryData();
+            Meteor.subscribe('Pos_ProductionResultReact');
+
         },
         computed: {
             langConfig() {

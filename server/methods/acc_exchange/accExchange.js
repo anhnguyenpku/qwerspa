@@ -29,7 +29,11 @@ Meteor.methods({
                 {
                     $match: selector
                 },
-
+                {
+                    $sort: {
+                        exDate: -1
+                    }
+                },
                 {
                     $limit: options.limit
                 },

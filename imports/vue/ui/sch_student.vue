@@ -1155,6 +1155,7 @@
     import storagePath from '../../firebase/storage_path';
     import firebase from '../../firebase/config';
     import sha256 from 'sha256';
+    import {Sch_StudentReact} from "../../collection/schStudent";
 
     export default {
         meteor: {
@@ -1166,6 +1167,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_StudentReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -1515,7 +1521,6 @@
                                                         if (err) {
                                                             console.log(err.message);
                                                         } else {
-                                                            vm.queryData();
                                                             vm.thumbImgCroppa = null;
                                                         }
                                                     });
@@ -1524,7 +1529,6 @@
                                 }
                                 vm.dialogAddSchStudent = false;
                                 vm.sortItem = "createdAt";
-                                vm.queryData();
                                 vm.$refs["schStudentFormAdd"].resetFields();
                                 vm.resetForm();
 
@@ -1664,7 +1668,6 @@
                                                         if (err) {
                                                             console.log(err.message);
                                                         } else {
-                                                            vm.queryData();
                                                         }
                                                     });
                                                 }).catch(err => console.log(err));
@@ -1672,7 +1675,6 @@
                                 }
 
                                 vm.dialogUpdateSchStudent = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schStudentFormUpdate"].resetFields();
                                 vm.resetForm();
@@ -1982,6 +1984,7 @@
         created() {
             this.isSearching = true;
             this.queryData();
+            Meteor.subscribe('Sch_StudentReact');
 
 
         },

@@ -507,6 +507,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_CiriculumnReact} from "../../collection/schCiriculumn";
 
     export default {
         meteor: {
@@ -518,6 +519,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_CiriculumnReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -706,7 +712,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchCiriculumn = false;
-                                vm.queryData();
 
                                 vm.$refs["schCiriculumnFormAdd"].resetFields();
                             } else {
@@ -762,7 +767,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchCiriculumn = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schCiriculumnFormUpdate"].resetFields();
                             } else {
@@ -858,6 +862,8 @@
             this.queryData();
             this.subjectOpt();
             this.majorOpt();
+            Meteor.subscribe('Sch_CiriculumnReact');
+
         },
         computed: {
             langConfig() {

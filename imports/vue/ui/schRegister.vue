@@ -880,6 +880,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_RegisterReact} from "../../collection/schRegister";
 
     export default {
         meteor: {
@@ -891,6 +892,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_RegisterReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -1208,7 +1214,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchRegister = false;
-                                vm.queryData();
 
                                 vm.$refs["schRegisterFormAdd"].resetFields();
                             } else {
@@ -1255,7 +1260,6 @@
                                 });
                                 vm.dialogUpdateSchRegister = false;
                                 vm.dialogUpdateSchRegisterToClass = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schRegisterFormUpdate"].resetFields();
                             } else {
@@ -1464,7 +1468,6 @@
                                     type: 'success'
                                 });
                                 vm.dialoginputTranscript = false;
-                                vm.queryData();
 
                                 vm.$refs["inputTranscriptForm"].resetFields();
                                 vm.resetForm();
@@ -1632,6 +1635,8 @@
             this.queryData();
             this.getMention();
             this.subjectOpt();
+            Meteor.subscribe('Sch_RegisterReact');
+
         },
         computed: {
             langConfig() {

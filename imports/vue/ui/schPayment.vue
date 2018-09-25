@@ -388,6 +388,7 @@
     // require('cleave.js/dist/addons/cleave-phone.{country}');
 
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_PaymentReact} from "../../collection/schPayment";
 
     export default {
         meteor: {
@@ -399,6 +400,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_PaymentReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         components: {
@@ -751,7 +757,6 @@
                                     });
                                 }
 
-                                vm.queryData();
                                 vm.resetForm();
                             }
                         })
@@ -776,7 +781,6 @@
                                     message: ` ${row.paymentDateName} ` + this.langConfig['removeSuccess'],
                                     type: 'success'
                                 });
-                                vm.queryData();
 
                             } else {
                                 vm.$message({
@@ -917,6 +921,8 @@
             this.queryData();
             this.getTotal();
             this.classOpt();
+            Meteor.subscribe('Sch_PaymentReact');
+
         }
         ,
         computed: {

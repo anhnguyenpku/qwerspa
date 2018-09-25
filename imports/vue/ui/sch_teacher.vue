@@ -1058,6 +1058,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_TeacherReact} from "../../collection/schTeacher";
 
     export default {
         meteor: {
@@ -1069,6 +1070,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_TeacherReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -1446,7 +1452,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchTeacher = false;
-                                vm.queryData();
 
                                 vm.$refs["schTeacherFormAdd"].resetFields();
                                 vm.resetForm();
@@ -1559,7 +1564,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchTeacher = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schTeacherFormUpdate"].resetFields();
                                 vm.resetForm();
@@ -1838,6 +1842,8 @@
             this.isSearching = true;
             this.postitionOpt();
             this.queryData();
+            Meteor.subscribe('Sch_TeacherReact');
+
         },
         computed: {
             langConfig() {

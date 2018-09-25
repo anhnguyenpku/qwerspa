@@ -393,6 +393,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_ProductReact} from "../../collection/posProduct";
 
     export default {
         meteor: {
@@ -404,6 +405,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_ProductReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -548,7 +554,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosProduct = false;
-                                vm.queryData();
                                 vm.queryCategoryDataOption();
                                 if (vm.$refs["posProductFormAdd"]) {
                                     vm.$refs["posProductFormAdd"].resetFields();
@@ -597,7 +602,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosProduct = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.queryCategoryDataOption();
                                 if (vm.$refs["posProductFormUpdate"]) {
                                     vm.$refs["posProductFormUpdate"].resetFields();
@@ -696,6 +700,8 @@
             this.queryCategoryDataOption();
             this.queryUnitDataOption();
             this.queryData();
+            Meteor.subscribe('Pos_ProductReact');
+
         },
         computed: {
             langConfig() {

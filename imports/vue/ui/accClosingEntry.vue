@@ -168,6 +168,8 @@
     </div>
 </template>
 <script>
+    import {Acc_ClosingEntryReact} from "../../collection/accClosingEntry";
+
     export default {
         data() {
             return {
@@ -323,7 +325,6 @@
                                             type: 'success'
                                         });
                                         vm.dialogAddClosingEntry = false;
-                                        vm.queryData();
                                         vm.$refs["closingEntryForm"].resetFields();
                                         vm.resetForm();
 
@@ -369,7 +370,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateClosingEntry = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.$refs["closingEntryForm"].resetFields();
                                 vm.resetForm();
 
@@ -457,6 +457,15 @@
             this.isSearching = true;
             this.queryData();
             this.fetchExchange();
+            Meteor.subscribe('Acc_ClosingEntryReact');
+
+        },
+        meteor: {
+            newRe() {
+                let vm = this;
+                Acc_ClosingEntryReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
+            }
         }
     }
 </script>

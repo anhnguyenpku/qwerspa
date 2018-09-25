@@ -212,6 +212,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_PromotionReact} from "../../collection/schPromotion";
 
     export default {
         meteor: {
@@ -223,6 +224,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_PromotionReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -332,7 +338,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchPromotion = false;
-                                vm.queryData();
 
                                 vm.$refs["schPromotionFormAdd"].resetFields();
                             } else {
@@ -373,7 +378,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchPromotion = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schPromotionFormUpdate"].resetFields();
                             } else {
@@ -459,6 +463,8 @@
             this.isSearching = true;
             this.fetchUser();
             this.queryData();
+            Meteor.subscribe('Sch_PromotionReact');
+
         },
         computed: {
             langConfig() {

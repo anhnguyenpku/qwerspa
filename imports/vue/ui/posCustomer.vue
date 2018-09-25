@@ -242,6 +242,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_CustomerReact} from "../../collection/posCustomer";
 
     export default {
         meteor: {
@@ -253,6 +254,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_CustomerReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -362,7 +368,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosCustomer = false;
-                                vm.queryData();
 
                                 vm.$refs["posCustomerForm"].resetFields();
                             } else {
@@ -402,7 +407,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosCustomer = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["posCustomerForm"].resetFields();
                             } else {
@@ -492,6 +496,8 @@
             this.isSearching = true;
             this.posTermOption();
             this.queryData();
+            Meteor.subscribe('Pos_CustomerReact');
+
         },
         computed: {
             langConfig() {

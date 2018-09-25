@@ -153,6 +153,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_FacultyReact} from "../../collection/schFaculty";
 
     export default {
         meteor: {
@@ -164,6 +165,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_FacultyReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -254,7 +260,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchFaculty = false;
-                                vm.queryData();
 
                                 vm.$refs["schFacultyFormAdd"].resetFields();
                             } else {
@@ -292,7 +297,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchFaculty = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schFacultyFormUpdate"].resetFields();
                             } else {
@@ -378,6 +382,8 @@
             this.isSearching = true;
             this.fetchUser();
             this.queryData();
+            Meteor.subscribe('Sch_FacultyReact');
+
         },
         computed: {
             langConfig() {

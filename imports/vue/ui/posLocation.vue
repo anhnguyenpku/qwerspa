@@ -230,6 +230,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_LocationReact} from "../../collection/posLocation";
 
     export default {
         meteor: {
@@ -241,6 +242,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_LocationReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -344,7 +350,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosLocation = false;
-                                vm.queryData();
 
                                 vm.$refs["posLocationFormAdd"].resetFields();
                             } else {
@@ -387,7 +392,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosLocation = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["posLocationFormUpdate"].resetFields();
                             } else {
@@ -474,6 +478,8 @@
             this.isSearching = true;
             this.fetchUser();
             this.queryData();
+            Meteor.subscribe('Pos_LocationReact');
+
         },
         computed: {
             langConfig() {

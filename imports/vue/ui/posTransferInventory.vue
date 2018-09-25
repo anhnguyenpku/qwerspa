@@ -596,6 +596,7 @@
     import compoLang from '../../../both/i18n/lang/elem-label'
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
+    import {Pos_TransferInventoryReact} from "../../collection/posTransferInventory";
 
     export default {
         meteor: {
@@ -607,6 +608,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_TransferInventoryReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         components: {
@@ -882,7 +888,6 @@
                                 if (isCloseDialog) {
                                     this.dialogAddTransferInventory = false;
                                 }
-                                vm.queryData();
                                 vm.resetForm();
                             }
                         })
@@ -919,7 +924,6 @@
 
                                 vm.dialogUpdateTransferInventory = false;
 
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.resetForm();
                             } else {
                                 vm.$message({
@@ -1171,6 +1175,8 @@
             this.queryData();
             this.getTotal();
             this.locationOpt();
+            Meteor.subscribe('Pos_TransferInventoryReact');
+
         },
         computed: {
             langConfig() {

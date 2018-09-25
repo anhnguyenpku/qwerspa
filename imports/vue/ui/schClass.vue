@@ -331,6 +331,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch'
+    import {Sch_ClassReact} from "../../collection/schClass";
 
     export default {
         meteor: {
@@ -342,6 +343,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Sch_ClassReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -490,7 +496,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddSchClass = false;
-                                vm.queryData();
 
                                 vm.$refs["schClassFormAdd"].resetFields();
                             } else {
@@ -536,7 +541,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateSchClass = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["schClassFormUpdate"].resetFields();
                             } else {
@@ -625,6 +629,8 @@
             this.levelOpt();
             this.timeOpt();
             this.queryData();
+            Meteor.subscribe('Sch_ClassReact');
+
         },
         computed: {
             langConfig() {

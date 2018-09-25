@@ -389,6 +389,7 @@
     // require('cleave.js/dist/addons/cleave-phone.{country}');
 
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_PayBillReact} from "../../collection/posPayBill";
 
     export default {
         meteor: {
@@ -400,6 +401,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_PayBillReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         components: {
@@ -812,7 +818,6 @@
                                     }
                                 })
 
-                                vm.queryData();
                                 vm.resetForm();
                             }
                         })
@@ -1136,6 +1141,8 @@
             this.queryData();
             this.getTotal();
             this.locationOpt();
+            Meteor.subscribe('Pos_PayBillReact');
+
         },
         computed: {
             langConfig() {

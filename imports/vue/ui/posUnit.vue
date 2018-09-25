@@ -154,6 +154,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_UnitReact} from "../../collection/posUnit";
 
     export default {
         meteor: {
@@ -165,6 +166,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_UnitReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -250,7 +256,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosUnit = false;
-                                vm.queryData();
 
                                 vm.$refs["posUnitFormAdd"].resetFields();
                             } else {
@@ -288,7 +293,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosUnit = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["posUnitFormUpdate"].resetFields();
                             } else {
@@ -374,6 +378,8 @@
         created() {
             this.isSearching = true;
             this.queryData();
+            Meteor.subscribe('Pos_UnitReact');
+
         },
         computed: {
             langConfig() {

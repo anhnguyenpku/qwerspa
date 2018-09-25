@@ -249,6 +249,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_VendorReact} from "../../collection/posVendor";
 
     export default {
         meteor: {
@@ -260,6 +261,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_VendorReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -371,7 +377,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosVendor = false;
-                                vm.queryData();
 
                                 vm.$refs["posVendorFormAdd"].resetFields();
                             } else {
@@ -413,7 +418,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosVendor = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
 
                                 vm.$refs["posVendorFormUpdate"].resetFields();
                             } else {
@@ -500,6 +504,8 @@
             this.isSearching = true;
             this.posTermOption();
             this.queryData();
+            Meteor.subscribe('Pos_VendorReact');
+
         },
         computed: {
             langConfig() {

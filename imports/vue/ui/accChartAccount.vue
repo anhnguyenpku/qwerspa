@@ -517,8 +517,7 @@
                 chartAccountAccumulatedOption: [],
                 chartAccountFixedAssetOption: [],
                 accountTypeId: "",
-                skip: 0,
-                newRe: 0
+                skip: 0
             }
         },
         watch: {
@@ -886,6 +885,7 @@
             this.accountTypeOption();
             this.parentChartAccountOption();
             this.queryData();
+            Meteor.subscribe('acc_chartAccountReact');
         },
         meteor: {
             newRe() {

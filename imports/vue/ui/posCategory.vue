@@ -198,6 +198,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
+    import {Pos_CategoryReact} from "../../collection/posCategory";
 
     export default {
         meteor: {
@@ -209,6 +210,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                Pos_CategoryReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -305,7 +311,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddPosCategory = false;
-                                vm.queryData();
                                 vm.parentPosCategoryOption();
                                 vm.$refs["posCategoryForm"].resetFields();
                             } else {
@@ -344,7 +349,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdatePosCategory = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.parentPosCategoryOption();
                                 vm.$refs["posCategoryForm"].resetFields();
                             } else {
@@ -436,6 +440,8 @@
             this.isSearching = true;
             this.parentPosCategoryOption();
             this.queryData();
+            Meteor.subscribe('Pos_CategoryReact');
+
         },
         computed: {
             langConfig() {

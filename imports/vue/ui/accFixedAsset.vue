@@ -273,11 +273,17 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-acc'
+    import {Acc_FixedAssetReact} from "../../collection/accFixedAsset";
 
     export default {
         meteor: {
             langSession() {
                 return Session.get('lang') || "en";
+            },
+            newRe() {
+                let vm = this;
+                Acc_FixedAssetReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -417,7 +423,6 @@
                                     type: 'success'
                                 });
                                 this.dialogAddFixedAsset = false;
-                                this.queryData();
                                 this.$refs["fixedAssetFormAdd"].resetFields();
                                 vm.resetForm();
 
@@ -462,7 +467,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateFixedAsset = false;
-                                vm.queryData(this.searchData, this.skip, this.currentSize + this.skip);
                                 vm.$refs["fixedAssetFormUpdate"].resetFields();
                                 vm.resetForm();
 
@@ -542,7 +546,7 @@
                 }
             },
             popUpUpdateFixedAsset(data) {
-                if (data.transaction[0].month > 0) {
+                if (data.transaction[0].month === 0) {
                     this.dialogUpdateFixedAsset = true;
                 } else {
                     this.$message({
@@ -556,6 +560,8 @@
             this.isSearching = true;
             this.queryData();
             this.fetchChartAccountOpt();
+            Meteor.subscribe('Acc_FixedAssetReact');
+
         },
         computed: {
             langConfig() {

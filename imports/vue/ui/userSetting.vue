@@ -113,6 +113,7 @@
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label-sch.json'
+    import {UserSchemaReact} from "../../collection/userSchema";
 
     export default {
         meteor: {
@@ -124,6 +125,11 @@
             },
             disabledUpdate() {
                 return Session.get("canUpdate");
+            },
+            newRe() {
+                let vm = this;
+                UserSchemaReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
         data() {
@@ -226,6 +232,8 @@
         created() {
             this.isSearching = true;
             this.queryData();
+            Meteor.subscribe('UserSchemaReact');
+
         },
         computed: {
             langConfig() {

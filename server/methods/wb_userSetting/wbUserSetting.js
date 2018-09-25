@@ -52,24 +52,23 @@ Meteor.methods({
     removeWbUserSetting(id) {
         let isRemoved = Meteor.users.remove({_id: id});
         if (isRemoved) {
-            userSchemaReact(id);
+            Meteor.call("userSchemaReact", id);
         }
         return isRemoved;
+    },
+    userSchemaReact(id) {
+        let doc = UserSchemaReact.findOne();
+        if (doc) {
+            UserSchemaReact.update({_id: doc._id}, {
+                $set: {
+                    id: id
+                }
+            });
+        } else {
+            UserSchemaReact.insert({
+                id: id
+            });
+        }
     }
 });
 
-
-let userSchemaReact = function (id) {
-    let doc = UserSchemaReact.findOne();
-    if (doc) {
-        UserSchemaReact.update({_id: doc._id}, {
-            $set: {
-                id: id
-            }
-        });
-    } else {
-        UserSchemaReact.insert({
-            id: id
-        });
-    }
-}
