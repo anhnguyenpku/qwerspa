@@ -1,8 +1,9 @@
 import {Sch_TeacherActivity} from '../../../imports/collection/schTeacherActivity';
+import {Sch_TeacherActivityReact} from '../../../imports/collection/schTeacherActivity';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Pos_Customer} from "../../../imports/collection/posCustomer";
-import {Sch_Teacher} from "../../../imports/collection/schTeacher";
+import {Sch_Teacher, Sch_TeacherReact} from "../../../imports/collection/schTeacher";
 
 Meteor.methods({
     querySchTeacherActivity({q, filter, options = {limit: 10, skip: 0}}) {
@@ -113,6 +114,9 @@ Meteor.methods({
     ,
     insertSchTeacherActivity(data) {
         let doc = Sch_TeacherActivity.insert(data);
+        if (doc) {
+            teacherActivityReact(doc);
+        }
         return doc;
     }
     ,
@@ -121,10 +125,33 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            teacherActivityReact(data._id);
+        }
         return doc;
     }
     ,
     removeSchTeacherActivity(id) {
-        return Sch_TeacherActivity.remove({_id: id});
+        let isRemoved = Sch_TeacherActivity.remove({_id: id});
+        if (isRemoved) {
+            teacherActivityReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let teacherActivityReact = function (id) {
+    let doc = Sch_TeacherActivityReact.findOne();
+    if (doc) {
+        Sch_TeacherActivityReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_TeacherActivityReact.insert({
+            id: id
+        });
+    }
+}

@@ -229,3 +229,52 @@ Sch_Teacher.schema = new SimpleSchema({
 
 
 Sch_Teacher.attachSchema(Sch_Teacher.schema);
+
+export const Sch_TeacherReact = new Mongo.Collection('sch_teacherReact');
+Sch_TeacherReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Sch_TeacherReact.attachSchema(Sch_TeacherReact.schema);

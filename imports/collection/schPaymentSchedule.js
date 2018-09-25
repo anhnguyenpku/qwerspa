@@ -4,12 +4,12 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
     studentId: {
         type: String,
         label: "Student",
-        index:true
+        index: true
     },
     classId: {
         type: String,
         label: "Class",
-        index:true
+        index: true
     },
     order: {
         type: Number
@@ -45,7 +45,7 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
     receivePaymentScheduleDate: {
         type: Date,
         label: 'Receive PaymentSchedule Date',
-        index:true
+        index: true
     },
     receivePaymentScheduleDateName: {
         type: String,
@@ -65,7 +65,7 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         optional: true,
-        index:true
+        index: true
     },
     canRemove: {
         type: Boolean,
@@ -81,7 +81,7 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -138,3 +138,52 @@ Sch_PaymentSchedule.schema = new SimpleSchema({
 });
 
 Sch_PaymentSchedule.attachSchema(Sch_PaymentSchedule.schema);
+
+export const Sch_PaymentScheduleReact = new Mongo.Collection('sch_paymentScheduleReact');
+Sch_PaymentScheduleReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Sch_PaymentScheduleReact.attachSchema(Sch_PaymentScheduleReact.schema);

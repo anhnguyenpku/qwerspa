@@ -4,7 +4,7 @@ Sch_Level.schema = new SimpleSchema({
     name: {
         type: String,
         label: "Name",
-        index:true
+        index: true
     },
     khName: {
         type: String,
@@ -35,7 +35,7 @@ Sch_Level.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     createdAt: {
         type: Date,
@@ -46,7 +46,7 @@ Sch_Level.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -81,3 +81,52 @@ Sch_Level.schema = new SimpleSchema({
 });
 
 Sch_Level.attachSchema(Sch_Level.schema);
+
+export const Sch_LevelReact = new Mongo.Collection('sch_levelReact');
+Sch_LevelReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Sch_LevelReact.attachSchema(Sch_LevelReact.schema);

@@ -1,6 +1,8 @@
 import {Sch_Teacher} from '../../../imports/collection/schTeacher';
+import {Sch_TeacherReact} from '../../../imports/collection/schTeacher';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_SubjectReact} from "../../../imports/collection/schSubject";
 
 Meteor.methods({
     querySchTeacher({q, filter, options = {limit: 10, skip: 0}}) {
@@ -55,15 +57,43 @@ Meteor.methods({
         return data;
     },
     insertSchTeacher(data) {
-        return Sch_Teacher.insert(data);
+        let isInserted = Sch_Teacher.insert(data);
+        if (isInserted) {
+            teacherReact(isInserted);
+        }
+        return isInserted;
     },
     updateSchTeacher(data) {
-        return Sch_Teacher.update({_id: data._id},
+        let isUpdated = Sch_Teacher.update({_id: data._id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            teacherReact(data._id);
+        }
+        return isUpdated;
     },
     removeSchTeacher(id) {
-        return Sch_Teacher.remove({_id: id});
+        let isRemoved = Sch_Teacher.remove({_id: id});
+        if (isRemoved) {
+            teacherReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let teacherReact = function (id) {
+    let doc = Sch_TeacherReact.findOne();
+    if (doc) {
+        Sch_TeacherReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_TeacherReact.insert({
+            id: id
+        });
+    }
+}

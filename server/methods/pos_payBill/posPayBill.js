@@ -1,4 +1,5 @@
 import {Pos_PayBill} from '../../../imports/collection/posPayBill';
+import {Pos_PayBillReact} from '../../../imports/collection/posPayBill';
 import {Pos_Bill} from '../../../imports/collection/posBill';
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import {formatCurrency, formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
@@ -8,6 +9,7 @@ import {Pos_Vendor} from "../../../imports/collection/posVendor";
 import {Acc_Journal} from "../../../imports/collection/accJournal";
 import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
 import {Pos_Customer} from "../../../imports/collection/posCustomer";
+import {Pos_LocationReact} from "../../../imports/collection/posLocation";
 
 Meteor.methods({
     queryPayBill({q, filter, options = {limit: 10, skip: 0}}) {
@@ -161,6 +163,9 @@ Meteor.methods({
             })
         }
 
+        if (id) {
+            payBillReact(id);
+        }
         return id;
     },
     removePosPayBill(id) {
@@ -210,6 +215,7 @@ Meteor.methods({
             if (companyDoc.integratedPosAccount === true) {
                 Acc_Journal.remove({refId: id, status: "Pay Bill"});
             }
+            payBillReact(id);
         }
         return isRemove;
 
@@ -287,3 +293,19 @@ Meteor.methods({
     }
 
 });
+
+
+let payBillReact = function (id) {
+    let doc = Pos_PayBillReact.findOne();
+    if (doc) {
+        Pos_PayBillReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_PayBillReact.insert({
+            id: id
+        });
+    }
+}

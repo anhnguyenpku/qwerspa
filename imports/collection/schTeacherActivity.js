@@ -4,7 +4,7 @@ Sch_TeacherActivity.schema = new SimpleSchema({
     teacherId: {
         type: String,
         label: "Teacher",
-        index:true
+        index: true
     },
     activityId: {
         type: String,
@@ -32,7 +32,7 @@ Sch_TeacherActivity.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     createdAt: {
         type: Date,
@@ -43,7 +43,7 @@ Sch_TeacherActivity.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -78,3 +78,52 @@ Sch_TeacherActivity.schema = new SimpleSchema({
 });
 
 Sch_TeacherActivity.attachSchema(Sch_TeacherActivity.schema);
+
+export const Sch_TeacherActivityReact = new Mongo.Collection('sch_teacherActivityReact');
+Sch_TeacherActivityReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Sch_TeacherActivityReact.attachSchema(Sch_TeacherActivityReact.schema);

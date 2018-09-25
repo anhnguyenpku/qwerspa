@@ -1,10 +1,12 @@
 import {Sch_Register} from '../../../imports/collection/schRegister';
+import {Sch_RegisterReact} from '../../../imports/collection/schRegister';
 import {Sch_ClassTable} from '../../../imports/collection/schClassTable';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Class} from "../../../imports/collection/schClass";
 import {Sch_Transcript} from "../../../imports/collection/schTranscript";
 import {Sch_Level} from "../../../imports/collection/schLevel";
+import {Sch_PromotionReact} from "../../../imports/collection/schPromotion";
 
 Meteor.methods({
     querySchRegister({q, filter, options = {limit: 10, skip: 0}}) {
@@ -170,6 +172,9 @@ Meteor.methods({
     },
     insertSchRegister(data) {
         let doc = Sch_Register.insert(data);
+        if (doc) {
+            registerReact(doc);
+        }
         return doc;
     },
     updateSchRegister(data) {
@@ -258,6 +263,10 @@ Meteor.methods({
             {
                 $set: data
             });
+
+        if (doc) {
+            registerReact(data._id);
+        }
         return doc;
     },
     removeSchRegister(id) {
@@ -279,6 +288,27 @@ Meteor.methods({
         }
         Meteor.call("removePaymentScheduleByClassAndStudent", registerDoc.classId, registerDoc.studentId);
         Sch_Transcript.remove({registerId: id});
-        return Sch_Register.remove({_id: id});
+        let isRemoved = Sch_Register.remove({_id: id});
+
+        if (isRemoved) {
+            registerReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let registerReact = function (id) {
+    let doc = Sch_RegisterReact.findOne();
+    if (doc) {
+        Sch_RegisterReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_RegisterReact.insert({
+            id: id
+        });
+    }
+}

@@ -5,8 +5,10 @@ import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Class} from "../../../imports/collection/schClass";
 import {Sch_Transcript} from "../../../imports/collection/schTranscript";
 import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
+import {Sch_PaymentScheduleReact} from "../../../imports/collection/schPaymentSchedule";
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 import {Sch_Promotion} from "../../../imports/collection/schPromotion";
+import {Sch_PaymentReact} from "../../../imports/collection/schPayment";
 
 Meteor.methods({
     schGeneratePaymentSchedule(classDoc, levelDoc, classTableDoc) {
@@ -145,7 +147,23 @@ Meteor.methods({
         return d;
     },
     removePaymentScheduleByClassAndStudent(classId, studentId) {
-        return Sch_PaymentSchedule.remove({classId: classId, studentId: studentId});
+        let isRemoved= Sch_PaymentSchedule.remove({classId: classId, studentId: studentId});
+        return isRemoved;
     }
 
 });
+
+let paymentScheduleReact = function (id) {
+    let doc = Sch_PaymentScheduleReact.findOne();
+    if (doc) {
+        Sch_PaymentScheduleReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_PaymentScheduleReact.insert({
+            id: id
+        });
+    }
+}

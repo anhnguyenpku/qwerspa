@@ -4,7 +4,7 @@ Sch_Bus.schema = new SimpleSchema({
     name: {
         type: String,
         label: "Name",
-        index:true
+        index: true
     },
     code: {
         type: String,
@@ -21,7 +21,7 @@ Sch_Bus.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     createdAt: {
         type: Date,
@@ -32,7 +32,7 @@ Sch_Bus.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -67,3 +67,51 @@ Sch_Bus.schema = new SimpleSchema({
 });
 
 Sch_Bus.attachSchema(Sch_Bus.schema);
+export const Sch_BusReact = new Mongo.Collection('sch_busReact');
+Sch_BusReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Sch_BusReact.attachSchema(Sch_BusReact.schema);

@@ -247,3 +247,52 @@ Pos_Invoice.schema = new SimpleSchema({
 });
 
 Pos_Invoice.attachSchema(Pos_Invoice.schema);
+
+export const Pos_InvoiceReact = new Mongo.Collection('pos_invoiceReact');
+Pos_InvoiceReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_InvoiceReact.attachSchema(Pos_InvoiceReact.schema);

@@ -1,6 +1,8 @@
 import {Sch_Level} from '../../../imports/collection/schLevel';
+import {Sch_LevelReact} from '../../../imports/collection/schLevel';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_FacultyReact} from "../../../imports/collection/schFaculty";
 
 Meteor.methods({
     querySchLevel({q, filter, options = {limit: 10, skip: 0}}) {
@@ -58,6 +60,9 @@ Meteor.methods({
     },
     insertSchLevel(data) {
         let doc = Sch_Level.insert(data);
+        if (doc) {
+            levelReact(doc);
+        }
         return doc;
     },
     updateSchLevel(data) {
@@ -65,9 +70,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            levelReact(data._id);
+        }
         return doc;
     },
     removeSchLevel(id) {
-        return Sch_Level.remove({_id: id});
+        let isRemoved = Sch_Level.remove({_id: id});
+        if (isRemoved) {
+            levelReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let levelReact = function (id) {
+    let doc = Sch_LevelReact.findOne();
+    if (doc) {
+        Sch_LevelReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_LevelReact.insert({
+            id: id
+        });
+    }
+}

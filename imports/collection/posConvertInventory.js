@@ -3,7 +3,7 @@ export const Pos_ConvertInventory = new Mongo.Collection('pos_convertInventory')
 Pos_ConvertInventory.schema = new SimpleSchema({
     productId: {
         type: String,
-        index:true
+        index: true
     },
     qty: {
         type: Number,
@@ -17,7 +17,7 @@ Pos_ConvertInventory.schema = new SimpleSchema({
     },
     locationId: {
         type: String,
-        index:true
+        index: true
     },
     convert: {
         type: [Object],
@@ -39,7 +39,7 @@ Pos_ConvertInventory.schema = new SimpleSchema({
     createdAt: {
         type: Date,
         optional: true,
-        index:true,
+        index: true,
 
         autoValue() {
             if (this.isInsert) {
@@ -66,7 +66,7 @@ Pos_ConvertInventory.schema = new SimpleSchema({
                 return Meteor.userId();
             }
         },
-        index:true
+        index: true
     },
     updatedUser: {
         type: String,
@@ -81,8 +81,57 @@ Pos_ConvertInventory.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     }
 });
 
 Pos_ConvertInventory.attachSchema(Pos_ConvertInventory.schema);
+
+export const Pos_ConvertInventoryReact = new Mongo.Collection('pos_convertInventoryReact');
+Pos_ConvertInventoryReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_ConvertInventoryReact.attachSchema(Pos_ConvertInventoryReact.schema);

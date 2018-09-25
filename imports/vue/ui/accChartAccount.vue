@@ -213,12 +213,12 @@
                 <div class="row">
                     <div class="col-md-6">
                         <el-form-item label="Paid Tax">
-                            <el-switch on-text="" off-text="" v-model="chartAccountForm.isPaidTax"></el-switch>
+                            <el-switch active-text="" inactive-text="" v-model="chartAccountForm.isPaidTax"></el-switch>
                         </el-form-item>
                     </div>
                     <div class="col-md-6">
                         <el-form-item label="Is Payment Type">
-                            <el-switch on-text="" off-text="" v-model="chartAccountForm.isPayment"></el-switch>
+                            <el-switch active-text="" inactive-text="" v-model="chartAccountForm.isPayment"></el-switch>
                         </el-form-item>
                     </div>
                 </div>
@@ -286,12 +286,12 @@
                 <div class="row">
                     <div class="col-md-6">
                         <el-form-item label="Paid Tax">
-                            <el-switch on-text="" off-text="" v-model="chartAccountForm.isPaidTax"></el-switch>
+                            <el-switch active-text="" inactive-text="" v-model="chartAccountForm.isPaidTax"></el-switch>
                         </el-form-item>
                     </div>
                     <div class="col-md-6">
                         <el-form-item label="Is Payment Type">
-                            <el-switch on-text="" off-text="" v-model="chartAccountForm.isPayment"></el-switch>
+                            <el-switch active-text="" inactive-text="" v-model="chartAccountForm.isPayment"></el-switch>
                         </el-form-item>
                     </div>
                 </div>
@@ -370,13 +370,13 @@
                 <div class="row">
                     <div class="col-md-6">
                         <el-form-item label="Paid Tax">
-                            <el-switch on-text="" off-text="" v-model="chartAccountForm.isPaidTax"
+                            <el-switch active-text="" inactive-text="" v-model="chartAccountForm.isPaidTax"
                                        :disabled="true"></el-switch>
                         </el-form-item>
                     </div>
                     <div class="col-md-6">
                         <el-form-item label="Is Payment Type">
-                            <el-switch on-text="" off-text="" v-model="chartAccountForm.isPayment"
+                            <el-switch active-text="" inactive-text="" v-model="chartAccountForm.isPayment"
                                        :disabled="true"></el-switch>
                         </el-form-item>
                     </div>
@@ -447,9 +447,9 @@
     </div>
 </template>
 <script>
-    let CountRow = new Mongo.Collection("countRow");
-    export default {
+    import {Acc_ChartAccountReact} from "../../collection/accChartAccount";
 
+    export default {
         data() {
             return {
                 chartAccountData: [],
@@ -517,7 +517,8 @@
                 chartAccountAccumulatedOption: [],
                 chartAccountFixedAssetOption: [],
                 accountTypeId: "",
-                skip: 0
+                skip: 0,
+                newRe: 0
             }
         },
         watch: {
@@ -615,7 +616,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogAddChartAccount = false;
-                                vm.queryData();
                                 vm.accountTypeOption();
                                 vm.parentChartAccountOption();
                                 vm.$refs["chartAccountFormAdd"].resetFields();
@@ -660,7 +660,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogUpdateChartAccount = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.accountTypeOption();
                                 vm.parentChartAccountOption();
                                 vm.$refs["chartAccountFormUpdate"].resetFields();
@@ -709,7 +708,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogMapChartAccount = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.accountTypeOption();
                                 vm.parentChartAccountOption();
                                 vm.$refs["mapChartAccount"].resetFields();
@@ -753,7 +751,6 @@
                                     type: 'success'
                                 });
                                 vm.dialogMapFixedAsset = false;
-                                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
                                 vm.accountTypeOption();
                                 vm.parentChartAccountOption();
                                 vm.$refs["mapFixedAsset"].resetFields();
@@ -889,14 +886,13 @@
             this.accountTypeOption();
             this.parentChartAccountOption();
             this.queryData();
-            //Meteor.subscribe("acc_chartAccountCount", Session.get("area"));
         },
-        mounted() {
-            /*if (CountRow) {
-                let num = CountRow.findOne({type: "Acc_ChartAccount", rolesArea: Session.get("area")});
-                console.log(num);
+        meteor: {
+            newRe() {
+                let vm = this;
+                Acc_ChartAccountReact.find({}).fetch();
+                vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
-*/
         }
     }
 </script>

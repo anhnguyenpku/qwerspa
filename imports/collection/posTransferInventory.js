@@ -4,16 +4,16 @@ Pos_TransferInventory.schema = new SimpleSchema({
     locationFromId: {
         type: String,
         label: "Location From",
-        index:true
+        index: true
     },
     locationToId: {
         type: String,
         label: "Location To",
-        index:true
+        index: true
     },
     transferInventoryDate: {
         type: Date,
-        index:true
+        index: true
     },
     transferInventoryDateName: {
         type: String,
@@ -26,7 +26,7 @@ Pos_TransferInventory.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     total: {
         type: Number,
@@ -70,7 +70,7 @@ Pos_TransferInventory.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -106,3 +106,52 @@ Pos_TransferInventory.schema = new SimpleSchema({
 });
 
 Pos_TransferInventory.attachSchema(Pos_TransferInventory.schema);
+
+export const Pos_TransferInventoryReact = new Mongo.Collection('pos_transferInventoryReact');
+Pos_TransferInventoryReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_TransferInventoryReact.attachSchema(Pos_TransferInventoryReact.schema);

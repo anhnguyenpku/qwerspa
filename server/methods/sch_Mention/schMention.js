@@ -1,6 +1,8 @@
 import {Sch_Mention} from '../../../imports/collection/schMention';
+import {Sch_MentionReact} from '../../../imports/collection/schMention';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_MajorReact} from "../../../imports/collection/schMajor";
 
 Meteor.methods({
     querySchMention({q, filter, options = {limit: 10, skip: 0}}) {
@@ -57,6 +59,9 @@ Meteor.methods({
     },
     insertSchMention(data) {
         let doc = Sch_Mention.insert(data);
+        if (doc) {
+            mentionReact(doc);
+        }
         return doc;
     },
     updateSchMention(data) {
@@ -64,9 +69,31 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            mentionReact(data._id);
+        }
         return doc;
     },
     removeSchMention(id) {
-        return Sch_Mention.remove({_id: id});
+        let isRemoved = Sch_Mention.remove({_id: id});
+        if (isRemoved) {
+            mentionReact(id);
+        }
+        return isRemoved;
     }
 });
+
+let mentionReact = function (id) {
+    let doc = Sch_MentionReact.findOne();
+    if (doc) {
+        Sch_MentionReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_MentionReact.insert({
+            id: id
+        });
+    }
+}

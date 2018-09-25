@@ -80,3 +80,52 @@ Pos_ProductionResult.schema = new SimpleSchema({
 });
 
 Pos_ProductionResult.attachSchema(Pos_ProductionResult.schema);
+
+export const Pos_ProductionResultReact = new Mongo.Collection('pos_productionResultReact');
+Pos_ProductionResultReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_ProductionResultReact.attachSchema(Pos_ProductionResultReact.schema);

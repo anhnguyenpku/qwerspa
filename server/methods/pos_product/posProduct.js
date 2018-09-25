@@ -1,7 +1,9 @@
 import {Pos_Product} from '../../../imports/collection/posProduct';
+import {Pos_ProductReact} from '../../../imports/collection/posProduct';
 import {Pos_Unit} from '../../../imports/collection/posUnit';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Pos_PayBillReact} from "../../../imports/collection/posPayBill";
 
 Meteor.methods({
     queryPosProduct({q, filter, options = {limit: 10, skip: 0}}) {
@@ -119,16 +121,27 @@ Meteor.methods({
         return data;
     },
     insertPosProduct(data) {
-        return Pos_Product.insert(data);
+        let isInserted = Pos_Product.insert(data);
+        if (isInserted) {
+            productReact(isInserted);
+        }
+        return isInserted;
     },
     updatePosProduct(data) {
-        return Pos_Product.update({_id: data._id},
+        let isUpdated = Pos_Product.update({_id: data._id},
             {
                 $set: data
             });
+
+        if (isUpdated) {
+            productReact(data._id);
+        }
+        return isUpdated;
     },
     removePosProduct(id) {
-        return Pos_Product.remove({_id: id});
+        let isRemoved = Pos_Product.remove({_id: id});
+        productReact(id);
+        return isRemoved;
     },
     getProductCodeByCateogry(categoryId) {
         let productDoc = Pos_Product.findOne({categoryId: categoryId}, {sort: {code: -1}});
@@ -138,3 +151,19 @@ Meteor.methods({
         return "";
     }
 });
+
+
+let productReact = function (id) {
+    let doc = Pos_ProductReact.findOne();
+    if (doc) {
+        Pos_ProductReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_ProductReact.insert({
+            id: id
+        });
+    }
+}

@@ -1,6 +1,8 @@
 import {Sch_BusStop} from '../../../imports/collection/schBusStop';
+import {Sch_BusStopReact} from '../../../imports/collection/schBusStop';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_BusPaymentReact} from "../../../imports/collection/schBusPayment";
 
 Meteor.methods({
     querySchBusStop({q, filter, options = {limit: 10, skip: 0}}) {
@@ -48,6 +50,9 @@ Meteor.methods({
     },
     insertSchBusStop(data) {
         let doc = Sch_BusStop.insert(data);
+        if (doc) {
+            busStopReact(doc);
+        }
         return doc;
     },
     updateSchBusStop(data) {
@@ -55,10 +60,17 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            busStopReact(data._id);
+        }
         return doc;
     },
     removeSchBusStop(id) {
-        return Sch_BusStop.remove({_id: id});
+        let isRemoved = Sch_BusStop.remove({_id: id});
+        if (isRemoved) {
+            busStopReact(id);
+        }
+        return isRemoved;
     },
     getPriceByBusStopAndType(busStopId, type) {
         let data = Sch_BusStop.aggregate([
@@ -85,3 +97,20 @@ Meteor.methods({
 
     }
 });
+
+
+let busStopReact = function (id) {
+    let doc = Sch_BusStopReact.findOne();
+    if (doc) {
+        Sch_BusStopReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_BusStopReact.insert({
+            id: id
+        });
+    }
+}
+

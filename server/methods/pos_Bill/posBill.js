@@ -1,4 +1,5 @@
 import {Pos_Bill} from '../../../imports/collection/posBill';
+import {Pos_BillReact} from '../../../imports/collection/posBill';
 import {Pos_PayBill} from '../../../imports/collection/posPayBill';
 import {Pos_Vendor} from '../../../imports/collection/posVendor';
 import {Pos_Unit} from '../../../imports/collection/posUnit';
@@ -7,6 +8,7 @@ import {SpaceChar} from "../../../both/config.js/space"
 import {formatCurrency, getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import numeral from "numeral";
+import {Acc_JournalReact} from "../../../imports/collection/accJournal";
 
 Meteor.methods({
     queryPosBill({q, filter, options = {limit: 10, skip: 0}}) {
@@ -172,6 +174,8 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+
+            billReact(id);
         }
 
 
@@ -250,6 +254,8 @@ Meteor.methods({
 
                 })
             });
+
+            billReact(_id);
         }
 
 
@@ -269,6 +275,7 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+            billReact(id);
         }
         return isRemoved;
     },
@@ -293,4 +300,20 @@ function pad(number, length) {
 
     return str;
 
+}
+
+
+let billReact = function (id) {
+    let doc = Pos_BillReact.findOne();
+    if (doc) {
+        Pos_BillReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_BillReact.insert({
+            id: id
+        });
+    }
 }

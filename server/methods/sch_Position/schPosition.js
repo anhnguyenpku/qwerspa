@@ -1,6 +1,8 @@
 import {Sch_Position} from '../../../imports/collection/schPosition';
+import {Sch_PositionReact} from '../../../imports/collection/schPosition';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_PaymentScheduleReact} from "../../../imports/collection/schPaymentSchedule";
 
 Meteor.methods({
     querySchPosition({q, filter, options = {limit: 10, skip: 0}}) {
@@ -53,6 +55,9 @@ Meteor.methods({
     },
     insertSchPosition(data) {
         let doc = Sch_Position.insert(data);
+        if (doc) {
+            positionReact(doc);
+        }
         return doc;
     },
     updateSchPosition(data) {
@@ -60,9 +65,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            positionReact(data._id);
+        }
         return doc;
     },
     removeSchPosition(id) {
-        return Sch_Position.remove({_id: id});
+        let isRemoved = Sch_Position.remove({_id: id});
+        if (isRemoved) {
+            positionReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let positionReact = function (id) {
+    let doc = Sch_PositionReact.findOne();
+    if (doc) {
+        Sch_PositionReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_PositionReact.insert({
+            id: id
+        });
+    }
+}

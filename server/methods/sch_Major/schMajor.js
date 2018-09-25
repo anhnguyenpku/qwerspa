@@ -1,6 +1,8 @@
 import {Sch_Major} from '../../../imports/collection/schMajor';
+import {Sch_MajorReact} from '../../../imports/collection/schMajor';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_LevelReact} from "../../../imports/collection/schLevel";
 
 Meteor.methods({
     querySchMajor({q, filter, options = {limit: 10, skip: 0}}) {
@@ -58,6 +60,9 @@ Meteor.methods({
     },
     insertSchMajor(data) {
         let doc = Sch_Major.insert(data);
+        if (doc) {
+            majorReact(doc);
+        }
         return doc;
     },
     updateSchMajor(data) {
@@ -65,9 +70,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            majorReact(data._id);
+        }
         return doc;
     },
     removeSchMajor(id) {
-        return Sch_Major.remove({_id: id});
+        let isRemoved = Sch_Major.remove({_id: id});
+        if (isRemoved) {
+            majorReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let majorReact = function (id) {
+    let doc = Sch_MajorReact.findOne();
+    if (doc) {
+        Sch_MajorReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_MajorReact.insert({
+            id: id
+        });
+    }
+}

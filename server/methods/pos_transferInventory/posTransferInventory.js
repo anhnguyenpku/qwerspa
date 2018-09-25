@@ -1,4 +1,5 @@
 import {Pos_TransferInventory} from '../../../imports/collection/posTransferInventory';
+import {Pos_TransferInventoryReact} from '../../../imports/collection/posTransferInventory';
 import {Pos_Location} from '../../../imports/collection/posLocation';
 
 import {SpaceChar} from "../../../both/config.js/space"
@@ -6,6 +7,7 @@ import {formatCurrency, getCurrencySymbolById} from "../../../imports/api/method
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import numeral from 'numeral';
 import {Pos_Vendor} from "../../../imports/collection/posVendor";
+import {Pos_TermReact} from "../../../imports/collection/posTerm";
 
 Meteor.methods({
     queryTransferInventory({q, filter, options = {limit: 10, skip: 0}}) {
@@ -143,6 +145,7 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+            transferInventoryReact(id);
         }
 
         return id;
@@ -178,6 +181,8 @@ Meteor.methods({
 
                 })
             });
+
+            transferInventoryReact(_id);
         }
 
 
@@ -193,6 +198,8 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+
+            transferInventoryReact(id);
         }
         return isRemoved;
     }
@@ -207,4 +214,20 @@ function pad(number, length) {
 
     return str;
 
+}
+
+
+let transferInventoryReact = function (id) {
+    let doc = Pos_TransferInventoryReact.findOne();
+    if (doc) {
+        Pos_TransferInventoryReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_TransferInventoryReact.insert({
+            id: id
+        });
+    }
 }

@@ -1,9 +1,11 @@
 import {Pos_ConvertInventory} from '../../../imports/collection/posConvertInventory';
+import {Pos_ConvertInventoryReact} from '../../../imports/collection/posConvertInventory';
 import {Pos_Product} from '../../../imports/collection/posProduct';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Pos_Customer} from "../../../imports/collection/posCustomer";
 import {Pos_TransferInventory} from "../../../imports/collection/posTransferInventory";
+import {Pos_CategoryReact} from "../../../imports/collection/posCategory";
 
 Meteor.methods({
     queryPosConvertInventory({q, filter, options = {limit: 10, skip: 0}}) {
@@ -137,6 +139,7 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+            convertInventoryReact(id);
         }
 
 
@@ -169,6 +172,7 @@ Meteor.methods({
 
                 })
             });
+            convertInventoryReact(data._id);
         }
         return isUpdated;
     },
@@ -184,7 +188,24 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+            convertInventoryReact(id);
         }
         return isRemoved;
     }
 });
+
+
+let convertInventoryReact = function (id) {
+    let doc = Pos_ConvertInventoryReact.findOne();
+    if (doc) {
+        Pos_ConvertInventoryReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_ConvertInventoryReact.insert({
+            id: id
+        });
+    }
+}

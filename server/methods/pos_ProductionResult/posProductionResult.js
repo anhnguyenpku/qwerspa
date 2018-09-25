@@ -1,6 +1,8 @@
 import {Pos_ProductionResult} from '../../../imports/collection/posProductionResult';
+import {Pos_ProductionResultReact} from '../../../imports/collection/posProductionResult';
 import {Pos_Product} from '../../../imports/collection/posProduct';
 import {SpaceChar} from "../../../both/config.js/space"
+import {Pos_ProductionReact} from "../../../imports/collection/posProduction";
 
 Meteor.methods({
     queryPosProductionResult({q, filter, options = {limit: 10, skip: 0}}) {
@@ -126,6 +128,7 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+            productionResultReact(id);
         }
         return isRemoved;
     },
@@ -141,6 +144,8 @@ Meteor.methods({
                 }
             })
             Meteor.call("updatePosProductionById", data.productionId);
+
+            productionResultReact(id);
         }
 
 
@@ -148,3 +153,18 @@ Meteor.methods({
     }
 
 });
+
+let productionResultReact = function (id) {
+    let doc = Pos_ProductionResultReact.findOne();
+    if (doc) {
+        Pos_ProductionResultReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_ProductionResultReact.insert({
+            id: id
+        });
+    }
+}

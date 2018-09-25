@@ -119,3 +119,53 @@ Acc_ChartAccount.schema = new SimpleSchema({
 });
 
 Acc_ChartAccount.attachSchema(Acc_ChartAccount.schema);
+
+
+export const Acc_ChartAccountReact = new Mongo.Collection('acc_chartAccountReact');
+Acc_ChartAccountReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Acc_ChartAccountReact.attachSchema(Acc_ChartAccountReact.schema);

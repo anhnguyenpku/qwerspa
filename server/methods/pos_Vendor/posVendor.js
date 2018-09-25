@@ -1,6 +1,8 @@
 import {Pos_Vendor} from '../../../imports/collection/posVendor';
+import {Pos_VendorReact} from '../../../imports/collection/posVendor';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Pos_UnitReact} from "../../../imports/collection/posUnit";
 
 Meteor.methods({
     queryPosVendor({q, filter, options = {limit: 10, skip: 0}}) {
@@ -63,15 +65,43 @@ Meteor.methods({
         return data;
     },
     insertPosVendor(data) {
-        return Pos_Vendor.insert(data);
+        let isInserted = Pos_Vendor.insert(data);
+        if (isInserted) {
+            vendorReact(isInserted);
+        }
+        return isInserted;
     },
     updatePosVendor(data) {
-        return Pos_Vendor.update({_id: data._id},
+        let isUpdated = Pos_Vendor.update({_id: data._id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            vendorReact(data._id);
+        }
+        return isUpdated;
     },
     removePosVendor(id) {
-        return Pos_Vendor.remove({_id: id});
+        let isRemoved = Pos_Vendor.remove({_id: id});
+        if (isRemoved) {
+            vendorReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let vendorReact = function (id) {
+    let doc = Pos_VendorReact.findOne();
+    if (doc) {
+        Pos_VendorReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_VendorReact.insert({
+            id: id
+        });
+    }
+}

@@ -1,6 +1,7 @@
 import {Sch_BusRegister} from '../../../imports/collection/schBusRegister';
+import {Sch_BusRegisterReact} from '../../../imports/collection/schBusRegister';
 import {Sch_Bus} from '../../../imports/collection/schBus';
-import {Sch_BusStop} from '../../../imports/collection/schBusStop';
+import {Sch_BusStop, Sch_BusStopReact} from '../../../imports/collection/schBusStop';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Student} from "../../../imports/collection/schStudent";
@@ -216,6 +217,9 @@ Meteor.methods({
     },
     insertSchBusRegister(data) {
         let doc = Sch_BusRegister.insert(data);
+        if (doc) {
+            busRegisterReact(doc);
+        }
         return doc;
     },
     updateSchBusRegister(data) {
@@ -223,9 +227,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            busRegisterReact(data._id);
+        }
         return doc;
     },
     removeSchBusRegister(id) {
-        return Sch_BusRegister.remove({_id: id});
+        let isRemoved = Sch_BusRegister.remove({_id: id});
+        if (isRemoved) {
+            busRegisterReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let busRegisterReact = function (id) {
+    let doc = Sch_BusRegisterReact.findOne();
+    if (doc) {
+        Sch_BusRegisterReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_BusRegisterReact.insert({
+            id: id
+        });
+    }
+}

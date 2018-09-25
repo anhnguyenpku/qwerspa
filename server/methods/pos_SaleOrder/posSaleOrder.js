@@ -1,8 +1,9 @@
 import {Pos_SaleOrder} from '../../../imports/collection/posSaleOrder';
+import {Pos_SaleOrderReact} from '../../../imports/collection/posSaleOrder';
 import {Pos_Customer} from '../../../imports/collection/posCustomer';
 
 import {SpaceChar} from "../../../both/config.js/space"
-import {Pos_ReceivePayment} from "../../../imports/collection/posReceivePayment";
+import {Pos_ReceivePayment, Pos_ReceivePaymentReact} from "../../../imports/collection/posReceivePayment";
 import {Acc_Journal} from "../../../imports/collection/accJournal";
 import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
 import {formatCurrency, formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
@@ -213,7 +214,7 @@ Meteor.methods({
                     }
                 })
             }
-
+            saleOrderReact(id);
 
         }
 
@@ -319,7 +320,7 @@ Meteor.methods({
                     }
                 })
             }
-
+            saleOrderReact(_id);
         }
 
         return isUpdated;
@@ -335,6 +336,8 @@ Meteor.methods({
             if (companyDoc.integratedPosAccount === true) {
                 Acc_Journal.remove({refId: id, status: "Sale Order"});
             }
+
+            saleOrderReact(id);
         }
 
         return isRemoved;
@@ -360,4 +363,20 @@ function pad(number, length) {
 
     return str;
 
+}
+
+
+let saleOrderReact = function (id) {
+    let doc = Pos_SaleOrderReact.findOne();
+    if (doc) {
+        Pos_SaleOrderReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_SaleOrderReact.insert({
+            id: id
+        });
+    }
 }

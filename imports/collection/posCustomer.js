@@ -4,7 +4,7 @@ Pos_Customer.schema = new SimpleSchema({
 
     name: {
         type: String,
-        index:true,
+        index: true,
 
         label: "Name /Company"
     },
@@ -43,12 +43,12 @@ Pos_Customer.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     createdAt: {
         type: Date,
         optional: true,
-        index:true,
+        index: true,
 
         autoValue() {
             if (this.isInsert) {
@@ -94,3 +94,52 @@ Pos_Customer.schema = new SimpleSchema({
 });
 
 Pos_Customer.attachSchema(Pos_Customer.schema);
+
+export const Pos_CustomerReact = new Mongo.Collection('pos_customerReact');
+Pos_CustomerReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_CustomerReact.attachSchema(Pos_CustomerReact.schema);

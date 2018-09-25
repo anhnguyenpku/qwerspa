@@ -4,7 +4,7 @@ Pos_Location.schema = new SimpleSchema({
     name: {
         type: String,
         label: "Name",
-        index:true
+        index: true
     },
     khName: {
         type: String,
@@ -38,7 +38,7 @@ Pos_Location.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     createdAt: {
         type: Date,
@@ -49,7 +49,7 @@ Pos_Location.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -84,3 +84,52 @@ Pos_Location.schema = new SimpleSchema({
 });
 
 Pos_Location.attachSchema(Pos_Location.schema);
+
+export const Pos_LocationReact = new Mongo.Collection('pos_locationReact');
+Pos_LocationReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_LocationReact.attachSchema(Pos_LocationReact.schema);

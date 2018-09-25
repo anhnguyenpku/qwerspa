@@ -1,6 +1,8 @@
 import {Sch_Subject} from '../../../imports/collection/schSubject';
+import {Sch_SubjectReact} from '../../../imports/collection/schSubject';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_StudentReact} from "../../../imports/collection/schStudent";
 
 Meteor.methods({
     querySchSubject({q, filter, options = {limit: 10, skip: 0}}) {
@@ -58,6 +60,9 @@ Meteor.methods({
     },
     insertSchSubject(data) {
         let doc = Sch_Subject.insert(data);
+        if (doc) {
+            subjectReact(doc);
+        }
         return doc;
     },
     updateSchSubject(data) {
@@ -65,9 +70,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            subjectReact(data._id);
+        }
         return doc;
     },
     removeSchSubject(id) {
-        return Sch_Subject.remove({_id: id});
+        let isRemoved = Sch_Subject.remove({_id: id});
+        if (isRemoved) {
+            subjectReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let subjectReact = function (id) {
+    let doc = Sch_SubjectReact.findOne();
+    if (doc) {
+        Sch_SubjectReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_SubjectReact.insert({
+            id: id
+        });
+    }
+}

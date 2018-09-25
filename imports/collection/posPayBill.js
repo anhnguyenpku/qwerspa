@@ -4,12 +4,12 @@ Pos_PayBill.schema = new SimpleSchema({
     vendorId: {
         type: String,
         label: "Vendor",
-        index:true
+        index: true
     },
     locationId: {
         type: String,
         label: "Location",
-        index:true
+        index: true
     },
     bill: {
         type: [Object],
@@ -101,7 +101,7 @@ Pos_PayBill.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         optional: true,
-        index:true
+        index: true
     },
     canRemove: {
         type: Boolean,
@@ -129,7 +129,7 @@ Pos_PayBill.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -165,3 +165,51 @@ Pos_PayBill.schema = new SimpleSchema({
 });
 
 Pos_PayBill.attachSchema(Pos_PayBill.schema);
+export const Pos_PayBillReact = new Mongo.Collection('pos_payBillReact');
+Pos_PayBillReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_PayBillReact.attachSchema(Pos_PayBillReact.schema);

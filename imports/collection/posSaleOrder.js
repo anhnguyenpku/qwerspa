@@ -4,13 +4,13 @@ Pos_SaleOrder.schema = new SimpleSchema({
     customerId: {
         type: String,
         label: "Customer",
-        index:true
+        index: true
     },
 
     locationId: {
         type: String,
         label: "Location",
-        index:true
+        index: true
     },
     address: {
         type: String,
@@ -22,7 +22,7 @@ Pos_SaleOrder.schema = new SimpleSchema({
     },
     saleOrderDate: {
         type: Date,
-        index:true
+        index: true
     },
     saleOrderDateName: {
         type: String,
@@ -109,7 +109,7 @@ Pos_SaleOrder.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     item: {
         type: [Object],
@@ -211,7 +211,7 @@ Pos_SaleOrder.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -250,3 +250,52 @@ Pos_SaleOrder.schema = new SimpleSchema({
 });
 
 Pos_SaleOrder.attachSchema(Pos_SaleOrder.schema);
+
+export const Pos_SaleOrderReact = new Mongo.Collection('pos_saleOrderReact');
+Pos_SaleOrderReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_SaleOrderReact.attachSchema(Pos_SaleOrderReact.schema);

@@ -1,6 +1,8 @@
 import {Sch_Time} from '../../../imports/collection/schTime';
+import {Sch_TimeReact} from '../../../imports/collection/schTime';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_TeacherActivityReact} from "../../../imports/collection/schTeacherActivity";
 
 Meteor.methods({
     querySchTime({q, filter, options = {limit: 10, skip: 0}}) {
@@ -48,6 +50,9 @@ Meteor.methods({
     },
     insertSchTime(data) {
         let doc = Sch_Time.insert(data);
+        if (doc) {
+            timeReact(doc);
+        }
         return doc;
     },
     updateSchTime(data) {
@@ -55,9 +60,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            timeReact(data._id);
+        }
         return doc;
     },
     removeSchTime(id) {
-        return Sch_Time.remove({_id: id});
+        let isRemoved = Sch_Time.remove({_id: id});
+        if (isRemoved) {
+            timeReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let timeReact = function (id) {
+    let doc = Sch_TimeReact.findOne();
+    if (doc) {
+        Sch_TimeReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_TimeReact.insert({
+            id: id
+        });
+    }
+}

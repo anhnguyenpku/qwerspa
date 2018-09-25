@@ -1,8 +1,9 @@
 import {Sch_Student} from '../../../imports/collection/schStudent';
+import {Sch_StudentReact} from '../../../imports/collection/schStudent';
 import {Sch_Transcript} from '../../../imports/collection/schTranscript';
 
 import {SpaceChar} from "../../../both/config.js/space"
-import {Sch_Register} from "../../../imports/collection/schRegister";
+import {Sch_Register, Sch_RegisterReact} from "../../../imports/collection/schRegister";
 import {Pos_Invoice} from "../../../imports/collection/posInvoice";
 
 Meteor.methods({
@@ -68,17 +69,29 @@ Meteor.methods({
     },
     insertSchStudent(data) {
         data.personal.code = pad(data.personal.code + "", 6);
-        return Sch_Student.insert(data);
+        let isInserted = Sch_Student.insert(data);
+        if (isInserted) {
+            studentReact(isInserted);
+        }
+        return isInserted;
     },
     updateSchStudent(data) {
         data.personal.code = pad(data.personal.code + "", 6);
-        return Sch_Student.update({_id: data._id},
+        let isUpdated = Sch_Student.update({_id: data._id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            studentReact(data._id);
+        }
+        return isUpdated;
     },
     removeSchStudent(id) {
-        return Sch_Student.remove({_id: id});
+        let isRemoved = Sch_Student.remove({_id: id});
+        if (isRemoved) {
+            studentReact(id);
+        }
+        return isRemoved;
     },
     inputTranscript(data) {
 
@@ -135,7 +148,11 @@ Meteor.methods({
 
     },
     sch_updateStudentImageURlById(id, url) {
-        return Sch_Student.direct.update({_id: id}, {$set: {imgUrl: url}});
+        let isUpdated = Sch_Student.direct.update({_id: id}, {$set: {imgUrl: url}});
+        if (isUpdated) {
+            studentReact(id);
+        }
+        return isUpdated;
     },
     querySchStudentOptionUnPaid() {
         return [];
@@ -146,4 +163,20 @@ Meteor.methods({
 function pad(str, max) {
     str = str.toString();
     return str.length < max ? pad("0" + str, max) : str;
+}
+
+
+let studentReact = function (id) {
+    let doc = Sch_StudentReact.findOne();
+    if (doc) {
+        Sch_StudentReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_StudentReact.insert({
+            id: id
+        });
+    }
 }

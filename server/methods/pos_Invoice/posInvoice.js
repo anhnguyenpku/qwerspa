@@ -1,5 +1,6 @@
 import {Pos_Invoice} from '../../../imports/collection/posInvoice';
-import {Pos_Customer} from '../../../imports/collection/posCustomer';
+import {Pos_InvoiceReact} from '../../../imports/collection/posInvoice';
+import {Pos_Customer, Pos_CustomerReact} from '../../../imports/collection/posCustomer';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Pos_ReceivePayment} from "../../../imports/collection/posReceivePayment";
@@ -191,6 +192,8 @@ Meteor.methods({
                 })
 
             }
+
+            invoiceReact(id);
         }
 
         if (id) {
@@ -321,6 +324,8 @@ Meteor.methods({
                     Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
                 })
             }
+
+            invoiceReact(_id);
         }
 
         if (isUpdated) {
@@ -397,6 +402,8 @@ Meteor.methods({
                 }
             })
 
+            invoiceReact(id);
+
         }
         return isRemoved;
     },
@@ -445,4 +452,20 @@ function pad(number, length) {
 
     return str;
 
+}
+
+
+let invoiceReact = function (id) {
+    let doc = Pos_InvoiceReact.findOne();
+    if (doc) {
+        Pos_InvoiceReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_InvoiceReact.insert({
+            id: id
+        });
+    }
 }

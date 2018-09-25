@@ -53,7 +53,7 @@ Acc_Exchange.schema = new SimpleSchema({
     },
     createdAt: {
         type: Date,
-        optional:true,
+        optional: true,
 
         autoValue() {
             if (this.isInsert) {
@@ -63,7 +63,7 @@ Acc_Exchange.schema = new SimpleSchema({
     },
     updatedAt: {
         type: Date,
-        optional:true,
+        optional: true,
 
         autoValue() {
             if (this.isUpdate) {
@@ -94,3 +94,52 @@ Acc_Exchange.schema = new SimpleSchema({
 });
 
 Acc_Exchange.attachSchema(Acc_Exchange.schema);
+
+export const Acc_ExchangeReact = new Mongo.Collection('acc_exchangeReact');
+Acc_ExchangeReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Acc_ExchangeReact.attachSchema(Acc_ExchangeReact.schema);

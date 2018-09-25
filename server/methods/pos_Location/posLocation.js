@@ -1,6 +1,8 @@
 import {Pos_Location} from '../../../imports/collection/posLocation';
+import {Pos_LocationReact} from '../../../imports/collection/posLocation';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Pos_InvoiceReact} from "../../../imports/collection/posInvoice";
 
 Meteor.methods({
     queryPosLocation({q, filter, options = {limit: 10, skip: 0}}) {
@@ -67,6 +69,10 @@ Meteor.methods({
         if (data.isMainLocation == true) {
             Pos_Location.direct.update({_id: {$ne: doc._id}}, {$set: {isMainLocation: false}}, {multi: true});
         }
+
+        if (doc) {
+            locationReact(doc);
+        }
         return doc;
     },
     updatePosLocation(data) {
@@ -79,9 +85,32 @@ Meteor.methods({
         if (data.isMainLocation == true) {
             let d = Pos_Location.direct.update({_id: {$ne: id}}, {$set: {isMainLocation: false}}, {multi: true});
         }
+        if (doc) {
+            locationReact(data._id);
+        }
         return doc;
     },
     removePosLocation(id) {
-        return Pos_Location.remove({_id: id});
+        let isRemoved = Pos_Location.remove({_id: id});
+        if (isRemoved) {
+            locationReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let locationReact = function (id) {
+    let doc = Pos_LocationReact.findOne();
+    if (doc) {
+        Pos_LocationReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_LocationReact.insert({
+            id: id
+        });
+    }
+}

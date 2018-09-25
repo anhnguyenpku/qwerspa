@@ -100,3 +100,52 @@ Sch_BusRegister.schema = new SimpleSchema({
 });
 
 Sch_BusRegister.attachSchema(Sch_BusRegister.schema);
+
+export const Sch_BusRegisterReact = new Mongo.Collection('sch_busRegisterReact');
+Sch_BusRegisterReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Sch_BusRegisterReact.attachSchema(Sch_BusRegisterReact.schema);

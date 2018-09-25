@@ -11,6 +11,8 @@ import Cleave from 'cleave.js';
 import Croppa from 'vue-croppa';
 import bodymovin from 'bodymovin';
 import $ from 'jQuery';
+import  VueMeteorTracker from "vue-meteor-tracker";
+
 GoogleMapsLoader.KEY = 'AIzaSyDOld0lTG5Ku15U-p-kyhohZXmZra2rG1k';
 
 
@@ -21,6 +23,7 @@ Vue.prototype.$_GoogleMapsLoader = GoogleMapsLoader;
 Vue.prototype.$_bodymovin = bodymovin;
 Vue.prototype.$jQuery = $;
 
+Vue.use(VueMeteorTracker);
 Vue.use(Croppa);
 Vue.use(VueMask);
 Vue.use(CollapseTransition);

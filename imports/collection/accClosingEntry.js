@@ -79,3 +79,53 @@ Acc_ClosingEntry.schema = new SimpleSchema({
 });
 
 Acc_ClosingEntry.attachSchema(Acc_ClosingEntry.schema);
+
+
+export const Acc_ClosingEntryReact = new Mongo.Collection('acc_closingEntryReact');
+Acc_ClosingEntryReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Acc_ClosingEntryReact.attachSchema(Acc_ClosingEntryReact.schema);

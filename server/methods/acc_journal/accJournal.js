@@ -1,4 +1,5 @@
 import {Acc_Journal} from '../../../imports/collection/accJournal';
+import {Acc_JournalReact} from '../../../imports/collection/accJournal';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
@@ -9,6 +10,7 @@ import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 import {exchangeCoefficient} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
 import {roundCurrency} from "../../../imports/api/methods/roundCurrency";
+import {Acc_FixedAssetReact} from "../../../imports/collection/accFixedAsset";
 
 
 Meteor.methods({
@@ -83,7 +85,11 @@ Meteor.methods({
             return obj.drcr = parseFloat(obj.dr) - parseFloat(obj.cr);
         });
 
-        return Acc_Journal.insert(data);
+        let isInserted = Acc_Journal.insert(data);
+        if (isInserted) {
+            journalReact(isInserted);
+        }
+        return isInserted;
     },
     insertJournalPaid(data, type) {
         data.voucherId = data.rolesArea + moment(data.journalData).format("YYYY") + pad(data.voucherId, 6);
@@ -127,7 +133,11 @@ Meteor.methods({
             })
         }
         data.transaction = newTransaction;
-        return Acc_Journal.insert(data);
+        let isInserted = Acc_Journal.insert(data);
+        if (isInserted) {
+            journalReact(isInserted);
+        }
+        return isInserted;
     },
     updateJournal(data, id) {
 
@@ -136,13 +146,22 @@ Meteor.methods({
             return obj.drcr = parseFloat(obj.dr) - parseFloat(obj.cr);
         });
 
-        return Acc_Journal.update({_id: id},
+        let isUpdated = Acc_Journal.update({_id: id},
             {
                 $set: data
             });
+
+        if (isUpdated) {
+            journalReact(id);
+        }
+        return isUpdated;
     },
     removeJournal(id) {
-        return Acc_Journal.remove({_id: id});
+        let isRemoved = Acc_Journal.remove({_id: id});
+        if (isRemoved) {
+            journalReact(id);
+        }
+        return isRemoved;
     },
     autoIncreseVoucher(roleArea, journalDate, currencyId) {
         let startYear = moment(journalDate).startOf("year").toDate();
@@ -168,4 +187,20 @@ function pad(number, length) {
 
     return str;
 
+}
+
+
+let journalReact = function (id) {
+    let doc = Acc_JournalReact.findOne();
+    if (doc) {
+        Acc_JournalReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Acc_JournalReact.insert({
+            id: id
+        });
+    }
 }

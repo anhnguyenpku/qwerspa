@@ -1,6 +1,8 @@
 import {Sch_Activity} from '../../../imports/collection/schActivity';
+import {Sch_ActivityReact} from '../../../imports/collection/schActivity';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Pos_VendorReact} from "../../../imports/collection/posVendor";
 
 Meteor.methods({
     querySchActivity({q, filter, options = {limit: 10, skip: 0}}) {
@@ -53,6 +55,9 @@ Meteor.methods({
     },
     insertSchActivity(data) {
         let doc = Sch_Activity.insert(data);
+        if (doc) {
+            activityReact(doc);
+        }
         return doc;
     },
     updateSchActivity(data) {
@@ -60,9 +65,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            activityReact(data._id);
+        }
         return doc;
     },
     removeSchActivity(id) {
-        return Sch_Activity.remove({_id: id});
+        let isRemoved = Sch_Activity.remove({_id: id});
+        if (isRemoved) {
+            activityReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let activityReact = function (id) {
+    let doc = Sch_ActivityReact.findOne();
+    if (doc) {
+        Sch_ActivityReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_ActivityReact.insert({
+            id: id
+        });
+    }
+}

@@ -1,6 +1,8 @@
 import {Pos_Category} from '../../../imports/collection/posCategory';
+import {Pos_CategoryReact} from '../../../imports/collection/posCategory';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Pos_BillReact} from "../../../imports/collection/posBill";
 
 Meteor.methods({
     queryPosCategory({q, filter, options = {limit: 10, skip: 0}}) {
@@ -81,7 +83,11 @@ Meteor.methods({
         if (parentDoc) {
             data.level = parentDoc.level + 1;
         }
-        return Pos_Category.insert(data);
+        let isInserted = Pos_Category.insert(data);
+        if (isInserted) {
+            categoryReact(isInserted);
+        }
+        return isInserted;
     },
     updatePosCategory(data) {
         let parentDoc = Pos_Category.findOne({_id: data.subCategoryOf});
@@ -89,12 +95,36 @@ Meteor.methods({
         if (parentDoc) {
             data.level = parentDoc.level + 1;
         }
-        return Pos_Category.update({_id: data._id},
+        let isUpdated = Pos_Category.update({_id: data._id},
             {
                 $set: data
             });
+
+        if (isUpdated) {
+            categoryReact(data._id);
+        }
+        return isUpdated;
     },
     removePosCategory(id) {
-        return Pos_Category.remove({_id: id});
+        let isRemoved = Pos_Category.remove({_id: id});
+        if (isRemoved) {
+            categoryReact(id);
+        }
+        return isRemoved;
     }
 });
+
+let categoryReact = function (id) {
+    let doc = Pos_CategoryReact.findOne();
+    if (doc) {
+        Pos_CategoryReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_CategoryReact.insert({
+            id: id
+        });
+    }
+}

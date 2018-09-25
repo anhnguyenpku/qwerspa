@@ -144,3 +144,52 @@ Acc_FixedAsset.schema = new SimpleSchema({
 });
 
 Acc_FixedAsset.attachSchema(Acc_FixedAsset.schema);
+
+export const Acc_FixedAssetReact = new Mongo.Collection('acc_fixedAssetReact');
+Acc_FixedAssetReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Acc_FixedAssetReact.attachSchema(Acc_FixedAssetReact.schema);

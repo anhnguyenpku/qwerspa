@@ -1,4 +1,5 @@
 import {Sch_Payment} from '../../../imports/collection/schPayment';
+import {Sch_PaymentReact} from '../../../imports/collection/schPayment';
 import {Sch_Student} from '../../../imports/collection/schStudent';
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
@@ -8,6 +9,7 @@ import numeral from "numeral";
 import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
 import {Pos_Invoice} from "../../../imports/collection/posInvoice";
 import {Pos_Customer} from "../../../imports/collection/posCustomer";
+import {Sch_MentionReact} from "../../../imports/collection/schMention";
 
 Meteor.methods({
     querySchPayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -116,7 +118,11 @@ Meteor.methods({
             return obj;
         });
 
-        return Sch_Payment.insert(data);
+        let isInserted = Sch_Payment.insert(data);
+        if (isInserted) {
+            paymentReact(isInserted);
+        }
+        return isInserted;
     },
     updateSchPayment(data, _id) {
         data.schedule.map((obj) => {
@@ -127,10 +133,14 @@ Meteor.methods({
             return obj;
         });
 
-        return Sch_Payment.update({_id: _id},
+        let isUpdated = Sch_Payment.update({_id: _id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            paymentReact(_id);
+        }
+        return isUpdated;
     },
     removeSchPayment(id) {
         let paymentDoc = Sch_Payment.findOne({_id: id});
@@ -166,7 +176,11 @@ Meteor.methods({
                     }, {multi: true}, true);
             })
         }
-        return Sch_Payment.remove({_id: id});
+        let isRemoved = Sch_Payment.remove({_id: id});
+        if (isRemoved) {
+            paymentReact(id);
+        }
+        return isRemoved;
 
 
     },
@@ -205,3 +219,18 @@ Meteor.methods({
     },
 
 });
+
+let paymentReact = function (id) {
+    let doc = Sch_PaymentReact.findOne();
+    if (doc) {
+        Sch_PaymentReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_PaymentReact.insert({
+            id: id
+        });
+    }
+}

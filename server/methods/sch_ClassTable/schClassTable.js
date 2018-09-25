@@ -1,8 +1,9 @@
 import {Sch_ClassTable} from '../../../imports/collection/schClassTable';
+import {Sch_ClassTableReact} from '../../../imports/collection/schClassTable';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Sch_Register} from "../../../imports/collection/schRegister";
-import {Sch_Class} from "../../../imports/collection/schClass";
+import {Sch_Class, Sch_ClassReact} from "../../../imports/collection/schClass";
 import {Sch_Level} from "../../../imports/collection/schLevel";
 import {Sch_PaymentSchedule} from "../../../imports/collection/schPaymentSchedule";
 
@@ -62,6 +63,9 @@ Meteor.methods({
     },
     insertSchClassTable(data) {
         let doc = Sch_ClassTable.insert(data);
+        if (doc) {
+            classTableReact(doc);
+        }
         return doc;
     },
     updateSchClassTable(data) {
@@ -69,10 +73,17 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            classTableReact(data._id);
+        }
         return doc;
     },
     removeSchClassTable(id) {
-        return Sch_ClassTable.remove({_id: id});
+        let isRemoved = Sch_ClassTable.remove({_id: id});
+        if (isRemoved) {
+            classTableReact(id);
+        }
+        return isRemoved;
     },
     queryStudentByClassId(classId) {
         let data = Sch_ClassTable.aggregate([
@@ -365,3 +376,19 @@ Meteor.methods({
     }
 
 });
+
+
+let classTableReact = function (id) {
+    let doc = Sch_ClassTableReact.findOne();
+    if (doc) {
+        Sch_ClassTableReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_ClassTableReact.insert({
+            id: id
+        });
+    }
+}

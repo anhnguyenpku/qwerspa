@@ -1,4 +1,5 @@
 import {Acc_ChartAccount} from '../../../imports/collection/accChartAccount';
+import {Acc_ChartAccountReact} from '../../../imports/collection/accChartAccount';
 import {Acc_AccountType} from '../../../imports/collection/accAccountType';
 
 import {SpaceChar} from "../../../both/config.js/space"
@@ -96,7 +97,11 @@ Meteor.methods({
         if (parentDoc) {
             data.level = parentDoc.level + 1;
         }
-        return Acc_ChartAccount.insert(data);
+        let isInsert = Acc_ChartAccount.insert(data);
+        if (isInsert) {
+            chartAccountReact(isInsert);
+        }
+        return isInsert;
     },
     updateChartAccount(data) {
         let parentDoc = Acc_ChartAccount.findOne({_id: data.subAccountOf});
@@ -104,20 +109,48 @@ Meteor.methods({
         if (parentDoc) {
             data.level = parentDoc.level + 1;
         }
-        return Acc_ChartAccount.update({_id: data._id},
+        let isUpdated = Acc_ChartAccount.update({_id: data._id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            chartAccountReact(data._id);
+        }
+        return isUpdated;
     },
     updateMapFixedAsset(mapFixedAssetDoc) {
         let obj = {};
         obj.mapFixedAsset = mapFixedAssetDoc;
-        return Acc_ChartAccount.update({_id: mapFixedAssetDoc.fixedAssetId},
+        let isUpdated = Acc_ChartAccount.update({_id: mapFixedAssetDoc.fixedAssetId},
             {
                 $set: obj
             });
+        if (isUpdated) {
+            chartAccountReact(mapFixedAssetDoc._id);
+
+        }
+        return isUpdated;
     },
     removeChartAccount(id) {
-        return Acc_ChartAccount.remove({_id: id});
+        let isRemoved = Acc_ChartAccount.remove({_id: id});
+        if (isRemoved) {
+            chartAccountReact(id);
+        }
+        return isRemoved;
     }
 });
+
+let chartAccountReact = function (id) {
+    let doc = Acc_ChartAccountReact.findOne();
+    if (doc) {
+        Acc_ChartAccountReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Acc_ChartAccountReact.insert({
+            id: id
+        });
+    }
+}

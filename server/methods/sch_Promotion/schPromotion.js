@@ -1,6 +1,8 @@
 import {Sch_Promotion} from '../../../imports/collection/schPromotion';
+import {Sch_PromotionReact} from '../../../imports/collection/schPromotion';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_ProgramReact} from "../../../imports/collection/schProgram";
 
 Meteor.methods({
     querySchPromotion({q, filter, options = {limit: 10, skip: 0}}) {
@@ -58,6 +60,9 @@ Meteor.methods({
     },
     insertSchPromotion(data) {
         let doc = Sch_Promotion.insert(data);
+        if (doc) {
+            promotionReact(doc);
+        }
         return doc;
     },
     updateSchPromotion(data) {
@@ -65,9 +70,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            promotionReact(data._id);
+        }
         return doc;
     },
     removeSchPromotion(id) {
-        return Sch_Promotion.remove({_id: id});
+        let isRemoved = Sch_Promotion.remove({_id: id});
+        if (isRemoved) {
+            promotionReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let promotionReact = function (id) {
+    let doc = Sch_PromotionReact.findOne();
+    if (doc) {
+        Sch_PromotionReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_PromotionReact.insert({
+            id: id
+        });
+    }
+}

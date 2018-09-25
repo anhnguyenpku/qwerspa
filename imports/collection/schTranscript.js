@@ -3,11 +3,11 @@ export const Sch_Transcript = new Mongo.Collection('sch_transcript');
 Sch_Transcript.schema = new SimpleSchema({
     studentId: {
         type: String,
-        index:true
+        index: true
     },
     curiculumnId: {
         type: String,
-        index:true
+        index: true
     },
     majorId: {
         type: String
@@ -25,7 +25,7 @@ Sch_Transcript.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     culumnSemester1: {
         type: [Object]
@@ -127,7 +127,7 @@ Sch_Transcript.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -162,3 +162,51 @@ Sch_Transcript.schema = new SimpleSchema({
 });
 
 Sch_Transcript.attachSchema(Sch_Transcript.schema);
+
+export const Sch_TranscriptReact = new Mongo.Collection('sch_transcriptReact');
+Sch_TranscriptReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+Sch_TranscriptReact.attachSchema(Sch_TranscriptReact.schema);

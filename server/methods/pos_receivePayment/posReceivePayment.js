@@ -1,4 +1,5 @@
 import {Pos_ReceivePayment} from '../../../imports/collection/posReceivePayment';
+import {Pos_ReceivePaymentReact} from '../../../imports/collection/posReceivePayment';
 import {Pos_Invoice} from '../../../imports/collection/posInvoice';
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import {formatCurrency, formatCurrencyLast} from "../../../imports/api/methods/roundCurrency";
@@ -8,6 +9,7 @@ import numeral from "numeral";
 import {Pos_Customer} from "../../../imports/collection/posCustomer";
 import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
 import {Acc_Journal} from "../../../imports/collection/accJournal";
+import {Pos_ProductionResultReact} from "../../../imports/collection/posProductionResult";
 
 Meteor.methods({
     queryPosReceivePayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -150,6 +152,9 @@ Meteor.methods({
                 }
             })
         }
+        if (id) {
+            receivePaymentReact(id);
+        }
 
         return id;
     },
@@ -199,6 +204,8 @@ Meteor.methods({
             if (companyDoc.integratedPosAccount === true) {
                 Acc_Journal.remove({refId: id, status: "Receive Payment"});
             }
+
+            receivePaymentReact(id);
         }
         return isRemove;
 
@@ -273,3 +280,18 @@ Meteor.methods({
     }
 
 });
+
+let receivePaymentReact = function (id) {
+    let doc = Pos_ReceivePaymentReact.findOne();
+    if (doc) {
+        Pos_ReceivePaymentReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_ReceivePaymentReact.insert({
+            id: id
+        });
+    }
+}

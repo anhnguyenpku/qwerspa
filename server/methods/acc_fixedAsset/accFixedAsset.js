@@ -1,8 +1,10 @@
 import {Acc_FixedAsset} from "../../../imports/collection/accFixedAsset";
+import {Acc_FixedAssetReact} from "../../../imports/collection/accFixedAsset";
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import numeral from "numeral";
 import math from "mathjs";
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
+import {Acc_ExchangeReact} from "../../../imports/collection/accExchange";
 
 Meteor.methods({
     queryAccFixedAsset({q, filter, options = {limit: 10, skip: 0}}) {
@@ -79,6 +81,10 @@ Meteor.methods({
         let transaction = generateScheduleFixedAsset(data);
         data.transaction = transaction;
         let doc = Acc_FixedAsset.insert(data);
+        if (doc) {
+            fixedAssetReact(doc);
+        }
+
         return doc;
     },
     updateAccFixedAsset(data) {
@@ -88,10 +94,18 @@ Meteor.methods({
             {
                 $set: data
             });
+
+        if (doc) {
+            fixedAssetReact(data._id);
+        }
         return doc;
     },
     removeAccFixedAsset(id) {
-        return Acc_FixedAsset.remove({_id: id});
+        let isRemoved = Acc_FixedAsset.remove({_id: id});
+        if (isRemoved) {
+            fixedAssetReact(id);
+        }
+        return isRemoved;
     }
 });
 
@@ -194,4 +208,19 @@ function generateScheduleFixedAsset(doc) {
     }
 
     return transaction;
+}
+
+let fixedAssetReact = function (id) {
+    let doc = Acc_FixedAssetReact.findOne();
+    if (doc) {
+        Acc_FixedAssetReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Acc_FixedAssetReact.insert({
+            id: id
+        });
+    }
 }

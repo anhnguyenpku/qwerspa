@@ -1,6 +1,8 @@
 import {Sch_Bus} from '../../../imports/collection/schBus';
+import {Sch_BusReact} from '../../../imports/collection/schBus';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_ActivityReact} from "../../../imports/collection/schActivity";
 
 Meteor.methods({
     querySchBus({q, filter, options = {limit: 10, skip: 0}}) {
@@ -58,6 +60,9 @@ Meteor.methods({
     },
     insertSchBus(data) {
         let doc = Sch_Bus.insert(data);
+        if (doc) {
+            busReact(doc);
+        }
         return doc;
     },
     updateSchBus(data) {
@@ -65,9 +70,31 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            busReact(data._id);
+        }
         return doc;
     },
     removeSchBus(id) {
-        return Sch_Bus.remove({_id: id});
+        let isRemoved = Sch_Bus.remove({_id: id});
+        if (isRemoved) {
+            busReact(id);
+        }
+        return isRemoved;
     }
 });
+
+let busReact = function (id) {
+    let doc = Sch_BusReact.findOne();
+    if (doc) {
+        Sch_BusReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_BusReact.insert({
+            id: id
+        });
+    }
+}

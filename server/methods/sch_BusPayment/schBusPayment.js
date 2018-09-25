@@ -1,4 +1,5 @@
 import {Sch_BusPayment} from '../../../imports/collection/schBusPayment';
+import {Sch_BusPaymentReact} from '../../../imports/collection/schBusPayment';
 import {WB_waterBillingSetup} from "../../../imports/collection/waterBillingSetup";
 import {formatCurrency} from "../../../imports/api/methods/roundCurrency";
 import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
@@ -6,6 +7,7 @@ import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency"
 import numeral from "numeral";
 import {Sch_BusRegister} from "../../../imports/collection/schBusRegister";
 import {Sch_Student} from "../../../imports/collection/schStudent";
+import {Sch_BusReact} from "../../../imports/collection/schBus";
 
 Meteor.methods({
     querySchBusPayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -107,7 +109,12 @@ Meteor.methods({
         } else {
             Sch_BusRegister.direct.update({_id: data.busRegisterId}, {$set: {dueDate: data.dueDate, status: "Close"}});
         }
-        return Sch_BusPayment.insert(data);
+        let isInserted = Sch_BusPayment.insert(data);
+
+        if (isInserted) {
+            busPaymentReact(isInserted);
+        }
+        return isInserted;
     },
     updateSchBusPayment(data, _id) {
         let list = [];
@@ -120,10 +127,14 @@ Meteor.methods({
             }
         });
 
-        return Sch_BusPayment.update({_id: _id},
+        let isUpdated = Sch_BusPayment.update({_id: _id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            busPaymentReact(_id);
+        }
+        return isUpdated;
     },
     removeSchBusPayment(id) {
         let busPaymentDoc = Sch_BusPayment.findOne({_id: id});
@@ -135,7 +146,11 @@ Meteor.methods({
                     busPaymentNumber: -busPaymentDoc.schedule.length || 0
                 }
             }, true);
-            return Sch_BusPayment.remove({_id: id});
+            let isRemoved = Sch_BusPayment.remove({_id: id});
+            if (isRemoved) {
+                busPaymentReact(id);
+            }
+            return isRemoved;
         }
 
     },
@@ -186,3 +201,19 @@ Meteor.methods({
     }
 
 });
+
+
+let busPaymentReact = function (id) {
+    let doc = Sch_BusPaymentReact.findOne();
+    if (doc) {
+        Sch_BusPaymentReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_BusPaymentReact.insert({
+            id: id
+        });
+    }
+}

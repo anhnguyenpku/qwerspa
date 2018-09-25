@@ -1,6 +1,8 @@
 import {Acc_Exchange} from '../../../imports/collection/accExchange';
+import {Acc_ExchangeReact} from '../../../imports/collection/accExchange';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Acc_ClosingEntryReact} from "../../../imports/collection/accClosingEntry";
 
 Meteor.methods({
     queryExchange({q, filter, options = {limit: 10, skip: 0}}) {
@@ -55,7 +57,11 @@ Meteor.methods({
                 $multi: true
             })
         }
-        return Acc_Exchange.insert(data);
+        let isInsert = Acc_Exchange.insert(data);
+        if (isInsert) {
+            exchangeReact(isInsert);
+        }
+        return isInsert;
     },
     updateExchange(data) {
         if (data.status == true) {
@@ -66,12 +72,36 @@ Meteor.methods({
                 $multi: true
             })
         }
-        return Acc_Exchange.update({_id: data._id},
+        let isUpdated = Acc_Exchange.update({_id: data._id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            exchangeReact(data._id);
+        }
+        return isUpdated;
     },
     removeExchange(id) {
-        return Acc_Exchange.remove({_id: id});
+        let isRemoved = Acc_Exchange.remove({_id: id});
+        if (isRemoved) {
+            exchangeReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let exchangeReact = function (id) {
+    let doc = Acc_ExchangeReact.findOne();
+    if (doc) {
+        Acc_ExchangeReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Acc_ExchangeReact.insert({
+            id: id
+        });
+    }
+}

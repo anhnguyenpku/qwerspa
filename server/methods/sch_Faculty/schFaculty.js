@@ -1,6 +1,8 @@
 import {Sch_Faculty} from '../../../imports/collection/schFaculty';
+import {Sch_FacultyReact} from '../../../imports/collection/schFaculty';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_ClassTableReact} from "../../../imports/collection/schClassTable";
 
 Meteor.methods({
     querySchFaculty({q, filter, options = {limit: 10, skip: 0}}) {
@@ -53,6 +55,9 @@ Meteor.methods({
     },
     insertSchFaculty(data) {
         let doc = Sch_Faculty.insert(data);
+        if (doc) {
+            facultyReact(doc);
+        }
         return doc;
     },
     updateSchFaculty(data) {
@@ -60,9 +65,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            facultyReact(data._id);
+        }
         return doc;
     },
     removeSchFaculty(id) {
-        return Sch_Faculty.remove({_id: id});
+        let isRemoved = Sch_Faculty.remove({_id: id});
+        if (isRemoved) {
+            facultyReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let facultyReact = function (id) {
+    let doc = Sch_FacultyReact.findOne();
+    if (doc) {
+        Sch_FacultyReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_FacultyReact.insert({
+            id: id
+        });
+    }
+}

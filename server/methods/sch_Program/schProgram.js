@@ -1,7 +1,9 @@
 import {Sch_Program} from '../../../imports/collection/schProgram';
+import {Sch_ProgramReact} from '../../../imports/collection/schProgram';
 import {Meteor} from 'meteor/meteor';
 import {Promis} from 'meteor/promise';
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_PositionReact} from "../../../imports/collection/schPosition";
 
 Meteor.methods({
     querySchProgram({q, filter, options = {limit: 10, skip: 0}}) {
@@ -61,6 +63,9 @@ Meteor.methods({
     },
     insertSchProgram(data) {
         let doc = Sch_Program.insert(data);
+        if (doc) {
+            programReact(doc);
+        }
         return doc;
     },
     updateSchProgram(data) {
@@ -68,9 +73,32 @@ Meteor.methods({
             {
                 $set: data
             });
+        if (doc) {
+            programReact(data._id);
+        }
         return doc;
     },
     removeSchProgram(id) {
-        return Sch_Program.remove({_id: id});
+        let isRemoved = Sch_Program.remove({_id: id});
+        if (isRemoved) {
+            programReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let programReact = function (id) {
+    let doc = Sch_ProgramReact.findOne();
+    if (doc) {
+        Sch_ProgramReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Sch_ProgramReact.insert({
+            id: id
+        });
+    }
+}

@@ -1,6 +1,8 @@
 import {Pos_Term} from '../../../imports/collection/posTerm';
+import {Pos_TermReact} from '../../../imports/collection/posTerm';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Pos_SaleOrderReact} from "../../../imports/collection/posSaleOrder";
 
 Meteor.methods({
     queryPosTerm({q, filter, options = {limit: 10, skip: 0}}) {
@@ -52,15 +54,43 @@ Meteor.methods({
         return data;
     },
     insertPosTerm(data) {
-        return Pos_Term.insert(data);
+        let isInserted = Pos_Term.insert(data);
+        if (isInserted) {
+            termReact(isInserted);
+        }
+        return isInserted;
     },
     updatePosTerm(data) {
-        return Pos_Term.update({_id: data._id},
+        let isUpdated = Pos_Term.update({_id: data._id},
             {
                 $set: data
             });
+        if (isUpdated) {
+            termReact(data._id);
+        }
+        return isUpdated;
     },
     removePosTerm(id) {
-        return Pos_Term.remove({_id: id});
+        let isRemoved = Pos_Term.remove({_id: id});
+        if (isRemoved) {
+            termReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let termReact = function (id) {
+    let doc = Pos_TermReact.findOne();
+    if (doc) {
+        Pos_TermReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_TermReact.insert({
+            id: id
+        });
+    }
+}

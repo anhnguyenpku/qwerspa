@@ -39,3 +39,4 @@ WB_waterBillingSetup.schema = new SimpleSchema({
 });
 
 WB_waterBillingSetup.attachSchema(WB_waterBillingSetup.schema);
+

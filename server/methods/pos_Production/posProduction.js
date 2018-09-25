@@ -1,5 +1,6 @@
 import {Pos_Production} from '../../../imports/collection/posProduction';
-import {Pos_Product} from '../../../imports/collection/posProduct';
+import {Pos_ProductionReact} from '../../../imports/collection/posProduction';
+import {Pos_Product, Pos_ProductReact} from '../../../imports/collection/posProduct';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Pos_Customer} from "../../../imports/collection/posCustomer";
@@ -120,6 +121,8 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+
+            productionReact(id);
         }
 
 
@@ -152,6 +155,8 @@ Meteor.methods({
 
                 })
             });
+
+            productionReact(data._id);
         }
         return isUpdated;
     },
@@ -167,12 +172,18 @@ Meteor.methods({
                     console.log(err.message);
                 }
             })
+
+
+            productionReact(id);
         }
         return isRemoved;
     },
     updatePosProductionById(id) {
-        return Pos_Production.update({_id: id}, {$set: {status: true}});
-
+        let isUpdated = Pos_Production.update({_id: id}, {$set: {status: true}});
+        if (isUpdated) {
+            productionReact(id);
+        }
+        return isUpdated;
     },
     queryPosProductionBoard({q, filter, options = {limit: 10, skip: 0}}) {
         if (Meteor.userId()) {
@@ -240,3 +251,18 @@ Meteor.methods({
     }
 
 });
+
+let productionReact = function (id) {
+    let doc = Pos_ProductionReact.findOne();
+    if (doc) {
+        Pos_ProductionReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Pos_ProductionReact.insert({
+            id: id
+        });
+    }
+}

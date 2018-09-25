@@ -10,7 +10,7 @@ Pos_Product.schema = new SimpleSchema({
     name: {
         type: String,
         label: "Name",
-        index:true
+        index: true
     },
     khName: {
         type: String,
@@ -86,7 +86,7 @@ Pos_Product.schema = new SimpleSchema({
                 return moment().toDate();
             }
         },
-        index:true
+        index: true
     },
     updatedAt: {
         type: Date,
@@ -121,3 +121,52 @@ Pos_Product.schema = new SimpleSchema({
 });
 
 Pos_Product.attachSchema(Pos_Product.schema);
+
+export const Pos_ProductReact = new Mongo.Collection('pos_productReact');
+Pos_ProductReact.schema = new SimpleSchema({
+    createdAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return moment().toDate();
+            }
+        }
+    },
+    updatedAt: {
+        type: Date,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return moment().toDate();
+            }
+        }
+    },
+    createdUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isInsert) {
+                return Meteor.userId();
+            }
+        }
+    },
+    updatedUser: {
+        type: String,
+        optional: true,
+
+        autoValue() {
+            if (this.isUpdate) {
+                return Meteor.userId();
+            }
+        }
+    },
+    id: {
+        type: String
+    }
+});
+
+Pos_ProductReact.attachSchema(Pos_ProductReact.schema);

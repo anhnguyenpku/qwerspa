@@ -1,6 +1,8 @@
 import {UserSchema} from '../../../imports/collection/userSchema';
+import {UserSchemaReact} from '../../../imports/collection/userSchema';
 
 import {SpaceChar} from "../../../both/config.js/space"
+import {Sch_TimeReact} from "../../../imports/collection/schTime";
 
 Meteor.methods({
     queryWbUserSetting({q, filter, options = {limit: 10, skip: 0}}) {
@@ -48,6 +50,26 @@ Meteor.methods({
         return data;
     },
     removeWbUserSetting(id) {
-        return Meteor.users.remove({_id: id});
+        let isRemoved = Meteor.users.remove({_id: id});
+        if (isRemoved) {
+            userSchemaReact(id);
+        }
+        return isRemoved;
     }
 });
+
+
+let userSchemaReact = function (id) {
+    let doc = UserSchemaReact.findOne();
+    if (doc) {
+        UserSchemaReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        UserSchemaReact.insert({
+            id: id
+        });
+    }
+}

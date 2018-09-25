@@ -1,10 +1,12 @@
 import {Acc_ClosingEntry} from '../../../imports/collection/accClosingEntry';
+import {Acc_ClosingEntryReact} from '../../../imports/collection/accClosingEntry';
 import {Acc_Journal} from '../../../imports/collection/accJournal';
 import {Acc_Exchange} from '../../../imports/collection/accExchange';
 import {Acc_ChartAccountBalance} from '../../../imports/collection/accChartAccountBalance';
 
 import {moment} from 'meteor/momentjs:moment';
 import {SpaceChar} from "../../../both/config.js/space"
+import {Acc_ChartAccountReact} from "../../../imports/collection/accChartAccount";
 
 Meteor.methods({
     queryClosingEntry({q, filter, options = {limit: 10, skip: 0}}) {
@@ -46,16 +48,30 @@ Meteor.methods({
         return Acc_ClosingEntry.findOne({rolesArea: rolesArea}, {sort: {closeDate: -1}});
     },
     insertClosingEntry(data) {
-        return Acc_ClosingEntry.insert(data);
+        let isInsert = Acc_ClosingEntry.insert(data);
+        if (isInsert) {
+            closingEntryReact(isInsert);
+        }
+        return isInsert;
     },
     updateClosingEntry(data) {
-        return Acc_ClosingEntry.update({_id: data._id},
+        let isUpdated = Acc_ClosingEntry.update({_id: data._id},
             {
                 $set: data
             });
+
+        if (isUpdated) {
+            closingEntryReact(data._id);
+
+        }
+        return isUpdated;
     },
     removeClosingEntry(id) {
-        return Acc_ClosingEntry.remove({_id: id});
+        let isRemoved = Acc_ClosingEntry.remove({_id: id});
+        if (isRemoved) {
+            closingEntryReact(id);
+        }
+        return isRemoved;
     },
 
     insertChartAccountBalance: function (selector, rolesArea, selectorLastBalance, lastDate, dateSelect, closingEntryId, selectorChartAccount) {
@@ -227,3 +243,19 @@ Meteor.methods({
     }
 
 });
+
+
+let closingEntryReact = function (id) {
+    let doc = Acc_ClosingEntryReact.findOne();
+    if (doc) {
+        Acc_ClosingEntryReact.update({_id: doc._id}, {
+            $set: {
+                id: id
+            }
+        });
+    } else {
+        Acc_ClosingEntryReact.insert({
+            id: id
+        });
+    }
+}
