@@ -147,6 +147,8 @@
                 title="Add Journal Entry"
                 :visible.sync="dialogAddJournal"
                 :fullscreen="fullscreen"
+                class="dialogJournal"
+
 
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
@@ -298,14 +300,14 @@
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger" @click.native="dialogAddJournal = false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;​Cancel</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;​Cancel <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="12" class="pull-right">
                         <el-button type="success" @click="saveJournal(false,$event)"><i
-                                class="el-icon-circle-check"> </i>&nbsp; Save and New</el-button>
+                                class="el-icon-circle-check"> </i>&nbsp; Save and New <i>(Ctl + Alt + Enter)</i></el-button>
 
                         <el-button type="primary" @click.native="saveJournal(true,$event)"><i
-                                class="el-icon-check"> </i>&nbsp; Save</el-button>
+                                class="el-icon-check"> </i>&nbsp; Save <i>(Ctl + Enter)</i></el-button>
 
                     </el-col>
                 </el-row>
@@ -319,6 +321,8 @@
                 title="Payment (Account)"
                 :visible.sync="dialogPaid"
                 :fullscreen="fullscreen"
+
+                class="dialogJournal"
 
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
@@ -463,10 +467,10 @@
                                    class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 
                         <el-button type="success" @click="saveJournalPaid(false,$event,type)"><i
-                                class="el-icon-circle-check"> </i>&nbsp; Save and New</el-button>
+                                class="el-icon-circle-check"> </i>&nbsp; Save and New <i>(Ctrl + Alt + Enter)</i></el-button>
 
                         <el-button type="primary" @click.native="saveJournalPaid(true,$event,type)"><i
-                                class="el-icon-check"> </i>&nbsp; Save</el-button>
+                                class="el-icon-check"> </i>&nbsp; Save <i>(Ctrl + Enter)</i></el-button>
                     </el-col>
                 </el-row>
             </span>
@@ -479,7 +483,7 @@
                 title="Update Journal Entry"
                 :visible.sync="dialogUpdateJournal"
                 :fullscreen="fullscreen"
-
+                class="dialogJournal"
         >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="journalForm" :rules="rules" ref="journalFormUpdate" label-width="120px"
@@ -827,6 +831,15 @@
                     return time.getTime() < min;
                 }
             }
+
+
+            let elem = this.$jQuery('el-dialog.dialogJournal');
+            let checkEvent = $._data($('body').get(0), 'events');
+            if (checkEvent.keyup.length <= 1) {
+                this.$nextTick(() => {
+                    this.$jQuery('body').on('keydown', elem, this.inputHandler);
+                })
+            }
         },
         watch: {
             currentSize(val) {
@@ -948,6 +961,38 @@
                     this.isSearching = false;
                 });
             }, 300),
+
+            inputHandler(e) {
+                let vm = this;
+                if (vm.dialogAddJournal === true) {
+                    if (e.keyCode === 13 && e.ctrlKey && !e.altKey) {
+                        e.preventDefault();
+                        vm.saveJournal(true, e);
+                    } else if (e.keyCode === 13 && e.ctrlKey && e.altKey) {
+                        e.preventDefault();
+                        vm.saveJournal(false, e);
+                    }
+                } else if (vm.dialogPaid === true) {
+                    if (e.keyCode === 13 && e.ctrlKey && !e.altKey) {
+                        e.preventDefault();
+                        vm.saveJournalPaid(true, e, vm.type);
+                    } else if (e.keyCode === 13 && e.ctrlKey && e.altKey) {
+                        e.preventDefault();
+                        vm.saveJournalPaid(false, e, vm.type);
+
+                    }
+                }
+
+                if (vm.dialogAddJournal === false && vm.dialogUpdateJournal === false && vm.dialogPaid === false) {
+                    if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                        e.preventDefault();
+                        vm.dialogAddJournal = true;
+                        vm.resetForm();
+                    }
+                }
+
+
+            },
             chartAccountOption() {
                 let selector = {};
                 if (this.accountTypeId !== "" && this.accountTypeId !== undefined) {

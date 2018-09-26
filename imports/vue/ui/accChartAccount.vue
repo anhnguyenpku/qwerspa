@@ -168,7 +168,8 @@
         <el-dialog
                 title="Add Chart Account"
                 :visible.sync="dialogAddChartAccount"
-                width="30%">
+                width="30%"
+                class="dialogChartAccount">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="chartAccountForm" :rules="rules" ref="chartAccountFormAdd" label-width="120px"
                      class="chartAccountForm">
@@ -226,8 +227,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddChartAccount = false, cancel()">Cancel</el-button>
-                    <el-button type="primary" @click="saveChartAccount($event)">Save</el-button>
+                    <el-button @click="dialogAddChartAccount = false, cancel()">Cancel <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveChartAccount($event)">Save <i>(Ctl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -238,10 +239,12 @@
         <el-dialog
                 title="Update Chart Account"
                 :visible.sync="dialogUpdateChartAccount"
-                width="30%">
+                width="30%"
+                class="dialogChartAccount"
+        >
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="chartAccountForm" :rules="rules" ref="chartAccountFormUpdate" label-width="120px"
-                     class="chartAccountForm">
+                     class="chartAccountForm" v-on:submit="updateChartAccount">
 
                 <el-form-item label="Name" prop="name">
                     <el-input v-model="chartAccountForm.name"></el-input>
@@ -299,8 +302,10 @@
                 <input type="hidden" v-model="chartAccountForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateChartAccount = false ,cancel()">Cancel</el-button>
-                    <el-button type="primary" @click="updateChartAccount">Save</el-button>
+                    <el-button @click="dialogUpdateChartAccount = false ,cancel()">Cancel <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateChartAccount">Save
+                        <i>(Ctl
+                            + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -385,8 +390,8 @@
                 <input type="hidden" v-model="chartAccountForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateChartAccount = false ,cancel()">Cancel</el-button>
-                    <el-button type="primary" @click="updateMapChartAccount">Save</el-button>
+                    <el-button @click="dialogUpdateChartAccount = false ,cancel()">Cancel <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateMapChartAccount">Save <i>(Ctl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -437,8 +442,8 @@
                 <input type="hidden" v-model="chartAccountForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogMapFixedAsset = false ,cancel()">Cancel</el-button>
-                    <el-button type="primary" @click="updateMapFixedAsset">Save</el-button>
+                    <el-button @click="dialogMapFixedAsset = false ,cancel()">Cancel <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateMapFixedAsset">Save <i>(Ctl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -450,6 +455,15 @@
     import {Acc_ChartAccountReact} from "../../collection/accChartAccount";
 
     export default {
+        mounted() {
+            let elem = this.$jQuery('el-dialog.dialogChartAccount');
+            let checkEvent = $._data($('body').get(0), 'events');
+            if (checkEvent.keyup.length <= 1) {
+                this.$nextTick(() => {
+                    this.$jQuery('body').on('keydown', elem, this.inputHandler);
+                })
+            }
+        },
         data() {
             return {
                 chartAccountData: [],
@@ -550,6 +564,40 @@
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
+            },
+            inputHandler(e) {
+                let vm = this;
+                if (vm.dialogAddChartAccount === true) {
+                    if (e.keyCode === 13 && e.ctrlKey) {
+                        e.preventDefault();
+                        vm.saveChartAccount(e);
+                    }
+                } else if (vm.dialogUpdateChartAccount === true) {
+                    if (e.keyCode === 13 && e.ctrlKey) {
+                        e.preventDefault();
+                        vm.updateChartAccount();
+                    }
+                } else if (vm.dialogMapChartAccount === true) {
+                    if (e.keyCode === 13 && e.ctrlKey) {
+                        e.preventDefault();
+                        vm.updateMapChartAccount();
+                    }
+                } else if (vm.dialogMapFixedAsset === true) {
+                    if (e.keyCode === 13 && e.ctrlKey) {
+                        e.preventDefault();
+                        vm.updateMapFixedAsset();
+                    }
+                }
+
+                if (vm.dialogMapChartAccount === false && vm.dialogMapFixedAsset === false && vm.dialogUpdateChartAccount === false && vm.dialogAddChartAccount === false) {
+                    if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                        e.preventDefault();
+                        vm.dialogAddChartAccount = true;
+                        vm.resetForm();
+                    }
+                }
+
+
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('queryChartAccount', {
@@ -788,7 +836,7 @@
                             });
 
                             vm.accountTypeOption();
-                            vm.queryParentChartAccountOption();
+                            vm.parentChartAccountOption();
                         } else {
                             vm.$message({
                                 type: 'error',
