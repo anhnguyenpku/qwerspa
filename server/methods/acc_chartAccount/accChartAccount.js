@@ -109,24 +109,26 @@ Meteor.methods({
         if (parentDoc) {
             data.level = parentDoc.level + 1;
         }
+        let id = data._id;
         let isUpdated = Acc_ChartAccount.update({_id: data._id},
             {
                 $set: data
             });
         if (isUpdated) {
-            chartAccountReact(data._id);
+            chartAccountReact(id);
         }
         return isUpdated;
     },
     updateMapFixedAsset(mapFixedAssetDoc) {
         let obj = {};
         obj.mapFixedAsset = mapFixedAssetDoc;
+        let id = mapFixedAssetDoc._id;
         let isUpdated = Acc_ChartAccount.update({_id: mapFixedAssetDoc.fixedAssetId},
             {
                 $set: obj
             });
         if (isUpdated) {
-            chartAccountReact(mapFixedAssetDoc._id);
+            chartAccountReact(id);
 
         }
         return isUpdated;

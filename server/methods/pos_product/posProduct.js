@@ -128,13 +128,14 @@ Meteor.methods({
         return isInserted;
     },
     updatePosProduct(data) {
+        let id = data._id;
         let isUpdated = Pos_Product.update({_id: data._id},
             {
                 $set: data
             });
 
         if (isUpdated) {
-            productReact(data._id);
+            productReact(id);
         }
         return isUpdated;
     },

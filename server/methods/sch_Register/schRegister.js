@@ -259,13 +259,14 @@ Meteor.methods({
         data.startClassDate = startClassDate;
         data.rolesArea = rolesArea;
         data.registerDateName = registerDateName;
+        let id = data._id;
         let doc = Sch_Register.update({_id: data._id},
             {
                 $set: data
             });
 
         if (doc) {
-            registerReact(data._id);
+            registerReact(id);
         }
         return doc;
     },

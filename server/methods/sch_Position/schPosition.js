@@ -61,12 +61,13 @@ Meteor.methods({
         return doc;
     },
     updateSchPosition(data) {
+        let id = data._id;
         let doc = Sch_Position.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            positionReact(data._id);
+            positionReact(id);
         }
         return doc;
     },

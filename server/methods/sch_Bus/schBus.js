@@ -66,12 +66,13 @@ Meteor.methods({
         return doc;
     },
     updateSchBus(data) {
+        let id = data._id;
         let doc = Sch_Bus.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            busReact(data._id);
+            busReact(id);
         }
         return doc;
     },

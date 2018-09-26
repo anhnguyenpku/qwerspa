@@ -61,12 +61,13 @@ Meteor.methods({
         return doc;
     },
     updateSchFaculty(data) {
+        let id = data._id;
         let doc = Sch_Faculty.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            facultyReact(data._id);
+            facultyReact(id);
         }
         return doc;
     },

@@ -129,7 +129,6 @@ Meteor.methods({
         return id;
     },
     updatePosProduction(data) {
-
         let dataBeforeUpdate = Pos_Production.findOne({_id: data._id});
         let isUpdated = Pos_Production.update({_id: data._id},
             {
@@ -155,8 +154,7 @@ Meteor.methods({
 
                 })
             });
-
-            productionReact(data._id);
+            productionReact(dataBeforeUpdate._id);
         }
         return isUpdated;
     },

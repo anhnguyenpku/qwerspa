@@ -61,12 +61,13 @@ Meteor.methods({
         return isInserted;
     },
     updatePosUnit(data) {
+        let id = data._id;
         let isUpdated = Pos_Unit.update({_id: data._id},
             {
                 $set: data
             });
         if (isUpdated) {
-            unitReact(data._id);
+            unitReact(id);
         }
         return isUpdated;
     },

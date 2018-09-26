@@ -65,12 +65,13 @@ Meteor.methods({
         return doc;
     },
     updateSchMention(data) {
+        let id = data._id;
         let doc = Sch_Mention.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            mentionReact(data._id);
+            mentionReact(id);
         }
         return doc;
     },

@@ -172,7 +172,7 @@ Meteor.methods({
 
                 })
             });
-            convertInventoryReact(data._id);
+            convertInventoryReact(dataBeforeUpdate._id);
         }
         return isUpdated;
     },

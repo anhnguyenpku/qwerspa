@@ -64,12 +64,13 @@ Meteor.methods({
         return isInserted;
     },
     updateSchTeacher(data) {
+        let id = data._id;
         let isUpdated = Sch_Teacher.update({_id: data._id},
             {
                 $set: data
             });
         if (isUpdated) {
-            teacherReact(data._id);
+            teacherReact(id);
         }
         return isUpdated;
     },

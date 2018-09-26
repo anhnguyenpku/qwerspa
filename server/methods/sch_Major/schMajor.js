@@ -66,12 +66,13 @@ Meteor.methods({
         return doc;
     },
     updateSchMajor(data) {
+        let id = data._id;
         let doc = Sch_Major.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            majorReact(data._id);
+            majorReact(id);
         }
         return doc;
     },

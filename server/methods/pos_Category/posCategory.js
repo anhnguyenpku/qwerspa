@@ -95,13 +95,14 @@ Meteor.methods({
         if (parentDoc) {
             data.level = parentDoc.level + 1;
         }
+        let id = data._id;
         let isUpdated = Pos_Category.update({_id: data._id},
             {
                 $set: data
             });
 
         if (isUpdated) {
-            categoryReact(data._id);
+            categoryReact(id);
         }
         return isUpdated;
     },

@@ -56,12 +56,13 @@ Meteor.methods({
         return doc;
     },
     updateSchTime(data) {
+        let id = data._id;
         let doc = Sch_Time.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            timeReact(data._id);
+            timeReact(id);
         }
         return doc;
     },

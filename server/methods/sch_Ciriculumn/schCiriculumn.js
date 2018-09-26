@@ -56,12 +56,13 @@ Meteor.methods({
         return doc;
     },
     updateSchCiriculumn(data) {
+        let id = data._id;
         let doc = Sch_Ciriculumn.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            ciriculumnReact(data._id);
+            ciriculumnReact(id);
         }
         return doc;
     },

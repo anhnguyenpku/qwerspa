@@ -66,12 +66,13 @@ Meteor.methods({
         return doc;
     },
     updateSchSubject(data) {
+        let id = data._id;
         let doc = Sch_Subject.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            subjectReact(data._id);
+            subjectReact(id);
         }
         return doc;
     },

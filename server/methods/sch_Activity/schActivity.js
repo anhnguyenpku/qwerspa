@@ -61,12 +61,13 @@ Meteor.methods({
         return doc;
     },
     updateSchActivity(data) {
+        let id = data._id;
         let doc = Sch_Activity.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            activityReact(data._id);
+            activityReact(id);
         }
         return doc;
     },

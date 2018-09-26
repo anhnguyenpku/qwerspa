@@ -61,12 +61,13 @@ Meteor.methods({
         return isInserted;
     },
     updatePosTerm(data) {
+        let id = data._id;
         let isUpdated = Pos_Term.update({_id: data._id},
             {
                 $set: data
             });
         if (isUpdated) {
-            termReact(data._id);
+            termReact(id);
         }
         return isUpdated;
     },

@@ -72,12 +72,13 @@ Meteor.methods({
         return isInserted;
     },
     updatePosVendor(data) {
+        let id = data._id;
         let isUpdated = Pos_Vendor.update({_id: data._id},
             {
                 $set: data
             });
         if (isUpdated) {
-            vendorReact(data._id);
+            vendorReact(id);
         }
         return isUpdated;
     },

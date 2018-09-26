@@ -121,12 +121,13 @@ Meteor.methods({
     }
     ,
     updateSchTeacherActivity(data) {
+        let id = data._id;
         let doc = Sch_TeacherActivity.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            teacherActivityReact(data._id);
+            teacherActivityReact(id);
         }
         return doc;
     }

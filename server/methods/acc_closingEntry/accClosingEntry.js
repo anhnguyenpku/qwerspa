@@ -55,13 +55,14 @@ Meteor.methods({
         return isInsert;
     },
     updateClosingEntry(data) {
+        let id = data._id;
         let isUpdated = Acc_ClosingEntry.update({_id: data._id},
             {
                 $set: data
             });
 
         if (isUpdated) {
-            closingEntryReact(data._id);
+            closingEntryReact(id);
 
         }
         return isUpdated;

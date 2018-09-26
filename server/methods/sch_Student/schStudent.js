@@ -76,13 +76,14 @@ Meteor.methods({
         return isInserted;
     },
     updateSchStudent(data) {
+        let id = data._id;
         data.personal.code = pad(data.personal.code + "", 6);
         let isUpdated = Sch_Student.update({_id: data._id},
             {
                 $set: data
             });
         if (isUpdated) {
-            studentReact(data._id);
+            studentReact(id);
         }
         return isUpdated;
     },

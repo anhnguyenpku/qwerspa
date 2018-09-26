@@ -66,12 +66,13 @@ Meteor.methods({
         return doc;
     },
     updateSchLevel(data) {
+        let id = data._id;
         let doc = Sch_Level.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            levelReact(data._id);
+            levelReact(id);
         }
         return doc;
     },

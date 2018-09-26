@@ -90,13 +90,14 @@ Meteor.methods({
     updateAccFixedAsset(data) {
         let transaction = generateScheduleFixedAsset(data);
         data.transaction = transaction;
+        let id = data._id;
         let doc = Acc_FixedAsset.update({_id: data._id},
             {
                 $set: data
             });
 
         if (doc) {
-            fixedAssetReact(data._id);
+            fixedAssetReact(id);
         }
         return doc;
     },

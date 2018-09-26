@@ -66,12 +66,13 @@ Meteor.methods({
         return doc;
     },
     updateSchPromotion(data) {
+        let id = data._id;
         let doc = Sch_Promotion.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            promotionReact(data._id);
+            promotionReact(id);
         }
         return doc;
     },

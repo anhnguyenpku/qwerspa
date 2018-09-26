@@ -234,12 +234,13 @@ Meteor.methods({
         return doc;
     },
     updateSchClass(data) {
+        let id = data._id;
         let doc = Sch_Class.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            classReact(data._id);
+            classReact(id);
         }
         return doc;
     },

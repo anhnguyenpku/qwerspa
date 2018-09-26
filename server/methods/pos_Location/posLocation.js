@@ -86,7 +86,7 @@ Meteor.methods({
             let d = Pos_Location.direct.update({_id: {$ne: id}}, {$set: {isMainLocation: false}}, {multi: true});
         }
         if (doc) {
-            locationReact(data._id);
+            locationReact(id);
         }
         return doc;
     },

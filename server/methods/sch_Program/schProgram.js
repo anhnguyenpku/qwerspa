@@ -69,12 +69,13 @@ Meteor.methods({
         return doc;
     },
     updateSchProgram(data) {
+        let id = data._id;
         let doc = Sch_Program.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            programReact(data._id);
+            programReact(id);
         }
         return doc;
     },

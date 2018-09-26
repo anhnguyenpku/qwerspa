@@ -76,12 +76,13 @@ Meteor.methods({
                 $multi: true
             })
         }
+        let id = data._id;
         let isUpdated = Acc_Exchange.update({_id: data._id},
             {
                 $set: data
             });
         if (isUpdated) {
-            exchangeReact(data._id);
+            exchangeReact(id);
         }
         return isUpdated;
     },

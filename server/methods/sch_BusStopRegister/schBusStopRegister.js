@@ -223,12 +223,13 @@ Meteor.methods({
         return doc;
     },
     updateSchBusRegister(data) {
+        let id = data._id;
         let doc = Sch_BusRegister.update({_id: data._id},
             {
                 $set: data
             });
         if (doc) {
-            busRegisterReact(data._id);
+            busRegisterReact(id);
         }
         return doc;
     },
