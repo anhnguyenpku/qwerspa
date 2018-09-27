@@ -436,6 +436,7 @@
             },
         },
         mounted() {
+            this.$jQuery('body').off();
 
         },
         created() {

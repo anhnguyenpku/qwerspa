@@ -1019,6 +1019,7 @@
             }
         },
         mounted() {
+            this.$jQuery('body').off();
             let vm = this;
             vm.options = {
                 disabledDate(time) {
@@ -1180,34 +1181,41 @@
                 }, 200)*/
             },
             barcodeScanBill(e) {
-                let vm = this;
-                if (this.dialogAddPosBill === true || this.dialogUpdatePosBill === true) {
-                    let scannerSensitivity = 100;
-                    if (e.keyCode !== 13 && !isNaN(e.key)) {
-                        this.takeBarcode += e.key;
-                    }
-                    this.timeStamp.push(Date.now());
-                    if (this.timeStamp.length > 1) {
-                        if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
-                            this.takeBarcode = '';
-                            this.timeStamp = [];
-                        } else {
-                            if (e.keyCode === 13) {
-                                this.posBillForm.code = this.takeBarcode;
-                                this.addToPosBillData(null);
+                if (e.data.init(0).selector === "el-dialog.dialogBill") {
+                    let vm = this;
+                    if (this.dialogAddPosBill === true || this.dialogUpdatePosBill === true) {
+                        let scannerSensitivity = 100;
+                        if (e.keyCode !== 13 && !isNaN(e.key)) {
+                            this.takeBarcode += e.key;
+                        }
+                        this.timeStamp.push(Date.now());
+                        if (this.timeStamp.length > 1) {
+                            if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
+                                this.takeBarcode = '';
                                 this.timeStamp = [];
-                                this.takeBarcode = ''
+                            } else {
+                                if (e.keyCode === 13) {
+                                    this.posBillForm.code = this.takeBarcode;
+                                    this.addToPosBillData(null);
+                                    this.timeStamp = [];
+                                    this.takeBarcode = ''
+                                }
                             }
                         }
                     }
-                }
 
-                if (this.dialogAddPosBill === false || this.dialogUpdatePosBill === false) {
-                    if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                    if (this.dialogAddPosBill === false || this.dialogUpdatePosBill === false) {
+                        if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                            e.preventDefault();
+                            vm.popupPosBillAdd();
+                            vm.dialogAddPosBill = true;
+                            vm.resetForm();
+                        }
+                    }
+
+                    if (e.keyCode === 27 && !e.ctrlKey && !e.altKey) {
                         e.preventDefault();
-                        vm.popupPosBillAdd();
-                        vm.dialogAddPosBill = true;
-                        vm.resetForm();
+                        vm.dialogAddPosBill = false;
                     }
                 }
             },

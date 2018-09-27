@@ -456,9 +456,11 @@
 
     export default {
         mounted() {
+            this.$jQuery('body').off();
+
             let elem = this.$jQuery('el-dialog.dialogChartAccount');
             let checkEvent = $._data($('body').get(0), 'events');
-            if (checkEvent.keyup.length <= 1) {
+            if (checkEvent.keydown.length <= 1) {
                 this.$nextTick(() => {
                     this.$jQuery('body').on('keydown', elem, this.inputHandler);
                 })
@@ -566,38 +568,43 @@
                 this.currentPage = val;
             },
             inputHandler(e) {
+                if (e.data.init(0).selector === "el-dialog.dialogChartAccount") {
+                    let vm = this;
+                    if (vm.dialogAddChartAccount === true) {
+                        if (e.keyCode === 13 && e.ctrlKey) {
+                            e.preventDefault();
+                            vm.saveChartAccount(e);
+                        }
+                    } else if (vm.dialogUpdateChartAccount === true) {
+                        if (e.keyCode === 13 && e.ctrlKey) {
+                            e.preventDefault();
+                            vm.updateChartAccount();
+                        }
+                    } else if (vm.dialogMapChartAccount === true) {
+                        if (e.keyCode === 13 && e.ctrlKey) {
+                            e.preventDefault();
+                            vm.updateMapChartAccount();
+                        }
+                    } else if (vm.dialogMapFixedAsset === true) {
+                        if (e.keyCode === 13 && e.ctrlKey) {
+                            e.preventDefault();
+                            vm.updateMapFixedAsset();
+                        }
+                    }
 
-                let vm = this;
-                if (vm.dialogAddChartAccount === true) {
-                    if (e.keyCode === 13 && e.ctrlKey) {
-                        e.preventDefault();
-                        vm.saveChartAccount(e);
+                    if (vm.dialogMapChartAccount === false && vm.dialogMapFixedAsset === false && vm.dialogUpdateChartAccount === false && vm.dialogAddChartAccount === false) {
+                        if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                            e.preventDefault();
+                            vm.dialogAddChartAccount = true;
+                            vm.resetForm();
+                        }
                     }
-                } else if (vm.dialogUpdateChartAccount === true) {
-                    if (e.keyCode === 13 && e.ctrlKey) {
+                    if (e.keyCode === 27 && !e.ctrlKey && !e.altKey) {
                         e.preventDefault();
-                        vm.updateChartAccount();
-                    }
-                } else if (vm.dialogMapChartAccount === true) {
-                    if (e.keyCode === 13 && e.ctrlKey) {
-                        e.preventDefault();
-                        vm.updateMapChartAccount();
-                    }
-                } else if (vm.dialogMapFixedAsset === true) {
-                    if (e.keyCode === 13 && e.ctrlKey) {
-                        e.preventDefault();
-                        vm.updateMapFixedAsset();
+                        vm.dialogAddChartAccount = false;
                     }
                 }
 
-                if (vm.dialogMapChartAccount === false && vm.dialogMapFixedAsset === false && vm.dialogUpdateChartAccount === false && vm.dialogAddChartAccount === false) {
-                    if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
-                        e.preventDefault();
-                        vm.dialogAddChartAccount = true;
-                        vm.resetForm();
-                    }
-                }
-                
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('queryChartAccount', {

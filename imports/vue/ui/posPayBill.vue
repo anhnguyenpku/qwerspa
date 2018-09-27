@@ -548,6 +548,9 @@
             }
         },
         mounted() {
+
+            this.$jQuery('body').off();
+
             let vm = this;
             vm.options = {
                 disabledDate(time) {

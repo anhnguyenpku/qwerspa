@@ -249,6 +249,10 @@
                 vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
             }
         },
+        mounted() {
+            this.$jQuery('body').off();
+
+        },
         data() {
             return {
                 posLocationData: [],

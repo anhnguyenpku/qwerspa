@@ -824,6 +824,7 @@
             }
         },
         mounted() {
+            this.$jQuery('body').off();
             let vm = this;
             vm.options = {
                 disabledDate(time) {
@@ -838,6 +839,7 @@
             if (checkEvent.keyup.length <= 1) {
                 this.$nextTick(() => {
                     this.$jQuery('body').on('keydown', elem, this.inputHandler);
+
                 })
             }
         },
@@ -963,33 +965,39 @@
             }, 300),
 
             inputHandler(e) {
-                let vm = this;
-                if (vm.dialogAddJournal === true) {
-                    if (e.keyCode === 13 && e.ctrlKey && !e.altKey) {
-                        e.preventDefault();
-                        vm.saveJournal(true, e);
-                    } else if (e.keyCode === 13 && e.ctrlKey && e.altKey) {
-                        e.preventDefault();
-                        vm.saveJournal(false, e);
-                    }
-                } else if (vm.dialogPaid === true) {
-                    if (e.keyCode === 13 && e.ctrlKey && !e.altKey) {
-                        e.preventDefault();
-                        vm.saveJournalPaid(true, e, vm.type);
-                    } else if (e.keyCode === 13 && e.ctrlKey && e.altKey) {
-                        e.preventDefault();
-                        vm.saveJournalPaid(false, e, vm.type);
+                if (e.data.init(0).selector === "el-dialog.dialogJournal") {
+                    let vm = this;
+                    if (vm.dialogAddJournal === true) {
+                        if (e.keyCode === 13 && e.ctrlKey && !e.altKey) {
+                            e.preventDefault();
+                            vm.saveJournal(true, e);
+                        } else if (e.keyCode === 13 && e.ctrlKey && e.altKey) {
+                            e.preventDefault();
+                            vm.saveJournal(false, e);
+                        }
+                    } else if (vm.dialogPaid === true) {
+                        if (e.keyCode === 13 && e.ctrlKey && !e.altKey) {
+                            e.preventDefault();
+                            vm.saveJournalPaid(true, e, vm.type);
+                        } else if (e.keyCode === 13 && e.ctrlKey && e.altKey) {
+                            e.preventDefault();
+                            vm.saveJournalPaid(false, e, vm.type);
 
+                        }
                     }
-                }
 
-                if (vm.dialogAddJournal === false && vm.dialogUpdateJournal === false && vm.dialogPaid === false) {
-                    if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                    if (vm.dialogAddJournal === false && vm.dialogUpdateJournal === false && vm.dialogPaid === false) {
+                        if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                            e.preventDefault();
+                            vm.popupJournalAdd();
+                            vm.dialogAddJournal = true;
+                            vm.autoIncreseVouchers();
+                            vm.resetForm();
+                        }
+                    }
+                    if (e.keyCode === 27 && !e.ctrlKey && !e.altKey) {
                         e.preventDefault();
-                        vm.popupJournalAdd();
-                        vm.dialogAddJournal = true;
-                        vm.autoIncreseVouchers();
-                        vm.resetForm();
+                        vm.dialogAddJournal = false;
                     }
                 }
 

@@ -130,6 +130,10 @@
 
     export default {
         //mixins: [GenerateFile],
+        mounted() {
+            this.$jQuery('body').off();
+
+        },
         components: {
             "barcode": PosBarcodeProduct,
             a4: PageA4

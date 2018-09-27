@@ -191,6 +191,10 @@
 
     export default {
         mixins: [GenerateFile],
+        mounted() {
+            this.$jQuery('body').off();
+
+        },
         data() {
             return {
                 params: {
