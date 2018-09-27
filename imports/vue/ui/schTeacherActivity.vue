@@ -164,9 +164,9 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchTeacherActivity = false, cancel()">{{langConfig['cancel']}}
+                    <el-button @click="dialogAddSchTeacherActivity = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="saveSchTeacherActivity($event)">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="saveSchTeacherActivity($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -239,9 +239,9 @@
                 <input type="hidden" v-model="schTeacherActivityForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchTeacherActivity = false ,cancel()">{{langConfig['cancel']}}
+                    <el-button @click="dialogUpdateSchTeacherActivity = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="updateSchTeacherActivity">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="updateSchTeacherActivity">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

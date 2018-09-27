@@ -153,8 +153,8 @@
                 </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchPromotion = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchPromotion($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchPromotion = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveSchPromotion($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -202,8 +202,8 @@
                 <input type="hidden" v-model="schPromotionForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchPromotion = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateSchPromotion">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateSchPromotion = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateSchPromotion">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

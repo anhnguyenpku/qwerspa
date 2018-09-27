@@ -112,8 +112,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchActivity = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchActivity($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchActivity = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveSchActivity($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -143,8 +143,8 @@
                 <input type="hidden" v-model="schActivityForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchActivity = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateSchActivity">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateSchActivity = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateSchActivity">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

@@ -99,8 +99,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchTime = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchTime($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchTime = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveSchTime($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -124,8 +124,8 @@
                 <input type="hidden" v-model="schTimeForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchTime = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateSchTime">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateSchTime = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateSchTime">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

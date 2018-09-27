@@ -166,9 +166,9 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosCustomer = false, cancel()"
-                    >{{langConfig['cancel']}}
+                    >{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="savePosCustomer($event)">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosCustomer($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -232,8 +232,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdatePosCustomer = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updatePosCustomer">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdatePosCustomer = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updatePosCustomer">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

@@ -319,7 +319,7 @@
                             </el-form-item>
 
                             <el-form-item :label="langConfig['note']" prop="note">
-                                <el-input type="textarea" v-model="schBusPaymentForm.note" :rows="4"></el-input>
+                                <el-input type="textarea" v-model="schBusPaymentForm.note" :rows="3"></el-input>
                             </el-form-item>
                         </div>
                         <!--</el-card>-->
@@ -333,16 +333,16 @@
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger"
                                    @click.native="dialogAddSchBusPayment= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
                         <el-button type="info" @click="saveSchBusPayment(true,$event,true)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
                         <el-button type="success" @click="saveSchBusPayment(false,$event)"><i
-                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}}</el-button>
+                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}} <i>(Ctrl + Alt + Enter)</i></el-button>
 
                         <el-button type="primary" @click.native="saveSchBusPayment(true,$event)"><i
-                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
 
                     </el-col>
                 </el-row>

@@ -204,9 +204,9 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddPosProductionResult = false, cancel()">{{langConfig['cancel']}}
+                    <el-button @click="dialogAddPosProductionResult = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="savePosProductionResult($event)">{{langConfig['save']}}
+                    <el-button type="primary" @click="savePosProductionResult($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i>
                     </el-button>
                 </el-row>
                 <br>

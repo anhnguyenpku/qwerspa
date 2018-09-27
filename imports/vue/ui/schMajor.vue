@@ -152,8 +152,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchMajor = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchMajor($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchMajor = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveSchMajor($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -217,8 +217,8 @@
                 <input type="hidden" v-model="schMajorForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchMajor = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateSchMajor">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateSchMajor = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateSchMajor">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

@@ -986,7 +986,9 @@
                 if (vm.dialogAddJournal === false && vm.dialogUpdateJournal === false && vm.dialogPaid === false) {
                     if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
                         e.preventDefault();
+                        vm.popupJournalAdd();
                         vm.dialogAddJournal = true;
+                        vm.autoIncreseVouchers();
                         vm.resetForm();
                     }
                 }

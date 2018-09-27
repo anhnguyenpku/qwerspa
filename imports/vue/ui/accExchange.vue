@@ -139,8 +139,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddExchange= false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveExchange($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddExchange= false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveExchange($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -185,8 +185,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateExchange= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateExchange">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateExchange= false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateExchange">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

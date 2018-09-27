@@ -140,8 +140,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddPosCategory = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosCategory($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddPosCategory = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="savePosCategory($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -188,8 +188,8 @@
                 <input type="hidden" v-model="posCategoryForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdatePosCategory = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updatePosCategory">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdatePosCategory = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updatePosCategory">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

@@ -566,6 +566,7 @@
                 this.currentPage = val;
             },
             inputHandler(e) {
+
                 let vm = this;
                 if (vm.dialogAddChartAccount === true) {
                     if (e.keyCode === 13 && e.ctrlKey) {
@@ -596,8 +597,7 @@
                         vm.resetForm();
                     }
                 }
-
-
+                
             },
             queryData: _.debounce(function (val, skip, limit) {
                 Meteor.call('queryChartAccount', {

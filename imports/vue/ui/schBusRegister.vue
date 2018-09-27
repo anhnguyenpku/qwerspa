@@ -229,8 +229,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchBusRegister = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchBusRegister($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchBusRegister = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveSchBusRegister($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -354,9 +354,9 @@
                 <input type="hidden" v-model="schBusRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchBusRegister = false ,cancel()">{{langConfig['cancel']}}
+                    <el-button @click="dialogUpdateSchBusRegister = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="updateSchBusRegister">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="updateSchBusRegister">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

@@ -165,8 +165,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddPosLocation = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosLocation($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddPosLocation = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="savePosLocation($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -220,8 +220,8 @@
                 <input type="hidden" v-model="posLocationForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdatePosLocation = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updatePosLocation">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdatePosLocation = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updatePosLocation">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

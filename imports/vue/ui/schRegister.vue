@@ -228,8 +228,8 @@
                 </el-row>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchRegister = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveSchRegister($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddSchRegister = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveSchRegister($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -363,8 +363,8 @@
                 <input type="hidden" v-model="schRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchRegister = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updateSchRegister">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdateSchRegister = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updateSchRegister">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -518,9 +518,9 @@
                 <input type="hidden" v-model="schRegisterForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchRegisterToClass = false ,cancel()">{{langConfig['cancel']}}
+                    <el-button @click="dialogUpdateSchRegisterToClass = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="updateSchRegister">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="updateSchRegister">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -867,11 +867,11 @@
                  <el-row>
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger" @click="dialoginputTranscript= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
                          <el-button type="primary" @click.native="saveTranscript"><i
-                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                     </el-col>
                 </el-row>
             </span>

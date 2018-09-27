@@ -262,8 +262,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddPosProduct = false, cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePosProduct($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogAddPosProduct = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="savePosProduct($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -383,8 +383,8 @@
                 <input type="hidden" v-model="posProductForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdatePosProduct = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updatePosProduct">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdatePosProduct = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updatePosProduct">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>

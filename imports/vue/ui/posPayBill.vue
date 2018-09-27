@@ -329,10 +329,6 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-
-                            <el-form-item :label="langConfig['address']" prop="address">
-                                <el-input type="textarea" v-model="posPayBillForm.address"></el-input>
-                            </el-form-item>
                             <el-form-item :label="langConfig['paidDate']" prop="payBillDate">
                                 <el-date-picker
                                         v-model="posPayBillForm.payBillDate"
@@ -344,11 +340,23 @@
                                 >
                                 </el-date-picker>
                             </el-form-item>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item :label="langConfig['address']" prop="address">
+                                        <el-input type="textarea" v-model="posPayBillForm.address"></el-input>
+                                    </el-form-item>
+                                </el-col>
 
+                                <el-col :span="1">
+                                    <div class="">&nbsp;</div>
+                                </el-col>
+                                <el-col :span="11">
+                                    <el-form-item :label="langConfig['note']" prop="note">
+                                        <el-input type="textarea" v-model="posPayBillForm.note" :rows="3"></el-input>
+                                    </el-form-item>
+                                </el-col>
 
-                            <el-form-item :label="langConfig['note']" prop="note">
-                                <el-input type="textarea" v-model="posPayBillForm.note" :rows="4"></el-input>
-                            </el-form-item>
+                            </el-row>
                         </div>
                         <!--</el-card>-->
                     </el-col>
@@ -361,14 +369,14 @@
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger"
                                    @click.native="dialogAddPayBill= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
                         <el-button type="success" @click="savePayBill(false,$event)"><i
-                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}}</el-button>
+                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}} <i>(Ctrl + Alt + Enter)</i></el-button>
 
                         <el-button type="primary" @click.native="savePayBill(true,$event)"><i
-                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
 
                     </el-col>
                 </el-row>

@@ -570,11 +570,11 @@
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger" @click="dialogAddSchTeacher= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
                          <el-button type="primary" @click.native="saveSchTeacher($event)"><i
-                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                     </el-col>
                 </el-row>
             </span>
@@ -1045,11 +1045,11 @@
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger" @click="dialogUpdateSchTeacher= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
                          <el-button type="primary" @click.native="updateSchTeacher(schTeacherId)"><i
-                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                     </el-col>
                 </el-row>
             </span>

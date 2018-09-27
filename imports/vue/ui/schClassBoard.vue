@@ -400,11 +400,11 @@
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger"
                                    @click.native="dialogAddSchStudentToClass= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
                         <el-button type="primary" @click.native="saveSchStudentToClass(true,$event,false)"><i
-                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
 
                     </el-col>
                 </el-row>
@@ -504,8 +504,8 @@
                 </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogPromoteToClass= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePromoteToClass($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogPromoteToClass= false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="savePromoteToClass($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -604,8 +604,8 @@
                 </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUnPromoteToClass= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveUnPromoteToClass">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUnPromoteToClass= false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveUnPromoteToClass">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -624,8 +624,8 @@
                 </h3>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogPromoteToGraduated= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="savePromoteToGraduated($event)">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogPromoteToGraduated= false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="savePromoteToGraduated($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -654,8 +654,8 @@
                 </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateStatusStudent= false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="saveUpdateStatusStudent($event)">{{langConfig['save']}}
+                    <el-button @click="dialogUpdateStatusStudent= false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="saveUpdateStatusStudent($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i>
                     </el-button>
                 </el-row>
                 <br>
@@ -685,9 +685,9 @@
                 </el-form-item>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdatePromotionStudent= false ,cancel()">{{langConfig['cancel']}}
+                    <el-button @click="dialogUpdatePromotionStudent= false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="saveUpdatePromotionStudent($event)">{{langConfig['save']}}
+                    <el-button type="primary" @click="saveUpdatePromotionStudent($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i>
                     </el-button>
                 </el-row>
                 <br>

@@ -440,11 +440,16 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-
+                                <el-col :span="1">
+                                    <div class="">&nbsp;</div>
+                                </el-col>
+                                <el-col :span="11">
+                                    <el-form-item :label="langConfig['note']" prop="note">
+                                        <el-input type="textarea" v-model="posSaleOrderForm.note" :rows="3"></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-row>
-                            <el-form-item :label="langConfig['note']" prop="note">
-                                <el-input type="textarea" v-model="posSaleOrderForm.note" :rows="4"></el-input>
-                            </el-form-item>
+
                         </div>
                         <!--</el-card>-->
                     </el-col>
@@ -456,7 +461,7 @@
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger" @click.native="dialogAddPosSaleOrder= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
 
@@ -464,10 +469,10 @@
                                 class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 -->
                         <el-button type="warning" @click="savePosSaleOrder(false,$event,false)"><i
-                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}}</el-button>
+                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}} <i>(Ctrl + Alt + Enter)</i></el-button>
 
                         <el-button type="primary" @click.native="savePosSaleOrder(true,$event,false)"><i
-                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
 
                     </el-col>
                 </el-row>
@@ -786,11 +791,16 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-
+                                <el-col :span="1">
+                                    <div class="">&nbsp;</div>
+                                </el-col>
+                                <el-col :span="11">
+                                    <el-form-item :label="langConfig['note']" prop="note">
+                                        <el-input type="textarea" v-model="posSaleOrderForm.note" :rows="3"></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-row>
-                            <el-form-item :label="langConfig['note']" prop="note">
-                                <el-input type="textarea" v-model="posSaleOrderForm.note" :rows="4"></el-input>
-                            </el-form-item>
+
                         </div>
                         <!--</el-card>-->
                     </el-col>
@@ -803,7 +813,7 @@
                 <el-row>
                     <el-col :span="12" style="text-align: left !important;">
                         <el-button type="danger" @click="dialogUpdatePosSaleOrder= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}}</el-button>
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
                     <el-col :span="11" class="pull-right">
 
@@ -811,7 +821,7 @@
                                  class="fa fa-print"></i>&nbsp;&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 -->
                          <el-button type="primary" @click.native="updatePosSaleOrder(posSaleOrderId,false)"><i
-                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}}</el-button>
+                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                     </el-col>
                 </el-row>
             </span>
@@ -1606,7 +1616,7 @@
                             vm.dialogUpdatePosSaleOrder = true;
                             vm.findPosSaleOrderById(scope);
                         } else {
-                            this.$message({
+                            vm.$message({
                                 duration: 1000,
                                 message: "Not Active State!!",
                                 type: 'error'

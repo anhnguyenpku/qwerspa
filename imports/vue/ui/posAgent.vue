@@ -139,9 +139,9 @@
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogAddPosAgent = false, cancel()"
-                    >{{langConfig['cancel']}}
+                    >{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="savePosAgent">{{langConfig['save']}}</el-button>
+                    <el-button type="primary" @click="savePosAgent">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -181,8 +181,8 @@
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdatePosAgent = false ,cancel()">{{langConfig['cancel']}}</el-button>
-                    <el-button type="primary" @click="updatePosAgent">{{langConfig['save']}}</el-button>
+                    <el-button @click="dialogUpdatePosAgent = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    <el-button type="primary" @click="updatePosAgent">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
