@@ -6,6 +6,7 @@ import {CheckRoles} from '../../imports/api/methods/checkRoles';
 //import layout render
 require("materialize-css-meteor");
 import {_Main} from '../libs/_renderLayout';
+import {_NoHeaderNoSideBar} from '../libs/_renderLayout';
 
 var posData = FlowRouter.group({
     prefix: '/pos-data',
@@ -100,6 +101,17 @@ posSale.route('/posInvoice', {
     title: "Invoice",
     action: function (query, params) {
         _Main('pos_Invoice');
+    }
+});
+
+import "../../imports/ui/pos_saleCoffee/posSaleCoffee";
+// Invoice
+posSale.route('/posSaleCoffee', {
+    name: 'pos.saleCoffee',
+    parent: 'wb.homeData',
+    title: "Sale Coffee",
+    action: function (query, params) {
+        _NoHeaderNoSideBar('pos_SaleCoffee');
     }
 });
 

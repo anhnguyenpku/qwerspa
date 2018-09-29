@@ -85,3 +85,5 @@ promise@0.11.1
 sakulstra:aggregate
 service-configuration
 random
+cfs:standard-packages
+cfs:gridfs

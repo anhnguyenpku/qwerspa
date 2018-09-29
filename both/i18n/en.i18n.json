@@ -55,7 +55,8 @@
       "productionBoard": "Production Board",
       "productionResult": "Production Result",
       "productionSummary": "Production Summary",
-      "productionResultSummary": "Production Result Summary"
+      "productionResultSummary": "Production Result Summary",
+      "saleCoffee": "Sale"
     },
     "customer": {
       "customerAdd": "Add Customer",

@@ -149,6 +149,18 @@ label {
      background: -moz-radial-gradient(circle, #51abff, #406C9A);*/
 }
 
+.custom-login-background-coffee {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 1;
+    background: black !important;
+    background-size: cover;
+
+}
+
 .custom-login-background-setting-area {
     top: 0;
     left: 0;

@@ -28,14 +28,7 @@ Meteor.startup(function () {
         loginExpirationInDays: (1 / 24 / 60) / 20
     })*/
     //SyncedCron.start();
-    if (Meteor.users.find().count() <= 0) {
-        let superId = Accounts.createUser({
-            username: 'super',
-            email: 'super@navi.com',
-            password: 'superh2e@123',
-            approved: true
-        });
-    }
+
     // Enable cross origin requests for all endpoints
     JsonRoutes.setResponseHeaders({
         "Cache-Control": "no-store",
