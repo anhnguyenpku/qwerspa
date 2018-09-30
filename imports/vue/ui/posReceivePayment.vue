@@ -446,7 +446,7 @@
                             <tr>
                                 <th>{{langConfig['no']}}</th>
 
-                                <th>{{langConfig['saleOrderNo']}}</th>
+                                <th>{{langConfig['orderNo']}}</th>
                                 <th>{{langConfig['netAmount']}}</th>
                                 <th style="color: #e91e63 !important;">{{langConfig['paid']}}</th>
                                 <th style="vertical-align: middle;">

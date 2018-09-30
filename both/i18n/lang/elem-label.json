@@ -196,7 +196,8 @@
       "saveAndPrint": "Save and Print",
       "pay": "Pay",
       "addReceiveFromSaleOrder": "Add Receive Payment From Sale Order",
-      "receivePaymentFromSaleOrder": "Receive Payment From Sale Order"
+      "receivePaymentFromSaleOrder": "Receive Payment From Sale Order",
+      "orderNo": "Order No"
     },
     "payBill": {
       "searchHere": "Search Here ...",
@@ -883,7 +884,8 @@
       "saveAndPrint": "រក្សាទុក ហើយបោះពុម្ភ",
       "pay": "បង់ប្រាក់",
       "addReceiveFromSaleOrder": "បញ្ចូលការទទួលប្រាក់ពីការកុម្មង់",
-      "receivePaymentFromSaleOrder": "ការទទួលប្រាក់ពីការកុម្មង់"
+      "receivePaymentFromSaleOrder": "ការទទួលប្រាក់ពីការកុម្មង់",
+      "orderNo": "លេខវិក័យបត្រ"
     },
     "payBill": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
