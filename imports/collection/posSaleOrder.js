@@ -246,6 +246,11 @@ Pos_SaleOrder.schema = new SimpleSchema({
     closeDate: {
         type: Date,
         optional: true
+    },
+    paymentNumber: {
+        type: Number,
+        defaultValue: 0,
+        optional: true
     }
 });
 

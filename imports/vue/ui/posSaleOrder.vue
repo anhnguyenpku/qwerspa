@@ -89,7 +89,7 @@
 
                     <el-table-column
                             :label="langConfig['action']"
-                            width="160"
+                            width="200"
                     >
                         <template slot-scope="scope">
                             <el-button-group>
@@ -101,6 +101,8 @@
                                            :disabled="disabledUpdate"></el-button>
                                 <el-button type="success" icon="el-icon-view" size="small" class="cursor-pointer"
                                            @click="popupPosSaleOrderShow(scope.row)"></el-button>
+                                <el-button type="info" icon="el-icon-printer" size="small" class="cursor-pointer"
+                                           @click="printSaleOrder(scope.row)"></el-button>
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -468,6 +470,8 @@
                         <!--<el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i
                                 class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 -->
+                         <el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
+
                         <el-button type="warning" @click="savePosSaleOrder(false,$event,false)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}} <i>(Ctrl + Alt + Enter)</i></el-button>
 
@@ -820,6 +824,8 @@
                          <!--<el-button type="success" @click.native="updatePosSaleOrder(posSaleOrderId,true)"><i
                                  class="fa fa-print"></i>&nbsp;&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 -->
+                          <el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
+
                          <el-button type="primary" @click.native="updatePosSaleOrder(posSaleOrderId,false)"><i
                                  class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
                     </el-col>
@@ -1478,7 +1484,7 @@
                             });
                             return false;
                         }
-                        if (row.status == "Active" || row.receiveNumber < 2) {
+                        if ((row.status !== "Complete" || row.receiveNumber < 2) && (row.paymentNumber === undefined || row.paymentNumber < 1)) {
 
                             vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
                                 confirmButtonText: 'OK',
@@ -1520,7 +1526,7 @@
 
                     })
                 } else {
-                    if (row.status == "Active" || row.receiveNumber < 2) {
+                    if ((row.status !== "Complete" || row.receiveNumber < 2) && (row.paymentNumber === undefined || row.paymentNumber < 1)) {
 
                         vm.$confirm('This will permanently delete the file. Continue?', 'Warning', {
                             confirmButtonText: 'OK',
@@ -1616,7 +1622,7 @@
                             });
                             return false;
                         }
-                        if (row.status == "Active" || row.receiveNumber < 2) {
+                        if ((row.status !== "Complete" || row.receiveNumber < 2) && (row.paymentNumber === undefined || row.paymentNumber < 1)) {
                             vm.dialogUpdatePosSaleOrder = true;
                             vm.findPosSaleOrderById(scope);
                         } else {
@@ -1629,7 +1635,7 @@
 
                     })
                 } else {
-                    if (row.status == "Active" || row.receiveNumber < 2) {
+                    if ((row.status !== "Complete" || row.receiveNumber < 2) && (row.paymentNumber === undefined || row.paymentNumber < 1)) {
                         vm.dialogUpdatePosSaleOrder = true;
                         vm.findPosSaleOrderById(scope);
                     } else {
@@ -1891,6 +1897,11 @@
                         console.log(err.message);
                     }
                 })
+            },
+            printSaleOrder(data) {
+
+                FlowRouter.go('/pos-data/posSaleOrder/print?inv=' + data._id);
+
             }
         },
         created() {

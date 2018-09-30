@@ -485,6 +485,48 @@ Meteor.methods({
             {$limit: 100}
 
         ]).map(obj => ({label: obj._id.name, value: obj._id.id}));
+    },
+    queryPosCustomerSaleOrderOptionUnPaid(q) {
+        let selector = {};
+        if (q != "") {
+            q = q.replace(/[/\\]/g, '');
+            let reg = new RegExp(q, 'mi');
+            selector.name = {$regex: reg};
+        }
+        return Pos_Customer.aggregate([
+            {$match: selector},
+            {
+
+                $lookup: {
+                    from: "pos_saleOrder",
+                    localField: "_id",
+                    foreignField: "customerId",
+                    as: "saleOderDoc"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$saleOderDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $match: {
+                    "saleOderDoc.status": {$in: ["Active", "Partial"]}
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        name: "$name",
+                        id: "$_id"
+                    }
+                }
+            },
+
+            {$limit: 100}
+
+        ]).map(obj => ({label: obj._id.name, value: obj._id.id}));
     }
     ,
 

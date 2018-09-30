@@ -10,6 +10,7 @@ import {Pos_Customer} from "../../../imports/collection/posCustomer";
 import {Acc_ChartAccount} from "../../../imports/collection/accChartAccount";
 import {Acc_Journal} from "../../../imports/collection/accJournal";
 import {Pos_ProductionResultReact} from "../../../imports/collection/posProductionResult";
+import {Pos_SaleOrder} from "../../../imports/collection/posSaleOrder";
 
 Meteor.methods({
     queryPosReceivePayment({q, filter, options = {limit: 10, skip: 0}}) {
@@ -158,51 +159,142 @@ Meteor.methods({
 
         return id;
     },
+    insertPosReceivePaymentFromSaleOrder(data) {
+        data.invoice.forEach((obj) => {
+            obj.amount = numeral(obj.amount).value();
+            obj.rawAmount = numeral(obj.rawAmount).value();
+            obj.discount = numeral(obj.discount).value();
+            obj.netAmount = numeral(obj.netAmount).value();
+            obj.paid = numeral(obj.paid).value();
+            obj.dayOverDue = -9999;
+            return obj;
+        })
+        let id = Pos_ReceivePayment.insert(data);
+
+        if (id && data.totalPaid > 0) {
+            //Integrated To Account===============================================================================================
+            Meteor.defer(function () {
+                let companyDoc = WB_waterBillingSetup.findOne({});
+
+                if (companyDoc.integratedPosAccount === true) {
+                    let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                    let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
+
+                    let cusDoc = Pos_Customer.findOne({_id: data.customerId});
+
+                    let journalDoc = {};
+                    journalDoc.journalDate = data.receivePaymentDate;
+                    journalDoc.journalDateName = moment(data.receivePaymentDate).format("DD/MM/YYYY");
+                    journalDoc.currencyId = companyDoc.baseCurrency;
+                    journalDoc.memo = cusDoc.name + " បង់ប្រាក់ពីការកុម្មង់";
+                    journalDoc.rolesArea = data.rolesArea;
+                    journalDoc.closingEntryId = id;
+                    journalDoc.status = "Receive Payment From Sale Order";
+                    journalDoc.refId = id;
+                    journalDoc.total = numeral(formatCurrencyLast(data.totalPaid, companyDoc.baseCurrency)).value();
+
+
+                    let transaction = [];
+                    transaction.push({
+                        account: cashAcc._id,
+                        dr: data.totalPaid,
+                        cr: 0,
+                        drcr: data.totalPaid
+                    });
+
+
+                    transaction.push({
+                        account: saleIncomeAcc._id,
+                        dr: 0,
+                        cr: data.totalPaid,
+                        drcr: -data.totalPaid
+                    });
+
+                    journalDoc.transaction = transaction;
+                    Meteor.call("insertJournal", journalDoc);
+
+                }
+            })
+        }
+        if (id) {
+            receivePaymentReact(id);
+        }
+
+        return id;
+    },
     removePosReceivePayment(id) {
+        let companyDoc = WB_waterBillingSetup.findOne({});
+
         let receviePaymentDoc = Pos_ReceivePayment.findOne({_id: id});
         let isRemove = Pos_ReceivePayment.remove({_id: id});
         if (isRemove) {
             if (receviePaymentDoc) {
                 receviePaymentDoc.invoice.forEach((data) => {
-                    let invoiceDoc = Pos_Invoice.findOne({_id: data._id});
-                    let newStatus = invoiceDoc.status;
 
-                    if (invoiceDoc.paid - (data.paid + data.discount) > 0) {
-                        newStatus = "Partial";
-                    } else {
-                        newStatus = "Active";
-                    }
+                    if (data.dayOverDue === -9999) {
+                        let paidUSD = 0;
+                        let paidKHR = 0;
+                        let paidTHB = 0;
+                        if (companyDoc.baseCurrency === "USD") {
+                            paidUSD = data.paid;
+                        } else if (companyDoc.baseCurrency === "KHR") {
+                            paidKHR = data.paid;
 
-                    Pos_Invoice.direct.update({_id: data._id}, {
-                        $set: {status: newStatus, closeDate: ""},
-                        $inc: {
-                            paid: -(data.paid + data.discount),
-                            paymentNumber: -1
+                        } else if (companyDoc.baseCurrency === "THB") {
+                            paidTHB = data.paid;
+
                         }
-                    }, true);
-
-                    Pos_ReceivePayment.direct.update({
-                            "invoice._id": data._id,
-                            createdAt: {$gt: receviePaymentDoc.createdAt}
-                        },
-                        {
-
+                        Pos_SaleOrder.direct.update({_id: data._id}, {
                             $inc: {
-                                "invoice.$.amount": (data.paid + data.discount),
-                                "invoice.$.netAmount": (data.paid + data.discount),
-                                totalAmount: (data.paid + data.discount),
-                                totalNetAmount: (data.paid + data.discount),
-                                balanceUnPaid: (data.paid + data.discount)
+                                paid: -data.paid,
+                                paidUSD: -paidUSD,
+                                paidKHR: -paidKHR,
+                                paidTHB: -paidTHB,
+                                paymentNumber: -1
                             }
-                        }, {multi: true}, true);
+                        }, true);
+
+                    } else {
+                        let invoiceDoc = Pos_Invoice.findOne({_id: data._id});
+                        let newStatus = invoiceDoc.status;
+
+                        if (invoiceDoc.paid - (data.paid + data.discount) > 0) {
+                            newStatus = "Partial";
+                        } else {
+                            newStatus = "Active";
+                        }
+
+                        Pos_Invoice.direct.update({_id: data._id}, {
+                            $set: {status: newStatus, closeDate: ""},
+                            $inc: {
+                                paid: -(data.paid + data.discount),
+                                paymentNumber: -1
+                            }
+                        }, true);
+
+                        Pos_ReceivePayment.direct.update({
+                                "invoice._id": data._id,
+                                createdAt: {$gt: receviePaymentDoc.createdAt}
+                            },
+                            {
+
+                                $inc: {
+                                    "invoice.$.amount": (data.paid + data.discount),
+                                    "invoice.$.netAmount": (data.paid + data.discount),
+                                    totalAmount: (data.paid + data.discount),
+                                    totalNetAmount: (data.paid + data.discount),
+                                    balanceUnPaid: (data.paid + data.discount)
+                                }
+                            }, {multi: true}, true);
+                    }
                 })
             }
         }
         //Integrated To Account===============================================================================================
         if (isRemove) {
-            let companyDoc = WB_waterBillingSetup.findOne({});
             if (companyDoc.integratedPosAccount === true) {
                 Acc_Journal.remove({refId: id, status: "Receive Payment"});
+                Acc_Journal.remove({refId: id, status: "Receive Payment From Sale Order"});
             }
 
             receivePaymentReact(id);
@@ -238,6 +330,40 @@ Meteor.methods({
             return [];
         });
     },
+    queryPosSaleOrderPartialByCustomerId(customerId, receiveDate, locationId) {
+        let data = Pos_SaleOrder.find({
+            customerId: customerId,
+            status: {$ne: "Complete"},
+            locationId: locationId
+        }).fetch();
+        let dataArr = [];
+        data.forEach((obj) => {
+            if (obj) {
+                let toInv = (obj.paid - obj.cutOnPaid) > 0 ? 0 : (obj.paid - obj.cutOnPaid);
+                let netAm = obj.netTotal - obj.paid - toInv;
+                if (netAm > 0) {
+                    dataArr.push({
+                        _id: obj._id,
+                        invoiceNo: obj.saleOrderNo,
+                        termId: obj.termId,
+                        amount: formatCurrency(netAm || 0),
+                        rawAmount: obj.total,
+                        isApplyTerm: false,
+                        discount: 0,
+                        invoiceDate: obj.saleOrderDate,
+                        dueDate: receiveDate,
+                        netAmount: formatCurrency(netAm || 0),
+                        paid: 0,
+                        isShow: true,
+                        isPaid: false,
+                        dayOverDue: 0
+                    })
+                }
+            }
+        })
+        return dataArr;
+    },
+
     /*queryPosInvoiceByCustomerIdSubmit(customerId, receiveDate) {
         return Pos_Invoice.find({customerId: customerId, status: {$in: ["Active", "Partial"]}}).fetch().map((obj) => {
             return {
@@ -274,6 +400,30 @@ Meteor.methods({
             $set: upd,
             $inc: {
                 paid: numeral(data.paid).value() + numeral(data.discount).value(),
+                paymentNumber: 1
+            }
+        }, true);
+    },
+    updateSaleOrderByReceivePayment(data, date) {
+        let companyDoc = WB_waterBillingSetup.findOne({});
+        let paidUSD = 0;
+        let paidKHR = 0;
+        let paidTHB = 0;
+        if (companyDoc.baseCurrency === "USD") {
+            paidUSD = numeral(data.paid).value();
+        } else if (companyDoc.baseCurrency === "KHR") {
+            paidKHR = numeral(data.paid).value();
+
+        } else if (companyDoc.baseCurrency === "THB") {
+            paidTHB = numeral(data.paid).value();
+
+        }
+        return Pos_SaleOrder.direct.update({_id: data._id}, {
+            $inc: {
+                paid: numeral(data.paid).value(),
+                paidUSD: paidUSD,
+                paidKHR: paidKHR,
+                paidTHB: paidTHB,
                 paymentNumber: 1
             }
         }, true);

@@ -166,6 +166,10 @@ Pos_ReceivePayment.schema = new SimpleSchema({
                 return Meteor.userId();
             }
         }
+    },
+    isSaleOrder: {
+        type: Boolean,
+        optional: true
     }
 
 });

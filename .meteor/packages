@@ -87,3 +87,4 @@ service-configuration
 random
 cfs:standard-packages
 cfs:gridfs
+ostrio:files

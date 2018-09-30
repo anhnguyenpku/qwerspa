@@ -119,6 +119,8 @@ npm-mongo@3.0.11
 observe-sequence@1.0.16
 ongoworks:security@1.3.0
 ordered-dict@1.1.0
+ostrio:cookies@2.3.0
+ostrio:files@1.10.2
 ovcharik:alertifyjs@1.6.1
 percolate:synced-cron@1.3.2
 promise@0.11.1

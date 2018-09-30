@@ -419,7 +419,7 @@ Meteor.methods({
         return invoiceNo + "";
     },
     queryPosSaleOrderByCustomerId(customerId) {
-        let data = Pos_SaleOrder.find({customerId: customerId}).fetch();
+        let data = Pos_SaleOrder.find({customerId: customerId, status: {$ne: "Complete"}}).fetch();
         let dataObj = {};
         let dataArr = [];
         let balanceNotCut = 0;

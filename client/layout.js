@@ -149,6 +149,7 @@ Template.MainLayout.helpers({
             ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.production = (ma.feature.indexOf("Production") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.coffee = (ma.feature.indexOf("Coffee") > -1 ? true : false) || CheckRoles({roles: ['super']});
         }
 
         return ob;

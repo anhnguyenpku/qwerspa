@@ -225,6 +225,7 @@
     import compoLang from '../../../both/i18n/lang/elem-label'
     import {Pos_CategoryReact} from "../../collection/posCategory";
     import {CategoryImage} from "../../collection/fileImages";
+    import {Files} from "../../collection/fileImages";
     import storagePath from '../../firebase/storage_path';
 
     export default {
@@ -337,9 +338,23 @@
                 let vm = this;
                 this.$refs["posCategoryFormAdd"].validate((valid) => {
                         if (valid) {
-                            console.log(vm.thumbImgCroppa.hasImage());
+                            console.log(vm.thumbImgCroppa);
                             if (vm.thumbImgCroppa.hasImage()) {
-                                fsFile = new FS.File(vm.thumbImgCroppa);
+
+                                //let fsFile = new FS.File(vm.thumbImgCroppa.getChosenFile());
+                                /*vm.thumbImgCroppa.generateBlob((result) => {
+                                    let reader = new FileReader();
+                                    reader.onload = function (event) {
+                                        let buffer = new Unit8Array(reader.result);
+                                        Files.insert({data: buffer});
+                                    }
+
+                                    reader.readAsArrayBuffer(result);
+                                });*/
+
+
+                                /*fsFile = new FS.File(vm.thumbImgCroppa.getChosenFile());
+                                console.log(fsFile);
                                 CategoryImage.insert(fsFile, function (err, result) {
                                     if (err) {
                                         throw new Meteor.Error(err);
@@ -347,7 +362,7 @@
                                         let imageLoc = '/cfs/files/categoryImage' + result._id;
                                         console.log(imageLoc);
                                     }
-                                })
+                                })*/
                                 /*vm.thumbImgCroppa.generateBlob((blob) => {
                                     let fd = new FormData();
                                     fd.append('file', blob, "fileName.jpg");
@@ -562,10 +577,7 @@
 
             },
             generateThumbImgUrl: function () {
-                console.log(this.thumbImgCroppa);
                 let url = this.thumbImgCroppa && this.thumbImgCroppa.generateDataUrl();
-                console.log(this.url);
-
                 if (!url) {
                     return
                 }

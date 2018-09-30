@@ -18,7 +18,12 @@
                     <br>
                     <el-row type="flex" justify="center">
                         <el-col :span="8"></el-col>
-                        <el-col :span="8"></el-col>
+                        <el-col :span="8">
+                            <el-button type="success" round
+                                       @click="popupPosReceivePaymentFromSaleOrder(),dialogAddPosReceiveFromSaleOrder = true,resetForm()">
+                                {{langConfig['receivePaymentFromSaleOrder']}}
+                            </el-button>
+                        </el-col>
                         <el-col :span="8">
                             <el-input
                                     :placeholder="langConfig['searchHere']"
@@ -382,12 +387,12 @@
             >
                 <hr style="margin-top: 0px !important;">
                 <el-row>
-                    <el-col :span="12" style="text-align: left !important;">
+                    <el-col :span="8" style="text-align: left !important;">
                         <el-button type="danger"
                                    @click.native="dialogAddPosReceivePayment= false, cancel(),resetForm()"> <i
                                 class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
                     </el-col>
-                    <el-col :span="11" class="pull-right">
+                    <el-col :span="15" class="pull-right">
                         <el-button type="success" @click="savePosReceivePayment(true,$event,true)"><i
                                 class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 
@@ -396,6 +401,220 @@
                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}} <i>(Ctrl + Alt + Enter)</i></el-button>
 
                         <el-button type="primary" @click.native="savePosReceivePayment(true,$event)"><i
+                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
+
+                    </el-col>
+                </el-row>
+            </span>
+        </el-dialog>
+
+
+        <!--Form Modal-->
+        <el-dialog
+                :title="langConfig['addReceiveFromSaleOrder']"
+                :visible.sync="dialogAddPosReceiveFromSaleOrder"
+                :fullscreen="fullScreen"
+
+        >
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="posReceivePaymentForm" :rules="rules" ref="posReceivePaymentFormAdd" label-width="120px"
+                     :label-position="labelPosition"
+                     class="posReceivePaymentForm">
+                <el-row :gutter="20">
+                    <el-col :span="18" class="posReceivePaymentForm">
+                        <table class="table table-responsive​​​ table-striped table-hover responstable">
+                            <thead>
+                            <tr>
+                                <th colspan="3">
+                                    &nbsp;
+                                </th>
+                                <th colspan="3">
+                                    <el-input placeholder="totalPaid"
+                                              v-model.number=totalPaidInput
+                                              @keyup.native="inputTotalPaid()"
+                                              @change="inputTotalPaid()"
+
+                                    >
+                                        <template slot="prepend">{{langConfig['totalPaid']}}:</template>
+                                        <template slot="append">{{currencySymbol}}</template>
+
+                                    </el-input>
+                                </th>
+                            </tr>
+                            </thead>
+                            <thead>
+                            <tr>
+                                <th>{{langConfig['no']}}</th>
+
+                                <th>{{langConfig['saleOrderNo']}}</th>
+                                <th>{{langConfig['netAmount']}}</th>
+                                <th style="color: #e91e63 !important;">{{langConfig['paid']}}</th>
+                                <th style="vertical-align: middle;">
+                                    <el-checkbox v-model="posReceivePaymentForm.isPaidAll"></el-checkbox>
+                                </th>
+                            </tr>
+                            </thead>
+                            <draggable v-model="posReceivePaymentData" :element="'tbody'">
+                                <tr v-for="(posReceivePaymentDoc,index ) in this.posReceivePaymentData" :key="index">
+                                    <template v-if="posReceivePaymentDoc.isShow">
+                                        <td style="vertical-align: middle">
+                                            {{index +1}}
+                                        </td>
+                                        <td style="vertical-align: middle">
+                                            #{{posReceivePaymentDoc.invoiceNo |
+                                            subStringVoucher}}({{posReceivePaymentDoc.invoiceDate |
+                                            momentFormat}})
+                                        </td>
+                                        <td>
+                                            <el-input placeholder="Net Amount"
+                                                      v-model.number=posReceivePaymentDoc.netAmount
+                                                      disabled>
+                                                <template slot="append">{{currencySymbol}}</template>
+                                            </el-input>
+                                        </td>
+                                        <td>
+                                            <el-input placeholder="Paid" v-model.number="posReceivePaymentDoc.paid"
+                                                      type='number'
+                                                      @keyup.native="updatePosReceivePaymentDetailPaid(posReceivePaymentDoc, index)"
+                                                      @change="updatePosReceivePaymentDetailPaid(posReceivePaymentDoc, index)"
+                                            >
+                                                <template slot="append">{{currencySymbol}}</template>
+                                            </el-input>
+                                        </td>
+                                        <td style="vertical-align: middle">
+                                            <el-checkbox v-model="posReceivePaymentDoc.isPaid"
+                                                         @change="updatePosReceivePaymentDetail(posReceivePaymentDoc, index)"></el-checkbox>
+                                        </td>
+                                    </template>
+                                </tr>
+                            </draggable>
+                            <thead>
+                            <tr>
+                                <th colspan="3" style="text-align: right;vertical-align: middle">
+                                    {{langConfig['totalNetAmount']}}:
+                                </th>
+                                <th colspan="3">
+                                    <el-input :placeholder="langConfig['totalNetAmount']"
+                                              v-model.number="posReceivePaymentForm.totalNetAmount"
+                                              disabled>
+                                        <template slot="append">{{currencySymbol}}</template>
+                                    </el-input>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="3" style="text-align: right;vertical-align: middle">
+                                    {{langConfig['balanceUnpaid']}}:
+                                </th>
+                                <th colspan="3">
+                                    <el-input :placeholder="langConfig['balanceUnpaid']"
+                                              v-model.number="posReceivePaymentForm.balanceUnPaid"
+                                              disabled>
+                                        <template slot="append">{{currencySymbol}}</template>
+                                    </el-input>
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </el-col>
+                    <el-col :span="6">
+                        <div class="w3-code">
+                            <div class="ui segments plan">
+                                <div class="ui top attached segment teal inverted plan-title">
+                                    <span class="plan-ribbon red">{{posReceivePaymentForm.totalDiscount}}{{currencySymbol}}</span>
+                                    <span class="ui header">{{langConfig['amountReceive']}}</span>
+
+                                </div>
+                                <div class="ui  attached segment feature">
+                                    <div class="amount">
+                                        {{posReceivePaymentForm.totalPaid}}{{currencySymbol}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <el-form-item :label="langConfig['location']" prop="locationId">
+
+                                <el-select style="display: block !important"
+                                           filterable clearable
+                                           v-model="posReceivePaymentForm.locationId"
+                                           :placeholder="langConfig['chooseLocation']">
+                                    <el-option
+                                            v-for="item in locationOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                            :disabled="item.disabled">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item :label="langConfig['customer']" prop="customerId">
+                                <el-select style="display: block !important;"
+                                           filterable clearable
+                                           v-model="posReceivePaymentForm.customerId" remote
+                                           :disabled="disabledCustomer"
+                                           :remote-method="customerSaleOrderOpt"
+                                           :loading="loading"
+                                           :placeholder="langConfig['customer']">
+                                    <el-option
+                                            v-for="item in customerSaleOrderOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                            :disabled="item.disabled">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item :label="langConfig['receiveDate']" prop="receivePaymentDate">
+                                <el-date-picker
+                                        v-model="posReceivePaymentForm.receivePaymentDate"
+                                        type="date"
+                                        style="width: 100%;"
+                                        placeholder="Pick a day"
+                                        :picker-options="options"
+                                        :disabled="disabledDate"
+                                >
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item :label="langConfig['address']" prop="address">
+                                        <el-input type="textarea" v-model="posReceivePaymentForm.address"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="1">
+                                    <div class="">&nbsp;</div>
+                                </el-col>
+                                <el-col :span="11">
+                                    <el-form-item :label="langConfig['note']" prop="note">
+                                        <el-input type="textarea" v-model="posReceivePaymentForm.note"
+                                                  :rows="3"></el-input>
+                                    </el-form-item>
+                                </el-col>
+
+                            </el-row>
+
+                        </div>
+                        <!--</el-card>-->
+                    </el-col>
+                </el-row>
+            </el-form>
+            <span slot="footer" class="dialog-footer fix-dialog-footer"
+            >
+                <hr style="margin-top: 0px !important;">
+                <el-row>
+                    <el-col :span="8" style="text-align: left !important;">
+                        <el-button type="danger"
+                                   @click.native="dialogAddPosReceivePayment= false, cancel(),resetForm()"> <i
+                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['cancel']}} <i>(ESC)</i></el-button>
+                    </el-col>
+                    <el-col :span="15" class="pull-right">
+                        <el-button type="success" @click="savePosReceivePaymentFromSaleOrder(true,$event,true)"><i
+                                class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
+
+
+                        <el-button type="success" @click="savePosReceivePaymentFromSaleOrder(false,$event)"><i
+                                class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}} <i>(Ctrl + Alt + Enter)</i></el-button>
+
+                        <el-button type="primary" @click.native="savePosReceivePaymentFromSaleOrder(true,$event)"><i
                                 class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
 
                     </el-col>
@@ -454,6 +673,7 @@
                 dialogAddPosReceivePayment: false,
                 dialogUpdatePosReceivePayment: false,
                 dialogShowPosReceivePayment: false,
+                dialogAddPosReceiveFromSaleOrder: false,
                 typeDiscount: "",
                 fullScreen: true,
 
@@ -507,6 +727,7 @@
                 // Options
                 itemOption: [],
                 customerOption: [],
+                customerSaleOrderOption: [],
                 termOption: [],
 
                 dialog: true,
@@ -640,30 +861,58 @@
             },
             "posReceivePaymentForm.customerId"(val) {
                 let vm = this;
-                if (val) {
-                    Meteor.call("queryPosCustomerById", val, (err, result) => {
-                        if (result) {
-                            vm.posReceivePaymentForm.address = result.address;
-                            vm.posReceivePaymentForm.termId = result.termId;
-                        }
-                    });
+                if (vm.dialogAddPosReceiveFromSaleOrder === true) {
+                    if (val) {
+                        Meteor.call("queryPosCustomerById", val, (err, result) => {
+                            if (result) {
+                                vm.posReceivePaymentForm.address = result.address;
+                                vm.posReceivePaymentForm.termId = result.termId;
+                            }
+                        });
 
-                    Meteor.call("queryPosInvoiceByCustomerId", val, vm.posReceivePaymentForm.receivePaymentDate, vm.posReceivePaymentForm.locationId, (err, result) => {
-                        if (result) {
-                            vm.posReceivePaymentData = result;
-                        }
-                        vm.getTotal();
-                    })
+                        Meteor.call("queryPosSaleOrderPartialByCustomerId", val, vm.posReceivePaymentForm.receivePaymentDate, vm.posReceivePaymentForm.locationId, (err, result) => {
+                            if (result) {
+                                vm.posReceivePaymentData = result;
+                            }
+                            vm.getTotal();
+                        })
+                    } else {
+                        Meteor.call("queryPosSaleOrderPartialByCustomerId", "", vm.posReceivePaymentForm.receivePaymentDate, vm.posReceivePaymentForm.locationId, (err, result) => {
+                            if (result) {
+                                vm.posReceivePaymentData = result;
+
+                                vm.posReceivePaymentForm.address = "";
+                                vm.posReceivePaymentForm.termId = "";
+                            }
+                            vm.getTotal();
+                        })
+                    }
                 } else {
-                    Meteor.call("queryPosInvoiceByCustomerId", "", vm.posReceivePaymentForm.receivePaymentDate, vm.posReceivePaymentForm.locationId, (err, result) => {
-                        if (result) {
-                            vm.posReceivePaymentData = result;
+                    if (val) {
+                        Meteor.call("queryPosCustomerById", val, (err, result) => {
+                            if (result) {
+                                vm.posReceivePaymentForm.address = result.address;
+                                vm.posReceivePaymentForm.termId = result.termId;
+                            }
+                        });
 
-                            vm.posReceivePaymentForm.address = "";
-                            vm.posReceivePaymentForm.termId = "";
-                        }
-                        vm.getTotal();
-                    })
+                        Meteor.call("queryPosInvoiceByCustomerId", val, vm.posReceivePaymentForm.receivePaymentDate, vm.posReceivePaymentForm.locationId, (err, result) => {
+                            if (result) {
+                                vm.posReceivePaymentData = result;
+                            }
+                            vm.getTotal();
+                        })
+                    } else {
+                        Meteor.call("queryPosInvoiceByCustomerId", "", vm.posReceivePaymentForm.receivePaymentDate, vm.posReceivePaymentForm.locationId, (err, result) => {
+                            if (result) {
+                                vm.posReceivePaymentData = result;
+
+                                vm.posReceivePaymentForm.address = "";
+                                vm.posReceivePaymentForm.termId = "";
+                            }
+                            vm.getTotal();
+                        })
+                    }
                 }
             },
             "posReceivePaymentForm.isAllTerm"(val) {
@@ -709,6 +958,7 @@
                 if (val) {
                     this.disabledCustomer = false;
                     this.posReceivePaymentForm.customerId = "";
+
                 } else {
                     this.disabledCustomer = true;
 
@@ -800,6 +1050,30 @@
                     })
                 }
             },
+            customerSaleOrderOpt(query) {
+                if (!!query) {
+                    this.loading = true;
+                    setTimeout(() => {
+                        let lists = [];
+                        this.loading = false;
+                        Meteor.call('queryPosCustomerSaleOrderOptionUnPaid', query, (err, result) => {
+                            if (!err) {
+                                this.customerSaleOrderOption = result;
+                            } else {
+                                console.log(err.message);
+                            }
+                        })
+                    }, 200);
+                } else {
+                    Meteor.call('queryPosCustomerSaleOrderOptionUnPaid', "", (err, result) => {
+                        if (!err) {
+                            this.customerSaleOrderOption = result;
+                        } else {
+                            console.log(err.message);
+                        }
+                    })
+                }
+            },
             termOpt() {
                 let selector = {};
                 Meteor.call('queryPosTermOption', selector, (err, result) => {
@@ -850,6 +1124,66 @@
                                 vm.posReceivePaymentData.forEach((obj) => {
                                     if (obj.isPaid === true) {
                                         Meteor.call("updateInvoiceByReceivePayment", obj, posReceivePaymentDoc.receivePaymentDate, (err, re) => {
+                                            if (err) {
+                                                console.log(err.message);
+                                            }
+                                        })
+                                    }
+                                })
+
+                                vm.resetForm();
+                            }
+                        })
+                    }
+                })
+
+
+            },
+
+            savePosReceivePaymentFromSaleOrder(isCloseDialog, event, isPrint) {
+                event.preventDefault();
+                let vm = this;
+                this.$refs["posReceivePaymentFormAdd"].validate((valid) => {
+                    if (valid) {
+                        let posReceivePaymentDoc = {
+                            totalPaid: vm.$_numeral(vm.posReceivePaymentForm.totalPaid).value(),
+                            totalNetAmount: vm.$_numeral(vm.posReceivePaymentForm.totalNetAmount).value(),
+                            totalDiscount: vm.$_numeral(vm.posReceivePaymentForm.totalDiscount).value(),
+
+                            balanceUnPaid: vm.$_numeral(vm.posReceivePaymentForm.totalNetAmount).value() - vm.$_numeral(vm.posReceivePaymentForm.totalPaid).value(),
+                            totalAmount: vm.$_numeral(vm.posReceivePaymentForm.totalNetAmount).value() + vm.$_numeral(vm.posReceivePaymentForm.totalDiscount).value(),
+
+                            receivePaymentDate: moment(vm.posReceivePaymentForm.receivePaymentDate).toDate(),
+                            receivePaymentDateName: moment(vm.posReceivePaymentForm.receivePaymentDate).format("DD/MM/YYYY"),
+                            note: vm.posReceivePaymentForm.note,
+                            address: vm.posReceivePaymentForm.address,
+
+                            rolesArea: Session.get('area'),
+                            customerId: vm.posReceivePaymentForm.customerId,
+                            locationId: vm.posReceivePaymentForm.locationId,
+                            isSaleOrder: true
+                        };
+                        posReceivePaymentDoc.invoice = vm.posReceivePaymentData;
+                        Meteor.call("insertPosReceivePaymentFromSaleOrder", posReceivePaymentDoc, (err, result) => {
+                            if (!err) {
+                                if (isPrint) {
+                                    FlowRouter.go('/pos-data/posInvoiceReceivePaymentFromSaleOrder/print?inv=' + result);
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: this.langConfig['saveSuccess'],
+                                        type: 'success'
+                                    });
+                                }
+
+
+                                if (isCloseDialog) {
+                                    this.dialogAddPosReceiveFromSaleOrder = false;
+                                }
+
+                                vm.posReceivePaymentData.forEach((obj) => {
+                                    if (obj.isPaid === true) {
+                                        Meteor.call("updateSaleOrderByReceivePayment", obj, posReceivePaymentDoc.receivePaymentDate, (err, re) => {
                                             if (err) {
                                                 console.log(err.message);
                                             }
@@ -1178,7 +1512,12 @@
                 }
             },
             printReceivePayment(data) {
-                FlowRouter.go('/pos-data/posInvoiceReceivePayment/print?inv=' + data._id);
+                if (data.isSaleOrder) {
+                    FlowRouter.go('/pos-data/posInvoiceReceivePaymentFromSaleOrder/print?inv=' + data._id);
+                } else {
+
+                    FlowRouter.go('/pos-data/posInvoiceReceivePayment/print?inv=' + data._id);
+                }
             },
             inputTotalPaid() {
                 let vm = this;
@@ -1197,6 +1536,23 @@
                     }
                 });
 
+            },
+            popupPosReceivePaymentFromSaleOrder() {
+                this.resetForm();
+                this.itemOpt();
+                let vm = this;
+                $(".el-dialog__title").text(this.langConfig['addReceiveFromSaleOrder']);
+
+                this.customerSaleOrderOpt();
+                this.termOpt();
+
+                Meteor.call("queryLastClosingEntry", Session.get("area"), function (err, re) {
+                    if (re !== undefined) {
+                        vm.closeDate = re.closeDate;
+                    } else {
+                        vm.closeDate = "";
+                    }
+                })
             }
         },
         created() {
