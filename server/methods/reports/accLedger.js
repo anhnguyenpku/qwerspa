@@ -403,7 +403,9 @@ Meteor.methods({
                     </tr>
                 `;
                 balance += beginingBal;
-                journalDoc.data.forEach(function (subObj) {
+
+                let newJournalDocData = journalDoc.data.sort(compareASD);
+                newJournalDocData.forEach(function (subObj) {
                     balance += subObj.drcr;
 
                     let splitData = "split";
@@ -540,6 +542,17 @@ Meteor.methods({
         return data;
     }
 });
+
+
+let compareASD = function (a, b) {
+    if (a.journalDate.getTime() < b.journalDate.getTime()) {
+        return -1;
+    } else if (a.journalDate.getTime() > b.journalDate.getTime()) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 
 
