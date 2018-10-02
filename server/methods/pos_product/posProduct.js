@@ -4,6 +4,8 @@ import {Pos_Unit} from '../../../imports/collection/posUnit';
 
 import {SpaceChar} from "../../../both/config.js/space"
 import {Pos_PayBillReact} from "../../../imports/collection/posPayBill";
+import {Pos_Category} from "../../../imports/collection/posCategory";
+import {Images} from "../../../imports/collection/fileImages";
 
 Meteor.methods({
     queryPosProduct({q, filter, options = {limit: 10, skip: 0}}) {
@@ -89,6 +91,8 @@ Meteor.methods({
                                 1,
                             isTaxable:
                                 1,
+                            imageId: 1,
+                            imagePath: 1,
                             categoryName:
                                 {
                                     $concat: ["$categoryDoc.code", " : ", "$categoryDoc.name"]
@@ -129,19 +133,29 @@ Meteor.methods({
     },
     updatePosProduct(data) {
         let id = data._id;
+        let oldDoc = Pos_Product.findOne({_id: data._id});
+        if (oldDoc && oldDoc.imageId) {
+            Images.remove({_id: oldDoc.imageId});
+        }
         let isUpdated = Pos_Product.update({_id: data._id},
             {
                 $set: data
             });
 
         if (isUpdated) {
+
             productReact(id);
         }
         return isUpdated;
     },
-    removePosProduct(id) {
+    removePosProduct(id, imageId) {
         let isRemoved = Pos_Product.remove({_id: id});
-        productReact(id);
+        if (isRemoved) {
+            if (imageId) {
+                Images.remove({_id: imageId});
+            }
+            productReact(id);
+        }
         return isRemoved;
     },
     getProductCodeByCateogry(categoryId) {

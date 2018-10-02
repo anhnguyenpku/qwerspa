@@ -114,6 +114,17 @@
                             label="Memo">
                     </el-table-column>-->
                     <el-table-column
+                            prop="imagePath"
+                            width="120"
+                            :label="langConfig['image']">
+                        <template slot-scope="scope">
+
+                            <img v-if="scope.row.imagePath" :src=scope.row.imagePath
+                                 style="width: 50%!important;height: 50%!important;border-radius: 5px !important;cursor: auto"
+                                 @click="handlePictureCardPreview(scope.row.imagePath)">
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                             :label="langConfig['action']"
                             width="120"
                     >
@@ -243,27 +254,59 @@
                                     inactive-color="#13ce66">
                             </el-switch>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
                         <el-form-item :label="langConfig['minimumStock']" prop="minimumStock">
                             <el-input-number :min="0" v-model.number="posProductForm.minimumStock"></el-input-number>
+                        </el-form-item>
+                        <el-form-item label="">
+                            <el-radio-group v-model="posProductForm.productType">
+                                <el-radio-button v-for="mt in productpTypeOption" :label="mt.value" :key="mt.value">
+                                    {{mt.label}}
+                                </el-radio-button>
+                            </el-radio-group>
+
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+
+
+                        <el-form-item :label="langConfig['image']" v-if="isCoffee">
+                            <croppa v-model="thumbImgCroppa" id="my-file"
+                                    v-loading="isloadingImage"
+                                    :width="120"
+                                    :height="100"
+                                    :quality="1"
+                                    :canvas-color="'grey'"
+                                    :file-size-limit="3096000"
+                                    accept=".jpg,.jpeg,.png"
+                                    :loading-end="generateThumbImgUrl"
+                                    placeholder="120 x 100"
+                                    :placeholder-color="'black'"
+                                    :placeholder-font-size="16"
+                                    @image-remove="handleThumbImgRemove"
+                                    @move="handleThumbImgCroppaMove"
+                                    @zoom="handleThumbImgCroppaZoom"
+                                    :zoom-speed="10"
+                                    crossOrigin="anonymous"
+                            >
+                            </croppa>
+
+                            <img :src="imgUrlUpdate" crossOrigin="anonymous"
+                                 slot="initial">
                         </el-form-item>
                     </el-col>
                 </el-row>
 
-                <div style="text-align: center !important;">
-                    <el-radio-group v-model="posProductForm.productType">
-                        <el-radio-button v-for="mt in productpTypeOption" :label="mt.value" :key="mt.value">
-                            {{mt.label}}
-                        </el-radio-button>
-                    </el-radio-group>
-                </div>
+                <!--<div style="text-align: center !important;">
+
+                </div>-->
 
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddPosProduct = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
-                    <el-button type="primary" @click="savePosProduct($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
+                    <el-button @click="dialogAddPosProduct = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
+                    </el-button>
+                    <el-button type="primary" @click="savePosProduct($event)">{{langConfig['save']}} <i>(Ctrl +
+                        Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -364,36 +407,71 @@
                                     inactive-color="#13ce66">
                             </el-switch>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
                         <el-form-item :label="langConfig['minimumStock']" prop="minimumStock">
                             <el-input-number :min="0" v-model.number="posProductForm.minimumStock"></el-input-number>
+                        </el-form-item>
+                        <el-form-item label="">
+
+                            <el-radio-group v-model="posProductForm.productType">
+                                <el-radio-button v-for="mt in productpTypeOption" :label="mt.value" :key="mt.value">
+                                    {{mt.label}}
+                                </el-radio-button>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+
+
+                        <el-form-item :label="langConfig['image']" v-if="isCoffee">
+                            <croppa v-model="thumbImgCroppa" id="my-file"
+                                    :width="120"
+                                    :height="100"
+                                    :quality="1"
+                                    :canvas-color="'grey'"
+                                    :file-size-limit="3096000"
+                                    accept=".jpg,.jpeg,.png"
+                                    :loading-end="generateThumbImgUrl"
+                                    placeholder="120 x 100"
+                                    :placeholder-color="'black'"
+                                    :placeholder-font-size="16"
+                                    @image-remove="handleThumbImgRemove"
+                                    @move="handleThumbImgCroppaMove"
+                                    @zoom="handleThumbImgCroppaZoom"
+                                    :zoom-speed="10"
+                                    crossOrigin="anonymous"
+                            >
+                                <img :src="imgUrlUpdate" crossOrigin="anonymous"
+                                     slot="initial">
+                            </croppa>
                         </el-form-item>
                     </el-col>
                 </el-row>
 
 
-                <div style="text-align: center">
-                    <el-radio-group v-model="posProductForm.productType">
-                        <el-radio-button v-for="mt in productpTypeOption" :label="mt.value" :key="mt.value">
-                            {{mt.label}}
-                        </el-radio-button>
-                    </el-radio-group>
-                </div>
+                <!--<div style="text-align: center">
+
+                </div>-->
                 <input type="hidden" v-model="posProductForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdatePosProduct = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
-                    <el-button type="primary" @click="updatePosProduct">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
+                    <el-button @click="dialogUpdatePosProduct = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
+                    </el-button>
+                    <el-button type="primary" @click="updatePosProduct">{{langConfig['save']}} <i>(Ctrl + Enter)</i>
+                    </el-button>
                 </el-row>
                 <br>
             </el-form>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogVisible" width="30%">
+            <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
     </div>
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
     import {Pos_ProductReact} from "../../collection/posProduct";
+    import {Images} from "../../collection/fileImages";
+    import {Manage_Module} from "../../collection/manageModule";
 
     export default {
         meteor: {
@@ -410,6 +488,14 @@
                 let vm = this;
                 Pos_ProductReact.find({}).fetch();
                 vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
+            },
+            isCoffee() {
+                let ma = Manage_Module.findOne();
+                if (ma && ma.feature) {
+                    return (ma.feature.indexOf("Coffee") > -1 ? true : false);
+                }
+
+                return false;
             }
         },
         mounted() {
@@ -418,6 +504,12 @@
         },
         data() {
             return {
+                dialogImageUrl: "",
+                dialogVisible: false,
+                isloadingImage: false,
+                thumbImgCroppa: null,
+                imgUrl: "",
+                imgUrlUpdate: "",
                 refForm: "",
                 posProductData: [],
                 loading: false,
@@ -487,6 +579,11 @@
                         }
                     })
                 }
+            },
+            'thumbImgCroppa.loading'(val) {
+                if (!val) {
+                    this.generateThumbImgUrl();
+                }
             }
         },
         methods: {
@@ -533,43 +630,112 @@
                 let vm = this;
                 this.$refs["posProductFormAdd"].validate((valid) => {
                     if (valid) {
-                        let posProductDoc = {
-                            code: vm.posProductForm.code,
-                            name: vm.posProductForm.name,
-                            khName: vm.posProductForm.khName,
-                            productType: vm.posProductForm.productType,
-                            categoryId: vm.posProductForm.categoryId,
-                            whPrice: vm.posProductForm.whPrice,
-                            rePrice: vm.posProductForm.rePrice,
-                            cost: vm.posProductForm.cost,
-                            qtyOnHand: vm.posProductForm.qtyOnHand,
-                            isTaxable: vm.posProductForm.isTaxable,
-                            description: vm.posProductForm.description,
-                            minimumStock: vm.posProductForm.minimumStock,
-                            unitId: vm.posProductForm.unitId
 
-                        };
+                        let imageId = "";
+                        let imagePath = "";
+                        if (vm.thumbImgCroppa && vm.thumbImgCroppa.hasImage() && vm.imgUrl) {
+                            const upload = Images.insert({
+                                file: vm.imgUrl,
+                                streams: 'dynamic',
+                                chunkSize: 'dynamic'
+                            }, false);
 
-                        Meteor.call("insertPosProduct", posProductDoc, (err, result) => {
-                            if (!err) {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `Save Successfully!`,
-                                    type: 'success'
-                                });
-                                vm.dialogAddPosProduct = false;
-                                vm.queryCategoryDataOption();
-                                if (vm.$refs["posProductFormAdd"]) {
-                                    vm.$refs["posProductFormAdd"].resetFields();
+                            upload.on('start', function (error, result) {
+                                if (error) {
+                                    console.log(error.message);
                                 }
-                            } else {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: err.message,
-                                    type: 'error'
-                                });
-                            }
-                        })
+                            })
+
+                            upload.on('end', function (error, fileObj) {
+                                if (error) {
+                                    console.log(error.message);
+                                } else {
+                                    imageId = fileObj._id;
+                                    imagePath = fileObj._downloadRoute + "/" + fileObj._collectionName + "/" + fileObj._id + "/original/" + fileObj._id + fileObj.extensionWithDot;
+
+                                    let posProductDoc = {
+                                        code: vm.posProductForm.code,
+                                        name: vm.posProductForm.name,
+                                        khName: vm.posProductForm.khName,
+                                        productType: vm.posProductForm.productType,
+                                        categoryId: vm.posProductForm.categoryId,
+                                        whPrice: vm.posProductForm.whPrice,
+                                        rePrice: vm.posProductForm.rePrice,
+                                        cost: vm.posProductForm.cost,
+                                        qtyOnHand: vm.posProductForm.qtyOnHand,
+                                        isTaxable: vm.posProductForm.isTaxable,
+                                        description: vm.posProductForm.description,
+                                        minimumStock: vm.posProductForm.minimumStock,
+                                        unitId: vm.posProductForm.unitId,
+                                        imageId: imageId,
+                                        imagePath: imagePath
+
+                                    };
+
+                                    Meteor.call("insertPosProduct", posProductDoc, (err, result) => {
+                                        if (!err) {
+                                            vm.$message({
+                                                duration: 1000,
+                                                message: `Save Successfully!`,
+                                                type: 'success'
+                                            });
+                                            vm.dialogAddPosProduct = false;
+                                            vm.queryCategoryDataOption();
+                                            if (vm.$refs["posProductFormAdd"]) {
+                                                vm.$refs["posProductFormAdd"].resetFields();
+                                            }
+                                        } else {
+                                            vm.$message({
+                                                duration: 1000,
+                                                message: err.message,
+                                                type: 'error'
+                                            });
+                                        }
+                                    })
+
+                                }
+                            })
+
+                            upload.start();
+                        } else {
+                            let posProductDoc = {
+                                code: vm.posProductForm.code,
+                                name: vm.posProductForm.name,
+                                khName: vm.posProductForm.khName,
+                                productType: vm.posProductForm.productType,
+                                categoryId: vm.posProductForm.categoryId,
+                                whPrice: vm.posProductForm.whPrice,
+                                rePrice: vm.posProductForm.rePrice,
+                                cost: vm.posProductForm.cost,
+                                qtyOnHand: vm.posProductForm.qtyOnHand,
+                                isTaxable: vm.posProductForm.isTaxable,
+                                description: vm.posProductForm.description,
+                                minimumStock: vm.posProductForm.minimumStock,
+                                unitId: vm.posProductForm.unitId
+
+                            };
+
+                            Meteor.call("insertPosProduct", posProductDoc, (err, result) => {
+                                if (!err) {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: `Save Successfully!`,
+                                        type: 'success'
+                                    });
+                                    vm.dialogAddPosProduct = false;
+                                    vm.queryCategoryDataOption();
+                                    if (vm.$refs["posProductFormAdd"]) {
+                                        vm.$refs["posProductFormAdd"].resetFields();
+                                    }
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: err.message,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        }
                     }
                 })
 
@@ -578,49 +744,124 @@
                 let vm = this;
                 this.$refs["posProductFormUpdate"].validate((valid) => {
                     if (valid) {
-                        let posProductDoc = {
-                            _id: vm.posProductForm._id,
-                            code: vm.posProductForm.code,
-                            name: vm.posProductForm.name,
-                            khName: vm.posProductForm.khName,
-                            productType: vm.posProductForm.productType,
-                            categoryId: vm.posProductForm.categoryId,
-                            whPrice: vm.posProductForm.whPrice,
-                            rePrice: vm.posProductForm.rePrice,
-                            cost: vm.posProductForm.cost,
-                            qtyOnHand: vm.posProductForm.qtyOnHand,
-                            isTaxable: vm.posProductForm.isTaxable,
-                            description: vm.posProductForm.description,
-                            minimumStock: vm.posProductForm.minimumStock,
-                            unitId: vm.posProductForm.unitId
-                        };
+                        if (vm.thumbImgCroppa && vm.thumbImgCroppa.hasImage() && vm.imgUrl) {
+                            const upload = Images.insert({
+                                file: vm.imgUrl,
+                                streams: 'dynamic',
+                                chunkSize: 'dynamic'
+                            }, false);
 
-                        Meteor.call("updatePosProduct", posProductDoc, (err, result) => {
-                            if (!err) {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `
+                            upload.on('start', function (error, result) {
+                                if (error) {
+                                    console.log(error.message);
+                                }
+                            })
+
+                            upload.on('end', function (error, fileObj) {
+                                if (error) {
+                                    console.log(error.message);
+                                } else {
+                                    let imageId = fileObj._id;
+                                    let imagePath = fileObj._downloadRoute + "/" + fileObj._collectionName + "/" + fileObj._id + "/original/" + fileObj._id + fileObj.extensionWithDot;
+
+                                    let posProductDoc = {
+                                        _id: vm.posProductForm._id,
+                                        code: vm.posProductForm.code,
+                                        name: vm.posProductForm.name,
+                                        khName: vm.posProductForm.khName,
+                                        productType: vm.posProductForm.productType,
+                                        categoryId: vm.posProductForm.categoryId,
+                                        whPrice: vm.posProductForm.whPrice,
+                                        rePrice: vm.posProductForm.rePrice,
+                                        cost: vm.posProductForm.cost,
+                                        qtyOnHand: vm.posProductForm.qtyOnHand,
+                                        isTaxable: vm.posProductForm.isTaxable,
+                                        description: vm.posProductForm.description,
+                                        minimumStock: vm.posProductForm.minimumStock,
+                                        unitId: vm.posProductForm.unitId,
+                                        imageId: imageId,
+                                        imagePath: imagePath
+                                    };
+
+                                    Meteor.call("updatePosProduct", posProductDoc, (err, result) => {
+                                        if (!err) {
+                                            vm.$message({
+                                                duration: 1000,
+                                                message: `
                         Update
                         Successfully
                         !`,
-                                    type: 'success'
-                                });
-                                vm.dialogUpdatePosProduct = false;
-                                vm.queryCategoryDataOption();
-                                if (vm.$refs["posProductFormUpdate"]) {
-                                    vm.$refs["posProductFormUpdate"].resetFields();
-                                }
-                            } else {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `
+                                                type: 'success'
+                                            });
+                                            vm.dialogUpdatePosProduct = false;
+                                            vm.queryCategoryDataOption();
+                                            if (vm.$refs["posProductFormUpdate"]) {
+                                                vm.$refs["posProductFormUpdate"].resetFields();
+                                            }
+                                        } else {
+                                            vm.$message({
+                                                duration: 1000,
+                                                message: `
                         Update
                         Failed
                         !`,
-                                    type: 'error'
-                                });
-                            }
-                        })
+                                                type: 'error'
+                                            });
+                                        }
+                                    })
+
+                                }
+                            })
+
+                            upload.start();
+
+                        } else {
+
+
+                            let posProductDoc = {
+                                _id: vm.posProductForm._id,
+                                code: vm.posProductForm.code,
+                                name: vm.posProductForm.name,
+                                khName: vm.posProductForm.khName,
+                                productType: vm.posProductForm.productType,
+                                categoryId: vm.posProductForm.categoryId,
+                                whPrice: vm.posProductForm.whPrice,
+                                rePrice: vm.posProductForm.rePrice,
+                                cost: vm.posProductForm.cost,
+                                qtyOnHand: vm.posProductForm.qtyOnHand,
+                                isTaxable: vm.posProductForm.isTaxable,
+                                description: vm.posProductForm.description,
+                                minimumStock: vm.posProductForm.minimumStock,
+                                unitId: vm.posProductForm.unitId
+                            };
+
+                            Meteor.call("updatePosProduct", posProductDoc, (err, result) => {
+                                if (!err) {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: `
+                        Update
+                        Successfully
+                        !`,
+                                        type: 'success'
+                                    });
+                                    vm.dialogUpdatePosProduct = false;
+                                    vm.queryCategoryDataOption();
+                                    if (vm.$refs["posProductFormUpdate"]) {
+                                        vm.$refs["posProductFormUpdate"].resetFields();
+                                    }
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: `
+                        Update
+                        Failed
+                        !`,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        }
                     }
                 })
 
@@ -632,7 +873,7 @@
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    Meteor.call("removePosProduct", row._id, (err, result) => {
+                    Meteor.call("removePosProduct", row._id, row.imageId, (err, result) => {
                         if (!err) {
                             rows.splice(index, 1);
 
@@ -669,6 +910,7 @@
                     if (result) {
                         vm.posProductForm._id = result._id;
                         vm.posProductForm = result;
+                        vm.imgUrlUpdate = result.imagePath || "";
                         this.queryCategoryDataOption();
                     }
                 })
@@ -697,6 +939,29 @@
             },
             popUpUpdate() {
                 this.refForm = "posProductFormUpdate";
+            },
+            generateThumbImgUrl: function () {
+                this.isloadingImage = true;
+                let url = this.thumbImgCroppa && this.thumbImgCroppa.getChosenFile();
+                this.isloadingImage = false;
+                // let url = this.thumbImgCroppa && this.thumbImgCroppa.generateDataUrl();
+                if (!url) {
+                    return
+                }
+                this.imgUrl = url
+            },
+            handleThumbImgCroppaZoom() {
+                this.generateThumbImgUrl();
+            },
+            handleThumbImgCroppaMove() {
+                this.generateThumbImgUrl();
+            },
+            handleThumbImgRemove() {
+                this.imgUrl = null
+            },
+            handlePictureCardPreview(url) {
+                this.dialogImageUrl = url;
+                this.dialogVisible = true;
             }
         },
         created() {

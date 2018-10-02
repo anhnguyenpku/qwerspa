@@ -1,4 +1,5 @@
 import {Pos_Category} from '../../../imports/collection/posCategory';
+import {Images} from '../../../imports/collection/fileImages';
 import {Pos_CategoryReact} from '../../../imports/collection/posCategory';
 
 import {SpaceChar} from "../../../both/config.js/space"
@@ -62,6 +63,8 @@ Meteor.methods({
                         subCategoryOf: 1,
                         level: 1,
                         description: 1,
+                        imagePath: 1,
+                        imageId: 1,
                         subCategoryOfName: {$concat: ["$subCategoryOfDoc.code", " : ", "$subCategoryOfDoc.name"]}
                     }
                 }
@@ -96,6 +99,10 @@ Meteor.methods({
             data.level = parentDoc.level + 1;
         }
         let id = data._id;
+        let oldDoc = Pos_Category.findOne({_id: data._id});
+        if (oldDoc && oldDoc.imageId) {
+            Images.remove({_id: oldDoc.imageId});
+        }
         let isUpdated = Pos_Category.update({_id: data._id},
             {
                 $set: data
@@ -106,9 +113,12 @@ Meteor.methods({
         }
         return isUpdated;
     },
-    removePosCategory(id) {
+    removePosCategory(id, imageId) {
         let isRemoved = Pos_Category.remove({_id: id});
         if (isRemoved) {
+            if (imageId) {
+                Images.remove({_id: imageId});
+            }
             categoryReact(id);
         }
         return isRemoved;

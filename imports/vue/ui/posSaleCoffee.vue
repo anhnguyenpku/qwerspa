@@ -51,11 +51,13 @@
             </el-row>
             <hr>
             <el-row>
-                <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
-                    <el-card style="width: 120px !important;" :body-style="{ padding: '0px' }">
-                        <img src="/hamburger.png" class="image">
-                        <div style="padding: 14px;">
-                            <span>Yummy</span>
+                <el-col v-if="isCategoryData" :span="1" v-for="(o, index) in categoryData" :key="o._id"
+                        :offset="index > 0 ? index%8===0 ? 1 : 2 : 1">
+                    <el-card style="width: 150px !important;" :body-style="{ padding: '0px' }"
+                    >
+                        <img :src="o.imagePath" class="image-category" @click="queryProduct(o._id)">
+                        <div style="padding: 14px;" @click="queryProduct(o._id)">
+                            <span>{{o.name}}</span>
                         </div>
                     </el-card>
                 </el-col>
@@ -298,6 +300,19 @@
                                 </thead>
                             </table>-->
                             &nbsp;
+
+                            <el-row>
+                                <el-col :span="1" v-for="(o, index) in productData" :key="o._id"
+                                        :offset="index > 0 ? index%8===0 ? 1 : 2 : 1">
+                                    <el-card style="width: 120px !important;" :body-style="{ padding: '0px' }"
+                                    >
+                                        <img :src="o.imagePath" class="image">
+                                        <div style="padding: 14px;">
+                                            <span>{{o.name}}</span>
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-row>
                         </el-col>
                         <el-col :span="6" style="background-color: black !important;">
                             <div class="w3-code-coffee">
@@ -315,7 +330,7 @@
                                 </div>
 
 
-                                <el-form-item :label="langConfig['customer']" prop="customerId">
+                                <!--<el-form-item :label="langConfig['customer']" prop="customerId">
                                     <el-select style="display: block !important;"
                                                filterable clearable
                                                v-model="posSaleCoffeeForm.customerId" remote
@@ -330,9 +345,9 @@
                                                 :disabled="item.disabled">
                                         </el-option>
                                     </el-select>
-                                </el-form-item>
+                                </el-form-item>-->
 
-                                <el-row>
+                                <!--<el-row>
                                     <el-col :span="12">
                                         <el-form-item :label="langConfig['address']" prop="address">
                                             <el-input type="textarea" v-model="posSaleCoffeeForm.address"></el-input>
@@ -347,10 +362,10 @@
                                                       prefix-icon="el-icon-edit" size="small"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                </el-row>
+                                </el-row>-->
 
 
-                                <el-row>
+                                <!--<el-row>
                                     <el-col :span="12">
                                         <el-form-item :label="langConfig['saleCoffeeDate']" prop="saleCoffeeDate">
                                             <el-date-picker
@@ -380,36 +395,36 @@
                                         </el-form-item>
                                     </el-col>
 
-                                </el-row>
-                                <el-row>
+                                </el-row>-->
+                                <!-- <el-row>
 
-                                    <el-col :span="12">
-                                        <el-form-item :label="langConfig['term']" prop="termId">
-                                            <el-select style="display: block !important;"
-                                                       filterable clearable
-                                                       v-model="posSaleCoffeeForm.termId"
-                                                       placeholder="Term">
-                                                <el-option
-                                                        v-for="item in termOption"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value"
-                                                        :disabled="item.disabled">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="1">
-                                        <div class="">&nbsp;</div>
-                                    </el-col>
-                                    <el-col :span="11">
-                                        <el-form-item :label="langConfig['note']" prop="note">
-                                            <el-input type="textarea" v-model="posSaleCoffeeForm.note"
-                                                      :rows="3"></el-input>
-                                        </el-form-item>
-                                    </el-col>
+                                     <el-col :span="12">
+                                         <el-form-item :label="langConfig['term']" prop="termId">
+                                             <el-select style="display: block !important;"
+                                                        filterable clearable
+                                                        v-model="posSaleCoffeeForm.termId"
+                                                        placeholder="Term">
+                                                 <el-option
+                                                         v-for="item in termOption"
+                                                         :key="item.value"
+                                                         :label="item.label"
+                                                         :value="item.value"
+                                                         :disabled="item.disabled">
+                                                 </el-option>
+                                             </el-select>
+                                         </el-form-item>
+                                     </el-col>
+                                     <el-col :span="1">
+                                         <div class="">&nbsp;</div>
+                                     </el-col>
+                                     <el-col :span="11">
+                                         <el-form-item :label="langConfig['note']" prop="note">
+                                             <el-input type="textarea" v-model="posSaleCoffeeForm.note"
+                                                       :rows="3"></el-input>
+                                         </el-form-item>
+                                     </el-col>
 
-                                </el-row>
+                                 </el-row>-->
 
                             </div>
                             <!--</el-card>-->
@@ -480,6 +495,10 @@
                 searchData: '',
                 isSearching: false,
                 typeDiscount: "",
+                categoryData: [],
+                productData: [],
+                currencySymbol: "",
+                posSaleCoffeeData: [],
 
                 posSaleCoffeeForm: {
                     itemId: "",
@@ -596,7 +615,8 @@
                 waterBillingSetup: {},
                 username: Meteor.user().username,
                 todaySt: "",
-                timeSt: ""
+                timeSt: "",
+                isCategoryData: false
             }
         },
         mounted() {
@@ -735,6 +755,36 @@
                 // selector.productType = "Inventory";
                 Meteor.call('queryItemOption', selector, (err, result) => {
                     this.itemOption = result;
+                })
+            },
+            queryCategory() {
+                let selector = {
+                        q: "",
+                        filter: "",
+                        options: {
+                            skip: 0, limit: 100
+                        }
+                    }
+                ;
+                Meteor.call('queryPosCategory', selector, (err, result) => {
+                    console.log(result.content);
+                    this.categoryData = result.content;
+                    this.isCategoryData = result.content.length > 0 ? true : false;
+                })
+            },
+            queryProduct(categoryId) {
+                console.log(categoryId);
+                let selector = {
+                        q: categoryId,
+                        filter: "categoryId",
+                        options: {
+                            skip: 0, limit: 100
+                        }
+                    }
+                ;
+                Meteor.call('queryPosProduct', selector, (err, result) => {
+                    console.log(result.content);
+                    this.productData = result.content;
                 })
             },
             locationOpt() {
@@ -1070,7 +1120,6 @@
                     vm.posSaleCoffeeForm.balanceNotCut = formatCurrency(total);
                 }
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
-                this.currencySymbol = getCurrencySymbolById(companyDoc.baseCurrency);
                 vm.posSaleCoffeeForm.total = formatCurrencyLast(total, companyDoc.baseCurrency);
 
                 if (vm.posSaleCoffeeForm.discountType === "Amount") {
@@ -1109,14 +1158,17 @@
         created() {
             this.isSearching = true;
             this.getTotal();
+            this.queryCategory();
             this.locationOpt();
             Meteor.subscribe('Pos_InvoiceReact');
 
             Meteor.call('getWaterBillingSetup', Session.get('area'), (err, result) => {
                 if (result) {
                     this.waterBillingSetup = result;
+                    this.currencySymbol = getCurrencySymbolById(result.baseCurrency);
                 }
             })
+
 
         },
         computed: {
@@ -1152,6 +1204,12 @@
 
     .image {
         width: 120px !important;
+        height: 100px !important;
+        display: block;
+    }
+
+    .image-category {
+        width: 150px !important;
         height: 100px !important;
         display: block;
     }

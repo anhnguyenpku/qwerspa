@@ -452,7 +452,8 @@
       "memo": "Memo",
       "add": "Add Category",
       "update": "Update Category",
-      "level": "Level"
+      "level": "Level",
+      "image": "Photo"
     },
     "convertInventory": {
       "searchHere": "Search Here ...",
@@ -570,7 +571,8 @@
       "update": "Update Product",
       "productType": "Product Type",
       "minimumStock": "Minimum Stock",
-      "unit": "Unit"
+      "unit": "Unit",
+      "image": "Photo"
     },
     "agent": {
       "searchHere": "Search Here ...",
@@ -1138,7 +1140,8 @@
       "memo": "បរិយាយ",
       "add": "បញ្ចូលព័តមានទីតាំង",
       "update": "កែប្រែព័តមានទីតាំង",
-      "level": "កម្រិត"
+      "level": "កម្រិត",
+      "image": "រូបភាព"
     },
     "convertInventory": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1253,7 +1256,8 @@
       "update": "កែប្រែព័តមានផលិតផល",
       "productType": "ប្រភេទទំនិញ",
       "minimumStock": "ស្តុកតិចបំផុត",
-      "unit": "ឯកតា"
+      "unit": "ឯកតា",
+      "image": "រូបភាព"
     },
     "agent": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

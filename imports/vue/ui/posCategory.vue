@@ -69,6 +69,17 @@
                             :label="langConfig['level']">
                     </el-table-column>
                     <el-table-column
+                            prop="imagePath"
+                            width="120"
+                            :label="langConfig['image']">
+                        <template slot-scope="scope">
+
+                            <img v-if="scope.row.imagePath" :src=scope.row.imagePath
+                                 style="width: 50%!important;height: 50%!important;border-radius: 5px !important;cursor: auto"
+                                 @click="handlePictureCardPreview(scope.row.imagePath)">
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                             :label="langConfig['action']"
                             width="120"
                     >
@@ -137,16 +148,17 @@
                 <el-form-item :label="langConfig['memo']" prop="description">
                     <el-input type="textarea" v-model="posCategoryForm.description"></el-input>
                 </el-form-item>
-                <el-form-item label="Photo">
-                    <croppa v-model="thumbImgCroppa"
-                            :width="120"
+                <el-form-item :label="langConfig['image']" v-if="isCoffee">
+                    <croppa v-model="thumbImgCroppa" id="my-file"
+                            v-loading="isloadingImage"
+                            :width="150"
                             :height="100"
                             :quality="1"
                             :canvas-color="'grey'"
                             :file-size-limit="3096000"
                             accept=".jpg,.jpeg,.png"
                             :loading-end="generateThumbImgUrl"
-                            placeholder="120 x 100"
+                            placeholder="150 x 100"
                             :placeholder-color="'black'"
                             :placeholder-font-size="16"
                             @image-remove="handleThumbImgRemove"
@@ -156,7 +168,11 @@
                             crossOrigin="anonymous"
                     >
                     </croppa>
+
+                    <img :src="imgUrlUpdate" crossOrigin="anonymous"
+                         slot="initial">
                 </el-form-item>
+                <!--<input type="file" id="my-file"/>-->
 
 
                 <hr style="margin-top: 0px !important;">
@@ -207,6 +223,28 @@
                 <el-form-item :label="langConfig['memo']" prop="description">
                     <el-input type="textarea" v-model="posCategoryForm.description"></el-input>
                 </el-form-item>
+                <el-form-item :label="langConfig['image']" v-if="isCoffee">
+                    <croppa v-model="thumbImgCroppa" id="my-file"
+                            :width="150"
+                            :height="100"
+                            :quality="1"
+                            :canvas-color="'grey'"
+                            :file-size-limit="3096000"
+                            accept=".jpg,.jpeg,.png"
+                            :loading-end="generateThumbImgUrl"
+                            placeholder="150 x 100"
+                            :placeholder-color="'black'"
+                            :placeholder-font-size="16"
+                            @image-remove="handleThumbImgRemove"
+                            @move="handleThumbImgCroppaMove"
+                            @zoom="handleThumbImgCroppaZoom"
+                            :zoom-speed="10"
+                            crossOrigin="anonymous"
+                    >
+                        <img :src="imgUrlUpdate" crossOrigin="anonymous"
+                             slot="initial">
+                    </croppa>
+                </el-form-item>
 
                 <input type="hidden" v-model="posCategoryForm._id"/>
                 <hr style="margin-top: 0px !important;">
@@ -219,14 +257,19 @@
                 <br>
             </el-form>
         </el-dialog>
+
+
+        <el-dialog :visible.sync="dialogVisible" width="30%">
+            <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
     </div>
 </template>
 <script>
     import compoLang from '../../../both/i18n/lang/elem-label'
     import {Pos_CategoryReact} from "../../collection/posCategory";
-    import {CategoryImage} from "../../collection/fileImages";
-    import {Files} from "../../collection/fileImages";
-    import storagePath from '../../firebase/storage_path';
+    import {Images} from "../../collection/fileImages";
+    import {Manage_Module} from "../../collection/manageModule";
+
 
     export default {
         meteor: {
@@ -243,7 +286,16 @@
                 let vm = this;
                 Pos_CategoryReact.find({}).fetch();
                 vm.queryData(vm.searchData, vm.skip, vm.currentSize + vm.skip);
+            },
+            isCoffee() {
+                let ma = Manage_Module.findOne();
+                if (ma && ma.feature) {
+                    return (ma.feature.indexOf("Coffee") > -1 ? true : false);
+                }
+
+                return false;
             }
+
         },
         mounted() {
             this.$jQuery('body').off();
@@ -255,6 +307,7 @@
                 dialogVisible: false,
                 posCategoryData: [],
                 loading: false,
+                isloadingImage: false,
                 searchData: '',
                 isSearching: false,
                 currentPage: 1,
@@ -338,8 +391,102 @@
                 let vm = this;
                 this.$refs["posCategoryFormAdd"].validate((valid) => {
                         if (valid) {
-                            console.log(vm.thumbImgCroppa);
-                            if (vm.thumbImgCroppa.hasImage()) {
+                            if (vm.thumbImgCroppa && vm.thumbImgCroppa.hasImage() && vm.imgUrl) {
+                                const upload = Images.insert({
+                                    file: vm.imgUrl,
+                                    streams: 'dynamic',
+                                    chunkSize: 'dynamic'
+                                }, false);
+
+                                upload.on('start', function (error, result) {
+                                    if (error) {
+                                        console.log(error.message);
+                                    }
+                                })
+
+                                upload.on('end', function (error, fileObj) {
+                                    if (error) {
+                                        console.log(error.message);
+                                    } else {
+                                        let imageId = fileObj._id;
+                                        let imagePath = fileObj._downloadRoute + "/" + fileObj._collectionName + "/" + fileObj._id + "/original/" + fileObj._id + fileObj.extensionWithDot;
+
+                                        let posCategoryDoc = {
+                                            code: vm.posCategoryForm.code,
+                                            name: vm.posCategoryForm.name,
+                                            khName: vm.posCategoryForm.khName,
+                                            subCategoryOf: vm.posCategoryForm.subCategoryOf,
+                                            description: vm.posCategoryForm.description,
+                                            imageId: imageId,
+                                            imagePath: imagePath,
+                                        };
+                                        Meteor.call("insertPosCategory", posCategoryDoc, (err, result) => {
+                                            if (!err) {
+                                                vm.$message({
+                                                    duration: 1000,
+                                                    message: `Save Successfully!`,
+                                                    type: 'success'
+                                                });
+                                                vm.dialogAddPosCategory = false;
+                                                vm.parentPosCategoryOption();
+                                                vm.$refs["posCategoryFormAdd"].resetFields();
+
+                                                /*if (vm.imgUrl) {
+                                                    const storageRef = storagePath.fileImage(fileImage, Meteor.userId(), result, "category");
+                                                    let uploadTask = storageRef
+                                                        .child("fileImage")
+                                                        .putString(vm.imgUrl, "data_url");
+                                                    uploadTask.on(
+                                                        "state_changed",
+                                                        function (snapshot) {
+                                                            // Observe state change events such as progress, pause, and resume
+                                                            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                                                            let progress =
+                                                                snapshot.bytesTransferred / snapshot.totalBytes * 100;
+                                                            console.log("Upload is " + progress + "% done");
+                                                            switch (snapshot.state) {
+                                                                case firebase.storageState.PAUSED: // or 'paused'
+                                                                    console.log("Upload is paused");
+                                                                    break;
+                                                                case firebase.storageState.RUNNING: // or 'running'
+                                                                    console.log("Upload is running " + progress);
+                                                                    break;
+                                                            }
+                                                        },
+                                                        function (error) {
+                                                            /!*setTimeout(() => {
+                                                                loading.close();
+                                                            }, 1000)*!/
+                                                        },
+                                                        function () {
+                                                            uploadTask.snapshot.ref.getDownloadURL()
+                                                                .then(url => {
+                                                                    console.log(url);
+                                                                    /!*Meteor.call('sch_updateStudentImageURlById', result, url, (err, re) => {
+                                                                        if (err) {
+                                                                            console.log(err.message);
+                                                                        } else {
+                                                                            vm.thumbImgCroppa = null;
+                                                                        }
+                                                                    });*!/
+                                                                }).catch(err => console.log(err));
+                                                        });
+                                                }*/
+
+
+                                            } else {
+                                                vm.$message({
+                                                    duration: 1000,
+                                                    message: err.message,
+                                                    type: 'error'
+                                                });
+                                            }
+                                        })
+
+                                    }
+                                })
+
+                                upload.start();
 
                                 //let fsFile = new FS.File(vm.thumbImgCroppa.getChosenFile());
                                 /*vm.thumbImgCroppa.generateBlob((result) => {
@@ -379,38 +526,39 @@
 
                                 })*/
 
-                                /*fsFile = new FS.File(vm.imgUrl);
-                                    console.log(fsFile);
-                                    CategoryImage.insert(fsFile, function (err, result) {
-                                        if (err) {
-                                            throw new Meteor.Error(err);
-                                        } else {
-                                            let imageLoc = '/cfs/files/categoryImage' + result._id;
-                                            console.log(imageLoc);
-                                        }
-                                    })*/
-                            }
-
-                            let posCategoryDoc = {
-                                code: vm.posCategoryForm.code,
-                                name: vm.posCategoryForm.name,
-                                khName: vm.posCategoryForm.khName,
-                                subCategoryOf: vm.posCategoryForm.subCategoryOf,
-                                description: vm.posCategoryForm.description,
-                            };
-                            Meteor.call("insertPosCategory", posCategoryDoc, (err, result) => {
-                                if (!err) {
-                                    vm.$message({
-                                        duration: 1000,
-                                        message: `Save Successfully!`,
-                                        type: 'success'
-                                    });
-                                    vm.dialogAddPosCategory = false;
-                                    vm.parentPosCategoryOption();
-                                    vm.$refs["posCategoryFormAdd"].resetFields();
+                                /*fsFile = new FS.File(myfi);
+                                console.log(fsFile);
+                                CategoryImage.insert(fsFile, function (err, result) {
+                                    if (err) {
+                                        throw new Meteor.Error(err);
+                                    } else {
+                                        let imageLoc = '/cfs/files/categoryImage' + result._id;
+                                        console.log(imageLoc);
+                                    }
+                                })*/
 
 
-                                    /*if (vm.imgUrl) {
+                            } else {
+                                let posCategoryDoc = {
+                                    code: vm.posCategoryForm.code,
+                                    name: vm.posCategoryForm.name,
+                                    khName: vm.posCategoryForm.khName,
+                                    subCategoryOf: vm.posCategoryForm.subCategoryOf,
+                                    description: vm.posCategoryForm.description
+                                };
+                                Meteor.call("insertPosCategory", posCategoryDoc, (err, result) => {
+                                    if (!err) {
+                                        vm.$message({
+                                            duration: 1000,
+                                            message: `Save Successfully!`,
+                                            type: 'success'
+                                        });
+                                        vm.dialogAddPosCategory = false;
+                                        vm.parentPosCategoryOption();
+                                        vm.$refs["posCategoryFormAdd"].resetFields();
+
+
+                                        /*if (vm.imgUrl) {
                                         const storageRef = storagePath.fileImage(fileImage, Meteor.userId(), result, "category");
                                         let uploadTask = storageRef
                                             .child("fileImage")
@@ -453,14 +601,15 @@
                                     }*/
 
 
-                                } else {
-                                    vm.$message({
-                                        duration: 1000,
-                                        message: err.message,
-                                        type: 'error'
-                                    });
-                                }
-                            })
+                                    } else {
+                                        vm.$message({
+                                            duration: 1000,
+                                            message: err.message,
+                                            type: 'error'
+                                        });
+                                    }
+                                })
+                            }
                         }
                     }
                 )
@@ -470,39 +619,104 @@
                 let vm = this;
                 this.$refs["posCategoryFormUpdate"].validate((valid) => {
                     if (valid) {
-                        let posCategoryDoc = {
-                            _id: vm.posCategoryForm._id,
-                            code: vm.posCategoryForm.code,
-                            name: vm.posCategoryForm.name,
-                            khName: vm.posCategoryForm.khName,
-                            subCategoryOf: vm.posCategoryForm.subCategoryOf,
-                            description: vm.posCategoryForm.description,
-                        };
+                        if (vm.thumbImgCroppa && vm.thumbImgCroppa.hasImage() && vm.imgUrl) {
+                            const upload = Images.insert({
+                                file: vm.imgUrl,
+                                streams: 'dynamic',
+                                chunkSize: 'dynamic'
+                            }, false);
 
-                        Meteor.call("updatePosCategory", posCategoryDoc, (err, result) => {
-                            if (!err) {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `
+                            upload.on('start', function (error, result) {
+                                if (error) {
+                                    console.log(error.message);
+                                }
+                            })
+
+                            upload.on('end', function (error, fileObj) {
+                                if (error) {
+                                    console.log(error.message);
+                                } else {
+                                    let imageId = fileObj._id;
+                                    let imagePath = fileObj._downloadRoute + "/" + fileObj._collectionName + "/" + fileObj._id + "/original/" + fileObj._id + fileObj.extensionWithDot;
+
+                                    let posCategoryDoc = {
+                                        _id: vm.posCategoryForm._id,
+                                        code: vm.posCategoryForm.code,
+                                        name: vm.posCategoryForm.name,
+                                        khName: vm.posCategoryForm.khName,
+                                        subCategoryOf: vm.posCategoryForm.subCategoryOf,
+                                        description: vm.posCategoryForm.description,
+                                        imageId: imageId,
+                                        imagePath: imagePath
+                                    };
+
+                                    Meteor.call("updatePosCategory", posCategoryDoc, (err, result) => {
+                                        if (!err) {
+                                            vm.$message({
+                                                duration: 1000,
+                                                message: `
                         Update
                         Successfully
                         !`,
-                                    type: 'success'
-                                });
-                                vm.dialogUpdatePosCategory = false;
-                                vm.parentPosCategoryOption();
-                                vm.$refs["posCategoryForm"].resetFields();
-                            } else {
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `
+                                                type: 'success'
+                                            });
+                                            vm.dialogUpdatePosCategory = false;
+                                            vm.parentPosCategoryOption();
+                                            vm.$refs["posCategoryFormUpdate"].resetFields();
+                                        } else {
+                                            vm.$message({
+                                                duration: 1000,
+                                                message: `
                         Update
                         Failed
                         !`,
-                                    type: 'error'
-                                });
-                            }
-                        })
+                                                type: 'error'
+                                            });
+                                        }
+                                    })
+
+                                }
+                            })
+
+                            upload.start();
+
+                        } else {
+
+
+                            let posCategoryDoc = {
+                                _id: vm.posCategoryForm._id,
+                                code: vm.posCategoryForm.code,
+                                name: vm.posCategoryForm.name,
+                                khName: vm.posCategoryForm.khName,
+                                subCategoryOf: vm.posCategoryForm.subCategoryOf,
+                                description: vm.posCategoryForm.description,
+                            };
+
+                            Meteor.call("updatePosCategory", posCategoryDoc, (err, result) => {
+                                if (!err) {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: `
+                        Update
+                        Successfully
+                        !`,
+                                        type: 'success'
+                                    });
+                                    vm.dialogUpdatePosCategory = false;
+                                    vm.parentPosCategoryOption();
+                                    vm.$refs["posCategoryFormUpdate"].resetFields();
+                                } else {
+                                    vm.$message({
+                                        duration: 1000,
+                                        message: `
+                        Update
+                        Failed
+                        !`,
+                                        type: 'error'
+                                    });
+                                }
+                            })
+                        }
                     }
                 })
 
@@ -514,7 +728,7 @@
                     cancelButtonText: 'Cancel',
                     type: 'warning'
                 }).then(() => {
-                    Meteor.call("removePosCategory", row._id, (err, result) => {
+                    Meteor.call("removePosCategory", row._id, row.imageId, (err, result) => {
                         if (!err) {
                             rows.splice(index, 1);
 
@@ -554,6 +768,7 @@
                             result.subCategoryOf = "";
                         }
                         vm.posCategoryForm = result;
+                        vm.imgUrlUpdate = result.imagePath || "";
                         this.parentPosCategoryOption();
                     }
                 })
@@ -565,6 +780,9 @@
                 });
             },
             resetForm() {
+                this.imgUrlUpdate = "";
+                this.thumbImgCroppa = null;
+
                 this.posCategoryForm._id = "";
                 this.parentPosCategoryOption();
                 if (this.$refs["posCategoryFormAdd"]) {
@@ -577,7 +795,10 @@
 
             },
             generateThumbImgUrl: function () {
-                let url = this.thumbImgCroppa && this.thumbImgCroppa.generateDataUrl();
+                this.isloadingImage = true;
+                let url = this.thumbImgCroppa && this.thumbImgCroppa.getChosenFile();
+                this.isloadingImage = false;
+                // let url = this.thumbImgCroppa && this.thumbImgCroppa.generateDataUrl();
                 if (!url) {
                     return
                 }

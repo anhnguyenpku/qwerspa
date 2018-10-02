@@ -73,6 +73,14 @@ Pos_Category.schema = new SimpleSchema({
                 return Meteor.userId();
             }
         }
+    },
+    imageId: {
+        type: String,
+        optional: true
+    },
+    imagePath: {
+        type: String,
+        optional: true
     }
 });
 
