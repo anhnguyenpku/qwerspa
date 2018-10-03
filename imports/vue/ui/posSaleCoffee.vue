@@ -50,10 +50,10 @@
                 </el-col>
             </el-row>
             <hr>
-            <el-row>
+            <el-row style="padding-right: 50px !important;">
                 <el-col v-if="isCategoryData" :span="1" v-for="(o, index) in categoryData" :key="o._id"
-                        :offset="index > 0 ? index%8===0 ? 1 : 2 : 1">
-                    <el-card style="width: 150px !important;" :body-style="{ padding: '0px' }"
+                        :offset="index > 0 ? index%6===0 ? 2 : 3 : 1">
+                    <el-card style="width: 180px !important;" :body-style="{ padding: '0px' }"
                     >
                         <img :src="o.imagePath" class="image-category" @click="queryProduct(o._id)">
                         <div style="padding: 14px;" @click="queryProduct(o._id)">
@@ -63,7 +63,6 @@
                 </el-col>
             </el-row>
             <hr>
-            <br>
             <slot v-if="loading">
                 <div class="row">
                     <div class="col-md-12" style="padding: 30px; margin-top: 70px">
@@ -77,234 +76,13 @@
                          class="posSaleCoffeeForm"
                          style="background-color: black !important;min-height:100% !important;">
                     <el-row :gutter="20">
-                        <el-col :span="18" class="posSaleCoffeeForm" style="background-color: black !important;">
-                            <!--<table class="table table-responsive​​​ table-striped table-hover responstable"
-                                  >
-                                <thead>
-                                <tr>
-                                    <th colspan="3" style="width: 30% !important;">
-                                        <el-form-item label="" prop="locationId">
-
-                                            <el-select style="display: block !important"
-                                                       filterable clearable
-                                                       v-model="posSaleCoffeeForm.locationId"
-                                                       :placeholder="langConfig['chooseLocation']">
-                                                <el-option
-                                                        v-for="item in locationOption"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value"
-                                                        :disabled="item.disabled">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </th>
-                                    <th style="width: 20% !important;">
-                                        <el-form-item label="">
-                                            <el-input :placeholder="langConfig['barcode']" :disabled="disabledItem"
-                                                      v-model="posSaleCoffeeForm.code" autofocus
-                                                      @keyup.native.13="addToPosSaleCoffeeData(null)"
-                                            >
-                                            </el-input>
-                                        </el-form-item>
-                                    </th>
-                                    <th style="width: 20% !important;">
-                                        <el-form-item label="">
-                                            <el-select style="display: block !important;"
-                                                       filterable clearable
-                                                       v-model="posSaleCoffeeForm.itemId" :disabled="disabledItem"
-                                                       :placeholder="langConfig['chooseItem']">
-                                                <el-option
-                                                        v-for="item in itemOption"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value"
-                                                        :disabled="item.disabled">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-
-                                    </th>
-
-                                    <th colspan="2">
-                                        <el-form-item label="">
-                                            <el-input :placeholder="langConfig['total']"
-                                                      v-model.number="posSaleCoffeeForm.total"
-                                                      disabled>
-                                                <template slot="prepend">{{langConfig['total']}} :</template>
-                                                <template slot="append">{{currencySymbol}}</template>
-                                            </el-input>
-                                        </el-form-item>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <thead>
-                                <tr>
-                                    <th>{{langConfig['no']}}</th>
-                                    <th style="min-width: 220px">{{langConfig['name']}}</th>
-                                    <th>{{langConfig['retail']}}</th>
-                                    &lt;!&ndash;<th>{{langConfig['longitude']}}</th>
-                                    <th>{{langConfig['width']}}</th>&ndash;&gt;
-                                    <th>{{langConfig['qty']}}</th>
-                                    <th>{{langConfig['price']}}</th>
-                                    <th colspan="2">{{langConfig['amount']}}</th>
-                                </tr>
-                                </thead>
-                                &lt;!&ndash;<draggable v-model="posSaleCoffeeData" :element="'tbody'">&ndash;&gt;
-                                <tr v-for="(posSaleCoffeeDoc,index ) in this.posSaleCoffeeData" :key="index">
-                                    <td style="vertical-align: middle">{{index + 1}}</td>
-                                    <td style="vertical-align: middle">{{posSaleCoffeeDoc.itemName}}</td>
-                                    <td style="vertical-align: middle">
-                                        <el-switch
-                                                v-model="posSaleCoffeeDoc.isRetail"
-                                                active-color="#13ce66"
-                                                inactive-color="#ff4949"
-                                                @change="updatePosSaleCoffeeDetailByRetail(posSaleCoffeeDoc, index)"
-                                        >
-                                        </el-switch>
-                                    </td>
-
-
-                                    &lt;!&ndash;<td>
-                                        <el-input placeholder="Please input Unit1" v-model.number=posSaleCoffeeDoc.unit1
-                                                  @keyup.native="updatePosSaleCoffeeDetail(posSaleCoffeeDoc, index)"></el-input>
-                                    </td>
-                                    <td>
-                                        <el-input placeholder="Please input Unit2" v-model.number=posSaleCoffeeDoc.unit2
-                                                  @keyup.native="updatePosSaleCoffeeDetail(posSaleCoffeeDoc, index)"></el-input>
-                                    </td>&ndash;&gt;
-
-                                    <td>
-                                        <el-input placeholder="Please input Qty"
-                                                  v-model.number=posSaleCoffeeDoc.qty type='number'
-                                                  @keyup.native="updatePosSaleCoffeeDetail(posSaleCoffeeDoc, index)"
-                                                  @change="updatePosSaleCoffeeDetail(posSaleCoffeeDoc, index)">
-                                            <template slot="append">{{posSaleCoffeeDoc.unitName || ""}}</template>
-                                        </el-input>
-                                    </td>
-                                    <td>
-                                        <el-input placeholder="Please input Price" v-model.number=posSaleCoffeeDoc.price
-                                                  type='number'
-                                                  @keyup.native="updatePosSaleCoffeeDetail(posSaleCoffeeDoc, index)"
-                                                  @change="updatePosSaleCoffeeDetail(posSaleCoffeeDoc, index)"
-                                        ></el-input>
-                                    </td>
-                                    <td>
-                                        <el-input placeholder="Amount" v-model.number=posSaleCoffeeDoc.amount
-                                                  disabled>
-                                            &lt;!&ndash;<template slot="append">{{currencySymbol}}</template>&ndash;&gt;
-                                            <template slot="append">
-                                                <el-dropdown trigger="click" :hide-on-click="false">
-                                                    <span class="el-dropdown-link">
-                                                        {{langConfig['desc']}} <span v-if="posSaleCoffeeDoc.desc==''">
-                                                                <i class="el-icon-caret-bottom el-icon&#45;&#45;right"></i>
-                                                            </span>
-                                                            <span v-else>
-                                                                <i class="el-icon-circle-check el-icon&#45;&#45;right"
-                                                                   style="color: blue"></i>
-
-                                                            </span>
-                                                    </span>
-                                                    <el-dropdown-menu slot="dropdown">
-                                                        <el-dropdown-item class="clearfix">
-                                                            <el-input :placeholder="langConfig['desc']" type="textarea"
-                                                                      v-model.number=posSaleCoffeeDoc.desc
-                                                                      @keyup.native="updatePosSaleCoffeeDetail(posSaleCoffeeDoc, index)"></el-input>
-                                                        </el-dropdown-item>
-                                                    </el-dropdown-menu>
-                                                </el-dropdown>
-                                            </template>
-                                        </el-input>
-                                    </td>
-                                    <td style="text-align: center;vertical-align: middle">
-                                        <el-button type="danger" icon="el-icon-delete" size="small"
-                                                   @click="removePosSaleCoffeeDetailByIndex(index,posSaleCoffeeDoc)"></el-button>
-                                    </td>
-                                </tr>
-                                &lt;!&ndash;</draggable>&ndash;&gt;
-                                <thead>
-                                <tr>
-                                    <th colspan="5" style="text-align: right;vertical-align: middle">
-                                        {{langConfig['discount']}} :
-                                        <el-radio-group v-model="posSaleCoffeeForm.discountType">
-                                            <el-radio-button v-for="mt in discountTypeOption" :label="mt.value"
-                                                             :key="mt.value"
-                                            >
-                                                {{langConfig[mt.label]}}
-                                            </el-radio-button>
-                                        </el-radio-group>
-                                    </th>
-                                    <th colspan="2">
-                                        <el-input placeholder="Amount Discount" prop="discount"
-                                                  v-model.number="posSaleCoffeeForm.discount" type='number'>
-                                            <template slot="append">{{typeDiscount}}</template>
-                                        </el-input>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="5" style="text-align: right;vertical-align: middle">
-                                        {{langConfig['netTotal']}} :
-                                    </th>
-                                    <th colspan="2">
-                                        <el-input :placeholder="langConfig['netTotal']"
-                                                  v-model.number="posSaleCoffeeForm.netTotal"
-                                                  disabled>
-                                            <template slot="append">{{currencySymbol}}</template>
-                                        </el-input>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="5" style="text-align: right;vertical-align: middle">
-                                        {{langConfig['paidDollar']}}:
-                                    </th>
-                                    <th colspan="2">
-                                        <el-input placeholder="USD" v-model.number="posSaleCoffeeForm.paidUSD"
-                                                  type='number'
-                                                  @change.native="getTotal()" @focus.native="clearZero($event)"
-                                                  @keyup.native="getTotal()"
-
-                                        >
-                                            <template slot="append">{{posSaleCoffeeForm.remainUSD}} $</template>
-                                        </el-input>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="5" style="text-align: right;vertical-align: middle">
-                                        {{langConfig['paidRiel']}} :
-                                    </th>
-                                    <th colspan="2">
-                                        <el-input placeholder="KHR" @change="getTotal()"
-                                                  @keyup.native="getTotal()"
-
-                                                  v-model.number="posSaleCoffeeForm.paidKHR" type='number'
-                                        >
-                                            <template slot="append">{{posSaleCoffeeForm.remainKHR}} ៛</template>
-                                        </el-input>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="5" style="text-align: right;vertical-align: middle">
-                                        {{langConfig['paidBaht']}}:
-                                    </th>
-                                    <th colspan="2">
-                                        <el-input placeholder="THB" v-model.number="posSaleCoffeeForm.paidTHB"
-                                                  type='number'
-                                                  @change="getTotal()"
-                                                  @keyup.native="getTotal()"
-                                        >
-                                            <template slot="append">{{posSaleCoffeeForm.remainTHB}} B</template>
-                                        </el-input>
-                                    </th>
-                                </tr>
-
-                                </thead>
-                            </table>-->
-                            &nbsp;
-
+                        <el-col :span="18" class="posSaleCoffeeForm"
+                                style=" padding-bottom: 40px !important;padding-left: 0px !important;padding-right: 90px !important; background-color: black !important;">
                             <el-row>
                                 <el-col :span="1" v-for="(o, index) in productData" :key="o._id"
-                                        :offset="index > 0 ? index%8===0 ? 1 : 2 : 1">
-                                    <el-card style="width: 120px !important;" :body-style="{ padding: '0px' }"
+                                        :offset="index > 0 ? index%5===0 ? 2: 4 : 2"
+                                        style="margin-bottom: 20px !important;">
+                                    <el-card style="width: 130px !important;" :body-style="{ padding: '0px' }"
                                     >
                                         <img :src="o.imagePath" class="image">
                                         <div style="padding: 14px;">
@@ -1203,13 +981,13 @@
     }
 
     .image {
-        width: 120px !important;
+        width: 130px !important;
         height: 100px !important;
         display: block;
     }
 
     .image-category {
-        width: 150px !important;
+        width: 180px !important;
         height: 100px !important;
         display: block;
     }

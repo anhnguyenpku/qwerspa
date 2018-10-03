@@ -485,3 +485,15 @@ posReport.route('/posProductionResultSummaryReport', {
     }
 
 });
+
+import '../../imports/ui/report/posSaleReceivePaymentByCustomerDetail/posSaleReceivePaymentByCustomerDetail';
+
+posReport.route('/posSaleReceivePaymentByCustomerDetailReport', {
+    name: 'pos.posSaleReceivePaymentByCustomerDetailReport',
+    title: "Sale Receive Payment By Customer Detail",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_saleReceivePaymentByCustomerDetailReport');
+    }
+
+});

@@ -56,7 +56,8 @@
       "productionResult": "បង្ហាញការផលិតបាន",
       "productionSummary": "ការផលិតសង្ខេប",
       "productionResultSummary": "ការផលិតបានសង្ខេប",
-      "saleCoffee": "លក់"
+      "saleCoffee": "លក់",
+      "saleReceivePaymentByCustomerDetail": "លក់និងទទួលប្រាក់ដោយអតិថិជនលម្អិត"
     },
     "customer": {
       "customerAdd": "បញ្ចូលពត័មានអតិថិជន",

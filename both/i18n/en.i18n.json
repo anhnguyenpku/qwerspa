@@ -56,7 +56,8 @@
       "productionResult": "Production Result",
       "productionSummary": "Production Summary",
       "productionResultSummary": "Production Result Summary",
-      "saleCoffee": "Sale"
+      "saleCoffee": "Sale",
+      "saleReceivePaymentByCustomerDetail":"Sale Receive Payment By Customer Detail"
     },
     "customer": {
       "customerAdd": "Add Customer",
