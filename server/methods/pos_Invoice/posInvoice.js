@@ -163,7 +163,7 @@ Meteor.methods({
                     totalNetAmount: data.netTotal,
                     totalDiscount: data.discountValue,
 
-                    balanceUnPaid: data.netTotal - data.paid,
+                    balanceUnPaid: data.balanceUnPaid,
                     totalAmount: data.total,
 
                     receivePaymentDate: moment(data.invoiceDate).toDate(),
@@ -200,11 +200,13 @@ Meteor.methods({
             Meteor.defer(function () {
                 data.id = id;
                 data.transactionType = "Invoice";
+                data.isReceiveItem = isReceiveItem;
                 Meteor.call("addPosAverageInventory", data, (err, result) => {
-                    if (err) {
-                        console.log(err.message);
+                        if (err) {
+                            console.log(err.message);
+                        }
                     }
-                })
+                )
             })
 
             if (isReceiveItem === true) {

@@ -169,7 +169,6 @@ Meteor.methods({
                     });
 
 
-
                 }
             })
 
@@ -177,82 +176,86 @@ Meteor.methods({
             //Integrated To Account===============================================================================================
             let companyDoc = WB_waterBillingSetup.findOne({});
             if (companyDoc.integratedPosAccount === true) {
-                let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
-                let arrAcc = Acc_ChartAccount.findOne({mapToAccount: "006"});
-                let saleDiscountAcc = Acc_ChartAccount.findOne({mapToAccount: "011"});
-                let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
-                let cogsAcc = Acc_ChartAccount.findOne({mapToAccount: "010"});
-                let inventoryAcc = Acc_ChartAccount.findOne({mapToAccount: "007"});
+                if (data.paid + data.balanceUnPaid + data.discountValue > 0) {
+                    let cashAcc = Acc_ChartAccount.findOne({mapToAccount: "005"});
+                    let arrAcc = Acc_ChartAccount.findOne({mapToAccount: "006"});
+                    let saleDiscountAcc = Acc_ChartAccount.findOne({mapToAccount: "011"});
+                    let saleIncomeAcc = Acc_ChartAccount.findOne({mapToAccount: "009"});
+                    let cogsAcc = Acc_ChartAccount.findOne({mapToAccount: "010"});
+                    let inventoryAcc = Acc_ChartAccount.findOne({mapToAccount: "007"});
 
 
-                let cusDoc = Pos_Customer.findOne({_id: data.customerId});
+                    let cusDoc = Pos_Customer.findOne({_id: data.customerId});
 
-                let journalDoc = {};
-                journalDoc.journalDate = data.invoiceDate;
-                journalDoc.journalDateName = moment(data.invoiceDate).format("DD/MM/YYYY");
-                journalDoc.currencyId = companyDoc.baseCurrency;
-                journalDoc.memo = cusDoc.name + " ទិញទំនិញ";
-                journalDoc.rolesArea = data.rolesArea;
-                journalDoc.closingEntryId = data.id;
-                journalDoc.status = "Invoice";
-                journalDoc.refId = data.id;
-                journalDoc.total = numeral(formatCurrencyLast(data.total + avgCost, companyDoc.baseCurrency)).value();
+                    let journalDoc = {};
+                    journalDoc.journalDate = data.invoiceDate;
+                    journalDoc.journalDateName = moment(data.invoiceDate).format("DD/MM/YYYY");
+                    journalDoc.currencyId = companyDoc.baseCurrency;
+                    journalDoc.memo = cusDoc.name + " ទិញទំនិញ";
+                    journalDoc.rolesArea = data.rolesArea;
+                    journalDoc.closingEntryId = data.id;
+                    journalDoc.status = "Invoice";
+                    journalDoc.refId = data.id;
+                    journalDoc.total = numeral(formatCurrencyLast(data.total + avgCost, companyDoc.baseCurrency)).value();
 
-                avgCost = formatCurrencyLast(avgCost, companyDoc.baseCurrency);
-                let transaction = [];
-                if (data.paid > 0) {
-                    transaction.push({
-                        account: cashAcc._id,
-                        dr: data.paid,
-                        cr: 0,
-                        drcr: data.paid
-                    });
+                    avgCost = formatCurrencyLast(avgCost, companyDoc.baseCurrency);
+
+                    let transaction = [];
+                    if (data.paid > 0) {
+                        transaction.push({
+                            account: cashAcc._id,
+                            dr: data.paid,
+                            cr: 0,
+                            drcr: data.paid
+                        });
+                    }
+
+                    if (data.balanceUnPaid > 0) {
+                        transaction.push({
+                            account: arrAcc._id,
+                            dr: data.balanceUnPaid,
+                            cr: 0,
+                            drcr: data.balanceUnPaid
+                        });
+                    }
+                    if (data.discountValue > 0) {
+                        transaction.push({
+                            account: saleDiscountAcc._id,
+                            dr: data.discountValue,
+                            cr: 0,
+                            drcr: data.discountValue
+                        });
+                    }
+
+                    if (data.paid + data.balanceUnPaid + data.discountValue > 0) {
+                        transaction.push({
+                            account: saleIncomeAcc._id,
+                            dr: 0,
+                            cr: data.paid + data.balanceUnPaid + data.discountValue,
+                            drcr: -(data.paid + data.balanceUnPaid + data.discountValue)
+                        });
+                    }
+
+                    if (avgCost > 0) {
+                        transaction.push({
+                            account: cogsAcc._id,
+                            dr: avgCost,
+                            cr: 0,
+                            drcr: avgCost
+                        });
+
+
+                        transaction.push({
+                            account: inventoryAcc._id,
+                            dr: 0,
+                            cr: avgCost,
+                            drcr: -avgCost
+                        });
+                    }
+
+                    journalDoc.transaction = transaction;
+                    Meteor.call("insertJournal", journalDoc);
                 }
-
-                if (data.netTotal - data.paid > 0) {
-                    transaction.push({
-                        account: arrAcc._id,
-                        dr: data.netTotal - data.paid,
-                        cr: 0,
-                        drcr: data.netTotal - data.paid
-                    });
-                }
-                if (data.discountValue > 0) {
-                    transaction.push({
-                        account: saleDiscountAcc._id,
-                        dr: data.discountValue,
-                        cr: 0,
-                        drcr: data.discountValue
-                    });
-                }
-
-                transaction.push({
-                    account: saleIncomeAcc._id,
-                    dr: 0,
-                    cr: data.total,
-                    drcr: -data.total
-                });
-
-                if (avgCost > 0) {
-                    transaction.push({
-                        account: cogsAcc._id,
-                        dr: avgCost,
-                        cr: 0,
-                        drcr: avgCost
-                    });
-
-
-                    transaction.push({
-                        account: inventoryAcc._id,
-                        dr: 0,
-                        cr: avgCost,
-                        drcr: -avgCost
-                    });
-                }
-
-                journalDoc.transaction = transaction;
-                Meteor.call("insertJournal", journalDoc);
-
             }
 
 
