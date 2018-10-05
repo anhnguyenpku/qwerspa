@@ -46,6 +46,23 @@ Meteor.methods({
                 }
             }
         ];
+
+
+        let parameter2 = {};
+        parameter2.$or = [
+            {
+                "receiveDoc.receivePaymentDate": {
+                    $exists: false
+                }
+            },
+            {
+                "receiveDoc.receivePaymentDate": {
+                    $lt: moment(params.date).endOf("day").toDate()
+                }
+            }
+        ];
+
+
         let debtList = Pos_Invoice.aggregate([
             {
                 $match: parameter
@@ -80,6 +97,93 @@ Meteor.methods({
                     lastInvoiceNo: {$last: "$invoiceNo"},
                     lastInvoiceDate: {$last: "$invoiceDate"},
                     data: {$addToSet: "$$ROOT"}
+                }
+            },
+            {
+                $lookup: {
+                    from: 'pos_receivePayment',
+                    localField: '_id.customerId',
+                    foreignField: 'customerId',
+                    as: 'receiveDoc'
+                }
+            }
+            ,
+            {
+                $unwind: {
+                    path: "$receiveDoc",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $match: parameter2
+            },
+            {
+                $sort: {
+                    "receiveDoc.receivePaymentDate": 1,
+                    "receiveDoc.createdAt": 1
+                }
+            },
+
+
+            {
+                $group: {
+                    _id: {
+                        customerId: "$_id.customerId",
+                        receiveId: "$receiveDoc._id",
+
+                    },
+                    invoiceTotal: {$last: "$invoiceTotal"},
+                    invoiceDiscount: {$last: "$invoiceDiscount"},
+                    invoicePaid: {$last: "$invoicePaid"},
+                    lastInvoiceNo: {$last: "$lastInvoiceNo"},
+                    lastInvoiceDate: {$last: "$lastInvoiceDate"},
+                    data: {$last: "$data"},
+                    totalPaidFromInvoice: {$sum: {$cond: [{$eq: ["$receiveDoc.invoiceId", undefined]}, 0, "$receiveDoc.totalPaid"]}},
+                    totalDiscountFromInvoice: {$sum: {$cond: [{$eq: ["$receiveDoc.invoiceId", undefined]}, 0, "$receiveDoc.totalDiscount"]}},
+                    receiveDoc: {$last: "$receiveDoc"},
+                    isFromInvoice: {$last: {$cond: [{$eq: ["$receiveDoc.invoiceId", undefined]}, false, true]}},
+                }
+            },
+            {
+                $unwind: {
+                    path: "$receiveDoc.invoice",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $group: {
+                    _id: {
+                        customerId: "$_id.customerId",
+                        invoiceId: "$receiveDoc.invoice._id",
+
+                    },
+                    invoiceTotal: {$last: "$invoiceTotal"},
+                    invoiceDiscount: {$last: "$invoiceDiscount"},
+                    invoicePaid: {$last: "$invoicePaid"},
+                    lastInvoiceNo: {$last: "$lastInvoiceNo"},
+                    lastInvoiceDate: {$last: "$lastInvoiceDate"},
+                    data: {$last: "$data"},
+                    totalPaidReceive: {$sum: {$cond: [{$eq: ["$isFromInvoice", true]}, 0, "$receiveDoc.invoice.paid"]}},
+                    totalDiscountReceive: {$sum: {$cond: [{$eq: ["$isFromInvoice", true]}, 0, "$receiveDoc.invoice.discount"]}},
+                    totalPaidFromInvoice: {$last: "$totalPaidFromInvoice"},
+                    totalDiscountFromInvoice: {$last: "$totalDiscountFromInvoice"}
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        customerId: "$_id.customerId"
+                    },
+                    invoiceTotal: {$last: "$invoiceTotal"},
+                    invoiceDiscount: {$last: "$invoiceDiscount"},
+                    invoicePaid: {$last: "$invoicePaid"},
+                    lastInvoiceNo: {$last: "$lastInvoiceNo"},
+                    lastInvoiceDate: {$last: "$lastInvoiceDate"},
+                    data: {$last: "$data"},
+                    dataReceivePayment: {$addToSet: "$$ROOT"}
+
                 }
             },
             {
@@ -119,33 +223,37 @@ Meteor.methods({
         if (debtList.length > 0) {
             debtList[0].data.forEach((obj) => {
 
-                debtHTML += `
-                    <tr>
-                            <td style="text-align: left !important;">${ind}</td>
-                            <td style="text-align: left !important;">${obj.customerDoc.name}</td>
-                            <td style="text-align: left !important;">${obj.customerDoc.phoneNumber || ""}</td>
-                            <td>${formatCurrency((obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid), companyDoc.baseCurrency)}</td>
-                    </tr>
-            
-                 `;
-                ind++;
+                let newDebtHtml = "";
+                let balanceUnpay = 0;
                 obj.data.forEach((ob) => {
-                    if (ob.netTotal - ob.paid > 0) {
+                    let findReceiveByInvoice = function (element) {
+                        if (element._id.invoiceId === ob._id) {
+                            return element;
+                        }
+                    }
+
+                    let receiveDoc = obj.dataReceivePayment.find(findReceiveByInvoice);
+
+                    if (ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0) > 0) {
+
+
                         ob.invoiceNo = ob && ob.invoiceNo.length > 9 ? parseInt((ob && ob.invoiceNo || "0000000000000").substr(9, 13)) : parseInt(ob && ob.invoiceNo || "0");
                         ob.invoiceNo = pad(ob.invoiceNo, 6);
+
+                        balanceUnpay += ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0);
                         if (ob.dueDate.getTime() >= params.date.getTime()) {
-                            debtHTML += `
+                            newDebtHtml += `
                         <tr>
                             <td colspan="3" style="text-align: center !important;">${moment(ob.invoiceDate).format("DD/MM/YYYY")}-(#${ob.invoiceNo})</td>
-                            <td style="text-align: left !important;">${formatCurrency(ob.netTotal - ob.paid, companyDoc.baseCurrency)}</td>
+                            <td style="text-align: left !important;">${formatCurrency(ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
                         </tr>
                     
                     `;
                         } else {
-                            debtHTML += `
+                            newDebtHtml += `
                         <tr>
                             <td colspan="3" style="text-align: center !important;">${moment(ob.invoiceDate).format("DD/MM/YYYY")}-(#${ob.invoiceNo})</td>
-                            <td style="text-align: left !important;color: red !important;">${formatCurrency(ob.netTotal - ob.paid, companyDoc.baseCurrency)}</td>
+                            <td style="text-align: left !important;color: red !important;">${formatCurrency(ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
                         </tr>
                     
                     `;
@@ -153,9 +261,25 @@ Meteor.methods({
                     }
                 });
 
+                if (balanceUnpay > 0) {
+                    debtHTML += `
+                    <tr>
+                            <td style="text-align: left !important;">${ind}</td>
+                            <td style="text-align: left !important;">${obj.customerDoc.name}</td>
+                            <td style="text-align: left !important;">${obj.customerDoc.phoneNumber || ""}</td>
+                            <td>${formatCurrency((balanceUnpay), companyDoc.baseCurrency)}</td>
+                    </tr>
+            
+                 `;
+                    ind++;
+
+                }
+
+                debtHTML += newDebtHtml;
+
 
                 grandTotal += obj.invoiceTotal;
-                grandUnpaid += obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid;
+                grandUnpaid += balanceUnpay;
             });
 
             debtHTML += `

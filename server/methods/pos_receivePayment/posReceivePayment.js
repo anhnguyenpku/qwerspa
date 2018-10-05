@@ -338,9 +338,24 @@ Meteor.methods({
         }).fetch();
         let dataArr = [];
         data.forEach((obj) => {
+            let receiveDoc = Pos_Invoice.aggregate([
+                {
+                    $match: {
+                        "item.saleOrderId": obj._id,
+                        transactionType: "Invoice Sale Order"
+                    },
+
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalInvoice: {$sum: "$total"}
+                    }
+                }
+            ])
             if (obj) {
-                let toInv = (obj.paid - obj.cutOnPaid) > 0 ? 0 : (obj.paid - obj.cutOnPaid);
-                let netAm = obj.netTotal - obj.paid - toInv;
+                //let toInv = (obj.paid - obj.cutOnPaid) > 0 ? 0 : (obj.paid - obj.cutOnPaid);
+                let netAm = obj.netTotal - obj.paid - (receiveDoc && receiveDoc[0].totalInvoice || 0);
                 if (netAm > 0) {
                     dataArr.push({
                         _id: obj._id,

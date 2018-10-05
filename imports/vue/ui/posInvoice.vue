@@ -1787,6 +1787,7 @@
                             paymentNumber: 1,
                             customerId: vm.posInvoiceForm.customerId,
                             locationId: vm.posInvoiceForm.locationId,
+                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
                             status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posInvoiceDoc.item = vm.posInvoiceData;
@@ -1865,6 +1866,7 @@
                             customerId: vm.posInvoiceForm.customerId,
                             _id: id,
                             locationId: vm.posInvoiceForm.locationId,
+                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
                             status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posInvoiceDoc.item = vm.posInvoiceData;
@@ -1941,6 +1943,7 @@
                             paymentNumber: 1,
                             customerId: vm.posInvoiceForm.customerId,
                             locationId: vm.posInvoiceForm.locationId,
+                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
                             status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         let newPosInvoiceData = [];

@@ -58,8 +58,6 @@ Meteor.methods({
                     $lt: moment(params.date).endOf("day").toDate()
                 }
             }
-
-
         ];
 
         let debtList = Pos_Invoice.aggregate([
@@ -167,7 +165,7 @@ Meteor.methods({
         let ind = 1;
         if (debtList.length > 0) {
             debtList[0].data.forEach((obj) => {
-                if ((obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid > 0) {
+                if ((obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || (obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid) > 0) {
                     debtHTML += `
                     <tr>
                             <td style="text-align: left !important;">${ind}</td>
@@ -177,14 +175,14 @@ Meteor.methods({
                             <td>${formatCurrency(obj.invoiceDiscount + (obj.receiveDoc && obj.receiveDoc.totalDiscount) || 0, companyDoc.baseCurrency)}</td>
                             <td>${formatCurrency(obj.invoiceTotal - (obj.invoiceDiscount + (obj.receiveDoc && obj.receiveDoc.totalDiscount) || 0) - ((obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid), companyDoc.baseCurrency)}</td>
 
-                            <td>${formatCurrency((obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid, companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency((obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || (obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid), companyDoc.baseCurrency)}</td>
                     </tr>
             
                  `
                     grandTotal += obj.invoiceTotal;
-                    grandPaid += obj.invoiceTotal - (obj.invoiceDiscount + (obj.receiveDoc && obj.receiveDoc.totalDiscount) || 0) - ((obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid);
+                    grandPaid += obj.invoiceTotal - (obj.invoiceDiscount + (obj.receiveDoc && obj.receiveDoc.totalDiscount) || 0) - ((obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || (obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid));
                     grandDiscount += obj.invoiceDiscount + (obj.receiveDoc && obj.receiveDoc.totalDiscount) || 0;
-                    grandUnpaid += (obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid;
+                    grandUnpaid += (obj.receiveDoc && obj.receiveDoc.balanceUnPaid) || (obj.invoiceTotal - obj.invoiceDiscount - obj.invoicePaid);
                     ind++;
                 }
             })

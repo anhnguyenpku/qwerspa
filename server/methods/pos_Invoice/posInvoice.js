@@ -177,7 +177,7 @@ Meteor.methods({
                     invoiceNo: data.invoiceNo,
                     canRemove: false,
                     locationId: data.locationId,
-                    closeDate: data.netTotal - data.paid == 0 ? moment(data.invoiceDate).toDate() : "",
+                    closeDate: data.balanceUnPaid === 0 ? moment(data.invoiceDate).toDate() : "",
                     transactionType: isReceiveItem == true ? "Invoice Sale Order" : (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt"
                 };
 
