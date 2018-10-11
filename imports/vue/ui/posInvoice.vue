@@ -375,7 +375,7 @@
                                 </div>
                                 <div class="ui  attached segment feature">
                                     <div class="amount">
-                                        {{posInvoiceForm.balanceUnpaid}}{{currencySymbol}}
+                                        {{posInvoiceForm.balanceUnPaid}}{{currencySymbol}}
                                     </div>
                                 </div>
                             </div>
@@ -743,7 +743,7 @@
                                 </div>
                                 <div class="ui  attached segment feature">
                                     <div class="amount">
-                                        {{posInvoiceForm.balanceUnpaid}}{{currencySymbol}}
+                                        {{posInvoiceForm.balanceUnPaid}}{{currencySymbol}}
                                     </div>
                                 </div>
                             </div>
@@ -1192,7 +1192,7 @@
                                 </div>
                                 <div class="ui  attached segment feature">
                                     <div class="amount">
-                                        {{posInvoiceForm.balanceUnpaid}}{{currencySymbol}}
+                                        {{posInvoiceForm.balanceUnPaid}}{{currencySymbol}}
                                     </div>
                                 </div>
                             </div>
@@ -1391,7 +1391,7 @@
                     amount: 0,
                     total: 0,
                     netTotal: 0,
-                    balanceUnpaid: 0,
+                    balanceUnPaid: 0,
                     paid: 0,
                     invoiceDate: moment().toDate(),
                     dueDate: moment().add(1, "month").toDate(),
@@ -1757,8 +1757,8 @@
                         let posInvoiceDoc = {
                             total: vm.$_numeral(vm.posInvoiceForm.total).value(),
                             netTotal: vm.$_numeral(vm.posInvoiceForm.netTotal).value(),
-                            balanceUnpaid: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(),
-                            paid: vm.$_numeral(vm.posInvoiceForm.netTotal).value() - vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(),
+                            balanceUnPaid: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(),
+                            paid: vm.$_numeral(vm.posInvoiceForm.netTotal).value() - vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(),
 
                             paidUSD: vm.$_numeral(vm.posInvoiceForm.paidUSD).value(),
                             paidKHR: vm.$_numeral(vm.posInvoiceForm.paidKHR).value(),
@@ -1787,8 +1787,8 @@
                             paymentNumber: 1,
                             customerId: vm.posInvoiceForm.customerId,
                             locationId: vm.posInvoiceForm.locationId,
-                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
-                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
+                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
+                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posInvoiceDoc.item = vm.posInvoiceData;
                         Meteor.call("insertPosInvoice", posInvoiceDoc, (err, result) => {
@@ -1837,8 +1837,8 @@
                         let posInvoiceDoc = {
                             total: vm.$_numeral(vm.posInvoiceForm.total).value(),
                             netTotal: vm.$_numeral(vm.posInvoiceForm.netTotal).value(),
-                            balanceUnpaid: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(),
-                            paid: vm.$_numeral(vm.posInvoiceForm.netTotal).value() - vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(),
+                            balanceUnPaid: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(),
+                            paid: vm.$_numeral(vm.posInvoiceForm.netTotal).value() - vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(),
 
                             paidUSD: vm.$_numeral(vm.posInvoiceForm.paidUSD).value(),
                             paidKHR: vm.$_numeral(vm.posInvoiceForm.paidKHR).value(),
@@ -1866,8 +1866,8 @@
                             customerId: vm.posInvoiceForm.customerId,
                             _id: id,
                             locationId: vm.posInvoiceForm.locationId,
-                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
-                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
+                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
+                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posInvoiceDoc.item = vm.posInvoiceData;
                         Meteor.call("updatePosInvoice", posInvoiceDoc, id, (err, result) => {
@@ -1913,8 +1913,8 @@
                         let posInvoiceDoc = {
                             total: vm.$_numeral(vm.posInvoiceForm.total).value(),
                             netTotal: vm.$_numeral(vm.posInvoiceForm.netTotal).value(),
-                            balanceUnpaid: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(),
-                            paid: vm.$_numeral(vm.posInvoiceForm.netTotal).value() - vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() - vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value(),
+                            balanceUnPaid: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(),
+                            paid: vm.$_numeral(vm.posInvoiceForm.netTotal).value() - vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() - vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value(),
 
                             paidUSD: vm.$_numeral(vm.posInvoiceForm.paidUSD).value(),
                             paidKHR: vm.$_numeral(vm.posInvoiceForm.paidKHR).value(),
@@ -1943,8 +1943,8 @@
                             paymentNumber: 1,
                             customerId: vm.posInvoiceForm.customerId,
                             locationId: vm.posInvoiceForm.locationId,
-                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
-                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
+                            closeDate: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() === 0 ? moment(vm.posInvoiceForm.invoiceDate).toDate() : "",
+                            status: vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() < vm.$_numeral(vm.posInvoiceForm.netTotal).value() ? "Partial" : "Active"
                         };
                         let newPosInvoiceData = [];
                         vm.posInvoiceData.map((obj) => {
@@ -2203,7 +2203,7 @@
                         vm.posInvoiceForm = {
                             total: formatCurrency(data.total, companyDoc.baseCurrency),
                             netTotal: formatCurrency(data.netTotal, companyDoc.baseCurrency),
-                            balanceUnpaid: formatCurrency(data.balanceUnpaid, companyDoc.baseCurrency),
+                            balanceUnPaid: formatCurrency(data.balanceUnPaid, companyDoc.baseCurrency),
                             paid: data.paid,
                             paidUSD: data.paidUSD,
                             paidKHR: data.paidKHR,
@@ -2452,7 +2452,7 @@
                 let vm = this;
                 let total = 0;
                 vm.posInvoiceData.forEach(function (obj) {
-                    total += parseFloat(vm.$_numeral(obj.amount).value());
+                    total += parseFloat(vm.$_numeral(obj.amount || 0).value());
 
                 });
                 if (total >= vm.$_numeral(vm.posInvoiceForm.balanceNotCutFull).value()) {
@@ -2466,25 +2466,25 @@
 
                 if (vm.posInvoiceForm.discountType === "Amount") {
                     vm.posInvoiceForm.netTotal = formatCurrencyLast(total - vm.posInvoiceForm.discount, companyDoc.baseCurrency);
-                    vm.posInvoiceForm.balanceUnpaid = formatCurrencyLast(total - vm.posInvoiceForm.discount - vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posInvoiceForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posInvoiceForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posInvoiceForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posInvoiceForm.balanceUnPaid = formatCurrencyLast(total - vm.posInvoiceForm.discount - vm.$_numeral(vm.posInvoiceForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posInvoiceForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posInvoiceForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posInvoiceForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posInvoiceForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "USD");
-                    vm.posInvoiceForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "KHR");
-                    vm.posInvoiceForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "THB");
+                    vm.posInvoiceForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(), Session.get("area")), "USD");
+                    vm.posInvoiceForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(), Session.get("area")), "KHR");
+                    vm.posInvoiceForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(), Session.get("area")), "THB");
                     vm.posInvoiceForm.discountValue = formatCurrencyLast(vm.posInvoiceForm.discount, companyDoc.baseCurrency);
 
-                    vm.posInvoiceForm.balanceUnpaid = vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() <= 0 ? 0 : vm.posInvoiceForm.balanceUnpaid;
+                    vm.posInvoiceForm.balanceUnPaid = vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() <= 0 ? 0 : vm.posInvoiceForm.balanceUnPaid;
                     this.typeDiscount = getCurrencySymbolById(companyDoc.baseCurrency);
                 } else {
                     vm.posInvoiceForm.netTotal = formatCurrencyLast(total - (total * vm.posInvoiceForm.discount / 100), companyDoc.baseCurrency);
-                    vm.posInvoiceForm.balanceUnpaid = formatCurrencyLast(total - (total * vm.posInvoiceForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posInvoiceForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posInvoiceForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posInvoiceForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posInvoiceForm.balanceUnPaid = formatCurrencyLast(total - (total * vm.posInvoiceForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posInvoiceForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posInvoiceForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posInvoiceForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posInvoiceForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "USD");
-                    vm.posInvoiceForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "KHR");
-                    vm.posInvoiceForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value(), Session.get("area")), "THB");
+                    vm.posInvoiceForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(), Session.get("area")), "USD");
+                    vm.posInvoiceForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(), Session.get("area")), "KHR");
+                    vm.posInvoiceForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value(), Session.get("area")), "THB");
                     vm.posInvoiceForm.discountValue = formatCurrencyLast((total * vm.posInvoiceForm.discount / 100), companyDoc.baseCurrency);
 
-                    vm.posInvoiceForm.balanceUnpaid = vm.$_numeral(vm.posInvoiceForm.balanceUnpaid).value() <= 0 ? 0 : vm.posInvoiceForm.balanceUnpaid;
+                    vm.posInvoiceForm.balanceUnPaid = vm.$_numeral(vm.posInvoiceForm.balanceUnPaid).value() <= 0 ? 0 : vm.posInvoiceForm.balanceUnPaid;
                     this.typeDiscount = "%";
                 }
             }

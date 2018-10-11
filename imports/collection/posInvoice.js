@@ -22,7 +22,7 @@ Pos_Invoice.schema = new SimpleSchema({
     },
     invoiceDate: {
         type: Date,
-        index:true
+        index: true
     },
     invoiceDateName: {
         type: String,
@@ -89,6 +89,12 @@ Pos_Invoice.schema = new SimpleSchema({
         decimal: true
     },
     balanceNotCut: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        defaultValue: 0
+    },
+    balanceUnPaid: {
         type: Number,
         decimal: true,
         optional: true,

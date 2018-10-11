@@ -190,7 +190,6 @@ Meteor.methods({
                     });
                     Pos_ReceivePayment.direct.insert(posReceivePaymentDoc);
                 })
-
             }
 
             invoiceReact(id);
