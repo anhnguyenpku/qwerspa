@@ -109,6 +109,21 @@ Meteor.methods({
             return data;
         }
     },
+    queryPosProductAll() {
+        if (Meteor.userId()) {
+            let posProducts = Pos_Product.find({}).map(function (obj) {
+                obj.qty = 0;
+                obj.smallQty = 0;
+                obj.largeQty = 0;
+                obj.small = "S";
+                obj.large = "L";
+                obj.type = "";
+                obj.disableInputQty = true;
+                return obj;
+            });
+            return posProducts;
+        }
+    },
     queryPosProductById(val) {
         let selector = {};
         selector.$or = [

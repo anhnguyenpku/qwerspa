@@ -13,14 +13,6 @@
                     <p>Login As : {{username}}</p>
                     <p>Today : {{todaySt}}</p>
                     <p>Time : {{timeSt}}</p>
-
-                    <!--<h5>
-                        <a class="cursor-pointer"
-                        >
-                             <span style="font-family: 'Khmer OS Muol light','Khmer OS Muol';font-size: 15px;vertical-align: middle !important;"><br>
-                                 <p style="font-size: 18px;">{{waterBillingSetup.khName}}</p><p>{{waterBillingSetup.enName}}</p></span>
-                        </a>
-                    </h5>-->
                 </el-col>
                 <el-col :span="16" style="text-align: right; margin-right: 10px">
                     <br>
@@ -29,16 +21,26 @@
                         <el-col :span="10" style="font-family: 'Khmer OS Freehand';text-align: left !important;"><h2>
                             {{langConfig['selectCategory']}}</h2>
                         </el-col>
-                        <el-col :span="3">
-
-                        </el-col>
-                        <el-col :span="8">
-                            <el-input
+                        <el-col :span="11">
+                            <!--<el-input
                                     :placeholder="langConfig['searchHere']"
                                     suffix-icon="el-icon-search"
                                     v-model="searchData"
                             >
-                            </el-input>
+                            </el-input>-->
+                            <el-button type="success" @click="savePosSaleCoffee(true,$event,true)"><i
+                                    class="fa fa-print"></i>&nbsp; {{langConfig['pay']}} <i>( + )</i>
+                            </el-button>
+
+                            <el-button type="primary" @click.native="savePosSaleCoffee(true,$event,false)"><i
+                                    class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i>
+                            </el-button>
+
+                            <el-button type="warning"
+                                       @click.native="resetForm()"><i
+                                    class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['reset']}} <i>(ESC)</i>
+                            </el-button>
+
                         </el-col>
                         <el-col :span="1">
                             <el-button type="danger" round
@@ -49,20 +51,20 @@
                     </el-row>
                 </el-col>
             </el-row>
-            <hr>
+            <hr style="margin-top: 0px !important;margin-bottom: 5px !important;">
             <el-row style="padding-right: 50px !important;">
                 <el-col v-if="isCategoryData" :span="1" v-for="(o, index) in categoryData" :key="o._id"
                         :offset="index > 0 ? index%6===0 ? 2 : 3 : 1">
                     <el-card style="width: 180px !important;" :body-style="{ padding: '0px' }"
                     >
-                        <img :src="o.imagePath" class="image-category" @click="queryProduct(o._id)">
-                        <div style="padding: 14px;" @click="queryProduct(o._id)">
+                        <img :src="o.imagePath" class="image-category" @click="queryProductByCategoryId(o._id)">
+                        <div style="padding: 14px;" @click="queryProductByCategoryId(o._id)">
                             <span>{{o.name}}</span>
                         </div>
                     </el-card>
                 </el-col>
             </el-row>
-            <hr>
+            <hr style="margin-top: 5px !important;margin-bottom: 5px !important;">
             <slot v-if="loading">
                 <div class="row">
                     <div class="col-md-12" style="padding: 30px; margin-top: 70px">
@@ -76,23 +78,59 @@
                          class="posSaleCoffeeForm"
                          style="background-color: black !important;min-height:100% !important;">
                     <el-row :gutter="20">
-                        <el-col :span="18" class="posSaleCoffeeForm"
-                                style=" padding-bottom: 40px !important;padding-left: 0px !important;padding-right: 90px !important; background-color: black !important;">
+                        <el-col :span="16" class="posSaleCoffeeForm"
+                                style=" padding-bottom: 40px !important;padding-left: 0px !important;padding-right: 90px !important;margin-top: 15px !important; background-color: black !important;">
                             <el-row>
-                                <el-col :span="1" v-for="(o, index) in productData" :key="o._id"
+                                <el-col :span="1" v-for="(productDoc, index) in productData" :key="productDoc._id"
                                         :offset="index > 0 ? index%5===0 ? 2: 4 : 2"
                                         style="margin-bottom: 20px !important;">
-                                    <el-card style="width: 130px !important;" :body-style="{ padding: '0px' }"
+                                    <el-card style="width: 130px !important;z-index: 0"
+                                             :body-style="{ padding: '0px' }"
                                     >
-                                        <img :src="o.imagePath" class="image">
-                                        <div style="padding: 14px;">
-                                            <span>{{o.name}}</span>
+                                        <img :src="productDoc.imagePath" class="image">
+                                        <el-button type="primary" size="mini" class="plan-ribbon-btn1"
+                                                   @click="handleClickBtn(productDoc,'S',index)"
+                                                   circle>S
+                                        </el-button>
+                                        <b style="padding-top: 50px"></b>
+                                        <el-button type="success" size="mini"
+                                                   @click="handleClickBtn(productDoc,'L',index)"
+                                                   class="plan-ribbon-btn2" circle>L
+                                        </el-button>
+                                        <div style="padding: 4px;">
+
+                                            <span>{{productDoc.name}}</span>
+
+
+                                            <hr style="margin-top: 5px !important;margin-bottom: 5px !important;">
+                                            <span class="label"
+                                                  style="background-color: #409EFF">{{productDoc.smallQty}}</span>
+                                            <span class="label"
+                                                  style="background-color: #5daf34">{{productDoc.largeQty}}</span>
+
+                                            <span class="label"
+                                                  style="background-color: gray;float: right !important;">{{productDoc.type || ""}}</span>
+
+
+                                            <el-input-number controls-position="right"
+                                                             style="width: 100% !important;"
+                                                             v-model=productDoc.qty
+                                                             @change="handleChange(productDoc,$event)"
+                                                             @keyup="handleChange(productDoc,$event)"
+                                                             :min="0"
+                                                             :disabled=productDoc.disableInputQty
+                                                             :max="999">
+                                            </el-input-number>
                                         </div>
+
+
                                     </el-card>
+
+
                                 </el-col>
                             </el-row>
                         </el-col>
-                        <el-col :span="6" style="background-color: black !important;">
+                        <el-col :span="8" style="background-color: black !important;">
                             <div class="w3-code-coffee">
                                 <div class="ui segments plan">
                                     <div class="ui top attached segment teal inverted plan-title">
@@ -106,110 +144,139 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <!--<el-form-item :label="langConfig['customer']" prop="customerId">
-                                    <el-select style="display: block !important;"
-                                               filterable clearable
-                                               v-model="posSaleCoffeeForm.customerId" remote
-                                               :remote-method="customerOpt"
-                                               :loading="loading"
-                                               :placeholder="langConfig['customer']">
-                                        <el-option
-                                                v-for="item in customerOption"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"
-                                                :disabled="item.disabled">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>-->
-
-                                <!--<el-row>
+                                <el-row>
                                     <el-col :span="12">
-                                        <el-form-item :label="langConfig['address']" prop="address">
-                                            <el-input type="textarea" v-model="posSaleCoffeeForm.address"></el-input>
+                                        <el-form-item
+                                                prop="locationId">
+
+                                            <el-select style="display: block !important"
+                                                       filterable clearable
+                                                       v-model="posSaleCoffeeForm.locationId"
+                                                       :placeholder="langConfig['tableNumber']">
+                                                <el-option
+                                                        v-for="item in locationOption"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value"
+                                                        :disabled="item.disabled">
+                                                </el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="1">
-                                        <div class="">&nbsp;</div>
-                                    </el-col>
+                                    <el-col :span="1">&nbsp;</el-col>
                                     <el-col :span="11">
-                                        <el-form-item :label="langConfig['saleCoffeeNo']" prop="saleCoffeeNo">
-                                            <el-input v-model="posSaleCoffeeForm.saleCoffeeNo"
-                                                      prefix-icon="el-icon-edit" size="small"></el-input>
+                                        <el-form-item prop="note">
+                                            <el-input type="textarea" v-model="posSaleCoffeeForm.note"
+                                                      :placeholder="langConfig['note']"
+                                                      :rows="1"></el-input>
                                         </el-form-item>
                                     </el-col>
-                                </el-row>-->
+                                </el-row>
 
 
-                                <!--<el-row>
-                                    <el-col :span="12">
-                                        <el-form-item :label="langConfig['saleCoffeeDate']" prop="saleCoffeeDate">
-                                            <el-date-picker
-                                                    v-model="posSaleCoffeeForm.saleCoffeeDate"
-                                                    type="date"
-                                                    style="width: 100%;"
-                                                    placeholder="Pick a day"
-                                                    :picker-options="options"
-                                                    :disabled="disabledDate"
-                                            >
-                                            </el-date-picker>
-                                        </el-form-item>
-                                    </el-col>
+                                <el-table
+                                        :data="posSaleCoffeeData"
+                                        height="350"
+                                        style="width: 100%">
+                                    <el-table-column
+                                            type="index"
+                                            :label="langConfig['no']"
+                                            width="50"
+                                    >
 
-                                    <el-col :span="1">
-                                        <div class="">&nbsp;</div>
-                                    </el-col>
-                                    <el-col :span="11">
-                                        <el-form-item :label="langConfig['dueDate']" prop="dueDate">
-                                            <el-date-picker
-                                                    v-model="posSaleCoffeeForm.dueDate"
-                                                    type="date"
-                                                    style="width: 100%;"
-                                                    placeholder="Pick a day"
-                                            >
-                                            </el-date-picker>
-                                        </el-form-item>
-                                    </el-col>
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="itemName"
+                                            :label="langConfig['name']">
+                                        <template slot-scope="scope">
+                                            <span>{{scope.row.itemName}} ({{scope.row.type}})</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="qty"
+                                            :label="langConfig['qty']"
+                                    >
+                                        <template slot-scope="scope">
+                                            <el-input-number controls-position="right"
+                                                             placeholder="Please input Qty"
+                                                             size="mini"
+                                                             v-model.number=scope.row.qty type='number'
+                                                             @keyup="updatePosSaleCoffeeDetail(scope.row, scope.$index,$event)"
+                                                             @change="updatePosSaleCoffeeDetail(scope.row, scope.$index,$event)">
+                                            </el-input-number>
+                                        </template>
+                                    </el-table-column>
 
-                                </el-row>-->
-                                <!-- <el-row>
+                                    <el-table-column
+                                            prop="amount"
+                                            :label="langConfig['amount']">
+                                    </el-table-column>
+                                </el-table>
+                                <!--<div class="el-table el-table&#45;&#45;fit el-table&#45;&#45;scrollable-y el-table&#45;&#45;enable-row-hover el-table&#45;&#45;enable-row-transition">
+                                    <div class="el-table__header-wrapper">
+                                        <table class="table table-responsive​​​ table-striped table-hover responstable">
+                                            <thead>
+                                            <tr>
+                                                <th>{{langConfig['no']}}</th>
+                                                <th>{{langConfig['qty']}}</th>
+                                                <th>{{langConfig['price']}}</th>
+                                                <th colspan="2">{{langConfig['amount']}}</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="el-table__body-wrapper is-scrolling-none"
+                                         style="height: 205px !important;">
 
-                                     <el-col :span="12">
-                                         <el-form-item :label="langConfig['term']" prop="termId">
-                                             <el-select style="display: block !important;"
-                                                        filterable clearable
-                                                        v-model="posSaleCoffeeForm.termId"
-                                                        placeholder="Term">
-                                                 <el-option
-                                                         v-for="item in termOption"
-                                                         :key="item.value"
-                                                         :label="item.label"
-                                                         :value="item.value"
-                                                         :disabled="item.disabled">
-                                                 </el-option>
-                                             </el-select>
-                                         </el-form-item>
-                                     </el-col>
-                                     <el-col :span="1">
-                                         <div class="">&nbsp;</div>
-                                     </el-col>
-                                     <el-col :span="11">
-                                         <el-form-item :label="langConfig['note']" prop="note">
-                                             <el-input type="textarea" v-model="posSaleCoffeeForm.note"
-                                                       :rows="3"></el-input>
-                                         </el-form-item>
-                                     </el-col>
+                                        <table class="table table-responsive​​​ table-striped table-hover responstable"
+                                               height="350 !important">
+                                            <tbody>
+                                            <span v-for="(posInvoiceDoc,index ) in this.posSaleCoffeeData" :key="index">
+                                    <tr>
+                                        <td style="vertical-align: middle;padding: 0px !important;" rowspan="2">{{index + 1}}</td>
+                                        <td colspan="3" style="padding: 0px !important;">{{posInvoiceDoc.itemName}} ({{posInvoiceDoc.type}})</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 0px !important;">
+                                            <el-input-number controls-position="right"
+                                                             placeholder="Please input Qty"
+                                                             size="mini"
+                                                             v-model.number=posInvoiceDoc.qty type='number'
+                                                             @keyup.native="updatePosInvoiceDetail(posInvoiceDoc, index)"
+                                                             @change="updatePosInvoiceDetail(posInvoiceDoc, index)">
+                                            </el-input-number>
+                                        </td>
+                                        <td style="padding: 0px !important;">
+                                            <el-input placeholder="Please input Price" size="mini"
+                                                      v-model.number=posInvoiceDoc.price
+                                                      type='number'
+                                                      disabled
+                                            ></el-input>
+                                        </td>
+                                        <td style="padding: 0px !important;">
+                                            <el-input placeholder="Amount" v-model.number=posInvoiceDoc.amount
+                                                      size="mini"
+                                                      disabled>
+                                            </el-input>
+                                        </td>
+                                        <td style="text-align: center;vertical-align: middle;padding: 0px !important;">
+                                            <el-button type="danger" icon="el-icon-delete" size="mini"
+                                                       @click="removePosInvoiceDetailByIndex(index,posInvoiceDoc)"></el-button>
+                                        </td>
+                                    </tr>
+                                    </span>
+                                            </tbody>
 
-                                 </el-row>-->
+                                        </table>
 
+                                    </div>
+                                </div>-->
                             </div>
-                            <!--</el-card>-->
+
                         </el-col>
                     </el-row>
                 </el-form>
-                <span slot="footer" class="dialog-footer fix-dialog-footer" style="background-color: black !important;"
+                <!--<span slot="footer" class="dialog-footer fix-dialog-footer" style="background-color: black !important;"
                 >
                 <hr style="margin-top: 0px !important;">
                 <el-row>
@@ -225,7 +292,7 @@
                                  class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}} <i>(Ctrl + Enter)</i></el-button>
                     </el-col>
                 </el-row>
-            </span>
+            </span>-->
 
                 <br>
             </slot>
@@ -266,15 +333,16 @@
         data() {
             return {
                 keyCode: [],
-                refForm: '',
+                refForm: 'posSaleCoffeeFormAdd',
                 multipleSelection: [],
-                posSaleCoffeeId: "",
+                posInvoiceId: "",
                 loading: false,
                 searchData: '',
                 isSearching: false,
                 typeDiscount: "",
                 categoryData: [],
                 productData: [],
+                productDataAll: [],
                 currencySymbol: "",
                 posSaleCoffeeData: [],
 
@@ -288,9 +356,9 @@
                     netTotal: 0,
                     balanceUnpaid: 0,
                     paid: 0,
-                    saleCoffeeDate: moment().toDate(),
+                    invoiceDate: moment().toDate(),
                     dueDate: moment().add(1, "month").toDate(),
-                    saleCoffeeNo: "",
+                    invoiceNo: "",
 
                     note: "",
 
@@ -322,44 +390,12 @@
 
                 },
                 rules: {
-                    saleCoffeeDate: [{
-                        type: 'date',
-                        required: true,
-                        message: 'Please input PosSaleCoffeeDate',
-                        trigger: 'blur'
-                    }],
-                    saleCoffeeNo: [{
-                        required: true,
-                        type: 'string',
-                        message: 'Please input SaleCoffee No',
-                        trigger: 'blur'
-                    }],
-                    discount: [{
-                        required: true,
-                        type: 'string',
-                        message: 'Please input Discount',
-                        trigger: 'blur'
-                    }],
-                    customerId: [{
-                        required: true,
-                        type: 'string',
-                        message: 'Please choose customer',
-                        trigger: 'change'
-                    }],
-                    termId: [{
-                        required: true,
-                        type: 'string',
-                        message: 'Please choose Term',
-                        trigger: 'change'
-                    }],
                     locationId: [{
                         required: true,
                         type: 'string',
                         message: 'Please choose Location',
                         trigger: 'change'
                     }],
-
-                    // note: [{required: true, type: 'string', message: 'Please input Memo', trigger: 'blur'}],
                 },
 
                 // Options
@@ -394,7 +430,8 @@
                 username: Meteor.user().username,
                 todaySt: "",
                 timeSt: "",
-                isCategoryData: false
+                isCategoryData: false,
+                qty: 0
             }
         },
         mounted() {
@@ -417,7 +454,7 @@
             this.time();
         },
         watch: {
-            "posSaleCoffeeForm.saleCoffeeDate"(val) {
+            "posSaleCoffeeForm.invoiceDate"(val) {
                 let vm = this;
                 if (vm.dialogUpdatePosSaleCoffee === false) {
                     vm.posSaleCoffeeForm.posSaleCoffeeDate = val;
@@ -440,19 +477,9 @@
                     this.getVoucherByRoleAndDate(val);
                 }
             },
-            /*dialogAddPosSaleCoffee(val) {
-                if (val) {
-                    this._inputMaskPosSaleCoffee();
-                }
-            },*/
             dialogUpdatePosSaleCoffee(val) {
                 if (val) {
                     this._inputMaskPosSaleCoffee();
-                }
-            },
-            "posSaleCoffeeForm.itemId"(val) {
-                if (val) {
-                    this.addToPosSaleCoffeeData(val);
                 }
             },
             "posSaleCoffeeForm.discount"(val) {
@@ -468,6 +495,9 @@
                     this.posSaleCoffeeForm.discountType = val;
                     this.getTotal();
                 }
+            },
+            "posSaleCoffeeForm.locationId"(val) {
+                this.findInvoiceActiveByLocationId(val);
             }
         },
         methods: {
@@ -545,25 +575,23 @@
                     }
                 ;
                 Meteor.call('queryPosCategory', selector, (err, result) => {
-                    console.log(result.content);
                     this.categoryData = result.content;
                     this.isCategoryData = result.content.length > 0 ? true : false;
                 })
             },
-            queryProduct(categoryId) {
-                console.log(categoryId);
-                let selector = {
-                        q: categoryId,
-                        filter: "categoryId",
-                        options: {
-                            skip: 0, limit: 100
-                        }
-                    }
-                ;
-                Meteor.call('queryPosProduct', selector, (err, result) => {
-                    console.log(result.content);
-                    this.productData = result.content;
+            queryProduct() {
+                Meteor.call('queryPosProductAll', (err, result) => {
+                    this.productDataAll = result;
                 })
+            },
+            queryProductByCategoryId(categoryId) {
+                let findProduct = function (element) {
+                    if (element.categoryId === categoryId) {
+                        return element;
+                    }
+                }
+                let pro = this.productDataAll.filter(findProduct);
+                this.productData = pro;
             },
             locationOpt() {
                 Meteor.call('queryLocationOption', (err, result) => {
@@ -627,10 +655,10 @@
                             remainKHR: vm.$_numeral(vm.posSaleCoffeeForm.remainKHR).value(),
                             remainTHB: vm.$_numeral(vm.posSaleCoffeeForm.remainTHB).value(),
 
-                            saleCoffeeDate: moment(vm.posSaleCoffeeForm.saleCoffeeDate).toDate(),
-                            saleCoffeeDateName: moment(vm.posSaleCoffeeForm.saleCoffeeDate).format("DD/MM/YYYY"),
+                            invoiceDate: moment(vm.posSaleCoffeeForm.invoiceDate).toDate(),
+                            invoiceDateName: moment(vm.posSaleCoffeeForm.invoiceDate).format("DD/MM/YYYY"),
                             dueDate: moment(vm.posSaleCoffeeForm.dueDate).toDate(),
-                            saleCoffeeNo: vm.posSaleCoffeeForm.saleCoffeeNo,
+                            invoiceNo: vm.posSaleCoffeeForm.invoiceNo,
 
                             note: vm.posSaleCoffeeForm.note,
 
@@ -639,48 +667,72 @@
 
                             discount: vm.$_numeral(vm.posSaleCoffeeForm.discount).value(),
                             discountValue: vm.$_numeral(vm.posSaleCoffeeForm.discountValue).value(),
-                            termId: vm.posSaleCoffeeForm.termId,
+                            termId: "001",
                             address: vm.posSaleCoffeeForm.address,
 
                             rolesArea: Session.get('area'),
                             paymentNumber: 1,
-                            customerId: vm.posSaleCoffeeForm.customerId,
+                            customerId: "001",
                             locationId: vm.posSaleCoffeeForm.locationId,
                             status: vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value() < vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posSaleCoffeeDoc.item = vm.posSaleCoffeeData;
-                        Meteor.call("insertPosSaleCoffee", posSaleCoffeeDoc, (err, result) => {
-                            if (!err) {
-                                if (isPrint) {
-                                    FlowRouter.go('/pos-data/posSaleCoffee/print?inv=' + result);
+                        if (vm.posInvoiceId === "") {
+                            Meteor.call("insertPosInvoice", posSaleCoffeeDoc, (err, result) => {
+                                if (!err) {
+                                    if (isPrint) {
+                                        FlowRouter.go('/pos-data/posInvoice/print?inv=' + result);
+                                    } else {
+                                        vm.$message({
+                                            duration: 1000,
+                                            message: this.langConfig['saveSuccess'],
+                                            type: 'success'
+                                        });
+                                    }
+
+                                    vm.getVoucherByRoleAndDate(moment().toDate());
+                                    vm.queryProduct();
+                                    vm.queryProductByCategoryId();
+
+                                    Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
+
+                                    vm.resetForm();
                                 } else {
-                                    vm.$message({
-                                        duration: 1000,
-                                        message: this.langConfig['saveSuccess'],
-                                        type: 'success'
+                                    vm.$notify.error({
+                                        duration: 5000,
+                                        title: 'Error',
+                                        message: err.error
+                                    });
+                                    /*vm.$message({
+                                        type: 'error',
+                                        message: err.error
+                                    });*/
+                                }
+                            })
+                        } else {
+                            Meteor.call("updatePosInvoice", posSaleCoffeeDoc, vm.posInvoiceId, (err, result) => {
+                                if (!err) {
+                                    if (isPrint) {
+                                        FlowRouter.go('/pos-data/posInvoice/print?inv=' + id);
+                                    } else {
+                                        vm.$message({
+                                            duration: 1000,
+                                            message: this.langConfig['saveSuccess'],
+                                            type: 'success'
+                                        });
+                                    }
+
+                                    Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
+                                    vm.resetForm();
+                                } else {
+                                    vm.$notify.error({
+                                        duration: 5000,
+                                        title: 'Error',
+                                        message: err.error
                                     });
                                 }
-                                if (isCloseDialog) {
-                                    this.dialogAddPosSaleCoffee = false;
-                                } else {
-                                    vm.getVoucherByRoleAndDate(moment().toDate());
-                                }
-
-                                Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
-
-                                vm.resetForm();
-                            } else {
-                                vm.$notify.error({
-                                    duration: 5000,
-                                    title: 'Error',
-                                    message: err.error
-                                });
-                                /*vm.$message({
-                                    type: 'error',
-                                    message: err.error
-                                });*/
-                            }
-                        })
+                            })
+                        }
 
                     }
                 })
@@ -690,161 +742,130 @@
 
             getVoucherByRoleAndDate(date) {
                 let vm = this;
-                Meteor.call("pos_getSaleCoffeeNoByRoleAndDate", Session.get("area"), date, (err, result) => {
+                Meteor.call("pos_getInvoiceNoByRoleAndDate", Session.get("area"), date, (err, result) => {
                     if (!err) {
-                        vm.posSaleCoffeeForm.saleCoffeeNo = result;
+                        vm.posSaleCoffeeForm.invoiceNo = result;
                     }
                 })
             },
 
 
-            addToPosSaleCoffeeData(val) {
+            addToPosSaleCoffeeData(val, data) {
                 let vm = this;
-
-                if (val === null) {
-                    val = vm.posSaleCoffeeForm.code;
-                }
-                if (val === "" || val === undefined) {
-                    this.$message({
-                        duration: 1000,
-                        message: "Item Can't Empty!!",
-                        type: 'error'
-                    });
-                    let s = new buzz.sound('/the-calling.mp3');
-                    s.play();
-                    return false;
-                }
-
                 let isFound = vm.posSaleCoffeeData.find(function (element) {
-                    return element.itemId === val || element.code === val;
+                    return element.itemId === data._id && element.type === data.type;
                 });
+                let indProduct = vm.productData.findIndex(k => k._id === data._id);
+                let indProductAll = vm.productDataAll.findIndex(k => k._id === data._id);
+                if (data.type === "S") {
+                    if (indProduct !== -1) {
+                        vm.productData[indProduct].smallQty = val;
+                        vm.productData[indProduct].qty = val;
+                    }
+                    vm.productDataAll[indProductAll].smallQty = val;
+                    vm.productDataAll[indProductAll].qty = val;
+                    vm.productDataAll[indProductAll].type = "S";
+                    vm.productDataAll[indProductAll].disableInputQty = false;
+
+                } else if (data.type === "L") {
+                    if (indProduct !== -1) {
+                        vm.productData[indProduct].largeQty = val;
+                        vm.productData[indProduct].qty = val;
+                    }
+                    vm.productDataAll[indProductAll].largeQty = val;
+                    vm.productDataAll[indProductAll].qty = val;
+                    vm.productDataAll[indProductAll].type = "L";
+                    vm.productDataAll[indProductAll].disableInputQty = false;
+
+                }
+
                 if (isFound !== undefined) {
                     this.$message({
-                        type: 'error',
-                        message: 'Item already add!'
+                        type: 'warning',
+                        message: 'កែប្រែចំនួន!'
                     });
-                    let s = new buzz.sound('/the-calling.mp3');
-                    s.play();
-                    return false;
-                }
-                vm.posSaleCoffeeForm.isRetail = true;
-                Meteor.call("queryPosProductById", val, (err, data) => {
-                    if (data) {
-                        Meteor.call("queryPosAverageCostById", data._id, Session.get("area"), vm.posSaleCoffeeForm.locationId, (err, dataStock) => {
-                            if (dataStock) {
-                                vm.posSaleCoffeeData.push({
-                                    itemId: data._id,
-                                    itemName: data.code + " : " + data.name,
-                                    code: data.code,
-                                    unit1: 1,
-                                    unit2: 1,
-                                    totalUnit: 1,
-                                    unitId: data.unitId,
-                                    unitName: data.unitName,
 
-                                    price: vm.posSaleCoffeeForm.isRetail === true ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
-                                    qty: vm.$_numeral(1).value(),
-                                    amount: vm.posSaleCoffeeForm.isRetail === true ? formatCurrency(data.rePrice) : formatCurrency(data.whPrice),
-                                    isRetail: true,
-                                    desc: "",
-                                    rawQty: vm.$_numeral(dataStock.qtyEnding).value()
-                                });
+                    let ind = vm.posSaleCoffeeData.findIndex(k => k.itemId === data._id && k.type === data.type);
+                    isFound.qty = val;
+                    isFound.totalUnit = val;
+                    isFound.amount = val * isFound.price;
 
-                                vm.posSaleCoffeeForm.itemId = "";
-                                vm.posSaleCoffeeForm.code = "";
-                                vm.$message({
-                                    duration: 1000,
-                                    message: `បន្ថែម ` + data.code + " : " + data.name + " បានជោគជ័យ !",
-                                    type: 'success'
-                                });
-
-                                this.getTotal();
-
-                            } else {
-                                vm.$message({
-                                    duration: 3000,
-                                    message: "ទំនិញនេះ អស់ពីស្តុកហើយ!!",
-                                    type: 'error'
-                                });
-                                let s = new buzz.sound('/the-calling.mp3');
-                                s.play();
-                            }
-                        })
-                    } else {
-                        vm.$message({
-                            duration: 1000,
-                            message: "មិនមានឈ្មេាះនេះឡើយ!!",
-                            type: 'error'
-                        });
-                        let s = new buzz.sound('/the-calling.mp3');
-                        s.play();
+                    vm.posSaleCoffeeData[ind] = isFound;
+                    if (val === 0) {
+                        vm.posSaleCoffeeData.splice(ind, 1);
                     }
-                })
-            },
-            removePosSaleCoffeeDetailByIndex(index, row) {
-                this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning'
-                }).then(() => {
 
-                    this.posSaleCoffeeData.splice(index, 1);
-                    this.$message({
-                        message: `លុប ${row.itemName} បានជោគជ័យ`,
+                } else {
+                    vm.posSaleCoffeeData.push({
+                        itemId: data._id,
+                        itemName: data.name,
+                        code: data.code,
+                        unit1: 1,
+                        unit2: 1,
+                        totalUnit: val,
+                        unitId: data.unitId,
+                        unitName: data.unitName,
+                        price: data.type === "S" ? vm.$_numeral(data.rePrice).value() : vm.$_numeral(data.whPrice).value(),
+                        qty: val,
+                        amount: data.type === "S" ? formatCurrency(data.rePrice * val) : formatCurrency(data.whPrice * val),
+                        isRetail: true,
+                        desc: "",
+                        rawQty: 0,
+                        type: data.type
+                    });
+                    vm.$message({
+                        duration: 1000,
+                        message: `បន្ថែម ` + data.code + " : " + data.name + " បានជោគជ័យ !",
                         type: 'success'
                     });
-                    this.getTotal();
+                }
 
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: 'Delete canceled'
-                    });
-                });
+
+                this.getTotal();
+
+
             }
             ,
-            updatePosSaleCoffeeDetail(row, index) {
-                if (row.qty > row.rawQty) {
-                    this.$message({
-                        type: 'error',
-                        message: 'ស្តុកមានមិនគ្រប់គ្រាន់ ។ ស្តុកនៅសល់តែ ' + row.rawQty + ' ប៉ុន្នោះ !!'
-                    });
-                }
-                row.totalUnit = this.$_math.round(row.unit1 * row.unit2 * row.qty, 2);
+            updatePosSaleCoffeeDetail(row, index, val) {
+                let vm = this;
+                row.totalUnit = this.$_math.round(row.unit1 * row.unit2 * val, 2);
                 row.amount = formatCurrency(row.price * row.totalUnit);
+                row.qty = formatCurrency(val);
+
+                let indProduct = vm.productData.findIndex(k => k._id === row.itemId);
+                let indProductAll = vm.productDataAll.findIndex(k => k._id === row.itemId);
+                if (row.type === "S") {
+                    if (indProduct !== -1) {
+                        vm.productData[indProduct].smallQty = val;
+                        vm.productData[indProduct].type = "S";
+                    }
+                    vm.productDataAll[indProductAll].smallQty = val;
+                    vm.productDataAll[indProductAll].type = "S";
+
+
+                } else if (row.type === "L") {
+                    if (indProduct !== -1) {
+                        vm.productData[indProduct].largeQty = val;
+                        vm.productData[indProduct].type = "L";
+                    }
+                    vm.productDataAll[indProductAll].largeQty = val;
+                    vm.productDataAll[indProductAll].type = "L";
+                }
+                if (indProduct !== -1) {
+                    vm.productData[indProduct].qty = val;
+                }
+                vm.productDataAll[indProductAll].qty = val;
+
+                vm.productDataAll[indProductAll].disableInputQty = row.type !== "" ? false : true;
+                if (indProduct !== -1) {
+                    vm.productData[indProduct].disableInputQty = row.type !== "" ? false : true;
+                }
 
                 this.posSaleCoffeeData[index] = row;
-                /*this.$message({
-                    duration: 1000,
-                    message: `Update Row Number ` + newIndex + " Successfully !",
-                    type: 'success'
-                });*/
+                if (val === 0) {
+                    this.posSaleCoffeeData.splice(index, 1);
+                }
                 this.getTotal();
-            }
-
-            ,
-            updatePosSaleCoffeeDetailByRetail(row, index) {
-                let vm = this;
-                Meteor.call("queryPosProductById", row.itemId, (err, data) => {
-                    if (data) {
-                        if (row.isRetail === true) {
-                            row.price = data.rePrice;
-                            row.amount = vm.$_numeral(formatCurrency(data.rePrice * row.totalUnit)).value();
-                        } else {
-                            row.price = data.whPrice;
-                            row.amount = vm.$_numeral(formatCurrency(data.whPrice * row.totalUnit)).value();
-
-                        }
-                        this.posSaleCoffeeData[index] = row;
-                        let newIndex = index + 1;
-                        this.$message({
-                            duration: 1000,
-                            message: `Update Row Number ` + newIndex + " Successfully !",
-                            type: 'success'
-                        });
-                        this.getTotal();
-                    }
-                })
             }
             ,
             clearZero(event) {
@@ -869,18 +890,16 @@
                 this.posSaleCoffeeForm.paidKHR = 0;
                 this.posSaleCoffeeForm.paidTHB = 0;
                 this.posSaleCoffeeForm.discount = 0;
-                this.posSaleCoffeeForm.saleCoffeeNo = "";
                 this.posSaleCoffeeForm.customerId = "";
                 this.posSaleCoffeeForm.locationId = "";
                 this.posSaleCoffeeForm.balanceNotCut = 0;
 
-
+                this.posInvoiceId = "";
                 if (this.$refs["posSaleCoffeeFormAdd"]) {
                     this.$refs["posSaleCoffeeFormAdd"].resetFields();
                 }
-                if (this.$refs["posSaleCoffeeFormUpdate"]) {
-                    this.$refs["posSaleCoffeeFormUpdate"].resetFields();
-                }
+                this.queryProduct();
+                this.queryProductByCategoryId("");
                 this.getTotal();
 
             }
@@ -931,14 +950,63 @@
                     FlowRouter.go('/pos-data/posSaleCoffee/print?inv=' + data._id);
                 }
 
+            },
+            handleChange(data, e) {
+                this.addToPosSaleCoffeeData(e, data);
+            },
+            handleClickBtn(data, btn, index) {
+                data.type = btn;
+                data.disableInputQty = data.type !== "" ? false : true;
+
+                if (data.type === "S") {
+                    data.qty = data.smallQty === 0 ? 1 : data.smallQty;
+                } else if (data.type === "L") {
+                    data.qty = data.largeQty === 0 ? 1 : data.largeQty;
+                }
+                this.addToPosSaleCoffeeData(data.qty, data);
+                this.productData[index] = data;
+            },
+            findInvoiceActiveByLocationId(locationId) {
+                let vm = this;
+                Meteor.call("queryInvoiceActiveByLocationId", locationId, (err, result) => {
+                    if (result) {
+                        vm.posInvoiceId = result._id;
+                        result.item.forEach((obj) => {
+                            if (obj) {
+                                let data = vm.productDataAll.find(function (element) {
+                                    return element._id === obj.itemId;
+                                });
+                                data.type = obj.type;
+                                if (data) {
+                                    vm.addToPosSaleCoffeeData(obj.qty, data);
+                                }
+                            }
+                        })
+                    } else {
+                        this.posSaleCoffeeData = [];
+                        this.posSaleCoffeeForm.discountValue = 0;
+                        this.posSaleCoffeeForm.code = "";
+                        this.posSaleCoffeeForm.paidUSD = 0;
+                        this.posSaleCoffeeForm.paidKHR = 0;
+                        this.posSaleCoffeeForm.paidTHB = 0;
+                        this.posSaleCoffeeForm.discount = 0;
+                        this.posSaleCoffeeForm.balanceNotCut = 0;
+                        this.posInvoiceId = "";
+                        this.queryProduct();
+                        this.queryProductByCategoryId("");
+                        this.getTotal();
+                    }
+                })
             }
         },
         created() {
             this.isSearching = true;
             this.getTotal();
             this.queryCategory();
+            this.queryProduct();
             this.locationOpt();
             Meteor.subscribe('Pos_InvoiceReact');
+            this.getVoucherByRoleAndDate(moment().toDate());
 
             Meteor.call('getWaterBillingSetup', Session.get('area'), (err, result) => {
                 if (result) {
@@ -1001,6 +1069,39 @@
     .clearfix:after {
         clear: both
     }
+
+    .plan-ribbon-btn1 {
+        font-size: 15px;
+        color: #fff;
+        text-align: center;
+        position: absolute;
+        transform: translate(-50%, -240%);
+        -ms-transform: translate(-50%, -240%);
+        float: left !important;
+        z-index: 1;
+    }
+
+    .plan-ribbon-btn2 {
+        font-size: 15px;
+        color: #fff;
+        text-align: center;
+        position: absolute;
+        margin-top: 40px !important;
+        transform: translate(-50%, -240%);
+        -ms-transform: translate(-50%, -240%);
+        float: left !important;
+        z-index: 1;
+    }
+
+    .el-table--scrollable-y .el-table__body-wrapper {
+        overflow-y: auto;
+    }
+
+    .el-table__body-wrapper {
+        overflow: hidden;
+        position: relative;
+    }
+
 </style>
 
 

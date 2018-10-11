@@ -148,7 +148,9 @@
       "paidOnSaleOrderRaw": "Prepay",
       "barcode": "Barcode",
       "reset": "Reset",
-      "selectCategory": "Select Category"
+      "selectCategory": "Select Category",
+      "tableNumber": "Table",
+      "pay": "Pay"
     },
     "receivePayment": {
       "searchHere": "Search Here ...",
@@ -839,7 +841,9 @@
       "paidOnSaleOrderRaw": "ប្រាក់កក់",
       "barcode": "លេខកូដ",
       "reset": "បោះបង់",
-      "selectCategory": "ជ្រើសរើសប្រភេទ"
+      "selectCategory": "ជ្រើសរើសប្រភេទ",
+      "tableNumber": "តុលេខ",
+      "pay": "គិតលុយ"
     },
     "receivePayment": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
