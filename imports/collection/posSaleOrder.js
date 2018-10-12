@@ -101,6 +101,13 @@ Pos_SaleOrder.schema = new SimpleSchema({
         //    Partial
         //    Complete
     },
+    receiveStatus: {
+        type: String,
+        defaultValue: "Active"
+        //    Active
+        //    Partial
+        //    Complete
+    },
     receiveNumber: {
         type: Number,
         optional: true,

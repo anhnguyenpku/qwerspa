@@ -470,7 +470,8 @@
                         <!--<el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i
                                 class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 -->
-                         <el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
+                         <el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i
+                                 class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 
                         <el-button type="warning" @click="savePosSaleOrder(false,$event,false)"><i
                                 class="el-icon-circle-check"> </i>&nbsp; {{langConfig['saveAndNew']}} <i>(Ctrl + Alt + Enter)</i></el-button>
@@ -824,7 +825,8 @@
                          <!--<el-button type="success" @click.native="updatePosSaleOrder(posSaleOrderId,true)"><i
                                  class="fa fa-print"></i>&nbsp;&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 -->
-                          <el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
+                          <el-button type="success" @click="savePosSaleOrder(true,$event,true)"><i
+                                  class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}}</el-button>
 
                          <el-button type="primary" @click.native="updatePosSaleOrder(posSaleOrderId,false)"><i
                                  class="el-icon-circle-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
@@ -1364,6 +1366,7 @@
                             receiveNumber: 1,
                             customerId: vm.posSaleOrderForm.customerId,
                             locationId: vm.posSaleOrderForm.locationId,
+                            receiveStatus: "Active",
                             status: vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() < vm.$_numeral(vm.posSaleOrderForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posSaleOrderDoc.item = vm.posSaleOrderData;
@@ -1432,6 +1435,7 @@
                             customerId: vm.posSaleOrderForm.customerId,
                             _id: id,
                             locationId: vm.posSaleOrderForm.locationId,
+                            receiveStatus: "Active",
                             status: vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posSaleOrderForm.balanceUnpaid).value() < vm.$_numeral(vm.posSaleOrderForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posSaleOrderDoc.item = vm.posSaleOrderData;

@@ -36,7 +36,7 @@ Meteor.methods({
             {updatedAt: {$gte: moment(params.date).endOf("day").toDate()}}
         ];*/
 
-        parameter.status = {$ne: "Complete"};
+        parameter.receiveStatus = {$ne: "Complete"};
 
         let saleOrderList;
         let saleOrderHTML = "";

@@ -236,9 +236,9 @@ Meteor.methods({
                             _id: obj.saleOrderId
                         }).count();
                         if (countNotReceive === 0) {
-                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Complete"}});
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {receiveStatus: "Complete"}});
                         } else {
-                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Partial"}});
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {receiveStatus: "Partial"}});
                         }
 
                     }
@@ -387,9 +387,9 @@ Meteor.methods({
                             _id: obj.saleOrderId
                         }).count();
                         if (countNotReceive == 0) {
-                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Complete"}});
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {receiveStatus: "Complete"}});
                         } else {
-                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {status: "Partial"}});
+                            Pos_SaleOrder.direct.update({_id: obj.saleOrderId}, {$set: {receiveStatus: "Partial"}});
                         }
 
                     }
@@ -420,7 +420,7 @@ Meteor.methods({
         return invoiceNo + "";
     },
     queryPosSaleOrderByCustomerId(customerId) {
-        let data = Pos_SaleOrder.find({customerId: customerId, status: {$ne: "Complete"}}).fetch();
+        let data = Pos_SaleOrder.find({customerId: customerId, receiveStatus: {$ne: "Complete"}}).fetch();
         let dataObj = {};
         let dataArr = [];
         let balanceNotCut = 0;

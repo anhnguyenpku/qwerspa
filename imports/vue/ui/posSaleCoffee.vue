@@ -140,7 +140,7 @@
                                     </div>
                                     <div class="ui  attached segment feature">
                                         <div class="amount">
-                                            {{posSaleCoffeeForm.balanceUnpaid}}{{currencySymbol}}
+                                            {{posSaleCoffeeForm.balanceUnPaid}}{{currencySymbol}}
                                         </div>
                                     </div>
                                 </div>
@@ -354,7 +354,7 @@
                     amount: 0,
                     total: 0,
                     netTotal: 0,
-                    balanceUnpaid: 0,
+                    balanceUnPaid: 0,
                     paid: 0,
                     invoiceDate: moment().toDate(),
                     dueDate: moment().add(1, "month").toDate(),
@@ -644,8 +644,8 @@
                         let posSaleCoffeeDoc = {
                             total: vm.$_numeral(vm.posSaleCoffeeForm.total).value(),
                             netTotal: vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value(),
-                            balanceUnpaid: vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(),
-                            paid: vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value() - vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(),
+                            balanceUnPaid: vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(),
+                            paid: vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value() - vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(),
 
                             paidUSD: vm.$_numeral(vm.posSaleCoffeeForm.paidUSD).value(),
                             paidKHR: vm.$_numeral(vm.posSaleCoffeeForm.paidKHR).value(),
@@ -674,7 +674,7 @@
                             paymentNumber: 1,
                             customerId: "001",
                             locationId: vm.posSaleCoffeeForm.locationId,
-                            status: vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value() < vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value() ? "Partial" : "Active"
+                            status: vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() < vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value() ? "Partial" : "Active"
                         };
                         posSaleCoffeeDoc.item = vm.posSaleCoffeeData;
                         if (vm.posInvoiceId === "") {
@@ -921,25 +921,25 @@
 
                 if (vm.posSaleCoffeeForm.discountType === "Amount") {
                     vm.posSaleCoffeeForm.netTotal = formatCurrencyLast(total - vm.posSaleCoffeeForm.discount, companyDoc.baseCurrency);
-                    vm.posSaleCoffeeForm.balanceUnpaid = formatCurrencyLast(total - vm.posSaleCoffeeForm.discount - vm.$_numeral(vm.posSaleCoffeeForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posSaleCoffeeForm.balanceUnPaid = formatCurrencyLast(total - vm.posSaleCoffeeForm.discount - vm.$_numeral(vm.posSaleCoffeeForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(), Session.get("area")), "USD");
-                    vm.posSaleCoffeeForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(), Session.get("area")), "KHR");
-                    vm.posSaleCoffeeForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(), Session.get("area")), "THB");
+                    vm.posSaleCoffeeForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "USD");
+                    vm.posSaleCoffeeForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "KHR");
+                    vm.posSaleCoffeeForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "THB");
                     vm.posSaleCoffeeForm.discountValue = formatCurrencyLast(vm.posSaleCoffeeForm.discount, companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.balanceUnpaid = vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value() <= 0 ? 0 : vm.posSaleCoffeeForm.balanceUnpaid;
+                    vm.posSaleCoffeeForm.balanceUnPaid = vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() <= 0 ? 0 : vm.posSaleCoffeeForm.balanceUnPaid;
                     this.typeDiscount = getCurrencySymbolById(companyDoc.baseCurrency);
                 } else {
                     vm.posSaleCoffeeForm.netTotal = formatCurrencyLast(total - (total * vm.posSaleCoffeeForm.discount / 100), companyDoc.baseCurrency);
-                    vm.posSaleCoffeeForm.balanceUnpaid = formatCurrencyLast(total - (total * vm.posSaleCoffeeForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posSaleCoffeeForm.balanceUnPaid = formatCurrencyLast(total - (total * vm.posSaleCoffeeForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(), Session.get("area")), "USD");
-                    vm.posSaleCoffeeForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(), Session.get("area")), "KHR");
-                    vm.posSaleCoffeeForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value(), Session.get("area")), "THB");
+                    vm.posSaleCoffeeForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "USD");
+                    vm.posSaleCoffeeForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "KHR");
+                    vm.posSaleCoffeeForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "THB");
                     vm.posSaleCoffeeForm.discountValue = formatCurrencyLast((total * vm.posSaleCoffeeForm.discount / 100), companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.balanceUnpaid = vm.$_numeral(vm.posSaleCoffeeForm.balanceUnpaid).value() <= 0 ? 0 : vm.posSaleCoffeeForm.balanceUnpaid;
+                    vm.posSaleCoffeeForm.balanceUnPaid = vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() <= 0 ? 0 : vm.posSaleCoffeeForm.balanceUnPaid;
                     this.typeDiscount = "%";
                 }
             },
