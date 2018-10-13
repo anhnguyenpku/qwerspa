@@ -28,7 +28,7 @@
                                     v-model="searchData"
                             >
                             </el-input>-->
-                            <el-button type="success" @click="savePosSaleCoffee(true,$event,true)"><i
+                            <el-button type="success" @click="dialogPayMoney=true"><i
                                     class="fa fa-print"></i>&nbsp; {{langConfig['pay']}} <i>( + )</i>
                             </el-button>
 

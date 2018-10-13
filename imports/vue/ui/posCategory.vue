@@ -391,6 +391,8 @@
                 let vm = this;
                 this.$refs["posCategoryFormAdd"].validate((valid) => {
                         if (valid) {
+                            let imageId = "";
+                            let imagePath = "";
                             if (vm.thumbImgCroppa && vm.thumbImgCroppa.hasImage() && vm.imgUrl) {
                                 const upload = Images.insert({
                                     file: vm.imgUrl,
@@ -408,8 +410,8 @@
                                     if (error) {
                                         console.log(error.message);
                                     } else {
-                                        let imageId = fileObj._id;
-                                        let imagePath = fileObj._downloadRoute + "/" + fileObj._collectionName + "/" + fileObj._id + "/original/" + fileObj._id + fileObj.extensionWithDot;
+                                        imageId = fileObj._id;
+                                        imagePath = fileObj._downloadRoute + "/" + fileObj._collectionName + "/" + fileObj._id + "/original/" + fileObj._id + fileObj.extensionWithDot;
 
                                         let posCategoryDoc = {
                                             code: vm.posCategoryForm.code,
