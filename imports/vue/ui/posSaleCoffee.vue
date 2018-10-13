@@ -18,10 +18,10 @@
                     <br>
                     <el-row type="flex" justify="center">
                         <el-col :span="2"></el-col>
-                        <el-col :span="10" style="font-family: 'Khmer OS Freehand';text-align: left !important;"><h2>
+                        <el-col :span="9" style="font-family: 'Khmer OS Freehand';text-align: left !important;"><h2>
                             {{langConfig['selectCategory']}}</h2>
                         </el-col>
-                        <el-col :span="11">
+                        <el-col :span="12">
                             <!--<el-input
                                     :placeholder="langConfig['searchHere']"
                                     suffix-icon="el-icon-search"
@@ -212,93 +212,117 @@
                                             :label="langConfig['amount']">
                                     </el-table-column>
                                 </el-table>
-                                <!--<div class="el-table el-table&#45;&#45;fit el-table&#45;&#45;scrollable-y el-table&#45;&#45;enable-row-hover el-table&#45;&#45;enable-row-transition">
-                                    <div class="el-table__header-wrapper">
-                                        <table class="table table-responsive​​​ table-striped table-hover responstable">
-                                            <thead>
-                                            <tr>
-                                                <th>{{langConfig['no']}}</th>
-                                                <th>{{langConfig['qty']}}</th>
-                                                <th>{{langConfig['price']}}</th>
-                                                <th colspan="2">{{langConfig['amount']}}</th>
-                                            </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                    <div class="el-table__body-wrapper is-scrolling-none"
-                                         style="height: 205px !important;">
-
-                                        <table class="table table-responsive​​​ table-striped table-hover responstable"
-                                               height="350 !important">
-                                            <tbody>
-                                            <span v-for="(posInvoiceDoc,index ) in this.posSaleCoffeeData" :key="index">
-                                    <tr>
-                                        <td style="vertical-align: middle;padding: 0px !important;" rowspan="2">{{index + 1}}</td>
-                                        <td colspan="3" style="padding: 0px !important;">{{posInvoiceDoc.itemName}} ({{posInvoiceDoc.type}})</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 0px !important;">
-                                            <el-input-number controls-position="right"
-                                                             placeholder="Please input Qty"
-                                                             size="mini"
-                                                             v-model.number=posInvoiceDoc.qty type='number'
-                                                             @keyup.native="updatePosInvoiceDetail(posInvoiceDoc, index)"
-                                                             @change="updatePosInvoiceDetail(posInvoiceDoc, index)">
-                                            </el-input-number>
-                                        </td>
-                                        <td style="padding: 0px !important;">
-                                            <el-input placeholder="Please input Price" size="mini"
-                                                      v-model.number=posInvoiceDoc.price
-                                                      type='number'
-                                                      disabled
-                                            ></el-input>
-                                        </td>
-                                        <td style="padding: 0px !important;">
-                                            <el-input placeholder="Amount" v-model.number=posInvoiceDoc.amount
-                                                      size="mini"
-                                                      disabled>
-                                            </el-input>
-                                        </td>
-                                        <td style="text-align: center;vertical-align: middle;padding: 0px !important;">
-                                            <el-button type="danger" icon="el-icon-delete" size="mini"
-                                                       @click="removePosInvoiceDetailByIndex(index,posInvoiceDoc)"></el-button>
-                                        </td>
-                                    </tr>
-                                    </span>
-                                            </tbody>
-
-                                        </table>
-
-                                    </div>
-                                </div>-->
                             </div>
 
                         </el-col>
                     </el-row>
                 </el-form>
-                <!--<span slot="footer" class="dialog-footer fix-dialog-footer" style="background-color: black !important;"
-                >
-                <hr style="margin-top: 0px !important;">
-                <el-row>
-                    <el-col :span="12" style="text-align: left !important;">
-                        <el-button type="danger" @click.native="dialogAddPosSaleCoffee= false, cancel(),resetForm()"> <i
-                                class="el-icon-circle-cross"> </i>&nbsp;{{langConfig['reset']}} <i>(ESC)</i></el-button>
-                    </el-col>
-                    <el-col :span="11" class="pull-right" style="text-align: right !important;">
-                        <el-button type="primary" @click.native="savePosSaleCoffee(true,$event,false)"><i
-                                class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Alt + Enter)</i></el-button>
-
-                         <el-button type="success" @click="savePosSaleCoffee(true,$event,true)"><i
-                                 class="fa fa-print"></i>&nbsp; {{langConfig['saveAndPrint']}} <i>(Ctrl + Enter)</i></el-button>
-                    </el-col>
-                </el-row>
-            </span>-->
-
                 <br>
             </slot>
             <!--End Pagination-->
         </div>
         </body>
+
+        <el-dialog
+                :title="langConfig['pay']"
+                :visible.sync="dialogPayMoney"
+                width="30%">
+            <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
+            <el-form :model="posSaleCoffeeForm" :rules="rules" ref="posSaleCoffeeFormPayment" label-width="120px"
+                     class="posSaleCoffeeForm">
+                <div class="ui segments plan">
+                    <div class="ui top attached segment teal inverted plan-title">
+                        <span class="plan-ribbon red">{{posSaleCoffeeForm.discountValue}}{{currencySymbol}}</span>
+                        <span class="ui header">{{langConfig['balanceDue']}}</span>
+
+                    </div>
+                    <div class="ui  attached segment feature">
+                        <div class="amount">
+                            {{posSaleCoffeeForm.balanceUnPaid}}{{currencySymbol}}
+                        </div>
+                    </div>
+                </div>
+
+
+                <el-form-item :label="langConfig['discount']">
+                    <el-row>
+                        <el-col :span="14">
+                            <el-radio-group v-model="posSaleCoffeeForm.discountType">
+                                <el-radio-button v-for="mt in discountTypeOption" :label="mt.value"
+                                                 :key="mt.value"
+                                >
+                                    {{langConfig[mt.label]}}
+                                </el-radio-button>
+
+                            </el-radio-group>
+                        </el-col>
+                        <el-col :span="10">
+                            <el-input :label="langConfig['discount']" placeholder="Amount Discount" prop="discount"
+                                      v-model.number="posSaleCoffeeForm.discount" type='number'>
+                                <template slot="append">{{typeDiscount}}</template>
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <el-form-item :label="langConfig['netTotal']">
+
+                    <el-input :placeholder="langConfig['netTotal']"
+                              v-model.number="posSaleCoffeeForm.netTotal"
+                              disabled>
+                        <template slot="append">{{currencySymbol}}</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['paidDollar']">
+
+                    <el-input placeholder="USD"
+                              v-model.number="posSaleCoffeeForm.paidUSD"
+                              type='number'
+                              @change.native="getTotal()" @focus.native="clearZero($event)"
+                              @keyup.native="getTotal()"
+
+                    >
+                        <el-button slot="append" @click="clickUSD(posSaleCoffeeForm.remainUSD)">
+                            {{posSaleCoffeeForm.remainUSD}} $
+                        </el-button>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item :label="langConfig['paidRiel']">
+
+
+                    <el-input placeholder="KHR" @change="getTotal()"
+                              @keyup.native="getTotal()"
+                              v-model.number="posSaleCoffeeForm.paidKHR" type='number'
+                    >
+                        <el-button slot="append" @click="clickKHR(posSaleCoffeeForm.remainKHR)">
+                            {{posSaleCoffeeForm.remainKHR}} ៛
+                        </el-button>
+                    </el-input>
+                </el-form-item>
+                <el-form-item :label="langConfig['paidBaht']">
+
+                    <el-input placeholder="THB"
+                              v-model.number="posSaleCoffeeForm.paidTHB"
+                              type='number'
+                              @change="getTotal()"
+                              @keyup.native="getTotal()"
+                    >
+                        <el-button slot="append" @click="clickTHB(posSaleCoffeeForm.remainTHB)">
+                            {{posSaleCoffeeForm.remainTHB}} B
+                        </el-button>
+                    </el-input>
+                </el-form-item>
+
+                <hr style="margin-top: 0px !important;">
+                <el-row class="pull-right">
+                    <el-button type="primary" @click="savePosSaleCoffee(true,$event,true)">{{langConfig['pay']}} <i>(Enter)</i>
+                    </el-button>
+                </el-row>
+                <br>
+            </el-form>
+        </el-dialog>
+
+
     </div>
 </template>
 
@@ -345,6 +369,7 @@
                 productDataAll: [],
                 currencySymbol: "",
                 posSaleCoffeeData: [],
+                dialogPayMoney: false,
 
                 posSaleCoffeeForm: {
                     itemId: "",
@@ -418,7 +443,7 @@
                 type: "",
                 posSaleCoffeeDetail: {},
                 discountTypeOption: [
-                    {label: "amount", value: "Amount"},
+                    {label: "amountDiscount", value: "Amount"},
                     {label: "percent", value: "Percent"}
                 ],
                 locationOption: [],
@@ -444,11 +469,12 @@
                 }
             };
 
-            let elem = this.$jQuery('el-dialog.dialogSaleCoffee');
+
+            let elem = this.$jQuery('.pos_SaleCoffee');
             let checkEvent = $._data($('body').get(0), 'events');
             if (checkEvent.keyup.length <= 1) {
                 this.$nextTick(() => {
-                    this.$jQuery('body').on('keyup', elem, this.barcodeScanSaleCoffee);
+                    this.$jQuery('body').on('keydown', elem, this.inputHandler);
                 })
             }
             this.time();
@@ -501,6 +527,18 @@
             }
         },
         methods: {
+            clickTHB(val) {
+                this.posSaleCoffeeForm.paidTHB = this.$_numeral(val).value();
+                this.getTotal();
+            },
+            clickUSD(val) {
+                this.posSaleCoffeeForm.paidUSD = this.$_numeral(val).value();
+                this.getTotal();
+            },
+            clickKHR(val) {
+                this.posSaleCoffeeForm.paidKHR = this.$_numeral(val).value();
+                this.getTotal();
+            },
             goToInvoice() {
                 FlowRouter.go("/pos-sale/posInvoice");
             },
@@ -536,28 +574,51 @@
 
                 }, 200)*/
             },
-            barcodeScanSaleCoffee(e) {
-                if (this.dialogAddPosSaleCoffee === true || this.dialogUpdatePosSaleCoffee === true) {
-                    let scannerSensitivity = 100;
-                    if (e.keyCode !== 13 && !isNaN(e.key)) {
-                        this.takeBarcode += e.key;
-                    }
-                    this.timeStamp.push(Date.now());
-                    if (this.timeStamp.length > 1) {
-                        if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
-                            this.takeBarcode = '';
-                            this.timeStamp = [];
-                        } else {
-                            if (e.keyCode === 13) {
-                                this.posSaleCoffeeForm.code = this.takeBarcode;
-                                this.addToPosSaleCoffeeData(null);
-                                this.timeStamp = [];
-                                this.takeBarcode = ''
-                            }
+            inputHandler(e) {
+                let vm = this;
+                if (e.data.init(0).selector === ".pos_SaleCoffee") {
+                    if (vm.dialogPayMoney === false) {
+                        if (e.keyCode === 13 && e.ctrlKey) {
+                            e.preventDefault();
+                            vm.savePosSaleCoffee(false, e, false);
+                        } else if (e.keyCode === 27 && !e.ctrlKey && !e.altKey) {
+                            e.preventDefault();
+                            vm.resetForm();
+                        } else if (e.keyCode === 107 && !e.ctrlKey && !e.altKey) {
+                            e.preventDefault();
+                            vm.dialogPayMoney = true;
+                        }
+                    } else {
+                        if (e.keyCode === 13) {
+                            e.preventDefault();
+                            vm.savePosSaleCoffee(false, e, true);
                         }
                     }
                 }
+
             },
+            /* barcodeScanSaleCoffee(e) {
+                 if (this.dialogAddPosSaleCoffee === true || this.dialogUpdatePosSaleCoffee === true) {
+                     let scannerSensitivity = 100;
+                     if (e.keyCode !== 13 && !isNaN(e.key)) {
+                         this.takeBarcode += e.key;
+                     }
+                     this.timeStamp.push(Date.now());
+                     if (this.timeStamp.length > 1) {
+                         if (this.timeStamp[1] - this.timeStamp[0] >= scannerSensitivity) {
+                             this.takeBarcode = '';
+                             this.timeStamp = [];
+                         } else {
+                             if (e.keyCode === 13) {
+                                 this.posSaleCoffeeForm.code = this.takeBarcode;
+                                 this.addToPosSaleCoffeeData(null);
+                                 this.timeStamp = [];
+                                 this.takeBarcode = ''
+                             }
+                         }
+                     }
+                 }
+             },*/
             itemOpt() {
                 let selector = {};
                 // selector.productType = "Inventory";
@@ -697,6 +758,7 @@
                                     Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
 
                                     vm.resetForm();
+                                    vm.dialogPayMoney = false;
                                 } else {
                                     vm.$notify.error({
                                         duration: 5000,

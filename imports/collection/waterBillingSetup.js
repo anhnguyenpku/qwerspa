@@ -111,6 +111,11 @@ WB_waterBillingSetup.schema = new SimpleSchema({
     website: {
         type: String,
         optional: true
+    },
+    validateStock: {
+        type: Boolean,
+        optional: true,
+        defaultValue: false
     }
 });
 

@@ -184,6 +184,11 @@
                                     <el-form-item label="Round THB">
                                         <el-input-number v-model="form.thbDigit" :step="2"></el-input-number>
                                     </el-form-item>
+
+                                    <el-form-item label="Validate Stock">
+                                        <el-switch v-model="form.validateStock">
+                                        </el-switch>
+                                    </el-form-item>
                                 </el-col>
                             </el-row>
 
@@ -291,7 +296,8 @@
                     khAddress: "",
                     integratedPosAccount: false,
                     depreciationType: "",
-                    depreciationPerTime: 12
+                    depreciationPerTime: 12,
+                    validateStock: false
                 },
                 rules: {
                     khName: [
@@ -392,7 +398,8 @@
                             website: '',
                             director: '',
                             province: '',
-                            khAddress: ""
+                            khAddress: "",
+                            validateStock: ""
                         };
                         this.$message({
                             message: 'Successfully',

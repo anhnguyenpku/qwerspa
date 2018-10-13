@@ -7,7 +7,7 @@ Meteor.startup(function () {
         const rawLocation = Pos_Location.rawCollection();
         rawLocation.insert({
             _id: "001", name: "ទូទៅ", code: "001", isMainLocation: true,
-            createdUser: us._id
+            createdUser: us._id, applyUser: []
         });
     }
 

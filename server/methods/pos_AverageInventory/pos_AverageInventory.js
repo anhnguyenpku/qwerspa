@@ -771,28 +771,33 @@ Meteor.methods({
     },
 
     checkStockBalance(data, isUpdate, dataBeforeUpdate) {
-        if (data.item.length > 0) {
-            let i = 0;
-            data.item.forEach((doc) => {
-                let onHandInventory = Pos_AverageInventory.findOne({
-                    itemId: doc.itemId,
-                    locationId: data.locationId,
-                    rolesArea: data.rolesArea
-                }, {sort: {createdAt: -1}});
-                if (isUpdate === true) {
-                    let oldDoc = dataBeforeUpdate.item.find(function (element) {
-                        return element.itemId === doc.itemId;
-                    });
-                    if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty - oldDoc.qty) {
-                        i++;
+        let setup = WB_waterBillingSetup.findOne();
+        if (setup.validateStock === true) {
+            if (data.item.length > 0) {
+                let i = 0;
+                data.item.forEach((doc) => {
+                    let onHandInventory = Pos_AverageInventory.findOne({
+                        itemId: doc.itemId,
+                        locationId: data.locationId,
+                        rolesArea: data.rolesArea
+                    }, {sort: {createdAt: -1}});
+                    if (isUpdate === true) {
+                        let oldDoc = dataBeforeUpdate.item.find(function (element) {
+                            return element.itemId === doc.itemId;
+                        });
+                        if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty - oldDoc.qty) {
+                            i++;
+                        }
+                    } else {
+                        if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty) {
+                            i++;
+                        }
                     }
-                } else {
-                    if (onHandInventory === undefined || onHandInventory && onHandInventory.qtyEnding < doc.qty) {
-                        i++;
-                    }
-                }
-            });
-            return i;
+                });
+                return i;
+            }
+        } else {
+            return 0;
         }
     },
 

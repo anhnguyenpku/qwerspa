@@ -742,7 +742,7 @@
                         } else {
                             vm.$message({
                                 type: 'error',
-                                message: 'Delete Fialed'
+                                message: 'Delete Failed'
                             });
                         }
 

@@ -150,7 +150,8 @@
       "reset": "Reset",
       "selectCategory": "Select Category",
       "tableNumber": "Table",
-      "pay": "Pay"
+      "pay": "Pay",
+      "amountDiscount": "Amount"
     },
     "receivePayment": {
       "searchHere": "Search Here ...",
@@ -843,7 +844,8 @@
       "reset": "បោះបង់",
       "selectCategory": "ជ្រើសរើសប្រភេទ",
       "tableNumber": "តុលេខ",
-      "pay": "គិតលុយ"
+      "pay": "គិតលុយ",
+      "amountDiscount": "តម្លៃ"
     },
     "receivePayment": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1142,8 +1144,8 @@
       "code": "កូដ",
       "subCategoryOf": "ប្រភេទរងនៃ",
       "memo": "បរិយាយ",
-      "add": "បញ្ចូលព័តមានទីតាំង",
-      "update": "កែប្រែព័តមានទីតាំង",
+      "add": "បញ្ចូលព័តមានប្រភេទ",
+      "update": "កែប្រែព័តមានប្រភេទ",
       "level": "កម្រិត",
       "image": "រូបភាព"
     },
@@ -1248,7 +1250,7 @@
       "qtyOnHand": "ចំនួនសល់ក្នុងដៃ",
       "retailSalePrice": "តម្លៃលករាយ",
       "wholeSalePrice": "តម្លៃលក់ដុំ",
-      "cost": "កូដ",
+      "cost": "ថ្លៃដើម",
       "barCode": "បាកូដ",
       "isTaxable": "គិតពន្ធ",
       "memo": "បរិយាយ",
