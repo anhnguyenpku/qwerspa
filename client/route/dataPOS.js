@@ -146,6 +146,16 @@ posData.route('/posInvoice/print', {
     }
 
 });
+
+import '../../imports/ui/report/posInvoicePrintSmall/posInvoicePrintSmall';
+
+posData.route('/posInvoiceSmall/print', {
+    name: 'pos.posInvoiceSmall-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'pos_invoicePrintSmallReport'});
+    }
+
+});
 import '../../imports/ui/report/posSaleOrderPrintA4/posSaleOrderPrintA4';
 
 posData.route('/posSaleOrder/print', {

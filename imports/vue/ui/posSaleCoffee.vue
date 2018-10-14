@@ -742,7 +742,7 @@
                             Meteor.call("insertPosInvoice", posSaleCoffeeDoc, (err, result) => {
                                 if (!err) {
                                     if (isPrint) {
-                                        FlowRouter.go('/pos-data/posInvoice/print?inv=' + result);
+                                        FlowRouter.go('/pos-data/posInvoiceSmall/print?inv=' + result);
                                     } else {
                                         vm.$message({
                                             duration: 1000,
@@ -775,7 +775,7 @@
                             Meteor.call("updatePosInvoice", posSaleCoffeeDoc, vm.posInvoiceId, (err, result) => {
                                 if (!err) {
                                     if (isPrint) {
-                                        FlowRouter.go('/pos-data/posInvoice/print?inv=' + id);
+                                        FlowRouter.go('/pos-data/posInvoiceSmall/print?inv=' + vm.posInvoiceId);
                                     } else {
                                         vm.$message({
                                             duration: 1000,
@@ -783,9 +783,13 @@
                                             type: 'success'
                                         });
                                     }
+                                    vm.getVoucherByRoleAndDate(moment().toDate());
+                                    vm.queryProduct();
+                                    vm.queryProductByCategoryId();
 
                                     Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
                                     vm.resetForm();
+                                    vm.dialogPayMoney = false;
                                 } else {
                                     vm.$notify.error({
                                         duration: 5000,
@@ -1032,6 +1036,13 @@
                 let vm = this;
                 Meteor.call("queryInvoiceActiveByLocationId", locationId, (err, result) => {
                     if (result) {
+                        vm.posSaleCoffeeData = [];
+                        vm.posSaleCoffeeForm.discountValue = 0;
+                        vm.posSaleCoffeeForm.paidUSD = 0;
+                        vm.posSaleCoffeeForm.paidKHR = 0;
+                        vm.posSaleCoffeeForm.paidTHB = 0;
+                        vm.posSaleCoffeeForm.discount = 0;
+                        vm.posSaleCoffeeForm.balanceNotCut = 0;
                         vm.posInvoiceId = result._id;
                         result.item.forEach((obj) => {
                             if (obj) {
@@ -1044,7 +1055,8 @@
                                 }
                             }
                         })
-                    } else {
+                    }
+                    else if (locationId === "") {
                         this.posSaleCoffeeData = [];
                         this.posSaleCoffeeForm.discountValue = 0;
                         this.posSaleCoffeeForm.code = "";
