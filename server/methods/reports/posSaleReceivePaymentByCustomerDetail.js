@@ -137,7 +137,7 @@ Meteor.methods({
                 }
             }
         ])
-        let newDataArr = saleReceivePaymentlList[0].data.concat(receivePaymentList);
+        let newDataArr = saleReceivePaymentlList.length > 0 ? saleReceivePaymentlList[0].data.concat(receivePaymentList) : receivePaymentList;
         let result = [];
         newDataArr.reduce(function (key, val) {
             if (!key[val._id.customerId]) {
