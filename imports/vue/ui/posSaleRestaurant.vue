@@ -1,5 +1,5 @@
 <template>
-    <div class="pos_SaleCoffee">
+    <div class="pos_SaleRestaurant">
         <body class="custom-login-background-coffee">
 
         <div class="card card-stats" style="background-color: black !important; color:white !important;">
@@ -19,7 +19,7 @@
                     <el-row type="flex" justify="center">
                         <el-col :span="2"></el-col>
                         <el-col :span="9" style="font-family: 'Khmer OS Freehand';text-align: left !important;"><h2>
-                            {{langConfig['selectCategory']}}</h2>
+                            {{langConfig['tableNumber']}} : {{tableName}}</h2>
                         </el-col>
                         <el-col :span="12">
                             <!--<el-input
@@ -32,7 +32,7 @@
                                     class="fa fa-print"></i>&nbsp; {{langConfig['pay']}} <i>( + )</i>
                             </el-button>
 
-                            <el-button type="primary" @click.native="savePosSaleCoffee(true,$event,false)"><i
+                            <el-button type="primary" @click.native="savePosSaleRestaurant(true,$event,false)"><i
                                     class="el-icon-check"> </i>&nbsp; {{langConfig['save']}} <i>(Ctrl + Enter)</i>
                             </el-button>
 
@@ -44,7 +44,7 @@
                         </el-col>
                         <el-col :span="1">
                             <el-button type="danger" round
-                                       @click="goToInvoice">
+                                       @click="goToTableBoard">
                                 <i class="fa fa-close"></i>
                             </el-button>
                         </el-col>
@@ -52,19 +52,19 @@
                 </el-col>
             </el-row>
             <hr style="margin-top: 0px !important;margin-bottom: 5px !important;">
-            <el-row style="padding-right: 50px !important;">
-                <el-col v-if="isCategoryData" :span="1" v-for="(o, index) in categoryData" :key="o._id"
-                        :offset="index > 0 ? index%6===0 ? 2 : 3 : 1">
-                    <el-card style="width: 180px !important;" :body-style="{ padding: '0px' }"
-                    >
-                        <img :src="o.imagePath" class="image-category" @click="queryProductByCategoryId(o._id)">
-                        <div style="padding: 14px;" @click="queryProductByCategoryId(o._id)">
-                            <span>{{o.name}}</span>
-                        </div>
-                    </el-card>
-                </el-col>
-            </el-row>
-            <hr style="margin-top: 5px !important;margin-bottom: 5px !important;">
+            <!-- <el-row style="padding-right: 50px !important;">
+                 <el-col v-if="isCategoryData" :span="1" v-for="(o, index) in categoryData" :key="o._id"
+                         :offset="index > 0 ? index%6===0 ? 2 : 3 : 1">
+                     <el-card style="width: 180px !important;" :body-style="{ padding: '0px' }"
+                     >
+                         <img :src="o.imagePath" class="image-category" @click="queryProductByCategoryId(o._id)">
+                         <div style="padding: 14px;" @click="queryProductByCategoryId(o._id)">
+                             <span>{{o.name}}</span>
+                         </div>
+                     </el-card>
+                 </el-col>
+             </el-row>
+             <hr style="margin-top: 5px !important;margin-bottom: 5px !important;">-->
             <slot v-if="loading">
                 <div class="row">
                     <div class="col-md-12" style="padding: 30px; margin-top: 70px">
@@ -73,18 +73,31 @@
                 </div>
             </slot>
             <slot v-else>
-                <el-form :model="posSaleCoffeeForm" :rules="rules" :ref="refForm" label-width="120px"
+                <el-form :model="posSaleRestaurantForm" :rules="rules" :ref="refForm" label-width="120px"
                          :label-position="labelPosition"
-                         class="posSaleCoffeeForm"
+                         class="posSaleRestaurantForm"
                          style="background-color: black !important;min-height:100% !important;">
                     <el-row :gutter="20">
-                        <el-col :span="16" class="posSaleCoffeeForm"
-                                style=" padding-bottom: 40px !important;padding-left: 0px !important;margin-top: 15px !important; background-color: black !important;">
-                            <div style="height: 560px !important;overflow-y: scroll !important;">
+                        <el-col :span="4">
+                            <div class="w3-code-restaurantCategory">
+
+                                <h3 style="text-align: center !important;">{{langConfig['selectCategory']}}</h3>
+                                <hr>
+                                <ul class="sidebar-menu tree animated-padding animated fadeInLeft" data-widget="tree">
+                                    <li v-for="(o, index) in categoryData">
+                                        <a href="#" @click="queryProductByCategoryId(o._id)" class="title-head"
+                                           style="color: white !important;">{{o.name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </el-col>
+                        <el-col :span="12" class="posSaleRestaurantForm"
+                                style=" padding-bottom: 20px !important;padding-left: 0px !important;padding-right: 0px !important;margin-top: 15px !important; background-color: black !important;">
+                            <div style="height: 760px !important;overflow-y: scroll !important;">
                                 <el-row style="padding-right: 90px !important;">
                                     <el-col :span="1" v-for="(productDoc, index) in productData" :key="productDoc._id"
-                                            :offset="index > 0 ? index%5===0 ? 2: 4 : 2"
-                                            style="margin-bottom: 20px !important;">
+                                            :offset="index > 0 ? index%5===0 ? 1: 4 : 1"
+                                            style="margin-bottom: 20px !important; padding-right: 40px !important;">
                                         <el-card style="width: 130px !important;z-index: 0"
                                                  :body-style="{ padding: '0px' }"
                                         >
@@ -133,55 +146,35 @@
                                     </el-col>
                                 </el-row>
                             </div>
-
                         </el-col>
                         <el-col :span="8" style="background-color: black !important;">
-                            <div class="w3-code-coffee">
+                            <div class="w3-code-restaurant">
                                 <div class="ui segments plan">
                                     <div class="ui top attached segment teal inverted plan-title">
-                                        <span class="plan-ribbon red">{{posSaleCoffeeForm.discountValue}}{{currencySymbol}}</span>
+                                        <span class="plan-ribbon red">{{posSaleRestaurantForm.discountValue}}{{currencySymbol}}</span>
                                         <span class="ui header">{{langConfig['balanceDue']}}</span>
 
                                     </div>
                                     <div class="ui  attached segment feature">
                                         <div class="amount">
-                                            {{posSaleCoffeeForm.balanceUnPaid}}{{currencySymbol}}
+                                            {{posSaleRestaurantForm.balanceUnPaid}}{{currencySymbol}}
                                         </div>
                                     </div>
                                 </div>
                                 <el-row>
-                                    <el-col :span="12">
-                                        <el-form-item
-                                                prop="tableId">
-
-                                            <el-select style="display: block !important"
-                                                       filterable clearable
-                                                       v-model="posSaleCoffeeForm.tableId"
-                                                       :placeholder="langConfig['tableNumber']">
-                                                <el-option
-                                                        v-for="item in tableOption"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value"
-                                                        :disabled="item.disabled">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="1">&nbsp;</el-col>
-                                    <el-col :span="11">
+                                    <el-col :span="24">
                                         <el-form-item prop="note">
-                                            <el-input type="textarea" v-model="posSaleCoffeeForm.note"
+                                            <el-input type="textarea" v-model="posSaleRestaurantForm.note"
                                                       :placeholder="langConfig['note']"
-                                                      :rows="1"></el-input>
+                                                      :rows="2"></el-input>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
 
 
                                 <el-table
-                                        :data="posSaleCoffeeData"
-                                        height="350"
+                                        :data="posSaleRestaurantData"
+                                        height="500"
                                         style="width: 100%">
                                     <el-table-column
                                             type="index"
@@ -206,8 +199,8 @@
                                                              placeholder="Please input Qty"
                                                              size="mini"
                                                              v-model.number=scope.row.qty type='number'
-                                                             @keyup="updatePosSaleCoffeeDetail(scope.row, scope.$index,$event)"
-                                                             @change="updatePosSaleCoffeeDetail(scope.row, scope.$index,$event)">
+                                                             @keyup="updatePosSaleRestaurantDetail(scope.row, scope.$index,$event)"
+                                                             @change="updatePosSaleRestaurantDetail(scope.row, scope.$index,$event)">
                                             </el-input-number>
                                         </template>
                                     </el-table-column>
@@ -233,17 +226,18 @@
                 :visible.sync="dialogPayMoney"
                 width="30%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
-            <el-form :model="posSaleCoffeeForm" :rules="rules" ref="posSaleCoffeeFormPayment" label-width="120px"
-                     class="posSaleCoffeeForm">
+            <el-form :model="posSaleRestaurantForm" :rules="rules" ref="posSaleRestaurantFormPayment"
+                     label-width="120px"
+                     class="posSaleRestaurantForm">
                 <div class="ui segments plan">
                     <div class="ui top attached segment teal inverted plan-title">
-                        <span class="plan-ribbon red">{{posSaleCoffeeForm.discountValue}}{{currencySymbol}}</span>
+                        <span class="plan-ribbon red">{{posSaleRestaurantForm.discountValue}}{{currencySymbol}}</span>
                         <span class="ui header">{{langConfig['balanceDue']}}</span>
 
                     </div>
                     <div class="ui  attached segment feature">
                         <div class="amount">
-                            {{posSaleCoffeeForm.balanceUnPaid}}{{currencySymbol}}
+                            {{posSaleRestaurantForm.balanceUnPaid}}{{currencySymbol}}
                         </div>
                     </div>
                 </div>
@@ -252,7 +246,7 @@
                 <el-form-item :label="langConfig['discount']">
                     <el-row>
                         <el-col :span="14">
-                            <el-radio-group v-model="posSaleCoffeeForm.discountType">
+                            <el-radio-group v-model="posSaleRestaurantForm.discountType">
                                 <el-radio-button v-for="mt in discountTypeOption" :label="mt.value"
                                                  :key="mt.value"
                                 >
@@ -263,7 +257,7 @@
                         </el-col>
                         <el-col :span="10">
                             <el-input :label="langConfig['discount']" placeholder="Amount Discount" prop="discount"
-                                      v-model.number="posSaleCoffeeForm.discount" type='number'>
+                                      v-model.number="posSaleRestaurantForm.discount" type='number'>
                                 <template slot="append">{{typeDiscount}}</template>
                             </el-input>
                         </el-col>
@@ -272,7 +266,7 @@
                 <el-form-item :label="langConfig['netTotal']">
 
                     <el-input :placeholder="langConfig['netTotal']"
-                              v-model.number="posSaleCoffeeForm.netTotal"
+                              v-model.number="posSaleRestaurantForm.netTotal"
                               disabled>
                         <template slot="append">{{currencySymbol}}</template>
                     </el-input>
@@ -280,14 +274,14 @@
                 <el-form-item :label="langConfig['paidDollar']">
 
                     <el-input placeholder="USD"
-                              v-model.number="posSaleCoffeeForm.paidUSD"
+                              v-model.number="posSaleRestaurantForm.paidUSD"
                               type='number'
                               @change.native="getTotal()" @focus.native="clearZero($event)"
                               @keyup.native="getTotal()"
 
                     >
-                        <el-button slot="append" @click="clickUSD(posSaleCoffeeForm.remainUSD)">
-                            {{posSaleCoffeeForm.remainUSD}} $
+                        <el-button slot="append" @click="clickUSD(posSaleRestaurantForm.remainUSD)">
+                            {{posSaleRestaurantForm.remainUSD}} $
                         </el-button>
                     </el-input>
                 </el-form-item>
@@ -297,30 +291,30 @@
 
                     <el-input placeholder="KHR" @change="getTotal()"
                               @keyup.native="getTotal()"
-                              v-model.number="posSaleCoffeeForm.paidKHR" type='number'
+                              v-model.number="posSaleRestaurantForm.paidKHR" type='number'
                     >
-                        <el-button slot="append" @click="clickKHR(posSaleCoffeeForm.remainKHR)">
-                            {{posSaleCoffeeForm.remainKHR}} ៛
+                        <el-button slot="append" @click="clickKHR(posSaleRestaurantForm.remainKHR)">
+                            {{posSaleRestaurantForm.remainKHR}} ៛
                         </el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item :label="langConfig['paidBaht']">
 
                     <el-input placeholder="THB"
-                              v-model.number="posSaleCoffeeForm.paidTHB"
+                              v-model.number="posSaleRestaurantForm.paidTHB"
                               type='number'
                               @change="getTotal()"
                               @keyup.native="getTotal()"
                     >
-                        <el-button slot="append" @click="clickTHB(posSaleCoffeeForm.remainTHB)">
-                            {{posSaleCoffeeForm.remainTHB}} B
+                        <el-button slot="append" @click="clickTHB(posSaleRestaurantForm.remainTHB)">
+                            {{posSaleRestaurantForm.remainTHB}} B
                         </el-button>
                     </el-input>
                 </el-form-item>
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button type="primary" @click="savePosSaleCoffee(true,$event,true)">{{langConfig['pay']}} <i>(Enter)</i>
+                    <el-button type="primary" @click="savePosSaleRestaurant(true,$event,true)">{{langConfig['pay']}} <i>(Enter)</i>
                     </el-button>
                 </el-row>
                 <br>
@@ -362,7 +356,7 @@
         data() {
             return {
                 keyCode: [],
-                refForm: 'posSaleCoffeeFormAdd',
+                refForm: 'posSaleRestaurantFormAdd',
                 multipleSelection: [],
                 posInvoiceId: "",
                 loading: false,
@@ -373,10 +367,10 @@
                 productData: [],
                 productDataAll: [],
                 currencySymbol: "",
-                posSaleCoffeeData: [],
+                posSaleRestaurantData: [],
                 dialogPayMoney: false,
 
-                posSaleCoffeeForm: {
+                posSaleRestaurantForm: {
                     itemId: "",
                     itemName: "",
                     price: 0,
@@ -412,20 +406,13 @@
                     totalUnit: 1,
                     desc: "",
                     tableId: "",
+                    locationId: "",
                     rawQty: 0,
                     isReceiveAll: false,
                     balanceNotCut: 0,
                     balanceNotCutFull: 0,
                     code: ""
 
-                },
-                rules: {
-                    tableId: [{
-                        required: true,
-                        type: 'string',
-                        message: 'Please choose Table',
-                        trigger: 'change'
-                    }],
                 },
 
                 // Options
@@ -446,7 +433,7 @@
                 disabledDate: false,
                 closeDate: "",
                 type: "",
-                posSaleCoffeeDetail: {},
+                posSaleRestaurantDetail: {},
                 discountTypeOption: [
                     {label: "amountDiscount", value: "Amount"},
                     {label: "percent", value: "Percent"}
@@ -461,7 +448,8 @@
                 todaySt: "",
                 timeSt: "",
                 isCategoryData: false,
-                qty: 0
+                qty: 0,
+                tableName: ""
             }
         },
         mounted() {
@@ -475,7 +463,7 @@
             };
 
 
-            let elem = this.$jQuery('.pos_SaleCoffee');
+            let elem = this.$jQuery('.pos_SaleRestaurant');
             let checkEvent = $._data($('body').get(0), 'events');
             if (checkEvent.keyup.length <= 1) {
                 this.$nextTick(() => {
@@ -485,10 +473,10 @@
             this.time();
         },
         watch: {
-            "posSaleCoffeeForm.invoiceDate"(val) {
+            "posSaleRestaurantForm.invoiceDate"(val) {
                 let vm = this;
-                if (vm.dialogUpdatePosSaleCoffee === false) {
-                    vm.posSaleCoffeeForm.posSaleCoffeeDate = val;
+                if (vm.dialogUpdatePosSaleRestaurant === false) {
+                    vm.posSaleRestaurantForm.posSaleRestaurantDate = val;
                 }
                 if (vm.closeDate && vm.closeDate !== "" && vm.closeDate !== undefined) {
                     vm.options = {
@@ -504,48 +492,48 @@
                         }
                     }
                 }
-                if (this.$refs["posSaleCoffeeFormAdd"]) {
+                if (this.$refs["posSaleRestaurantFormAdd"]) {
                     this.getVoucherByRoleAndDate(val);
                 }
             },
-            dialogUpdatePosSaleCoffee(val) {
+            dialogUpdatePosSaleRestaurant(val) {
                 if (val) {
-                    this._inputMaskPosSaleCoffee();
+                    this._inputMaskPosSaleRestaurant();
                 }
             },
-            "posSaleCoffeeForm.discount"(val) {
+            "posSaleRestaurantForm.discount"(val) {
                 if (val || val === 0) {
-                    this.posSaleCoffeeForm.discount = val;
-                    // this.posSaleCoffeeForm.discount = this.$_numeral(val).format("0,00");
+                    this.posSaleRestaurantForm.discount = val;
+                    // this.posSaleRestaurantForm.discount = this.$_numeral(val).format("0,00");
                     this.getTotal();
 
                 }
             },
-            "posSaleCoffeeForm.discountType"(val) {
+            "posSaleRestaurantForm.discountType"(val) {
                 if (val) {
-                    this.posSaleCoffeeForm.discountType = val;
+                    this.posSaleRestaurantForm.discountType = val;
                     this.getTotal();
                 }
             },
-            "posSaleCoffeeForm.tableId"(val) {
+            "posSaleRestaurantForm.tableId"(val) {
                 this.findInvoiceActiveByTableId(val);
             }
         },
         methods: {
             clickTHB(val) {
-                this.posSaleCoffeeForm.paidTHB = this.$_numeral(val).value();
+                this.posSaleRestaurantForm.paidTHB = this.$_numeral(val).value();
                 this.getTotal();
             },
             clickUSD(val) {
-                this.posSaleCoffeeForm.paidUSD = this.$_numeral(val).value();
+                this.posSaleRestaurantForm.paidUSD = this.$_numeral(val).value();
                 this.getTotal();
             },
             clickKHR(val) {
-                this.posSaleCoffeeForm.paidKHR = this.$_numeral(val).value();
+                this.posSaleRestaurantForm.paidKHR = this.$_numeral(val).value();
                 this.getTotal();
             },
-            goToInvoice() {
-                FlowRouter.go("/pos-sale/posInvoice");
+            goToTableBoard() {
+                FlowRouter.go("/pos-sale/posTableBoard");
             },
             time() {
                 let self = this;
@@ -553,7 +541,7 @@
                 this.timeSt = moment().format("hh:mm:ss");
                 setTimeout(self.time, 1000);
             },
-            _inputMaskPosSaleCoffee() {
+            _inputMaskPosSaleRestaurant() {
                 /*setTimeout(() => {
                     if ($(".el-inputAmount").length) {
                         new this.$_Cleave('.el-inputAmount', {
@@ -581,11 +569,11 @@
             },
             inputHandler(e) {
                 let vm = this;
-                if (e.data.init(0).selector === ".pos_SaleCoffee") {
+                if (e.data.init(0).selector === ".pos_SaleRestaurant") {
                     if (vm.dialogPayMoney === false) {
                         if (e.keyCode === 13 && e.ctrlKey) {
                             e.preventDefault();
-                            vm.savePosSaleCoffee(false, e, false);
+                            vm.savePosSaleRestaurant(false, e, false);
                         } else if (e.keyCode === 27 && !e.ctrlKey && !e.altKey) {
                             e.preventDefault();
                             vm.resetForm();
@@ -596,14 +584,14 @@
                     } else {
                         if (e.keyCode === 13) {
                             e.preventDefault();
-                            vm.savePosSaleCoffee(false, e, true);
+                            vm.savePosSaleRestaurant(false, e, true);
                         }
                     }
                 }
 
             },
-            /* barcodeScanSaleCoffee(e) {
-                 if (this.dialogAddPosSaleCoffee === true || this.dialogUpdatePosSaleCoffee === true) {
+            /* barcodeScanSaleRestaurant(e) {
+                 if (this.dialogAddPosSaleRestaurant === true || this.dialogUpdatePosSaleRestaurant === true) {
                      let scannerSensitivity = 100;
                      if (e.keyCode !== 13 && !isNaN(e.key)) {
                          this.takeBarcode += e.key;
@@ -615,8 +603,8 @@
                              this.timeStamp = [];
                          } else {
                              if (e.keyCode === 13) {
-                                 this.posSaleCoffeeForm.code = this.takeBarcode;
-                                 this.addToPosSaleCoffeeData(null);
+                                 this.posSaleRestaurantForm.code = this.takeBarcode;
+                                 this.addToPosSaleRestaurantData(null);
                                  this.timeStamp = [];
                                  this.takeBarcode = ''
                              }
@@ -702,59 +690,65 @@
                 return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
 
             },*/
-            savePosSaleCoffee(isCloseDialog, event, isPrint) {
+            savePosSaleRestaurant(isCloseDialog, event, isPrint) {
                 event.preventDefault();
                 let vm = this;
-                this.$refs["posSaleCoffeeFormAdd"].validate((valid) => {
+                this.$refs["posSaleRestaurantFormAdd"].validate((valid) => {
                     if (valid) {
-                        let posSaleCoffeeDoc = {
-                            total: vm.$_numeral(vm.posSaleCoffeeForm.total).value(),
-                            netTotal: vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value(),
-                            balanceUnPaid: vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(),
-                            paid: vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value() - vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(),
+                        let posSaleRestaurantDoc = {
+                            total: vm.$_numeral(vm.posSaleRestaurantForm.total).value(),
+                            netTotal: vm.$_numeral(vm.posSaleRestaurantForm.netTotal).value(),
+                            balanceUnPaid: vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(),
+                            paid: vm.$_numeral(vm.posSaleRestaurantForm.netTotal).value() - vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(),
 
-                            paidUSD: vm.$_numeral(vm.posSaleCoffeeForm.paidUSD).value(),
-                            paidKHR: vm.$_numeral(vm.posSaleCoffeeForm.paidKHR).value(),
-                            paidTHB: vm.$_numeral(vm.posSaleCoffeeForm.paidTHB).value(),
+                            paidUSD: vm.$_numeral(vm.posSaleRestaurantForm.paidUSD).value(),
+                            paidKHR: vm.$_numeral(vm.posSaleRestaurantForm.paidKHR).value(),
+                            paidTHB: vm.$_numeral(vm.posSaleRestaurantForm.paidTHB).value(),
 
-                            remainUSD: vm.$_numeral(vm.posSaleCoffeeForm.remainUSD).value(),
-                            remainKHR: vm.$_numeral(vm.posSaleCoffeeForm.remainKHR).value(),
-                            remainTHB: vm.$_numeral(vm.posSaleCoffeeForm.remainTHB).value(),
+                            remainUSD: vm.$_numeral(vm.posSaleRestaurantForm.remainUSD).value(),
+                            remainKHR: vm.$_numeral(vm.posSaleRestaurantForm.remainKHR).value(),
+                            remainTHB: vm.$_numeral(vm.posSaleRestaurantForm.remainTHB).value(),
 
-                            invoiceDate: moment(vm.posSaleCoffeeForm.invoiceDate).toDate(),
-                            invoiceDateName: moment(vm.posSaleCoffeeForm.invoiceDate).format("DD/MM/YYYY"),
-                            dueDate: moment(vm.posSaleCoffeeForm.dueDate).toDate(),
-                            invoiceNo: vm.posSaleCoffeeForm.invoiceNo,
+                            invoiceDate: moment(vm.posSaleRestaurantForm.invoiceDate).toDate(),
+                            invoiceDateName: moment(vm.posSaleRestaurantForm.invoiceDate).format("DD/MM/YYYY"),
+                            dueDate: moment(vm.posSaleRestaurantForm.dueDate).toDate(),
+                            invoiceNo: vm.posSaleRestaurantForm.invoiceNo,
 
-                            note: vm.posSaleCoffeeForm.note,
+                            note: vm.posSaleRestaurantForm.note,
 
-                            discountType: vm.posSaleCoffeeForm.discountType,
+                            discountType: vm.posSaleRestaurantForm.discountType,
 
 
-                            discount: vm.$_numeral(vm.posSaleCoffeeForm.discount).value(),
-                            discountValue: vm.$_numeral(vm.posSaleCoffeeForm.discountValue).value(),
+                            discount: vm.$_numeral(vm.posSaleRestaurantForm.discount).value(),
+                            discountValue: vm.$_numeral(vm.posSaleRestaurantForm.discountValue).value(),
                             termId: "001",
-                            address: vm.posSaleCoffeeForm.address,
+                            address: vm.posSaleRestaurantForm.address,
 
                             rolesArea: Session.get('area'),
                             paymentNumber: 1,
                             customerId: "001",
-                            tableId: vm.posSaleCoffeeForm.tableId,
+                            tableId: vm.posSaleRestaurantForm.tableId,
                             locationId: "001",
-                            status: vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() < vm.$_numeral(vm.posSaleCoffeeForm.netTotal).value() ? "Partial" : "Active"
+                            status: vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value() < vm.$_numeral(vm.posSaleRestaurantForm.netTotal).value() ? "Partial" : "Active"
                         };
-                        posSaleCoffeeDoc.item = vm.posSaleCoffeeData;
+                        posSaleRestaurantDoc.item = vm.posSaleRestaurantData;
+                        if (vm.posSaleRestaurantData.length === 0) {
+                            return false;
+                        }
                         if (vm.posInvoiceId === "") {
-                            Meteor.call("insertPosInvoice", posSaleCoffeeDoc, (err, result) => {
+                            Meteor.call("insertPosInvoice", posSaleRestaurantDoc, (err, result) => {
                                 if (!err) {
                                     if (isPrint) {
-                                        FlowRouter.go('/pos-data/posInvoiceSmall/print?inv=' + result);
+                                        FlowRouter.go('/pos-data/posInvoiceSmallRestaurant/print?inv=' + result);
                                     } else {
                                         vm.$message({
                                             duration: 1000,
                                             message: this.langConfig['saveSuccess'],
                                             type: 'success'
                                         });
+                                        Meteor.call("updatePosTableStatus", vm.posSaleRestaurantForm.tableId, true);
+                                        FlowRouter.go("/pos-sale/posTableBoard");
+
                                     }
 
                                     vm.getVoucherByRoleAndDate(moment().toDate());
@@ -765,6 +759,8 @@
 
                                     vm.resetForm();
                                     vm.dialogPayMoney = false;
+
+
                                 } else {
                                     vm.$notify.error({
                                         duration: 5000,
@@ -778,16 +774,18 @@
                                 }
                             })
                         } else {
-                            Meteor.call("updatePosInvoice", posSaleCoffeeDoc, vm.posInvoiceId, (err, result) => {
+                            Meteor.call("updatePosInvoice", posSaleRestaurantDoc, vm.posInvoiceId, (err, result) => {
                                 if (!err) {
                                     if (isPrint) {
-                                        FlowRouter.go('/pos-data/posInvoiceSmall/print?inv=' + vm.posInvoiceId);
+                                        FlowRouter.go('/pos-data/posInvoiceSmallRestaurant/print?inv=' + vm.posInvoiceId);
                                     } else {
                                         vm.$message({
                                             duration: 1000,
                                             message: this.langConfig['saveSuccess'],
                                             type: 'success'
                                         });
+                                        Meteor.call("updatePosTableStatus", vm.posSaleRestaurantForm.tableId, true);
+                                        FlowRouter.go("/pos-sale/posTableBoard");
                                     }
                                     vm.getVoucherByRoleAndDate(moment().toDate());
                                     vm.queryProduct();
@@ -796,6 +794,8 @@
                                     Session.set("transactionActionNumber", (Session.get("transactionActionNumber") || 0) + 1);
                                     vm.resetForm();
                                     vm.dialogPayMoney = false;
+
+
                                 } else {
                                     vm.$notify.error({
                                         duration: 5000,
@@ -816,15 +816,15 @@
                 let vm = this;
                 Meteor.call("pos_getInvoiceNoByRoleAndDate", Session.get("area"), date, (err, result) => {
                     if (!err) {
-                        vm.posSaleCoffeeForm.invoiceNo = result;
+                        vm.posSaleRestaurantForm.invoiceNo = result;
                     }
                 })
             },
 
 
-            addToPosSaleCoffeeData(val, data) {
+            addToPosSaleRestaurantData(val, data) {
                 let vm = this;
-                let isFound = vm.posSaleCoffeeData.find(function (element) {
+                let isFound = vm.posSaleRestaurantData.find(function (element) {
                     return element.itemId === data._id && element.type === data.type;
                 });
                 let indProduct = vm.productData.findIndex(k => k._id === data._id);
@@ -857,18 +857,18 @@
                         message: 'កែប្រែចំនួន!'
                     });
 
-                    let ind = vm.posSaleCoffeeData.findIndex(k => k.itemId === data._id && k.type === data.type);
+                    let ind = vm.posSaleRestaurantData.findIndex(k => k.itemId === data._id && k.type === data.type);
                     isFound.qty = val;
                     isFound.totalUnit = val;
                     isFound.amount = val * isFound.price;
 
-                    vm.posSaleCoffeeData[ind] = isFound;
+                    vm.posSaleRestaurantData[ind] = isFound;
                     if (val === 0) {
-                        vm.posSaleCoffeeData.splice(ind, 1);
+                        vm.posSaleRestaurantData.splice(ind, 1);
                     }
 
                 } else {
-                    vm.posSaleCoffeeData.push({
+                    vm.posSaleRestaurantData.push({
                         itemId: data._id,
                         itemName: data.name,
                         code: data.code,
@@ -898,7 +898,7 @@
 
             }
             ,
-            updatePosSaleCoffeeDetail(row, index, val) {
+            updatePosSaleRestaurantDetail(row, index, val) {
                 let vm = this;
                 row.totalUnit = this.$_math.round(row.unit1 * row.unit2 * val, 2);
                 row.amount = formatCurrency(row.price * row.totalUnit);
@@ -933,9 +933,9 @@
                     vm.productData[indProduct].disableInputQty = row.type !== "" ? false : true;
                 }
 
-                this.posSaleCoffeeData[index] = row;
+                this.posSaleRestaurantData[index] = row;
                 if (val === 0) {
-                    this.posSaleCoffeeData.splice(index, 1);
+                    this.posSaleRestaurantData.splice(index, 1);
                 }
                 this.getTotal();
             }
@@ -955,20 +955,20 @@
             }
             ,
             resetForm() {
-                this.posSaleCoffeeData = [];
-                this.posSaleCoffeeForm.discountValue = 0;
-                this.posSaleCoffeeForm.code = "";
-                this.posSaleCoffeeForm.paidUSD = 0;
-                this.posSaleCoffeeForm.paidKHR = 0;
-                this.posSaleCoffeeForm.paidTHB = 0;
-                this.posSaleCoffeeForm.discount = 0;
-                this.posSaleCoffeeForm.customerId = "";
-                this.posSaleCoffeeForm.tableId = "";
-                this.posSaleCoffeeForm.balanceNotCut = 0;
+                this.posSaleRestaurantData = [];
+                this.posSaleRestaurantForm.discountValue = 0;
+                this.posSaleRestaurantForm.code = "";
+                this.posSaleRestaurantForm.paidUSD = 0;
+                this.posSaleRestaurantForm.paidKHR = 0;
+                this.posSaleRestaurantForm.paidTHB = 0;
+                this.posSaleRestaurantForm.discount = 0;
+                this.posSaleRestaurantForm.customerId = "";
+                this.posSaleRestaurantForm.tableId = "";
+                this.posSaleRestaurantForm.balanceNotCut = 0;
 
                 this.posInvoiceId = "";
-                if (this.$refs["posSaleCoffeeFormAdd"]) {
-                    this.$refs["posSaleCoffeeFormAdd"].resetFields();
+                if (this.$refs["posSaleRestaurantFormAdd"]) {
+                    this.$refs["posSaleRestaurantFormAdd"].resetFields();
                 }
                 this.queryProduct();
                 this.queryProductByCategoryId("");
@@ -979,52 +979,52 @@
             getTotal() {
                 let vm = this;
                 let total = 0;
-                vm.posSaleCoffeeData.forEach(function (obj) {
+                vm.posSaleRestaurantData.forEach(function (obj) {
                     total += parseFloat(vm.$_numeral(obj.amount).value());
 
                 });
-                if (total >= vm.$_numeral(vm.posSaleCoffeeForm.balanceNotCutFull).value()) {
-                    vm.posSaleCoffeeForm.balanceNotCut = vm.posSaleCoffeeForm.balanceNotCutFull;
+                if (total >= vm.$_numeral(vm.posSaleRestaurantForm.balanceNotCutFull).value()) {
+                    vm.posSaleRestaurantForm.balanceNotCut = vm.posSaleRestaurantForm.balanceNotCutFull;
                 } else {
-                    vm.posSaleCoffeeForm.balanceNotCut = formatCurrency(total);
+                    vm.posSaleRestaurantForm.balanceNotCut = formatCurrency(total);
                 }
                 let companyDoc = WB_waterBillingSetup.findOne({rolesArea: Session.get("area")});
-                vm.posSaleCoffeeForm.total = formatCurrencyLast(total, companyDoc.baseCurrency);
+                vm.posSaleRestaurantForm.total = formatCurrencyLast(total, companyDoc.baseCurrency);
 
-                if (vm.posSaleCoffeeForm.discountType === "Amount") {
-                    vm.posSaleCoffeeForm.netTotal = formatCurrencyLast(total - vm.posSaleCoffeeForm.discount, companyDoc.baseCurrency);
-                    vm.posSaleCoffeeForm.balanceUnPaid = formatCurrencyLast(total - vm.posSaleCoffeeForm.discount - vm.$_numeral(vm.posSaleCoffeeForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                if (vm.posSaleRestaurantForm.discountType === "Amount") {
+                    vm.posSaleRestaurantForm.netTotal = formatCurrencyLast(total - vm.posSaleRestaurantForm.discount, companyDoc.baseCurrency);
+                    vm.posSaleRestaurantForm.balanceUnPaid = formatCurrencyLast(total - vm.posSaleRestaurantForm.discount - vm.$_numeral(vm.posSaleRestaurantForm.balanceNotCut).value() - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleRestaurantForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleRestaurantForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleRestaurantForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "USD");
-                    vm.posSaleCoffeeForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "KHR");
-                    vm.posSaleCoffeeForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "THB");
-                    vm.posSaleCoffeeForm.discountValue = formatCurrencyLast(vm.posSaleCoffeeForm.discount, companyDoc.baseCurrency);
+                    vm.posSaleRestaurantForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(), Session.get("area")), "USD");
+                    vm.posSaleRestaurantForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(), Session.get("area")), "KHR");
+                    vm.posSaleRestaurantForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(), Session.get("area")), "THB");
+                    vm.posSaleRestaurantForm.discountValue = formatCurrencyLast(vm.posSaleRestaurantForm.discount, companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.balanceUnPaid = vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() <= 0 ? 0 : vm.posSaleCoffeeForm.balanceUnPaid;
+                    vm.posSaleRestaurantForm.balanceUnPaid = vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value() <= 0 ? 0 : vm.posSaleRestaurantForm.balanceUnPaid;
                     this.typeDiscount = getCurrencySymbolById(companyDoc.baseCurrency);
                 } else {
-                    vm.posSaleCoffeeForm.netTotal = formatCurrencyLast(total - (total * vm.posSaleCoffeeForm.discount / 100), companyDoc.baseCurrency);
-                    vm.posSaleCoffeeForm.balanceUnPaid = formatCurrencyLast(total - (total * vm.posSaleCoffeeForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleCoffeeForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
+                    vm.posSaleRestaurantForm.netTotal = formatCurrencyLast(total - (total * vm.posSaleRestaurantForm.discount / 100), companyDoc.baseCurrency);
+                    vm.posSaleRestaurantForm.balanceUnPaid = formatCurrencyLast(total - (total * vm.posSaleRestaurantForm.discount / 100) - GeneralFunction.exchange("USD", companyDoc.baseCurrency, vm.posSaleRestaurantForm.paidUSD, Session.get("area")) - GeneralFunction.exchange("KHR", companyDoc.baseCurrency, vm.posSaleRestaurantForm.paidKHR, Session.get("area")) - GeneralFunction.exchange("THB", companyDoc.baseCurrency, vm.posSaleRestaurantForm.paidTHB, Session.get("area")), companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "USD");
-                    vm.posSaleCoffeeForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "KHR");
-                    vm.posSaleCoffeeForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value(), Session.get("area")), "THB");
-                    vm.posSaleCoffeeForm.discountValue = formatCurrencyLast((total * vm.posSaleCoffeeForm.discount / 100), companyDoc.baseCurrency);
+                    vm.posSaleRestaurantForm.remainUSD = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "USD", vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(), Session.get("area")), "USD");
+                    vm.posSaleRestaurantForm.remainKHR = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "KHR", vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(), Session.get("area")), "KHR");
+                    vm.posSaleRestaurantForm.remainTHB = formatCurrencyLast(GeneralFunction.exchange(companyDoc.baseCurrency, "THB", vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value(), Session.get("area")), "THB");
+                    vm.posSaleRestaurantForm.discountValue = formatCurrencyLast((total * vm.posSaleRestaurantForm.discount / 100), companyDoc.baseCurrency);
 
-                    vm.posSaleCoffeeForm.balanceUnPaid = vm.$_numeral(vm.posSaleCoffeeForm.balanceUnPaid).value() <= 0 ? 0 : vm.posSaleCoffeeForm.balanceUnPaid;
+                    vm.posSaleRestaurantForm.balanceUnPaid = vm.$_numeral(vm.posSaleRestaurantForm.balanceUnPaid).value() <= 0 ? 0 : vm.posSaleRestaurantForm.balanceUnPaid;
                     this.typeDiscount = "%";
                 }
             },
-            printSaleCoffee(data) {
-                if (data.transactionType === "SaleCoffee Sale Order") {
-                    FlowRouter.go('/pos-data/posSaleCoffeeReceiveItem/print?inv=' + data._id);
+            printSaleRestaurant(data) {
+                if (data.transactionType === "SaleRestaurant Sale Order") {
+                    FlowRouter.go('/pos-data/posSaleRestaurantReceiveItem/print?inv=' + data._id);
                 } else {
-                    FlowRouter.go('/pos-data/posSaleCoffee/print?inv=' + data._id);
+                    FlowRouter.go('/pos-data/posSaleRestaurant/print?inv=' + data._id);
                 }
 
             },
             handleChange(data, e) {
-                this.addToPosSaleCoffeeData(e, data);
+                this.addToPosSaleRestaurantData(e, data);
             },
             handleClickBtn(data, btn, index) {
                 data.type = btn;
@@ -1035,20 +1035,20 @@
                 } else if (data.type === "L") {
                     data.qty = data.largeQty === 0 ? 1 : data.largeQty;
                 }
-                this.addToPosSaleCoffeeData(data.qty, data);
+                this.addToPosSaleRestaurantData(data.qty, data);
                 this.productData[index] = data;
             },
             findInvoiceActiveByTableId(tableId) {
                 let vm = this;
                 Meteor.call("queryInvoiceActiveByTableId", tableId, (err, result) => {
                     if (result) {
-                        vm.posSaleCoffeeData = [];
-                        vm.posSaleCoffeeForm.discountValue = 0;
-                        vm.posSaleCoffeeForm.paidUSD = 0;
-                        vm.posSaleCoffeeForm.paidKHR = 0;
-                        vm.posSaleCoffeeForm.paidTHB = 0;
-                        vm.posSaleCoffeeForm.discount = 0;
-                        vm.posSaleCoffeeForm.balanceNotCut = 0;
+                        vm.posSaleRestaurantData = [];
+                        vm.posSaleRestaurantForm.discountValue = 0;
+                        vm.posSaleRestaurantForm.paidUSD = 0;
+                        vm.posSaleRestaurantForm.paidKHR = 0;
+                        vm.posSaleRestaurantForm.paidTHB = 0;
+                        vm.posSaleRestaurantForm.discount = 0;
+                        vm.posSaleRestaurantForm.balanceNotCut = 0;
                         vm.posInvoiceId = result._id;
                         result.item.forEach((obj) => {
                             if (obj) {
@@ -1057,20 +1057,20 @@
                                 });
                                 data.type = obj.type;
                                 if (data) {
-                                    vm.addToPosSaleCoffeeData(obj.qty, data);
+                                    vm.addToPosSaleRestaurantData(obj.qty, data);
                                 }
                             }
                         })
                     }
                     else if (tableId === "") {
-                        this.posSaleCoffeeData = [];
-                        this.posSaleCoffeeForm.discountValue = 0;
-                        this.posSaleCoffeeForm.code = "";
-                        this.posSaleCoffeeForm.paidUSD = 0;
-                        this.posSaleCoffeeForm.paidKHR = 0;
-                        this.posSaleCoffeeForm.paidTHB = 0;
-                        this.posSaleCoffeeForm.discount = 0;
-                        this.posSaleCoffeeForm.balanceNotCut = 0;
+                        this.posSaleRestaurantData = [];
+                        this.posSaleRestaurantForm.discountValue = 0;
+                        this.posSaleRestaurantForm.code = "";
+                        this.posSaleRestaurantForm.paidUSD = 0;
+                        this.posSaleRestaurantForm.paidKHR = 0;
+                        this.posSaleRestaurantForm.paidTHB = 0;
+                        this.posSaleRestaurantForm.discount = 0;
+                        this.posSaleRestaurantForm.balanceNotCut = 0;
                         this.posInvoiceId = "";
                         this.queryProduct();
                         this.queryProductByCategoryId("");
@@ -1087,6 +1087,12 @@
             this.tableOpt();
             Meteor.subscribe('Pos_InvoiceReact');
             this.getVoucherByRoleAndDate(moment().toDate());
+            this.posSaleRestaurantForm.tableId = FlowRouter.query.get('tableId');
+            Meteor.call("queryPosTableById", this.posSaleRestaurantForm.tableId, (err, result) => {
+                if (result) {
+                    this.tableName = result.name;
+                }
+            });
 
             Meteor.call('getWaterBillingSetup', Session.get('area'), (err, result) => {
                 if (result) {
@@ -1120,11 +1126,19 @@
         background: #fff;
     }
 
-    .w3-code-coffee {
+    .w3-code-restaurant {
         width: auto;
         background-color: black !important;
         padding: 8px 12px;
         border-left: 4px solid #4CAF50;
+        word-wrap: break-word;
+    }
+
+    .w3-code-restaurantCategory {
+        width: auto;
+        background-color: black !important;
+        padding: 8px 12px;
+        border-right: 4px solid #4CAF50;
         word-wrap: break-word;
     }
 

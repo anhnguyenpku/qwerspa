@@ -205,6 +205,10 @@ Pos_Invoice.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    tableId: {
+        type: String,
+        optional: true
+    },
     createdAt: {
         type: Date,
         optional: true,

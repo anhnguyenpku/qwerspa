@@ -57,7 +57,9 @@
       "productionSummary": "Production Summary",
       "productionResultSummary": "Production Result Summary",
       "saleCoffee": "Sale",
-      "saleReceivePaymentByCustomerDetail":"Sale Receive Payment By Customer Detail"
+      "table": "Table",
+      "tableLocation": "Table Location",
+      "saleReceivePaymentByCustomerDetail": "Sale Receive Payment By Customer Detail"
     },
     "customer": {
       "customerAdd": "Add Customer",

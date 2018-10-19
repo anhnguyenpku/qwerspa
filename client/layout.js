@@ -137,7 +137,7 @@ Template.MainLayout.helpers({
     manageModule() {
         let ob = {};
         let ma = Manage_Module.findOne();
-        if (ma.feature) {
+        if (ma && ma.feature) {
             ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
@@ -150,6 +150,8 @@ Template.MainLayout.helpers({
             ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.production = (ma.feature.indexOf("Production") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.coffee = (ma.feature.indexOf("Coffee") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.restaurant = (ma.feature.indexOf("Restaurant") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.table = ((ma.feature.indexOf("Restaurant") > -1 || ma.feature.indexOf("Coffee") > -1) ? true : false) || CheckRoles({roles: ['super']});
         }
 
         return ob;
@@ -185,7 +187,7 @@ Template.sidebar.helpers({
     manageModule() {
         let ob = {};
         let ma = Manage_Module.findOne();
-        if (ma.feature) {
+        if (ma && ma.feature) {
             ob.bus = (ma.feature.indexOf("Bus") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.trascript = (ma.feature.indexOf("Transcript") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.score = (ma.feature.indexOf("Score") > -1 ? true : false) || CheckRoles({roles: ['super']});
@@ -196,6 +198,10 @@ Template.sidebar.helpers({
             ob.vendor = (ma.feature.indexOf("Vendor") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.customer = (ma.feature.indexOf("Customer") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.production = (ma.feature.indexOf("Production") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.coffee = (ma.feature.indexOf("Coffee") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.restaurant = (ma.feature.indexOf("Restaurant") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.table = ((ma.feature.indexOf("Restaurant") > -1 || ma.feature.indexOf("Coffee") > -1) ? true : false) || CheckRoles({roles: ['super']});
+
         }
         return ob;
     }

@@ -111,7 +111,13 @@ Meteor.methods({
     },
     queryPosProductAll() {
         if (Meteor.userId()) {
+            let unitList = Pos_Unit.find({}).fetch();
             let posProducts = Pos_Product.find({}).map(function (obj) {
+                let findUnit = function (element) {
+                    return element._id === obj.unitId;
+                }
+                let unit = unitList.find(findUnit);
+                obj.unitName = unit && unit.name || "";
                 obj.qty = 0;
                 obj.smallQty = 0;
                 obj.largeQty = 0;

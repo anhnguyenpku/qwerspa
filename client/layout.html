@@ -60,6 +60,15 @@
                                 <div class="pull-right">
                                     {{#if posLayout}}
                                         <ul class="nav navbar-nav">
+                                            {{#if manageModule.restaurant}}
+                                                <li>
+                                                    <a href="{{pathFor 'pos.tableBoard'}}" class="dropdown-toggle"
+                                                       aria-expanded="true">
+                                                        <img src="/res.png" alt=""
+                                                             style="width: 22px;height: 22px">
+                                                    </a>
+                                                </li>
+                                            {{/if}}
                                             {{#if manageModule.coffee}}
                                                 <li>
                                                     <a href="{{pathFor 'pos.saleCoffee'}}" class="dropdown-toggle"
@@ -1007,6 +1016,19 @@
                                     <i class="fa fa-location-arrow" aria-hidden="true"></i>{{_
                                         "pos.sidebarMenu.location"}}</a>
                                 </li>
+
+                                {{#if manageModule.table}}
+                                    <li><a href="{{pathFor 'pos.tableLocation'}}" class="title-body">
+                                        <i class="fa fa-location-arrow" aria-hidden="true"></i>{{_
+                                            "pos.sidebarMenu.tableLocation"}}</a>
+                                    </li>
+                                    <li><a href="{{pathFor 'pos.table'}}" class="title-body">
+                                        <i class="fa fa-location-arrow" aria-hidden="true"></i>{{_
+                                            "pos.sidebarMenu.table"}}</a>
+                                    </li>
+                                {{/if}}
+
+
                                 <li><a href="{{pathFor 'pos.category'}}" class="title-body">
                                     <i class="fa fa-rebel" aria-hidden="true"></i>{{_ "pos.sidebarMenu.category"}}</a>
                                 </li>

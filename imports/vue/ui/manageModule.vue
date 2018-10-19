@@ -112,6 +112,7 @@
                     {label: "Customer", value: "Customer"},
                     {label: "Production", value: "Production"},
                     {label: "Coffee", value: "Coffee"},
+                    {label: "Restaurant", value: "Restaurant"},
 
                 ],
                 moduleOption: [

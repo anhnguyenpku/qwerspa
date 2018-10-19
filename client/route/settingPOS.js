@@ -53,6 +53,8 @@ import '../../imports/ui/pos_Vendor/posVendor';
 import '../../imports/ui/pos_Customer/posCustomer';
 import '../../imports/ui/pos_transferInventory/posTransferInventory';
 import '../../imports/ui/manage_module/manage_module';
+import '../../imports/ui/pos_table/posTable';
+import '../../imports/ui/pos_tableLocation/posTableLocation';
 
 //Category
 posSetting.route('/posCategory', {
@@ -63,8 +65,27 @@ posSetting.route('/posCategory', {
         _Main('pos_category');
     }
 });
+//Table
+posSetting.route('/posTable', {
+    name: 'pos.table',
+    title: "Table",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('pos_table');
+    }
+});
 
-//Category
+//Table Location
+posSetting.route('/posTableLocation', {
+    name: 'pos.tableLocation',
+    title: "Table Location",
+    parent: "wb.home",
+    action: function (query, params) {
+        _Main('pos_tableLocation');
+    }
+});
+
+//Product
 posSetting.route('/posProduct', {
     name: 'pos.product',
     title: "Product",
@@ -73,7 +94,7 @@ posSetting.route('/posProduct', {
         _Main('pos_product');
     }
 });
-//Category
+//Term
 posSetting.route('/posTerm', {
     name: 'pos.term',
     title: "Term",

@@ -142,8 +142,14 @@ Meteor.methods({
         }
 
         data.transactionType = (data.netTotal - data.paid) > 0 ? "Invoice" : "Sale Receipt";
+
+
         data.transactionType = isReceiveItem === true ? "Invoice Sale Order" : data.transactionType;
         data.invoiceNo = data.rolesArea + "-" + moment(data.invoiceDate).format("YYYY") + pad(data.invoiceNo, 6);
+
+        if (data.transactionType === "Sale Receipt" && data.tableId) {
+            Meteor.call("updatePosTableStatus", data.tableId, false);
+        }
 
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
@@ -259,6 +265,10 @@ Meteor.methods({
 
         data.invoiceNo = data.rolesArea + "-" + moment(data.invoiceDate).format("YYYY") + pad(data.invoiceNo, 6);
 
+
+        if (data.transactionType === "Sale Receipt" && data.tableId) {
+            Meteor.call("updatePosTableStatus", data.tableId, false);
+        }
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             obj.price = numeral(obj.price).value();

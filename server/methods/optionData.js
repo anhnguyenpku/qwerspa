@@ -27,6 +27,8 @@ import {Sch_BusRegister} from "../../imports/collection/schBusRegister";
 import {Sch_Position} from "../../imports/collection/schPosition";
 import {Sch_Activity} from "../../imports/collection/schActivity";
 import {Pos_Production} from "../../imports/collection/posProduction";
+import {Pos_TableLocation} from "../../imports/collection/posTableLocation";
+import {Pos_Table} from "../../imports/collection/posTable";
 
 Meteor.methods({
     querySchStudentOption(q) {
@@ -641,6 +643,15 @@ Meteor.methods({
             }
         })
 
+    },
+    queryPosTableLocationOption(selector) {
+        return Pos_TableLocation.find(selector).fetch().map(function (obj) {
+            return {
+                label: obj.name,
+                value: obj._id,
+            }
+        })
+
     }
     ,
     queryChartAccountOption(selector) {
@@ -711,6 +722,27 @@ Meteor.methods({
             return {label: obj.code + " : " + obj.name, value: obj._id};
         });
         return data;
+    },
+    queryTableOption() {
+        let userId = Meteor.userId();
+        if (userId) {
+            let data = Pos_Table.find({}).map((obj) => {
+                return {label: obj.name, value: obj._id};
+            });
+            return data;
+        }
+        return [];
+    },
+    queryTableLocationOption() {
+        let userId = Meteor.userId();
+        if (userId) {
+            let data = Pos_TableLocation.find({}).map((obj) => {
+                return {label: obj.name, value: obj._id};
+            });
+            data.unshift({label: "All", value: ""});
+            return data;
+        }
+        return [];
     }
 })
 ;

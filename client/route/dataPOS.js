@@ -115,6 +115,17 @@ posSale.route('/posSaleCoffee', {
     }
 });
 
+import "../../imports/ui/pos_saleRestaurant/posSaleRestaurant";
+// Invoice
+posSale.route('/posSaleRestaurant', {
+    name: 'pos.saleRestaurant',
+    parent: 'wb.homeData',
+    title: "Sale Restaurant",
+    action: function (query, params) {
+        _NoHeaderNoSideBar('pos_SaleRestaurant');
+    }
+});
+
 import "../../imports/ui/pos_receivePayment/posReceivePayment";
 // Invoice
 posSale.route('/posReceivePayment', {
@@ -153,6 +164,15 @@ posData.route('/posInvoiceSmall/print', {
     name: 'pos.posInvoiceSmall-print',
     action: function (params, queryParams) {
         BlazeLayout.render('PrintLayout', {printLayout: 'pos_invoicePrintSmallReport'});
+    }
+
+});
+import '../../imports/ui/report/posInvoicePrintSmallRestaurant/posInvoicePrintSmallRestaurant';
+
+posData.route('/posInvoiceSmallRestaurant/print', {
+    name: 'pos.posInvoiceSmallRestaurant-print',
+    action: function (params, queryParams) {
+        BlazeLayout.render('PrintLayout', {printLayout: 'pos_invoicePrintSmallRestaurantReport'});
     }
 
 });
@@ -267,5 +287,17 @@ posData.route('/posProductionResult', {
     title: "Production Result",
     action: function (query, params) {
         _Main('pos_productionResult');
+    }
+});
+
+
+import "../../imports/ui/pos_tableBoard/posTableBoard";
+// Table Board
+posSale.route('/posTableBoard', {
+    name: 'pos.tableBoard',
+    parent: 'wb.homeData',
+    title: "Production Board",
+    action: function (query, params) {
+        _NoHeaderNoSideBar('pos_tableBoard');
     }
 });
