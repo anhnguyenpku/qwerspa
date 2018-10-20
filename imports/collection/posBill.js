@@ -4,12 +4,12 @@ Pos_Bill.schema = new SimpleSchema({
     vendorId: {
         type: String,
         label: "Vendor",
-        index:true
+        index: true
     },
     locationId: {
         type: String,
         label: "Location",
-        index:true
+        index: true
     },
     address: {
         type: String,
@@ -21,7 +21,7 @@ Pos_Bill.schema = new SimpleSchema({
     },
     billDate: {
         type: Date,
-        index:true
+        index: true
     },
     billDateName: {
         type: String,
@@ -88,6 +88,18 @@ Pos_Bill.schema = new SimpleSchema({
         type: Number,
         decimal: true
     },
+    balanceNotCut: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        defaultValue: 0
+    },
+    balanceUnPaid: {
+        type: Number,
+        decimal: true,
+        optional: true,
+        defaultValue: 0
+    },
     status: {
         type: String,
         defaultValue: "Active"
@@ -103,7 +115,7 @@ Pos_Bill.schema = new SimpleSchema({
     rolesArea: {
         type: String,
         label: "Role Area",
-        index:true
+        index: true
     },
     item: {
         type: [Object],
@@ -158,7 +170,7 @@ Pos_Bill.schema = new SimpleSchema({
     createdAt: {
         type: Date,
         optional: true,
-        index:true,
+        index: true,
         autoValue() {
             if (this.isInsert) {
                 return moment().toDate();

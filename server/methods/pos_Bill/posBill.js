@@ -150,7 +150,7 @@ Meteor.methods({
                 billNo: data.billNo,
                 canRemove: false,
                 locationId: data.locationId,
-                closeDate: data.netTotal - data.paid == 0 ? moment(data.billDate).toDate() : "",
+                closeDate: data.balanceUnPaid <= 0.001 ? moment(data.billDate).toDate() : "",
                 transactionType: (data.netTotal - data.paid) > 0 ? "Bill" : "Sale Receipt"
             };
 
@@ -220,7 +220,7 @@ Meteor.methods({
                         canRemove: false,
                         locationId: data.locationId,
 
-                        closeDate: data.netTotal - data.paid == 0 ? moment(data.billDate).toDate() : "",
+                        closeDate: data.balanceUnPaid <= 0 ? moment(data.billDate).toDate() : "",
                         transactionType: (data.netTotal - data.paid) > 0 ? "Bill" : "Sale Receipt"
 
                     }

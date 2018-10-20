@@ -93,6 +93,8 @@ Meteor.methods({
                     billPaid: {$sum: "$paid"},
                     lastBillNo: {$last: "$billNo"},
                     lastBillDate: {$last: "$billDate"},
+                    data: {$addToSet: "$$ROOT"}
+
                 }
             },
             {
@@ -122,14 +124,60 @@ Meteor.methods({
             {
                 $group: {
                     _id: {
+                        vendorId: "$_id.vendorId",
+                        receiveId: "$payBillDoc._id",
+                    },
+                    billTotal: {$last: "$billTotal"},
+                    billDiscount: {$last: "$billDiscount"},
+                    billPaid: {$last: "$billPaid"},
+                    payBillDoc: {$push: "$payBillDoc"},
+                    lastBillNo: {$last: "$lastBillNo"},
+                    data: {$last: "$data"},
+                    lastBillDate: {$last: "$lastBillDate"},
+                    totalPaidFromBill: {$sum: {$cond: [{$eq: ["$payBillDoc.billId", undefined]}, 0, "$payBillDoc.totalPaid"]}},
+                    totalDiscountFromBill: {$sum: {$cond: [{$eq: ["$payBillDoc.billId", undefined]}, 0, "$payBillDoc.totalDiscount"]}},
+                    isFromBill: {$last: {$cond: [{$eq: ["$payBillDoc.billId", undefined]}, false, true]}},
+                }
+            },
+            {
+                $unwind: {
+                    path: "$payBillDoc.bill",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+
+            {
+                $group: {
+                    _id: {
+                        vendorId: "$_id.vendorId",
+                        receiveId: "$payBillDoc.bill._id",
+
+                    },
+                    billTotal: {$last: "$billTotal"},
+                    billDiscount: {$last: "$billDiscount"},
+                    billPaid: {$last: "$billPaid"},
+                    lastBillNo: {$last: "$lastBillNo"},
+                    lastBillDate: {$last: "$lastBillDate"},
+                    data: {$last: "$data"},
+                    totalPaidReceive: {$sum: {$cond: [{$eq: ["$isFromBill", true]}, 0, "$payBillDoc.bill.paid"]}},
+                    totalDiscountReceive: {$sum: {$cond: [{$eq: ["$isFromBill", true]}, 0, "$payBillDoc.bill.discount"]}},
+                    totalPaidFromBill: {$last: "$totalPaidFromBill"},
+                    totalDiscountFromBill: {$last: "$totalDiscountFromBill"}
+                }
+            },
+            {
+                $group: {
+                    _id: {
                         vendorId: "$_id.vendorId"
                     },
                     billTotal: {$last: "$billTotal"},
                     billDiscount: {$last: "$billDiscount"},
                     billPaid: {$last: "$billPaid"},
-                    payBillDoc: {$last: "$payBillDoc"},
                     lastBillNo: {$last: "$lastBillNo"},
-                    lastBillDate: {$last: "$lastBillDate"}
+                    lastBillDate: {$last: "$lastBillDate"},
+                    data: {$last: "$data"},
+                    dataPayment: {$addToSet: "$$ROOT"}
+
                 }
             },
 
@@ -170,53 +218,53 @@ Meteor.methods({
         if (unPaidList.length > 0) {
             unPaidList[0].data.forEach((obj) => {
 
-                if (obj.payBillDoc == undefined || obj.payBillDoc == null) {
-                    obj.billDiscount = 0;
-                    obj.billPaid = 0;
-                }
-                if ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid > 0) {
+                let newUnPaidHtml = "";
+                let balanceUnpay = 0;
+                obj.data.forEach((ob) => {
+                    let findReceiveByBill = function (element) {
+                        if (element._id.billId === ob._id) {
+                            return element;
+                        }
+                    }
+
+                    let payDoc = obj.dataPayment.find(findReceiveByBill);
+
+                    if (ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0) - ob.paid - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0) > 0) {
+
+
+                        ob.billNo = ob && ob.billNo.length > 9 ? parseInt((ob && ob.billNo || "0000000000000").substr(9, 13)) : parseInt(ob && ob.billNo || "0");
+                        ob.billNo = pad(ob.billNo, 6);
+
+                        balanceUnpay += ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0) - ob.paid - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0);
+                        newUnPaidHtml += `
+                        <tr>
+                            <td colspan="3" style="text-align: center !important;">${moment(ob.billDate).format("DD/MM/YYYY")}-(#${ob.billNo})</td>
+                            <td style="text-align: left !important;">${formatCurrency(ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0) - ob.paid - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
+                        </tr>
+                    `;
+
+                    }
+                });
+
+                if (balanceUnpay > 0) {
                     unPaidHTML += `
                     <tr>
                             <td style="text-align: left !important;">${ind}</td>
                             <td style="text-align: left !important;">${obj.vendorDoc.name}</td>
                             <td style="text-align: left !important;">${obj.vendorDoc.phoneNumber || ""}</td>
-                            <td>${formatCurrency((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid, companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency((balanceUnpay), companyDoc.baseCurrency)}</td>
                     </tr>
             
-                 `
-
-                    if (obj.payBillDoc && obj.payBillDoc.bill.length > 0) {
-                        obj.payBillDoc.bill.forEach((ob) => {
-                            if (ob.netAmount - ob.paid > 0) {
-
-                                ob.billNo = ob && ob.billNo.length > 9 ? parseInt((ob && ob.billNo || "0000000000000").substr(9, 13)) : parseInt(ob && ob.billNo || "0");
-                                ob.billNo = pad(ob.billNo, 6);
-                                unPaidHTML += `
-                        <tr>
-                            <td colspan="3" style="text-align: center !important;">${moment(ob.billDate).format("DD/MM/YYYY")}-(#${ob.billNo})</td>
-                            <td>${formatCurrency(ob.netAmount - ob.paid, companyDoc.baseCurrency)}</td>
-                        </tr>
-                    
-                    `
-                            }
-                        })
-                    } else {
-                        obj.lastBillNo = obj && obj.lastBillNo.length > 9 ? parseInt((obj && obj.lastBillNo || "0000000000000").substr(9, 13)) : parseInt(obj && obj.lastBillNo || "0");
-                        obj.lastBillNo = pad(obj.lastBillNo, 6);
-                        unPaidHTML += `
-                        <tr>
-                            <td colspan="3" style="text-align: center !important;">${moment(obj.lastBillDate).format("DD/MM/YYYY")}-(#${obj.lastBillNo})</td>
-                            <td>${formatCurrency(obj.billTotal - obj.billDiscount - obj.billPaid, companyDoc.baseCurrency)}</td>
-                        </tr>
-                    
-                    `
-                    }
-
-
-                    grandTotal += obj.billTotal;
-                    grandUnpaid += (obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid;
+                 `;
                     ind++;
+
                 }
+
+                unPaidHTML += newUnPaidHtml;
+
+
+                grandTotal += obj.billTotal;
+                grandUnpaid += balanceUnpay;
             })
 
             unPaidHTML += `

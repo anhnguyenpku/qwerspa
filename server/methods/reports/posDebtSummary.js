@@ -121,7 +121,7 @@ Meteor.methods({
                     invoiceTotal: {$last: "$invoiceTotal"},
                     invoiceDiscount: {$last: "$invoiceDiscount"},
                     invoicePaid: {$last: "$invoicePaid"},
-                    receiveDoc: {$last: "$receiveDoc"}
+                    receiveDoc: {$push: "$receiveDoc"}
                 }
             },
 

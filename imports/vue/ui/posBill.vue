@@ -1295,6 +1295,7 @@
                             remainTHB: vm.$_numeral(vm.posBillForm.remainTHB).value(),
                             paymentNumber: 1,
                             locationId: vm.posBillForm.locationId,
+                            closeDate: vm.$_numeral(vm.posBillForm.balanceUnPaid).value() === 0 ? moment(vm.posBillForm.billDate).toDate() : "",
                             status: vm.$_numeral(vm.posBillForm.balanceUnpaid).value() == 0 ? "Complete" : vm.$_numeral(vm.posBillForm.balanceUnpaid).value() < vm.$_numeral(vm.posBillForm.netTotal).value() ? "Partial" : "Active"
 
                         };
@@ -1356,6 +1357,7 @@
                             remainTHB: vm.$_numeral(vm.posBillForm.remainTHB).value(),
                             _id: id,
                             locationId: vm.posBillForm.locationId,
+                            closeDate: vm.$_numeral(vm.posBillForm.balanceUnPaid).value() === 0 ? moment(vm.posBillForm.billDate).toDate() : "",
                             status: vm.$_numeral(vm.posBillForm.balanceUnpaid).value() === 0 ? "Complete" : vm.$_numeral(vm.posBillForm.balanceUnpaid).value() < vm.$_numeral(vm.posBillForm.netTotal).value() ? "Partial" : "Active"
 
 

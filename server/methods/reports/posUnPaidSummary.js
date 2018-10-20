@@ -123,7 +123,7 @@ Meteor.methods({
                     billTotal: {$last: "$billTotal"},
                     billDiscount: {$last: "$billDiscount"},
                     billPaid: {$last: "$billPaid"},
-                    payBillDoc: {$last: "$payBillDoc"}
+                    payBillDoc: {$push: "$payBillDoc"}
                 }
             },
 
@@ -167,8 +167,7 @@ Meteor.methods({
         let ind = 1;
         if (unPaidList.length > 0) {
             unPaidList[0].data.forEach((obj) => {
-
-                if ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid > 0) {
+                if ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid) > 0) {
                     unPaidHTML += `
                     <tr>
                             <td style="text-align: left !important;">${ind}</td>
@@ -176,16 +175,16 @@ Meteor.methods({
                             <td style="text-align: left !important;">${obj.vendorDoc.phoneNumber || ""}</td>
                             <td>${formatCurrency(obj.billTotal, companyDoc.baseCurrency)}</td>
                             <td>${formatCurrency(obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0, companyDoc.baseCurrency)}</td>
-                            <td>${formatCurrency(obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid), companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency(obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid)), companyDoc.baseCurrency)}</td>
 
-                            <td>${formatCurrency((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid, companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid), companyDoc.baseCurrency)}</td>
                     </tr>
             
                  `
                     grandTotal += obj.billTotal;
-                    grandPaid += obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid);
+                    grandPaid += obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid));
                     grandDiscount += obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0;
-                    grandUnpaid += (obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || obj.billTotal - obj.billDiscount - obj.billPaid;
+                    grandUnpaid += (obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid);
                     ind++;
                 }
             })
