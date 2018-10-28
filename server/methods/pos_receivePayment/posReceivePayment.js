@@ -349,13 +349,14 @@ Meteor.methods({
                 {
                     $group: {
                         _id: null,
-                        totalInvoice: {$sum: "$total"}
+                        totalInvoice: {$sum: "$total"},
+                        balanceNotCut: {$sum: "$balanceNotCut"}
                     }
                 }
             ])
             if (obj) {
                 //let toInv = (obj.paid - obj.cutOnPaid) > 0 ? 0 : (obj.paid - obj.cutOnPaid);
-                let netAm = obj.netTotal - obj.paid - (receiveDoc && receiveDoc[0].totalInvoice || 0);
+                let netAm = obj.netTotal - obj.paid - (receiveDoc && receiveDoc[0].totalInvoice || 0) + (receiveDoc && receiveDoc[0].balanceNotCut || 0);
                 if (netAm > 0) {
                     dataArr.push({
                         _id: obj._id,
