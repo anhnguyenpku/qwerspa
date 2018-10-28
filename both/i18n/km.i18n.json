@@ -59,7 +59,8 @@
       "saleCoffee": "លក់",
       "table": "តុ",
       "tableLocation": "ទីតាំងតុ",
-      "saleReceivePaymentByCustomerDetail": "លក់និងទទួលប្រាក់ដោយអតិថិជនលម្អិត"
+      "saleReceivePaymentByCustomerDetail": "លក់និងទទួលប្រាក់ដោយអតិថិជនលម្អិត",
+      "invoiceByImei": "លក់ដោយលេខកូដ"
     },
     "customer": {
       "customerAdd": "បញ្ចូលពត័មានអតិថិជន",

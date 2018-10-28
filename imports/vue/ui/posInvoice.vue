@@ -263,7 +263,9 @@
                                         <template slot="append">
                                             <el-dropdown trigger="click" :hide-on-click="false">
                                                     <span class="el-dropdown-link">
-                                                        {{langConfig['desc']}} <span v-if="posInvoiceDoc.desc==''">
+                                                        <span v-if="phoneShop===true">{{langConfig['imei']}}</span>
+                                                        <span v-if="phoneShop===false">{{langConfig['desc']}}</span>
+                                                        <span v-if="posInvoiceDoc.desc==''">
                                                                 <i class="el-icon-caret-bottom el-icon--right"></i>
                                                             </span>
                                                             <span v-else>
@@ -274,7 +276,12 @@
                                                     </span>
                                                 <el-dropdown-menu slot="dropdown">
                                                     <el-dropdown-item class="clearfix">
-                                                        <el-input :placeholder="langConfig['desc']" type="textarea"
+                                                        <el-input v-if="phoneShop===true"
+                                                                  :placeholder="langConfig['imei']" type="textarea"
+                                                                  v-model.number=posInvoiceDoc.desc
+                                                                  @keyup.native="updatePosInvoiceDetail(posInvoiceDoc, index)"></el-input>
+                                                        <el-input v-if="phoneShop===false"
+                                                                  :placeholder="langConfig['desc']" type="textarea"
                                                                   v-model.number=posInvoiceDoc.desc
                                                                   @keyup.native="updatePosInvoiceDetail(posInvoiceDoc, index)"></el-input>
                                                     </el-dropdown-item>
@@ -635,7 +642,9 @@
                                         <template slot="append">
                                             <el-dropdown trigger="click" :hide-on-click="false">
                                                     <span class="el-dropdown-link">
-                                                        {{langConfig['desc']}} <span v-if="posInvoiceDoc.desc==''">
+                                                        <span v-if="phoneShop===true">{{langConfig['imei']}}</span>
+                                                        <span v-if="phoneShop===false">{{langConfig['desc']}}</span>
+                                                        <span v-if="posInvoiceDoc.desc==''">
                                                                 <i class="el-icon-caret-bottom el-icon--right"></i>
                                                             </span>
                                                             <span v-else>
@@ -646,7 +655,12 @@
                                                     </span>
                                                 <el-dropdown-menu slot="dropdown">
                                                     <el-dropdown-item class="clearfix">
-                                                        <el-input :placeholder="langConfig['desc']" type="textarea"
+                                                        <el-input v-if="phoneShop===false"
+                                                                  :placeholder="langConfig['desc']" type="textarea"
+                                                                  v-model.number=posInvoiceDoc.desc
+                                                                  @keyup.native="updatePosInvoiceDetail(posInvoiceDoc, index)"></el-input>
+                                                        <el-input v-if="phoneShop===true"
+                                                                  :placeholder="langConfig['imei']" type="textarea"
                                                                   v-model.number=posInvoiceDoc.desc
                                                                   @keyup.native="updatePosInvoiceDetail(posInvoiceDoc, index)"></el-input>
                                                     </el-dropdown-item>
@@ -1335,6 +1349,7 @@
     import {GeneralFunction} from "../../../imports/api/methods/generalFunction";
     import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
     import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
+    import {Manage_Module} from "../../collection/manageModule";
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
     import compoLang from '../../../both/i18n/lang/elem-label'
@@ -1382,7 +1397,7 @@
                 dialogAddPosReceiveItem: false,
                 typeDiscount: "",
                 fullScreen: true,
-
+                phoneShop: false,
                 posInvoiceForm: {
                     itemId: "",
                     itemName: "",
@@ -2536,6 +2551,11 @@
             this.getTotal();
             this.locationOpt();
             Meteor.subscribe('Pos_InvoiceReact');
+
+            let ma = Manage_Module.findOne();
+            if (ma && ma.feature) {
+                this.phoneShop = ma.feature.indexOf("Phone Shop") > -1 ? true : false;
+            }
 
         },
         computed: {

@@ -59,7 +59,8 @@
       "saleCoffee": "Sale",
       "table": "Table",
       "tableLocation": "Table Location",
-      "saleReceivePaymentByCustomerDetail": "Sale Receive Payment By Customer Detail"
+      "saleReceivePaymentByCustomerDetail": "Sale Receive Payment By Customer Detail",
+      "invoiceByImei": "Invoice By Imei"
     },
     "customer": {
       "customerAdd": "Add Customer",

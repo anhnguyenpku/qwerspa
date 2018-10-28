@@ -113,6 +113,7 @@
                     {label: "Production", value: "Production"},
                     {label: "Coffee", value: "Coffee"},
                     {label: "Restaurant", value: "Restaurant"},
+                    {label: "Phone Shop", value: "Phone Shop"},
 
                 ],
                 moduleOption: [

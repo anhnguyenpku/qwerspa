@@ -369,6 +369,16 @@
                                                                                 "pos.sidebarMenu.saleReceivePaymentByCustomerDetail"}}
                                                                         </a>
                                                                         </li>
+
+                                                                        {{#if manageModule.phoneShop}}
+                                                                            <li><a href="{{pathFor
+                                                                                    'pos.posInvoiceByImeiReport'}}"
+                                                                                   class="title-body">
+                                                                                <i class="fa fa-dollar"></i> {{_
+                                                                                    "pos.sidebarMenu.invoiceByImei"}}
+                                                                            </a>
+                                                                            </li>
+                                                                        {{/if}}
                                                                         <hr>
 
                                                                     </ul>

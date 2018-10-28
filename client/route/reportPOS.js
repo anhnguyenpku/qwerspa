@@ -497,3 +497,15 @@ posReport.route('/posSaleReceivePaymentByCustomerDetailReport', {
     }
 
 });
+
+import '../../imports/ui/report/posInvoiceByImei/posInvoiceByImei';
+
+posReport.route('/posInvoiceByImeiReport', {
+    name: 'pos.posInvoiceByImeiReport',
+    title: "Invoice By Imei",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('pos_invoiceByImeiReport');
+    }
+
+});

@@ -156,6 +156,7 @@ Meteor.methods({
             obj.price = numeral(obj.price).value();
             obj.cost = numeral(obj.cost || 0).value();
             obj.totalCost = numeral(obj.totalCost).value();
+            obj.desc = (obj.desc || "").toString();
             return obj;
         });
 
@@ -274,6 +275,7 @@ Meteor.methods({
             obj.price = numeral(obj.price).value();
             obj.cost = numeral(obj.cost || 0).value();
             obj.totalCost = numeral(obj.totalCost).value();
+            obj.desc = (obj.desc || "").toString();
             return obj;
         });
 

@@ -151,6 +151,7 @@ Template.MainLayout.helpers({
             ob.production = (ma.feature.indexOf("Production") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.coffee = (ma.feature.indexOf("Coffee") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.restaurant = (ma.feature.indexOf("Restaurant") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.phoneShop = (ma.feature.indexOf("Phone Shop") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.table = ((ma.feature.indexOf("Restaurant") > -1 || ma.feature.indexOf("Coffee") > -1) ? true : false) || CheckRoles({roles: ['super']});
         }
 
@@ -200,6 +201,7 @@ Template.sidebar.helpers({
             ob.production = (ma.feature.indexOf("Production") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.coffee = (ma.feature.indexOf("Coffee") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.restaurant = (ma.feature.indexOf("Restaurant") > -1 ? true : false) || CheckRoles({roles: ['super']});
+            ob.phoneShop = (ma.feature.indexOf("Phone Shop") > -1 ? true : false) || CheckRoles({roles: ['super']});
             ob.table = ((ma.feature.indexOf("Restaurant") > -1 || ma.feature.indexOf("Coffee") > -1) ? true : false) || CheckRoles({roles: ['super']});
 
         }

@@ -87,7 +87,8 @@
       "qtyReceive": "Qty Receive",
       "paidOnSaleOrder": "Paid On Prepay",
       "paidOnSaleOrderRaw": "Prepay",
-      "barcode": "Barcode"
+      "barcode": "Barcode",
+      "imei": "Imei"
     },
     "saleCoffee": {
       "searchHere": "Search Here ...",
@@ -152,7 +153,8 @@
       "tableNumber": "Table",
       "pay": "Pay",
       "amountDiscount": "Amount"
-    },"saleCoffee": {
+    },
+    "saleCoffee": {
       "searchHere": "Search Here ...",
       "title": "Sale",
       "add": "Add Sale",
@@ -897,7 +899,8 @@
       "qtyReceive": "ចំនួនបានទទួល",
       "paidOnSaleOrder": "កាត់ពីប្រាក់កក់",
       "paidOnSaleOrderRaw": "ប្រាក់កក់",
-      "barcode": "លេខកូដ"
+      "barcode": "លេខកូដ",
+      "imei": "Imei"
     },
     "saleCoffee": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
