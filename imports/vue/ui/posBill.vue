@@ -229,7 +229,9 @@
                                         <template slot="append">
                                             <el-dropdown trigger="click" :hide-on-click="false">
                                                     <span class="el-dropdown-link">
-                                                        {{langConfig['des']}} <span v-if="posBillDoc.desc==''">
+                                                        <span v-if="phoneShop===false">{{langConfig['des']}}</span>
+                                                        <span v-if="phoneShop===true">{{langConfig['imei']}}</span>
+                                                         <span v-if="posBillDoc.desc==''">
                                                                 <i class="el-icon-caret-bottom el-icon--right"></i>
                                                             </span>
                                                             <span v-else>
@@ -240,7 +242,13 @@
                                                     </span>
                                                 <el-dropdown-menu slot="dropdown">
                                                     <el-dropdown-item class="clearfix">
-                                                        <el-input :placeholder="langConfig['des']"
+                                                        <el-input v-if="phoneShop===false"
+                                                                  :placeholder="langConfig['des']"
+                                                                  type="textarea"
+                                                                  v-model.number=posBillDoc.desc
+                                                                  @keyup.native="updatePosBillDetail(posBillDoc, index)"></el-input>
+                                                        <el-input v-if="phoneShop===true"
+                                                                  :placeholder="langConfig['imei']"
                                                                   type="textarea"
                                                                   v-model.number=posBillDoc.desc
                                                                   @keyup.native="updatePosBillDetail(posBillDoc, index)"></el-input>
@@ -294,7 +302,9 @@
                                     <el-input placeholder="USD" v-model.number="posBillForm.paidUSD" type='number'
                                               @change="getTotal()" @keyup.native="getTotal()"
                                     >
-                                        <template slot="append">{{posBillForm.remainUSD}} $</template>
+                                        <el-button slot="append" @click="clickUSD(posBillForm.remainUSD)">
+                                            {{posBillForm.remainUSD}} $
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -306,7 +316,9 @@
                                     <el-input placeholder="KHR" @change="getTotal()" @keyup.native="getTotal()"
                                               v-model.number="posBillForm.paidKHR" type='number'
                                     >
-                                        <template slot="append">{{posBillForm.remainKHR}} ៛</template>
+                                        <el-button slot="append" @click="clickKHR(posBillForm.remainKHR)">
+                                            {{posBillForm.remainKHR}} ៛
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -318,7 +330,9 @@
                                     <el-input placeholder="THB" v-model.number="posBillForm.paidTHB" type='number'
                                               @change="getTotal()" @keyup.native="getTotal()"
                                     >
-                                        <template slot="append">{{posBillForm.remainTHB}} B</template>
+                                        <el-button slot="append" @click="clickTHB(posBillForm.remainTHB)">
+                                            {{posBillForm.remainTHB}} B
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -570,7 +584,9 @@
                                         <template slot="append">
                                             <el-dropdown trigger="click" :hide-on-click="false">
                                                     <span class="el-dropdown-link">
-                                                        {{langConfig['des']}} <span v-if="posBillDoc.desc==''">
+                                                        <span v-if="phoneShop===false">{{langConfig['des']}}</span>
+                                                        <span v-if="phoneShop===true">{{langConfig['imei']}}</span> <span
+                                                            v-if="posBillDoc.desc==''">
                                                                 <i class="el-icon-caret-bottom el-icon--right"></i>
                                                             </span>
                                                             <span v-else>
@@ -581,7 +597,13 @@
                                                     </span>
                                                 <el-dropdown-menu slot="dropdown">
                                                     <el-dropdown-item class="clearfix">
-                                                        <el-input :placeholder="langConfig['des']"
+                                                        <el-input v-if="phoneShop===false"
+                                                                  :placeholder="langConfig['des']"
+                                                                  type="textarea"
+                                                                  v-model.number=posBillDoc.desc
+                                                                  @keyup.native="updatePosBillDetail(posBillDoc, index)"></el-input>
+                                                        <el-input v-if="phoneShop===true"
+                                                                  :placeholder="langConfig['imei']"
                                                                   type="textarea"
                                                                   v-model.number=posBillDoc.desc
                                                                   @keyup.native="updatePosBillDetail(posBillDoc, index)"></el-input>
@@ -634,7 +656,9 @@
                                     <el-input placeholder="USD" v-model.number="posBillForm.paidUSD" type='number'
                                               @change="getTotal()" @keyup.native="getTotal()"
                                     >
-                                        <template slot="append">{{posBillForm.remainUSD}} $</template>
+                                        <el-button slot="append" @click="clickUSD(posBillForm.remainUSD)">
+                                            {{posBillForm.remainUSD}} $
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -646,7 +670,9 @@
                                     <el-input placeholder="KHR" @change="getTotal()" @keyup.native="getTotal()"
                                               v-model.number="posBillForm.paidKHR" type='number'
                                     >
-                                        <template slot="append">{{posBillForm.remainKHR}} ៛</template>
+                                        <el-button slot="append" @click="clickKHR(posBillForm.remainKHR)">
+                                            {{posBillForm.remainKHR}} ៛
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -658,7 +684,9 @@
                                     <el-input placeholder="THB" v-model.number="posBillForm.paidTHB" type='number'
                                               @change.native="getTotal()" @keyup.native="getTotal()"
                                     >
-                                        <template slot="append">{{posBillForm.remainTHB}} B</template>
+                                        <el-button slot="append" @click="clickTHB(posBillForm.remainTHB)">
+                                            {{posBillForm.remainTHB}} B
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -874,6 +902,8 @@
     import {GeneralFunction} from "../../../imports/api/methods/generalFunction";
     import {getCurrencySymbolById} from "../../../imports/api/methods/roundCurrency";
     import {WB_waterBillingSetup} from "../../collection/waterBillingSetup";
+    import {Manage_Module} from "../../collection/manageModule";
+
     import compoLang from '../../../both/i18n/lang/elem-label'
     // require('cleave.js/dist/addons/cleave-phone.ac');
     // require('cleave.js/dist/addons/cleave-phone.{country}');
@@ -921,7 +951,7 @@
                 typeDiscount: "",
                 fullScreen: true,
                 timeStamp: [],
-
+                phoneShop: false,
                 posBillForm: {
                     itemId: "",
                     itemName: "",
@@ -1153,6 +1183,18 @@
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
+            },
+            clickTHB(val) {
+                this.posBillForm.paidTHB = this.$_numeral(val).value();
+                this.getTotal();
+            },
+            clickUSD(val) {
+                this.posBillForm.paidUSD = this.$_numeral(val).value();
+                this.getTotal();
+            },
+            clickKHR(val) {
+                this.posBillForm.paidKHR = this.$_numeral(val).value();
+                this.getTotal();
             },
             _inputMaskPosBill() {
                 /*setTimeout(() => {
@@ -1793,6 +1835,10 @@
             this.getTotal();
             this.locationOpt();
             Meteor.subscribe('Pos_BillReact');
+            let ma = Manage_Module.findOne();
+            if (ma && ma.feature) {
+                this.phoneShop = ma.feature.indexOf("Phone Shop") > -1 ? true : false;
+            }
 
         },
         computed: {

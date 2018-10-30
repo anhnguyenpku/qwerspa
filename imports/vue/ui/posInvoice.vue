@@ -337,7 +337,9 @@
                                               @keyup.native="getTotal()"
 
                                     >
-                                        <template slot="append">{{posInvoiceForm.remainUSD}} $</template>
+                                        <el-button slot="append" @click="clickUSD(posInvoiceForm.remainUSD)">
+                                            {{posInvoiceForm.remainUSD}} $
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -351,7 +353,9 @@
 
                                               v-model.number="posInvoiceForm.paidKHR" type='number'
                                     >
-                                        <template slot="append">{{posInvoiceForm.remainKHR}} ៛</template>
+                                        <el-button slot="append" @click="clickKHR(posInvoiceForm.remainKHR)">
+                                            {{posInvoiceForm.remainKHR}} ៛
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -364,7 +368,9 @@
                                               @change="getTotal()"
                                               @keyup.native="getTotal()"
                                     >
-                                        <template slot="append">{{posInvoiceForm.remainTHB}} B</template>
+                                        <el-button slot="append" @click="clickTHB(posInvoiceForm.remainTHB)">
+                                            {{posInvoiceForm.remainTHB}} B
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -715,7 +721,9 @@
                                               @keyup.native="getTotal()" @change="getTotal()"
                                               @click.native="clearZero($event)"
                                     >
-                                        <template slot="append">{{posInvoiceForm.remainUSD}} $</template>
+                                        <el-button slot="append" @click="clickUSD(posInvoiceForm.remainUSD)">
+                                            {{posInvoiceForm.remainUSD}} $
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -727,7 +735,9 @@
                                     <el-input placeholder="KHR" @change="getTotal()" @keyup.native="getTotal()"
                                               v-model.number="posInvoiceForm.paidKHR" type='number'
                                     >
-                                        <template slot="append">{{posInvoiceForm.remainKHR}} ៛</template>
+                                        <el-button slot="append" @click="clickKHR(posInvoiceForm.remainKHR)">
+                                            {{posInvoiceForm.remainKHR}} ៛
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -739,7 +749,9 @@
                                     <el-input placeholder="THB" v-model.number="posInvoiceForm.paidTHB" type='number'
                                               @change="getTotal()" @keyup.native="getTotal()"
                                     >
-                                        <template slot="append">{{posInvoiceForm.remainTHB}} B</template>
+                                        <el-button slot="append" @click="clickTHB(posInvoiceForm.remainTHB)">
+                                            {{posInvoiceForm.remainTHB}} B
+                                        </el-button>
                                     </el-input>
                                 </th>
                             </tr>
@@ -1652,6 +1664,19 @@
             },
             handleCurrentChange(val) {
                 this.currentPage = val;
+            },
+
+            clickTHB(val) {
+                this.posInvoiceForm.paidTHB = this.$_numeral(val).value();
+                this.getTotal();
+            },
+            clickUSD(val) {
+                this.posInvoiceForm.paidUSD = this.$_numeral(val).value();
+                this.getTotal();
+            },
+            clickKHR(val) {
+                this.posInvoiceForm.paidKHR = this.$_numeral(val).value();
+                this.getTotal();
             },
             _inputMaskPosInvoice() {
                 /*setTimeout(() => {

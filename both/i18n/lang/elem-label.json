@@ -359,7 +359,8 @@
       "chooseItem": "Choose Item",
       "chooseLocation": "Choose Location",
       "unit": "Unit",
-      "barcode": "Barcode"
+      "barcode": "Barcode",
+      "imei": "Imei"
     },
     "vendor": {
       "searchHere": "Search Here ...",
@@ -1103,7 +1104,8 @@
       "location": "ទីតាំង",
       "chooseLocation": "ជ្រើសរើសទីតាំង",
       "unit": "ឯកតា",
-      "barcode": "លេខកូដ"
+      "barcode": "លេខកូដ",
+      "imei": "លេខសំគាល់"
     },
     "vendor": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

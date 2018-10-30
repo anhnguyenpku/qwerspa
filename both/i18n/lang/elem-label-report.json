@@ -401,7 +401,11 @@
       "imei": "Imei",
       "note": "Note",
       "price": "Price",
-      "buyDate": "Buy Date"
+      "buyDate": "Buy Date",
+      "invoiceNo": "Invoice No",
+      "billNo": "Bill No",
+      "customer": "Customer",
+      "vendor": "Vendor"
     },
     "saleByProductSummary": {
       "run": "RUN REPORT",
@@ -1375,7 +1379,11 @@
       "imei": "លេខកូដ",
       "note": "បរិយាយ",
       "price": "តម្លៃ",
-      "buyDate": "ថ្ងៃទិញ"
+      "buyDate": "ថ្ងៃទិញ",
+      "invoiceNo": "លេខវិក័យបត្រ",
+      "billNo": "លេខវិក័យបត្រ",
+      "customer": "អតិថិជន",
+      "vendor": "អ្នកផ្គត់ផ្គង់"
     },
     "saleByProductDetail": {
       "run": "ដំណើរការរបាយការណ៍",

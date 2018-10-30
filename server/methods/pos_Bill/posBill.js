@@ -126,6 +126,8 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             obj.cost = numeral(obj.cost || 0).value();
+            obj.desc = (obj.desc || "").toString();
+
             return obj;
         });
         let id = Pos_Bill.insert(data);
@@ -189,6 +191,8 @@ Meteor.methods({
         data.item.forEach((obj) => {
             obj.amount = numeral(obj.amount).value();
             obj.cost = numeral(obj.cost || 0).value();
+            obj.desc = (obj.desc || "").toString();
+
             return obj;
         });
         let isUpdated = Pos_Bill.update({_id: _id},

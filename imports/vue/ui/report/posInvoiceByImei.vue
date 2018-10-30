@@ -111,16 +111,16 @@
                               </div>
                               <div class="col-lg-3"></div>
                           </div>
-                          <div class="row">
-                                                                <span style="float: left !important;">{{langConfig['no']}}: {{invoiceId}}</span>
+                          <!-- <div class="row">
+                                                                 <span style="float: left !important;">{{langConfig['no']}}: {{invoiceId}}</span>
 
-                          </div>
+                           </div>-->
                           <div class="row">
                               <div style="widows: 50% !important; float:right">
                                   {{langConfig['currency']}}: {{currencyHeader}}
                               </div>
                               <div style="width: 50% !important;">
-                                  {{langConfig['buyDate']}}: {{buyDate}}
+                                  {{langConfig['imei']}}: {{imei}}
                               </div>
 
                           </div>
@@ -130,6 +130,8 @@
                     <tr>
                         <th>{{langConfig['no']}}</th>
                         <th>{{langConfig['productName']}}</th>
+                        <th>{{langConfig['buyDate']}}</th>
+                        <th>{{langConfig['invoiceNo']}}</th>
                         <th>{{langConfig['imei']}}</th>
                         <th>{{langConfig['qty']}}</th>
                         <th>{{langConfig['price']}}</th>
@@ -137,8 +139,21 @@
                     </tr>
                 </thead>
                 <tbody style="margin-bottom: 5px;" v-html="saleHtml">
-
                 </tbody>
+                    <tbody>
+                        <tr style="border: 0px !important;">&nbsp;</tr>
+                    </tbody>
+                 <thead style="margin-top: 5px">
+                    <tr>
+                        <th>{{langConfig['no']}}</th>
+                        <th>{{langConfig['productName']}}</th>
+                        <th>{{langConfig['buyDate']}}</th>
+                        <th>{{langConfig['billNo']}}</th>
+                        <th>{{langConfig['imei']}}</th>
+                        <th>{{langConfig['qty']}}</th>
+                    </tr>
+                </thead>
+                    <tbody style="margin-bottom: 5px" v-html="purchaseHTML"></tbody>
 
 
             </table>
@@ -181,6 +196,7 @@
                 rolesArea: '',
                 activeName: '1',
                 saleHtml: "",
+                purchaseHTML: "",
                 labelPosition: 'top',
                 branchOptions: [],
                 areaOptions: [],
@@ -197,9 +213,9 @@
 
                 checkAll: false,
                 isIndeterminate: true,
-                buyDate: "",
+                imei: "",
                 currencyHeader: "",
-                invoiceId:"",
+                invoiceId: "",
                 pickerDateOptions: {
                     shortcuts: [{
                         text: 'Last week',
@@ -298,8 +314,8 @@
                 Meteor.call('posInvoiceByImeiReport', this.params, this.langConfig, (err, result) => {
                     if (result) {
                         this.saleHtml = result.saleHTML;
-                        this.buyDate = result.buyDate || "";
-                        this.invoiceId = result.invoiceId || "";
+                        this.purchaseHTML = result.purchaseHTML;
+                        this.imei = result.imei || "";
                         this.currencyHeader = result.currencyHeader;
                     }
                     this.loading = false;
