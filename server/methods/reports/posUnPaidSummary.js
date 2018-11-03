@@ -47,7 +47,7 @@ Meteor.methods({
             }
         ];
         let parameter2 = {};
-        parameter2.$or = [
+        /*parameter2.$or = [
             {
                 "payBillDoc.payBillDate": {
                     $exists: false
@@ -60,7 +60,7 @@ Meteor.methods({
             }
 
 
-        ];
+        ];*/
 
         let unPaidList = Pos_Bill.aggregate([
             {
@@ -90,16 +90,33 @@ Meteor.methods({
                     billDiscount: {$sum: "$discountValue"},
                     billPaid: {$sum: "$paid"},
                 }
-            },
+            }
+            ,
             {
                 $lookup: {
                     from: 'pos_payBill',
-                    localField: '_id.vendorId',
-                    foreignField: 'vendorId',
+                    let: {vendorId: "$_id.vendorId"},
+                    pipeline: [
+                        {
+                            $match:
+                                {
+                                    $expr:
+                                        {
+                                            $and:
+                                                [
+                                                    {$eq: ["$vendorId", "$$vendorId"]},
+                                                    {$lte: ["$payBillDate", moment(params.date).endOf("day").toDate()]}
+                                                ]
+                                        }
+                                }
+
+                        },
+                        {$project: {_id: 0}}
+                    ],
                     as: 'payBillDoc'
                 }
-            }
-            ,
+            },
+
             {
                 $unwind: {
                     path: "$payBillDoc",
@@ -111,8 +128,8 @@ Meteor.methods({
             },
             {
                 $sort: {
-                    "payBillDoc.payBillDate": 1,
-                    "payBillDoc.createdAt": 1
+                    "payBillDoc.createdAt": 1,
+                    "payBillDoc.payBillDate": 1
                 }
             },
             {
@@ -167,7 +184,7 @@ Meteor.methods({
         let ind = 1;
         if (unPaidList.length > 0) {
             unPaidList[0].data.forEach((obj) => {
-                if ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid) > 0) {
+                if ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid > 0) || (obj.billTotal - obj.billDiscount - obj.billPaid) > 0) {
                     unPaidHTML += `
                     <tr>
                             <td style="text-align: left !important;">${ind}</td>
@@ -175,16 +192,16 @@ Meteor.methods({
                             <td style="text-align: left !important;">${obj.vendorDoc.phoneNumber || ""}</td>
                             <td>${formatCurrency(obj.billTotal, companyDoc.baseCurrency)}</td>
                             <td>${formatCurrency(obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0, companyDoc.baseCurrency)}</td>
-                            <td>${formatCurrency(obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid)), companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency(obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount)), companyDoc.baseCurrency)}</td>
 
-                            <td>${formatCurrency((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid), companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount), companyDoc.baseCurrency)}</td>
                     </tr>
             
                  `
                     grandTotal += obj.billTotal;
-                    grandPaid += obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid));
+                    grandPaid += obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount));
                     grandDiscount += obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0;
-                    grandUnpaid += (obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount - obj.billPaid);
+                    grandUnpaid += (obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount);
                     ind++;
                 }
             })

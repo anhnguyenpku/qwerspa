@@ -100,12 +100,27 @@ Meteor.methods({
             {
                 $lookup: {
                     from: 'pos_payBill',
-                    localField: '_id.vendorId',
-                    foreignField: 'vendorId',
+                    let: {vendorId: "$_id.vendorId"},
+                    pipeline: [
+                        {
+                            $match:
+                                {
+                                    $expr:
+                                        {
+                                            $and:
+                                                [
+                                                    {$eq: ["$vendorId", "$$vendorId"]},
+                                                    {$lte: ["$payBillDate", moment(params.date).endOf("day").toDate()]}
+                                                ]
+                                        }
+                                }
+
+                        },
+                        {$project: {_id: 0}}
+                    ],
                     as: 'payBillDoc'
                 }
-            }
-            ,
+            },
             {
                 $unwind: {
                     path: "$payBillDoc",
@@ -134,9 +149,9 @@ Meteor.methods({
                     lastBillNo: {$last: "$lastBillNo"},
                     data: {$last: "$data"},
                     lastBillDate: {$last: "$lastBillDate"},
-                    totalPaidFromBill: {$sum: {$cond: [{$eq: ["$payBillDoc.billId", undefined]}, 0, "$payBillDoc.totalPaid"]}},
-                    totalDiscountFromBill: {$sum: {$cond: [{$eq: ["$payBillDoc.billId", undefined]}, 0, "$payBillDoc.totalDiscount"]}},
-                    isFromBill: {$last: {$cond: [{$eq: ["$payBillDoc.billId", undefined]}, false, true]}},
+                    totalPaidFromBill: {$sum: {$cond: [{$ifNull: ["$payBillDoc.billId", true]}, 0, "$payBillDoc.totalPaid"]}},
+                    totalDiscountFromBill: {$sum: {$cond: [{$ifNull: ["$payBillDoc.billId", true]}, 0, "$payBillDoc.totalDiscount"]}},
+                    isFromBill: {$last: {$cond: [{$ifNull: ["$payBillDoc.billId", true]}, false, true]}},
                 }
             },
             {
@@ -229,17 +244,17 @@ Meteor.methods({
 
                     let payDoc = obj.dataPayment.find(findReceiveByBill);
 
-                    if (ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0) - ob.paid - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0) > 0) {
+                    if (ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0)  - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0) > 0) {
 
 
                         ob.billNo = ob && ob.billNo.length > 9 ? parseInt((ob && ob.billNo || "0000000000000").substr(9, 13)) : parseInt(ob && ob.billNo || "0");
                         ob.billNo = pad(ob.billNo, 6);
 
-                        balanceUnpay += ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0) - ob.paid - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0);
+                        balanceUnpay += ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0)  - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0);
                         newUnPaidHtml += `
                         <tr>
                             <td colspan="3" style="text-align: center !important;">${moment(ob.billDate).format("DD/MM/YYYY")}-(#${ob.billNo})</td>
-                            <td style="text-align: left !important;">${formatCurrency(ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0) - ob.paid - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
+                            <td style="text-align: left !important;">${formatCurrency(ob.total - (ob.totalPaidFromBill || 0) - (ob.totalDiscountFromBill || 0)  - (ob.discountValue || 0) - (payDoc && payDoc.totalPaidReceive || 0) - (payDoc && payDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
                         </tr>
                     `;
 

@@ -49,7 +49,7 @@ Meteor.methods({
 
 
         let parameter2 = {};
-        parameter2.$or = [
+        /*parameter2.$or = [
             {
                 "receiveDoc.receivePaymentDate": {
                     $exists: false
@@ -60,7 +60,7 @@ Meteor.methods({
                     $lt: moment(params.date).endOf("day").toDate()
                 }
             }
-        ];
+        ];*/
 
 
         let debtList = Pos_Invoice.aggregate([
@@ -102,12 +102,27 @@ Meteor.methods({
             {
                 $lookup: {
                     from: 'pos_receivePayment',
-                    localField: '_id.customerId',
-                    foreignField: 'customerId',
+                    let: {customerId: "$_id.customerId"},
+                    pipeline: [
+                        {
+                            $match:
+                                {
+                                    $expr:
+                                        {
+                                            $and:
+                                                [
+                                                    {$eq: ["$customerId", "$$customerId"]},
+                                                    {$lte: ["$receivePaymentDate", moment(params.date).endOf("day").toDate()]}
+                                                ]
+                                        }
+                                }
+
+                        },
+                        {$project: {_id: 0}}
+                    ],
                     as: 'receiveDoc'
                 }
-            }
-            ,
+            },
             {
                 $unwind: {
                     path: "$receiveDoc",
@@ -120,8 +135,8 @@ Meteor.methods({
             },
             {
                 $sort: {
-                    "receiveDoc.receivePaymentDate": 1,
-                    "receiveDoc.createdAt": 1
+                    "receiveDoc.createdAt": 1,
+                    "receiveDoc.receivePaymentDate": 1
                 }
             },
 
@@ -139,10 +154,10 @@ Meteor.methods({
                     lastInvoiceNo: {$last: "$lastInvoiceNo"},
                     lastInvoiceDate: {$last: "$lastInvoiceDate"},
                     data: {$last: "$data"},
-                    totalPaidFromInvoice: {$sum: {$cond: [{$eq: ["$receiveDoc.invoiceId", undefined]}, 0, "$receiveDoc.totalPaid"]}},
-                    totalDiscountFromInvoice: {$sum: {$cond: [{$eq: ["$receiveDoc.invoiceId", undefined]}, 0, "$receiveDoc.totalDiscount"]}},
+                    totalPaidFromInvoice: {$sum: {$cond: [{$ifNull: ["$receiveDoc.invoiceId", true]}, 0, "$receiveDoc.totalPaid"]}},
+                    totalDiscountFromInvoice: {$sum: {$cond: [{$ifNull: ["$receiveDoc.invoiceId", true]}, 0, "$receiveDoc.totalDiscount"]}},
                     receiveDoc: {$last: "$receiveDoc"},
-                    isFromInvoice: {$last: {$cond: [{$eq: ["$receiveDoc.invoiceId", undefined]}, false, true]}},
+                    isFromInvoice: {$last: {$cond: [{$ifNull: ["$receiveDoc.invoiceId", true]}, false, true]}},
                 }
             },
             {
@@ -233,19 +248,17 @@ Meteor.methods({
                     }
 
                     let receiveDoc = obj.dataReceivePayment.find(findReceiveByInvoice);
-
-                    if (ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0) > 0) {
-
+                    if (ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0) > 0) {
 
                         ob.invoiceNo = ob && ob.invoiceNo.length > 9 ? parseInt((ob && ob.invoiceNo || "0000000000000").substr(9, 13)) : parseInt(ob && ob.invoiceNo || "0");
                         ob.invoiceNo = pad(ob.invoiceNo, 6);
 
-                        balanceUnpay += ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0);
+                        balanceUnpay += ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0);
                         if (ob.dueDate.getTime() >= params.date.getTime()) {
                             newDebtHtml += `
                         <tr>
                             <td colspan="3" style="text-align: center !important;">${moment(ob.invoiceDate).format("DD/MM/YYYY")}-(#${ob.invoiceNo})</td>
-                            <td style="text-align: left !important;">${formatCurrency(ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
+                            <td style="text-align: left !important;">${formatCurrency(ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
                         </tr>
                     
                     `;
@@ -253,7 +266,7 @@ Meteor.methods({
                             newDebtHtml += `
                         <tr>
                             <td colspan="3" style="text-align: center !important;">${moment(ob.invoiceDate).format("DD/MM/YYYY")}-(#${ob.invoiceNo})</td>
-                            <td style="text-align: left !important;color: red !important;">${formatCurrency(ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - ob.paid - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
+                            <td style="text-align: left !important;color: red !important;">${formatCurrency(ob.total - (ob.totalPaidFromInvoice || 0) - (ob.totalDiscountFromInvoice || 0) - (ob.discountValue || 0) - (receiveDoc && receiveDoc.totalPaidReceive || 0) - (receiveDoc && receiveDoc.totalDiscountReceive || 0), companyDoc.baseCurrency)}</td>
                         </tr>
                     
                     `;
