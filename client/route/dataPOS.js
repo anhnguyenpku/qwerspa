@@ -73,6 +73,27 @@ var posSale = FlowRouter.group({
     }]
 });
 
+var posDirector= FlowRouter.group({
+    prefix: '/pos-sale',
+    name: 'posSale',
+    triggersEnter: [function (context, redirect) {
+        if (!CheckRoles({roles: ['super', 'admin', 'director']})) {
+            redirect('wb.home');
+        }
+
+        if (!CheckRoles({roles: ['remove', 'super']})) {
+            Session.set("canRemove", true);
+        } else {
+            Session.set("canRemove", false);
+        }
+        if (!CheckRoles({roles: ['update', 'super']})) {
+            Session.set("canUpdate", true);
+        } else {
+            Session.set("canUpdate", false);
+        }
+    }]
+});
+
 // home
 posData.route('/', {
     name: 'wb.homeData',
@@ -299,5 +320,16 @@ posSale.route('/posTableBoard', {
     title: "Production Board",
     action: function (query, params) {
         _NoHeaderNoSideBar('pos_tableBoard');
+    }
+});
+
+import "../../imports/ui/pos_dashboard/posDashBoard";
+// Dash Board
+posDirector.route('/posDashboard', {
+    name: 'pos.dashBoard',
+    parent: 'wb.homeData',
+    title: "Dashboard",
+    action: function (query, params) {
+        _NoHeaderNoSideBar('pos_dashBoard');
     }
 });
