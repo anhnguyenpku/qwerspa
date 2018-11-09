@@ -195,8 +195,8 @@ Meteor.methods({
                     _id: {
                         itemName: "$item.itemName"
                     },
-                    totalQty: {$sum: {$cond: [{$ifNull: ["$item.saleOrderId", true]}, "$item.qty", 0]}},
-                    totalQtyReceiveItem: {$sum: {$cond: [{$ifNull: ["$item.saleOrderId", true]}, 0, "$item.qty"]}},
+                    totalQty: {$sum: {$cond: [{$ne: ["$transactionType", "Invoice Sale Order"]}, "$item.qty", 0]}},
+                    totalQtyReceiveItem: {$sum: {$cond: [{$ne: ["$transactionType", "Invoice Sale Order"]}, 0, "$item.qty"]}},
 
                 }
             }
