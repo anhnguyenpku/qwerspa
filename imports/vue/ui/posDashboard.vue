@@ -245,10 +245,8 @@
         },
         watch: {
             "params.dateChoose"(val) {
-                if (val) {
-                    this.params.dateChoose = val;
-                    this.queryData();
-                }
+                this.params.dateChoose = val;
+                this.queryData();
             }
         },
         methods: {
