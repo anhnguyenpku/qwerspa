@@ -77,7 +77,8 @@ Meteor.methods({
                     vendorId: 1,
                     total: 1,
                     discountValue: 1,
-                    paid: 1
+                    paid: 1,
+
                 }
             },
             {
@@ -89,6 +90,8 @@ Meteor.methods({
                     billTotal: {$sum: "$total"},
                     billDiscount: {$sum: "$discountValue"},
                     billPaid: {$sum: "$paid"},
+                    billList: {$push: "$_id"},
+
                 }
             }
             ,
@@ -133,6 +136,12 @@ Meteor.methods({
                 }
             },
             {
+                $unwind: {
+                    path: "$payBillDoc.bill",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
                 $group: {
                     _id: {
                         vendorId: "$_id.vendorId"
@@ -140,7 +149,9 @@ Meteor.methods({
                     billTotal: {$last: "$billTotal"},
                     billDiscount: {$last: "$billDiscount"},
                     billPaid: {$last: "$billPaid"},
-                    payBillDoc: {$push: "$payBillDoc"}
+                    billDoc: {$push: "$payBillDoc.bill"},
+                    billList: {$last: "$billList"}
+
                 }
             },
 
@@ -184,24 +195,35 @@ Meteor.methods({
         let ind = 1;
         if (unPaidList.length > 0) {
             unPaidList[0].data.forEach((obj) => {
-                if ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid > 0) || (obj.billTotal - obj.billDiscount - obj.billPaid) > 0) {
+                let toPaid = 0;
+                let toDiscount = 0;
+                if (obj.billDoc.length > 0) {
+                    obj.billDoc.forEach((inv) => {
+                        if (obj.billList.indexOf(inv._id) > -1) {
+                            toPaid += inv.paid + inv.discount;
+                            toDiscount += inv.discount;
+                        }
+                    })
+                }
+
+                if ((obj.billTotal - obj.billDiscount - toPaid) > 0) {
                     unPaidHTML += `
                     <tr>
                             <td style="text-align: left !important;">${ind}</td>
                             <td style="text-align: left !important;">${obj.vendorDoc.name}</td>
                             <td style="text-align: left !important;">${obj.vendorDoc.phoneNumber || ""}</td>
                             <td>${formatCurrency(obj.billTotal, companyDoc.baseCurrency)}</td>
-                            <td>${formatCurrency(obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0, companyDoc.baseCurrency)}</td>
-                            <td>${formatCurrency(obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount)), companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency(obj.billDiscount + toDiscount, companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency(toPaid, companyDoc.baseCurrency)}</td>
 
-                            <td>${formatCurrency((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount), companyDoc.baseCurrency)}</td>
+                            <td>${formatCurrency((obj.billTotal - obj.billDiscount - toPaid), companyDoc.baseCurrency)}</td>
                     </tr>
             
                  `
                     grandTotal += obj.billTotal;
-                    grandPaid += obj.billTotal - (obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0) - ((obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount));
-                    grandDiscount += obj.billDiscount + (obj.payBillDoc && obj.payBillDoc.totalDiscount) || 0;
-                    grandUnpaid += (obj.payBillDoc && obj.payBillDoc.balanceUnPaid) || (obj.billTotal - obj.billDiscount);
+                    grandPaid += toPaid;
+                    grandDiscount += obj.billDiscount + toDiscount;
+                    grandUnpaid += (obj.billTotal - obj.billDiscount - toPaid);
                     ind++;
                 }
             })
