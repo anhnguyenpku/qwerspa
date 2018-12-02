@@ -45,7 +45,7 @@ Meteor.methods({
                         return obj._id;
                     });
 
-                    selector.$or = [{teacherId: {$in: teacherList}}, {
+                    selector.$or = [{"teacher.teacherId": {$in: teacherList}}, {
                         activityId: {
                             $in: activityList
                         }
@@ -70,9 +70,15 @@ Meteor.methods({
                     $skip: options.skip
                 },
                 {
+                    $unwind: {
+                        path: "$teacher",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
                     $lookup: {
                         from: "sch_teacher",
-                        localField: "teacherId",
+                        localField: "teacher.teacherId",
                         foreignField: "_id",
                         as: "teacherDoc"
                     }
@@ -81,6 +87,18 @@ Meteor.methods({
                     $unwind: {
                         path: "$teacherDoc",
                         preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        teacherName: {
+                            $push: "$teacherDoc.personal.name"
+                        },
+                        activityId: {$last: "$activityId"},
+                        startDateName: {$last: "$startDateName"},
+                        endDateName: {$last: "$endDateName"},
+                        desc: {$last: "$desc"},
                     }
                 },
                 {

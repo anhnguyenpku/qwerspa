@@ -110,7 +110,8 @@
       "busDebtDetail": "Bus Debt Detail",
       "position": "Position",
       "activity": "Activity",
-      "teacherActivity": "Teacher Activity"
+      "teacherActivity": "Teacher Activity",
+      "teacherSalary": "Teacher Salary"
     }
   },
   "acc": {

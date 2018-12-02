@@ -215,3 +215,15 @@ schReportDirector.route('/schTeacherActivityReport', {
     }
 
 });
+
+import '../../imports/ui/report/schTeacherSalary/schTeacherSalary';
+
+schReportDirector.route('/schTeacherSalaryReport', {
+    name: 'sch.schTeacherSalaryReport',
+    title: "Teacher Salary Report",
+    parent: 'wb.home',
+    action: function (query, params) {
+        _Main('sch_teacherSalaryReport');
+    }
+
+});

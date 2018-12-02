@@ -81,6 +81,26 @@ Sch_Teacher.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    "personal.idCode": {
+        type: String,
+        optional: true
+    },
+    "personal.bankAccount": {
+        type: String,
+        optional: true
+    },
+    "personal.bankName": {
+        type: String,
+        optional: true
+    },
+    "personal.major": {
+        type: String,
+        optional: true
+    },
+    "personal.generation": {
+        type: String,
+        optional: true
+    },
 
     family: {
         type: Object
@@ -180,7 +200,52 @@ Sch_Teacher.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    levelSalary: {
+        type: [Object],
+        optional: true,
+        blackbox: true
+    },
+    "levelSalary.order": {
+        type: Number,
+        optional: true
+    },
+    "levelSalary.number": {
+        type: String,
+        optional: true
+    },
+    "levelSalary.date": {
+        type: Date,
+        optional: true
+    },
+    "levelSalary.level": {
+        type: String,
+        optional: true
+    },
+    "levelSalary.desc": {
+        type: String,
+        optional: true
+    },
+    "levelSalary.meaning": {
+        type: String,
+        optional: true
+    },
 
+    startDate: {
+        type: Date,
+        optional: true
+    },
+    stopDate: {
+        type: Date,
+        optional: true
+    },
+    status: {
+        type: String,
+        optional: true,
+        defaultValue: "Active"
+        //Transfer
+        //Retired
+        //Other
+    },
     rolesArea: {
         type: String,
         label: "Role Area"

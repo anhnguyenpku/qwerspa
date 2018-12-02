@@ -123,7 +123,7 @@
       "isDie": "Die",
       "address": "Address",
       "personalContract": "Personal Contract",
-      "cousin": "Cousin",
+      "cousin": "Sibling",
       "family": "Family",
       "study": "Study",
       "studyAt": "Study At?",
@@ -151,8 +151,21 @@
       "grades": "Grade",
       "position": "Position",
       "idNumber": "Id Number",
+      "idCode": "National Id",
       "startWorkDate": "Start Work Date",
-      "startDate": "Start Date"
+      "startDate": "Start Date",
+      "bankAccount": "Bank Account",
+      "bankName": "Bank Name",
+      "major": "Major",
+      "generation": "Generation",
+      "levelSalary": "Level Salary",
+      "kambrak": "Type Salary",
+      "order": "Oder",
+      "number": "Number",
+      "date": "Date",
+      "desc": "Description",
+      "meaning": "Meaning",
+      "startDateInSchool": "Start Date In School"
     },
     "level": {
       "searchHere": "Search Here ...",
@@ -321,7 +334,7 @@
       "updateStatusStudent": "Update Status Student",
       "promotion": "Scholarship",
       "time": "Time",
-      "faculty":"Faculty"
+      "faculty": "Faculty"
     },
     "program": {
       "searchHere": "Search Here ...",
@@ -408,7 +421,9 @@
       "endDate": "End Date",
       "desc": "desc",
       "add": "Add Teacher Activity",
-      "update": "Update Teacher Activity"
+      "update": "Update Teacher Activity",
+      "topic": "Topic",
+      "place": "Place"
     },
     "position": {
       "searchHere": "Search Here ...",
@@ -429,7 +444,8 @@
       "khName": "Khmer Name",
       "desc": "desc",
       "add": "Add Position",
-      "update": "Update Position"
+      "update": "Update Position",
+      "order": "Order"
     },
     "major": {
       "searchHere": "Search Here ...",
@@ -902,8 +918,21 @@
       "credit": "ក្រេឌីត",
       "position": "តួនាទី",
       "idNumber": "អត្តលេខ",
+      "idCode": "លេខអត្តសញ្ញាណប័ណ្ណ",
       "startWorkDate": "ថ្ងៃចូលបម្រើការងារ",
-      "startDate": "ថ្ងៃចាប់ផ្តើម"
+      "startDate": "ថ្ងៃចាប់ផ្តើម",
+      "bankAccount": "លេខគណនី",
+      "bankName": "ឈ្មោះធនាគារ",
+      "major": "ជំនាញ",
+      "generation": "ជំនាន់",
+      "levelSalary": "កម្រិតប្រាក់ខែ",
+      "kambrak": "កាំប្រាក់",
+      "order": "លេខរៀង",
+      "number": "ប្រកាស់លេខ",
+      "date": "កាលបរិច្ឋេទ",
+      "desc": "បរិយាយ",
+      "meaning": "អត្ថន័យ",
+      "startDateInSchool": "ថ្ងៃចាប់ផ្តើមធ្វើការក្នុងសាលា"
     },
     "level": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1078,7 +1107,7 @@
       "updateStatusStudent": "កែប្រែស្ថានភាពសិស្ស",
       "promotion": "អាហារូបករណ៍",
       "time": "ពេលសិក្សា",
-      "faculty":"មហាវិទ្យាល័យ"
+      "faculty": "មហាវិទ្យាល័យ"
     },
     "program": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1169,7 +1198,9 @@
       "endDate": "ថ្ងៃបញ្ចប់",
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានសកម្មភាពគ្រូ",
-      "update": "កែប្រែព័តមានសកម្មភាពគ្រូ"
+      "update": "កែប្រែព័តមានសកម្មភាពគ្រូ",
+      "topic": "ប្រធានបទ",
+      "place": "ទិកន្លែង"
     },
     "position": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",
@@ -1191,7 +1222,8 @@
       "khName": "ឈ្មោះខ្មែរ",
       "desc": "សម្គាល់",
       "add": "បញ្ចូលព័តមានតួនាទី",
-      "update": "កែប្រែព័តមានតួនាទី"
+      "update": "កែប្រែព័តមានតួនាទី",
+      "order": "លេខរៀង"
     },
     "major": {
       "searchHere": "ស្វែងរក​នៅទីនេះ ...",

@@ -44,6 +44,12 @@
                         border
                         style="width: 100%">
                     <el-table-column
+                            prop="order"
+                            :label="langConfig['order']"
+                            width="120"
+                            sortable>
+                    </el-table-column>
+                    <el-table-column
                             prop="name"
                             :label="langConfig['name']"
                             sortable>
@@ -106,14 +112,21 @@
                 <el-form-item :label="langConfig['khName']" prop="khName">
                     <el-input v-model="schPositionForm.khName"></el-input>
                 </el-form-item>
+
+                <el-form-item :label="langConfig['order']" prop="order">
+                    <el-input-number v-model="schPositionForm.order"></el-input-number>
+                </el-form-item>
+
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schPositionForm.desc"></el-input>
                 </el-form-item>
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchPosition = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
-                    <el-button type="primary" @click="saveSchPosition($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
+                    <el-button @click="dialogAddSchPosition = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
+                    </el-button>
+                    <el-button type="primary" @click="saveSchPosition($event)">{{langConfig['save']}} <i>(Ctrl +
+                        Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -136,6 +149,9 @@
                 <el-form-item :label="langConfig['khName']" prop="khName">
                     <el-input v-model="schPositionForm.khName"></el-input>
                 </el-form-item>
+                <el-form-item :label="langConfig['order']" prop="order">
+                    <el-input-number v-model="schPositionForm.order"></el-input-number>
+                </el-form-item>
                 <el-form-item :label="langConfig['desc']" prop="desc">
                     <el-input type="textarea" v-model="schPositionForm.desc"></el-input>
                 </el-form-item>
@@ -143,8 +159,10 @@
                 <input type="hidden" v-model="schPositionForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogUpdateSchPosition = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i></el-button>
-                    <el-button type="primary" @click="updateSchPosition">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
+                    <el-button @click="dialogUpdateSchPosition = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
+                    </el-button>
+                    <el-button type="primary" @click="updateSchPosition">{{langConfig['save']}} <i>(Ctrl + Enter)</i>
+                    </el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -192,10 +210,12 @@
                     name: "",
                     khName: "",
                     desc: "",
-                    _id: ""
+                    _id: "",
+                    order: ""
                 },
                 rules: {
                     name: [{required: true, message: 'Please input name', trigger: 'blur'}],
+                    order: [{required: true, message: 'Please input order', trigger: 'blur'}],
                 },
                 skip: 0
             }
@@ -253,6 +273,7 @@
                             name: vm.schPositionForm.name,
                             khName: vm.schPositionForm.khName,
                             desc: vm.schPositionForm.desc,
+                            order: vm.schPositionForm.order,
                             rolesArea: Session.get('area')
                         };
 
@@ -287,6 +308,7 @@
                             name: vm.schPositionForm.name,
                             khName: vm.schPositionForm.khName,
                             desc: vm.schPositionForm.desc,
+                            order: vm.schPositionForm.order,
                             rolesArea: Session.get('area')
                         };
 

@@ -61,7 +61,7 @@
       "tableLocation": "ទីតាំងតុ",
       "saleReceivePaymentByCustomerDetail": "លក់និងទទួលប្រាក់ដោយអតិថិជនលម្អិត",
       "invoiceByImei": "លក់ដោយលេខកូដ",
-      "dashBoard":"សង្ខេប"
+      "dashBoard": "សង្ខេប"
     },
     "customer": {
       "customerAdd": "បញ្ចូលពត័មានអតិថិជន",
@@ -110,7 +110,8 @@
       "busDebtDetail": "បំណុលសេវាឡានលម្អិត",
       "position": "តួនាទី",
       "activity": "សកម្មភាព",
-      "teacherActivity": "សកម្មភាពគ្រូ "
+      "teacherActivity": "សកម្មភាពគ្រូ ",
+      "teacherSalary": "របាយកាណ៍ប្រាក់បៀវត្ស"
     }
   },
   "acc": {

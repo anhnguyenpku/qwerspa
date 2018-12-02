@@ -14,13 +14,13 @@ import {formatCurrency} from "../../../imports/api/methods/roundCurrency"
 Meteor.methods({
     schTeacherActivityReport(params, translate) {
         let parameter = {};
-
+        let newParam = {};
         if (params.area != "") {
             parameter.rolesArea = params.area;
 
         }
         if (params.teacherId != "") {
-            parameter.teacherId = params.teacherId;
+            newParam["teacher.teacherId"] = params.teacherId;
         }
         if (params.activityId != "") {
             parameter.activityId = params.activityId;
@@ -79,9 +79,18 @@ Meteor.methods({
                 }
             },
             {
+                $unwind: {
+                    path: "$teacher",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $match: newParam
+            },
+            {
                 $lookup: {
                     from: 'sch_teacher',
-                    localField: 'teacherId',
+                    localField: 'teacher.teacherId',
                     foreignField: '_id',
                     as: 'teacherDoc'
                 }
@@ -97,7 +106,6 @@ Meteor.methods({
                 $group: {
                     _id: null,
                     data: {$push: "$$ROOT"},
-                    totalPrice: {$sum: "$levelDoc.price"}
                 }
             },
         ]);

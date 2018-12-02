@@ -1,10 +1,14 @@
 export const Sch_TeacherActivity = new Mongo.Collection('sch_teacherActivity');
 
 Sch_TeacherActivity.schema = new SimpleSchema({
-    teacherId: {
+    teacher: {
+        type: [Object],
+        optional: true,
+        blackbox: true
+    },
+    "teacher.teacherId": {
         type: String,
-        label: "Teacher",
-        index: true
+        optional: true
     },
     activityId: {
         type: String,
@@ -26,6 +30,14 @@ Sch_TeacherActivity.schema = new SimpleSchema({
         optional: true
     },
     desc: {
+        type: String,
+        optional: true
+    },
+    place: {
+        type: String,
+        optional: true
+    },
+    topic: {
         type: String,
         optional: true
     },

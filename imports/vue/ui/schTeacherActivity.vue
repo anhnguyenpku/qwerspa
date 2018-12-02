@@ -44,9 +44,11 @@
                         border
                         style="width: 100%">
                     <el-table-column
-                            prop="teacherDoc.personal.name"
                             :label="langConfig['teacher']"
                             sortable>
+                        <template slot-scope="scope">
+                            <p v-for="o in scope.row.teacherName">{{o}}</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
                             prop="activityDoc.name"
@@ -104,69 +106,126 @@
         <el-dialog
                 :title="langConfig['add']"
                 :visible.sync="dialogAddSchTeacherActivity"
-                width="30%">
+                width="70%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schTeacherActivityForm" :rules="rules" ref="schTeacherActivityFormAdd" label-width="120px"
                      class="schTeacherActivityForm">
 
-                <el-form-item :label="langConfig['teacher']" prop="teacherId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schTeacherActivityForm.teacherId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in teacherList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['activity']" prop="activityId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schTeacherActivityForm.activityId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in activityList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item :label="langConfig['activity']" prop="activityId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schTeacherActivityForm.activityId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in activityList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
 
-                <el-form-item :label="langConfig['startDate']" prop="startDate">
-                    <el-date-picker
-                            v-model="schTeacherActivityForm.startDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['endDate']" prop="endDate">
-                    <el-date-picker
-                            v-model="schTeacherActivityForm.endDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
+                        <el-form-item :label="langConfig['startDate']" prop="startDate">
+                            <el-date-picker
+                                    v-model="schTeacherActivityForm.startDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['endDate']" prop="endDate">
+                            <el-date-picker
+                                    v-model="schTeacherActivityForm.endDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+
+                        <el-form-item :label="langConfig['topic']" prop="topic">
+                            <el-input type="text" v-model="schTeacherActivityForm.topic"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['place']" prop="place">
+                            <el-input type="text" v-model="schTeacherActivityForm.place"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['desc']" prop="desc">
+                            <el-input type="textarea" v-model="schTeacherActivityForm.desc"></el-input>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="2">
+                        &nbsp;
+                    </el-col>
+                    <el-col :span="10">
+                        <p><b><i class="material-icons">
+                            whatshot
+                        </i> {{langConfig['teacher']}}</b></p>
+                        <hr>
+                        <el-row>
+                            <el-table
+                                    :data="teacherData"
+                                    stripe
+                                    style="width: 100%">
+                                <el-table-column
+                                        type="index"
+                                        :index="indexMethod">
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['teacher']">
+                                    <template slot-scope="scope">
+                                        <el-select style="display: block !important;"
+                                                   filterable
+                                                   v-model="scope.row.teacherId"
+                                                   @change="handleEditTeacher(scope.$index, scope.row)"
+                                                   :placeholder="langConfig['chooseItem']">
+                                            <el-option
+                                                    v-for="item in teacherList"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                    :disabled="item.disabled">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['action']"
+                                        width="120"
+                                >
+                                    <template slot-scope="scope">
+                                        <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
+                                                   size="small"
+                                                   @click="handleAddTeacher()"
+
+                                        ></el-button>
+                                        <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
+                                                   size="small"
+                                                   @click="removeTeacherData(scope.$index,scope.row)"
+                                        ></el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-row>
 
 
-                <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schTeacherActivityForm.desc"></el-input>
-                </el-form-item>
+                        <br>
+                        <br>
+                    </el-col>
+                </el-row>
+
 
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
-                    <el-button @click="dialogAddSchTeacherActivity = false, cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
+                    <el-button @click="dialogAddSchTeacherActivity = false, cancel()">{{langConfig['cancel']}}
+                        <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="saveSchTeacherActivity($event)">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
+                    <el-button type="primary" @click="saveSchTeacherActivity($event)">{{langConfig['save']}} <i>(Ctrl +
+                        Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -177,71 +236,125 @@
         <el-dialog
                 :title="langConfig['update']"
                 :visible.sync="dialogUpdateSchTeacherActivity"
-                width="30%">
+                width="70%">
             <!--<hr style="margin-top: 0px !important;border-top: 2px solid teal">-->
             <el-form :model="schTeacherActivityForm" :rules="rules" ref="schTeacherActivityFormUpdate"
                      label-width="120px"
                      class="schTeacherActivityForm">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item :label="langConfig['activity']" prop="activityId">
+                            <el-select style="display: block !important;"
+                                       filterable
+                                       v-model="schTeacherActivityForm.activityId"
+                                       :placeholder="langConfig['chooseItem']">
+                                <el-option
+                                        v-for="item in activityList"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                        :disabled="item.disabled">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
 
-                <el-form-item :label="langConfig['teacher']" prop="teacherId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schTeacherActivityForm.teacherId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in teacherList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="langConfig['activity']" prop="activityId">
-                    <el-select style="display: block !important;"
-                               filterable
-                               v-model="schTeacherActivityForm.activityId"
-                               :placeholder="langConfig['chooseItem']">
-                        <el-option
-                                v-for="item in activityList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                                :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                        <el-form-item :label="langConfig['startDate']" prop="startDate">
+                            <el-date-picker
+                                    v-model="schTeacherActivityForm.startDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['endDate']" prop="endDate">
+                            <el-date-picker
+                                    v-model="schTeacherActivityForm.endDate"
+                                    type="date"
+                                    style="width: 100%;"
+                                    placeholder="Pick a day"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['topic']" prop="topic">
+                            <el-input type="text" v-model="schTeacherActivityForm.topic"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="langConfig['place']" prop="place">
+                            <el-input type="text" v-model="schTeacherActivityForm.place"></el-input>
+                        </el-form-item>
 
-                <el-form-item :label="langConfig['startDate']" prop="startDate">
-                    <el-date-picker
-                            v-model="schTeacherActivityForm.startDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item :label="langConfig['endDate']" prop="endDate">
-                    <el-date-picker
-                            v-model="schTeacherActivityForm.endDate"
-                            type="date"
-                            style="width: 100%;"
-                            placeholder="Pick a day"
-                    >
-                    </el-date-picker>
-                </el-form-item>
+                        <el-form-item :label="langConfig['desc']" prop="desc">
+                            <el-input type="textarea" v-model="schTeacherActivityForm.desc"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        &nbsp;
+                    </el-col>
+                    <el-col :span="10">
+                        <p><b><i class="material-icons">
+                            whatshot
+                        </i> {{langConfig['teacher']}}</b></p>
+                        <hr>
+                        <el-row>
+                            <el-table
+                                    :data="teacherData"
+                                    stripe
+                                    style="width: 100%">
+                                <el-table-column
+                                        type="index"
+                                        :index="indexMethod">
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['teacher']">
+                                    <template slot-scope="scope">
+                                        <el-select style="display: block !important;"
+                                                   filterable
+                                                   v-model="scope.row.teacherId"
+                                                   @change="handleEditTeacher(scope.$index, scope.row)"
+                                                   :placeholder="langConfig['chooseItem']">
+                                            <el-option
+                                                    v-for="item in teacherList"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                    :disabled="item.disabled">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                        :label="langConfig['action']"
+                                        width="120"
+                                >
+                                    <template slot-scope="scope">
+                                        <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
+                                                   size="small"
+                                                   @click="handleAddTeacher()"
+
+                                        ></el-button>
+                                        <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
+                                                   size="small"
+                                                   @click="removeTeacherData(scope.$index,scope.row)"
+                                        ></el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-row>
 
 
-                <el-form-item :label="langConfig['desc']" prop="desc">
-                    <el-input type="textarea" v-model="schTeacherActivityForm.desc"></el-input>
-                </el-form-item>
+                        <br>
+                        <br>
+                    </el-col>
+                </el-row>
+
 
                 <input type="hidden" v-model="schTeacherActivityForm._id"/>
                 <hr style="margin-top: 0px !important;">
                 <el-row class="pull-right">
                     <el-button @click="dialogUpdateSchTeacherActivity = false ,cancel()">{{langConfig['cancel']}} <i>(ESC)</i>
                     </el-button>
-                    <el-button type="primary" @click="updateSchTeacherActivity">{{langConfig['save']}} <i>(Ctrl + Enter)</i></el-button>
+                    <el-button type="primary" @click="updateSchTeacherActivity">{{langConfig['save']}} <i>(Ctrl +
+                        Enter)</i></el-button>
                 </el-row>
                 <br>
             </el-form>
@@ -286,9 +399,11 @@
                 dialogUpdateSchTeacherActivity: false,
                 teacherList: [],
                 activityList: [],
-
+                teacherData: [{
+                    teacherId: ""
+                }],
                 schTeacherActivityForm: {
-                    teacherId: "",
+                    teacherId: [],
                     activityId: "",
                     desc: "",
                     startDate: "",
@@ -365,7 +480,9 @@
                     this.isSearching = false;
                 });
             }, 300),
-
+            indexMethod(index) {
+                return index + 1;
+            },
             fetchUser() {
                 Meteor.call("queryUserOption", (err, result) => {
                     this.applyUserOption = result;
@@ -391,16 +508,25 @@
                 let vm = this;
                 this.$refs["schTeacherActivityFormAdd"].validate((valid) => {
                     if (valid) {
+                        let teacher = [];
+                        this.teacherData.map((obj) => {
+                            if (obj.teacherId) {
+                                teacher.push(obj);
+                            }
+                        });
                         let schTeacherActivityDoc = {
-                            teacherId: vm.schTeacherActivityForm.teacherId,
+                            teacher: teacher,
                             activityId: vm.schTeacherActivityForm.activityId,
                             startDate: vm.schTeacherActivityForm.startDate,
                             startDateName: moment(vm.schTeacherActivityForm.startDate).format("DD/MM/YYYY"),
                             endDate: vm.schTeacherActivityForm.endDate,
                             endDateName: moment(vm.schTeacherActivityForm.endDate).format("DD/MM/YYYY"),
                             desc: vm.schTeacherActivityForm.desc,
+                            topic: vm.schTeacherActivityForm.topic,
+                            place: vm.schTeacherActivityForm.place,
                             rolesArea: Session.get('area')
                         };
+
 
                         Meteor.call("insertSchTeacherActivity", schTeacherActivityDoc, (err, result) => {
                             if (!err) {
@@ -428,15 +554,23 @@
                 let vm = this;
                 this.$refs["schTeacherActivityFormUpdate"].validate((valid) => {
                     if (valid) {
+                        let teacher = [];
+                        this.teacherData.map((obj) => {
+                            if (obj.teacherId) {
+                                teacher.push(obj);
+                            }
+                        });
                         let schTeacherActivityDoc = {
                             _id: vm.schTeacherActivityForm._id,
-                            teacherId: vm.schTeacherActivityForm.teacherId,
+                            teacher: teacher,
                             activityId: vm.schTeacherActivityForm.activityId,
                             startDate: vm.schTeacherActivityForm.startDate,
                             startDateName: moment(vm.schTeacherActivityForm.startDate).format("DD/MM/YYYY"),
                             endDate: vm.schTeacherActivityForm.endDate,
                             endDateName: moment(vm.schTeacherActivityForm.endDate).format("DD/MM/YYYY"),
                             desc: vm.schTeacherActivityForm.desc,
+                            topic: vm.schTeacherActivityForm.topic,
+                            place: vm.schTeacherActivityForm.place,
                             rolesArea: Session.get('area')
                         };
 
@@ -481,7 +615,7 @@
 
                             vm.$message({
                                 message: `
-                        លុប ${row.code} : ${row.name} បានជោគជ័យ`,
+                        លុប បានជោគជ័យ`,
                                 type: 'success'
                             });
 
@@ -511,8 +645,32 @@
                     if (result) {
                         vm.schTeacherActivityForm._id = result._id;
                         vm.schTeacherActivityForm = result;
+                        vm.teacherData = result.teacher;
                     }
                 })
+            },
+            handleAddTeacher() {
+                this.teacherData.push({
+                    teacherId: ""
+                })
+            },
+
+            handleEditTeacher(index, row) {
+                this.teacherData[index] = row;
+            },
+            removeTeacherData(index, row) {
+                if (this.teacherData.length > 1) {
+                    this.teacherData.splice(index, 1);
+                    this.$message({
+                        message: `លុប បានជោគជ័យ`,
+                        type: 'success'
+                    });
+                } else {
+                    this.teacherData = [{
+                        teacherId: ""
+
+                    }];
+                }
             },
             cancel() {
                 this.$message({
@@ -522,6 +680,10 @@
             },
             resetForm() {
                 this.schTeacherActivityForm._id = "";
+                this.teacherData = [{
+                    teacherId: ""
+
+                }];
                 if (this.$refs["schTeacherActivityFormAdd"]) {
                     this.$refs["schTeacherActivityFormAdd"].resetFields();
                 }

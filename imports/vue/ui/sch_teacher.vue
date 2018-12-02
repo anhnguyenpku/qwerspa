@@ -80,7 +80,6 @@
                                 <el-button type="primary" icon="el-icon-edit" size="small" class="cursor-pointer"
                                            @click="findSchTeacherById(scope),dialogUpdateSchTeacher= true"
                                            :disabled="disabledUpdate"></el-button>
-                                </el-button>
 
                             </el-button-group>
 
@@ -144,7 +143,9 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="10">
-
+                                        <el-form-item :label="langConfig['idCode']" prop="idCode">
+                                            <el-input v-model="schTeacherForm.idCode"></el-input>
+                                        </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row>
@@ -282,6 +283,42 @@
                                 <el-form-item :label="langConfig['phoneNumber']" prop="phoneNumber">
                                     <el-input v-model="schTeacherForm.phoneNumber"></el-input>
                                 </el-form-item>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['bankAccount']" prop="bankAccount">
+                                            <el-input v-model="schTeacherForm.bankAccount"></el-input>
+                                        </el-form-item>
+
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['bankName']" prop="bankName">
+                                            <el-input v-model="schTeacherForm.bankName"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['major']" prop="major">
+                                            <el-input v-model="schTeacherForm.major"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['generation']" prop="generation">
+                                            <el-input v-model="schTeacherForm.generation"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-form-item :label="langConfig['startDateInSchool']" prop="startDate">
+                                        <el-date-picker
+                                                v-model="schTeacherForm.startDate"
+                                                type="date"
+                                                style="width: 100%;"
+                                                placeholder="Pick a day"
+                                        >
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-row>
 
 
                             </el-col>
@@ -558,11 +595,100 @@
                                 </el-table-column>
                             </el-table>
                         </el-row>
+
+
                         <br>
                         <br>
                     </el-col>
                 </el-row>
+                <p><b><i class="material-icons">
+                    attach_money
+                </i> {{langConfig['levelSalary']}}</b></p>
+                <hr>
+                <el-row>
+                    <el-table
+                            :data="levelSalaryData"
+                            stripe
+                            style="width: 100%">
+                        <el-table-column
+                                type="index"
+                                :index="indexMethod">
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['order']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.order"
+                                          :placeholder="langConfig['order']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['number']"
+                        >
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.number"
+                                          :placeholder="langConfig['number']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['date']" style="margin-left:0px !important; ">
+                            <template slot-scope="scope">
+                                <el-date-picker
+                                        v-model="scope.row.date"
+                                        type="date"
+                                        style="width: 100%;"
+                                        placeholder="Pick a day"
+                                        @change="handleEditLevelSalary(scope.$index, scope.row)"
+                                >
+                                </el-date-picker>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['kambrak']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.level"
+                                          :placeholder="langConfig['kambrak']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['meaning']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.meaning"
+                                          :placeholder="langConfig['meaning']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['desc']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.desc"
+                                          :placeholder="langConfig['desc']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
 
+                        <el-table-column
+                                :label="langConfig['action']"
+                                width="120"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
+                                           size="small"
+                                           @click="handleAddLevelSalary()"
+
+                                ></el-button>
+                                <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
+                                           size="small"
+                                           @click="removeLevelSalaryData(scope.$index,scope.row)"
+                                ></el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-row>
+                <br>
+                <br>
 
             </el-form>
             <span slot="footer" class="dialog-footer fix-dialog-footer">
@@ -619,7 +745,9 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="10">
-
+                                        <el-form-item :label="langConfig['idCode']" prop="idCode">
+                                            <el-input v-model="schTeacherForm.idCode"></el-input>
+                                        </el-form-item>
                                     </el-col>
                                 </el-row>
                                 <el-row>
@@ -756,7 +884,43 @@
                                 <el-form-item :label="langConfig['phoneNumber']" prop="phoneNumber">
                                     <el-input v-model="schTeacherForm.phoneNumber"></el-input>
                                 </el-form-item>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['bankAccount']" prop="bankAccount">
+                                            <el-input v-model="schTeacherForm.bankAccount"></el-input>
 
+                                        </el-form-item>
+
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['bankName']" prop="bankName">
+                                            <el-input v-model="schTeacherForm.bankName"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="14">
+                                        <el-form-item :label="langConfig['major']" prop="major">
+                                            <el-input v-model="schTeacherForm.major"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-form-item :label="langConfig['generation']" prop="generation">
+                                            <el-input v-model="schTeacherForm.generation"></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-form-item :label="langConfig['startDateInSchool']" prop="startDate">
+                                        <el-date-picker
+                                                v-model="schTeacherForm.startDate"
+                                                type="date"
+                                                style="width: 100%;"
+                                                placeholder="Pick a day"
+                                        >
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-row>
 
                             </el-col>
                         </el-row>
@@ -1033,11 +1197,100 @@
                                 </el-table-column>
                             </el-table>
                         </el-row>
+
+
                         <br>
                         <br>
                     </el-col>
                 </el-row>
+                <p><b><i class="material-icons">
+                    attach_money
+                </i> {{langConfig['levelSalary']}}</b></p>
+                <hr>
+                <el-row>
+                    <el-table
+                            :data="levelSalaryData"
+                            stripe
+                            style="width: 100%">
+                        <el-table-column
+                                type="index"
+                                :index="indexMethod">
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['order']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.order"
+                                          :placeholder="langConfig['order']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['number']"
+                        >
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.number"
+                                          :placeholder="langConfig['number']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['date']" style="margin-left:0px !important; ">
+                            <template slot-scope="scope">
+                                <el-date-picker
+                                        v-model="scope.row.date"
+                                        type="date"
+                                        style="width: 100%;"
+                                        placeholder="Pick a day"
+                                        @change="handleEditLevelSalary(scope.$index, scope.row)"
+                                >
+                                </el-date-picker>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['kambrak']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.level"
+                                          :placeholder="langConfig['kambrak']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['meaning']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.meaning"
+                                          :placeholder="langConfig['meaning']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                :label="langConfig['desc']">
+                            <template slot-scope="scope">
+                                <el-input v-model="scope.row.desc"
+                                          :placeholder="langConfig['desc']"
+                                          @change="handleEditLevelSalary(scope.$index, scope.row)"></el-input>
+                            </template>
+                        </el-table-column>
 
+                        <el-table-column
+                                :label="langConfig['action']"
+                                width="120"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="primary" class="cursor-pointer" icon="el-icon-circle-plus"
+                                           size="small"
+                                           @click="handleAddLevelSalary()"
+
+                                ></el-button>
+                                <el-button type="danger" class="cursor-pointer" icon="el-icon-remove"
+                                           size="small"
+                                           @click="removeLevelSalaryData(scope.$index,scope.row)"
+                                ></el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-row>
+                <br>
+                <br>
             </el-form>
             <span slot="footer" class="dialog-footer fix-dialog-footer"
             >
@@ -1104,6 +1357,14 @@
                 positionData: [{
                     startDate: "",
                     positionId: ""
+                }],
+                levelSalaryData: [{
+                    order: "",
+                    number: "",
+                    date: "",
+                    level: "",
+                    desc: "",
+                    meaning: "",
                 }],
                 studyData: [{
                     studyAt: "",
@@ -1208,8 +1469,15 @@
                         personalStudy:
                             [],
                         idNumber: "",
+                        idCode: "",
                         startWorkDate: "",
-                        position: []
+                        position: [],
+                        levelSalary: [],
+                        bankAccount: "",
+                        bankName: "",
+                        major: "",
+                        generation: "",
+                        startDate: ""
 
                     }
                 ,
@@ -1334,12 +1602,44 @@
                     }];
                 }
             },
+            handleAddLevelSalary() {
+                this.levelSalaryData.push({
+                    order: "",
+                    number: "",
+                    date: "",
+                    level: "",
+                    desc: "",
+                    meaning: "",
+                })
+            },
+            handleEditLevelSalary(index, row) {
+                this.levelSalaryData[index] = row;
+            },
+            removeLevelSalaryData(index, row) {
+                if (this.levelSalaryData.length > 1) {
+                    this.levelSalaryData.splice(index, 1);
+                    this.$message({
+                        message: `លុប ${row.name} បានជោគជ័យ`,
+                        type: 'success'
+                    });
+                } else {
+                    this.levelSalaryData = [{
+                        order: "",
+                        number: "",
+                        date: "",
+                        level: "",
+                        desc: "",
+                        meaning: "",
+                    }];
+                }
+            },
             handleAddPosition() {
                 this.positionData.push({
                     startDate: "",
                     positionId: ""
                 })
             },
+
             handleEditPosition(index, row) {
                 this.positionData[index] = row;
             },
@@ -1393,6 +1693,11 @@
                             degreeYear: vm.schTeacherForm.degreeYear,
                             phoneNumber: vm.schTeacherForm.phoneNumber,
                             idNumber: vm.schTeacherForm.idNumber,
+                            idCode: vm.schTeacherForm.idCode,
+                            bankAccount: vm.schTeacherForm.bankAccount,
+                            bankName: vm.schTeacherForm.bankName,
+                            major: vm.schTeacherForm.major,
+                            generation: vm.schTeacherForm.generation,
 
                         };
 
@@ -1401,7 +1706,7 @@
                         let personalStudy = [];
                         let cousin = [];
                         let position = [];
-
+                        let levelSalary = [];
                         this.studyData.map((obj) => {
                             if (obj.studyAt) {
                                 personalStudy.push(obj)
@@ -1416,6 +1721,12 @@
                         this.positionData.map((obj) => {
                             if (obj.positionId) {
                                 position.push(obj);
+                            }
+                        });
+
+                        this.levelSalaryData.map((obj) => {
+                            if (obj.number) {
+                                levelSalary.push(obj);
                             }
                         });
 
@@ -1445,7 +1756,9 @@
 
                             rolesArea: Session.get('area'),
                             startWorkDate: vm.schTeacherForm.startWorkDate,
+                            startDate: vm.schTeacherForm.startDate,
                             position: position,
+                            levelSalary: levelSalary,
                         };
 
                         Meteor.call("insertSchTeacher", schTeacherDoc, (err, result) => {
@@ -1503,6 +1816,13 @@
                             degreeYear: vm.schTeacherForm.degreeYear,
                             phoneNumber: vm.schTeacherForm.phoneNumber,
                             idNumber: vm.schTeacherForm.idNumber,
+                            idCode: vm.schTeacherForm.idCode,
+
+                            bankAccount: vm.schTeacherForm.bankAccount,
+                            bankName: vm.schTeacherForm.bankName,
+                            major: vm.schTeacherForm.major,
+                            generation: vm.schTeacherForm.generation,
+
 
                         };
 
@@ -1513,6 +1833,7 @@
                         let personalStudy = [];
                         let cousin = [];
                         let position = [];
+                        let levelSalary = [];
 
                         this.studyData.map((obj) => {
                             if (obj.studyAt) {
@@ -1528,6 +1849,11 @@
                         this.positionData.map((obj) => {
                             if (obj.positionId) {
                                 position.push(obj);
+                            }
+                        });
+                        this.levelSalaryData.map((obj) => {
+                            if (obj.number) {
+                                levelSalary.push(obj);
                             }
                         });
 
@@ -1557,7 +1883,10 @@
                             _id: _id,
                             personalContract: vm.schTeacherForm.personalContract,
                             startWorkDate: vm.schTeacherForm.startWorkDate,
+                            startDate: vm.schTeacherForm.startDate,
                             position: position,
+                            levelSalary: levelSalary,
+
                         };
 
                         Meteor.call("updateSchTeacher", schTeacherDoc, (err, result) => {
@@ -1623,7 +1952,14 @@
                     if (result) {
                         vm.schTeacherId = result._id;
                         vm.schTeacherForm.idNumber = result.personal.idNumber;
+                        vm.schTeacherForm.idCode = result.personal.idCode;
+                        vm.schTeacherForm.bankAccount = result.personal.bankAccount;
+                        vm.schTeacherForm.bankName = result.personal.bankName;
+                        vm.schTeacherForm.major = result.personal.major;
+                        vm.schTeacherForm.generation = result.personal.generation;
+
                         vm.schTeacherForm.startWorkDate = result.startWorkDate;
+                        vm.schTeacherForm.startDate = result.startDate;
                         vm.schTeacherForm.personal = result.personal;
 
 
@@ -1688,6 +2024,22 @@
                                 }];
 
                         }
+                        if (result.levelSalary.length > 0) {
+                            vm.levelSalaryData = result.levelSalary;
+
+                        } else {
+
+                            vm.levelSalaryData =
+                                [{
+                                    order: "",
+                                    number: "",
+                                    date: "",
+                                    level: "",
+                                    desc: "",
+                                    meaning: "",
+                                }];
+
+                        }
 
                         vm.schTeacherForm.faName = result.family.parent.faName;
                         vm.schTeacherForm.faYob = result.family.parent.faYob;
@@ -1729,6 +2081,15 @@
                     [{
                         startDate: "",
                         positionId: ""
+                    }];
+                this.levelSalaryData =
+                    [{
+                        order: "",
+                        number: "",
+                        date: "",
+                        level: "",
+                        desc: "",
+                        meaning: "",
                     }];
 
                 this.studyData =

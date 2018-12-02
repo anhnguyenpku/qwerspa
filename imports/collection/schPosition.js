@@ -14,6 +14,10 @@ Sch_Position.schema = new SimpleSchema({
         type: String,
         optional: true
     },
+    order: {
+        type: Number,
+        //unique: true
+    },
     rolesArea: {
         type: String,
         label: "Role Area"
